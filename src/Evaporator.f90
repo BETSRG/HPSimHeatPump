@@ -291,7 +291,7 @@ REAL rhoRef   !Ref. density, kg/m3
 REAL CPAir                !Specific heat of air, kJ/kg-K
 INTEGER(2) AirPropOpt     !Air prop calc. option
 INTEGER(2) AirPropErr     !Error flag:1-error; 0-no error
-REAL AirProp(8)
+!REAL AirProp(8)
 REAL TwbAiMod !Inlet air wet bulb temperature, C
 REAL TdpAiMod !Inlet air dewpoint temeperature, C
 REAL TdbAoDry !Outlet air dry bulb temperature, dry surface, C
@@ -482,7 +482,7 @@ CONTAINS
 
 !***********************************************************************************
 
-    SUBROUTINE Evaporator(Ref$,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT) !RS: Debugging: Extraneous PureRef
+    SUBROUTINE Evaporator(Ref$) !,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT) !RS: Debugging: Extraneous PureRef
 
     !-----------------------------------------------------------------------------------
     !
@@ -491,7 +491,7 @@ CONTAINS
     !  To predict coil air side and refrigerant side properties, heat transfer, 
     !  and pressure drop
     !
-    !  HVACSIM+ Airprop subroutine requied
+    !  HVACSIM+ Airprop subroutine required
     !  EnergyPlus REFPROP subroutines required 	
     !
     !  Inputs:
@@ -614,9 +614,9 @@ CONTAINS
     !Subroutine argument declarations
     CHARACTER*80,     INTENT(IN)  :: Ref$
     !INTEGER(2),       INTENT(IN)  :: PureRef   !RS: Debugging: Extraneous PureRef
-    REAL, INTENT(IN)  :: XIN(9) 
-    REAL, INTENT(IN)  :: PAR(39) !ISI - 12/21/06    !RS: Debugging: Formerly EvapPAR(54)
-    REAL, INTENT(OUT) :: OUT(17)    !RS: Debugging: Formerly OUT(20)
+    !REAL, INTENT(IN)  :: XIN(9) 
+    !REAL, INTENT(IN)  :: PAR(39) !ISI - 12/21/06    !RS: Debugging: Formerly EvapPAR(54)
+    !REAL, INTENT(OUT) :: OUT(17)    !RS: Debugging: Formerly OUT(20)
 
     !Subroutine local variables
     REAL :: MCXIN(7)  !Microchannel coil input data
@@ -658,53 +658,53 @@ CONTAINS
     
     !Flow:
 
-    mRefTot =XIN(EInmRef) !RS: Debugging: Formerly XIN(1)
-    pRiCoil =XIN(EInpRi) !RS: Debugging: Formerly XIN(2)
-    hRiCoil =XIN(EInhRi) !RS: Debugging: Formerly XIN(3)
-    mAiCoil =XIN(EInmAi) !RS: Debugging: Formerly XIN(4)
-    tAiCoil =XIN(EIntAi) !RS: Debugging: Formerly XIN(5)
-    rhAiCoil=XIN(EInrhAi) !RS: Debugging: Formerly XIN(6)
-    SolarFlux=XIN(EInSolFlux)    !RS: Debugging: EvapIN(8) set once to 0 !RS: Debugging: Formerly XIN(8)
-    tRdis=XIN(EIntRdis)    !RS: Debugging: Formerly XIN(9)
+    mRefTot =EvapIN%EInmRef !RS: Debugging: Formerly XIN(1)
+    pRiCoil =EvapIN%EInpRi !RS: Debugging: Formerly XIN(2)
+    hRiCoil =EvapIN%EInhRi !RS: Debugging: Formerly XIN(3)
+    mAiCoil =EvapIN%EInmAi !RS: Debugging: Formerly XIN(4)
+    tAiCoil =EvapIN%EIntAi !RS: Debugging: Formerly XIN(5)
+    rhAiCoil=EvapIN%EInrhAi !RS: Debugging: Formerly XIN(6)
+    SolarFlux=EvapIN%EInSolFlux    !RS: Debugging: EvapIN(8) set once to 0 !RS: Debugging: Formerly XIN(8)
+    tRdis=EvapIN%EIntRdis    !RS: Debugging: Formerly XIN(9)
 
     !IF (QdisTube .EQ. 0) THEN  RS: Debugging: QDisTube is never used
     !    QdisTube=SMALL
     !END IF
 
-    LsucLn    = PAR(EvapSucLnLen) !RS: Debugging: Formerly PAR(1)
-    ODsucLn   = PAR(EvapSucLnOD)  !RS: Debugging: Formerly PAR(2)
-    SucLnThk  = PAR(EvapSucLnTWThick)   !RS: Debugging: Formerly PAR(3)
-    ElevSucLn = PAR(EvapSucLnElev)  !RS: Debugging: Formerly PAR(4)
-    QsucLn    = PAR(EvapSucLnQLoss)  !RS: Debugging: Formerly PAR(5)
-    DTsucLn   = PAR(EvapSucLnTempChg)  !RS: Debugging: Formerly PAR(6)
-    AddDPSucLn = PAR(EvapSucLnAddPD) !RS: Debugging: Formerly PAR(7)
+    LsucLn    = EvapPAR%EvapSucLnLen !RS: Debugging: Formerly PAR(1)
+    ODsucLn   = EvapPAR%EvapSucLnOD  !RS: Debugging: Formerly PAR(2)
+    SucLnThk  = EvapPAR%EvapSucLnTWThick   !RS: Debugging: Formerly PAR(3)
+    ElevSucLn = EvapPAR%EvapSucLnElev  !RS: Debugging: Formerly PAR(4)
+    QsucLn    = EvapPAR%EvapSucLnQLoss  !RS: Debugging: Formerly PAR(5)
+    DTsucLn   = EvapPAR%EvapSucLnTempChg  !RS: Debugging: Formerly PAR(6)
+    AddDPSucLn = EvapPAR%EvapSucLnAddPD !RS: Debugging: Formerly PAR(7)
 
-    IsSimpleCoil=PAR(EvapSimpCoil) !(38) !PAR(53) !ISI - 12/21/06    !RS: Debugging: Formerly PAR(37)
-    FirstTime=PAR(EvapFirstTime) !(39) !PAR(54)    !ISI - 12/21/06   !RS: Debugging: Formerly PAR(38)
+    IsSimpleCoil=EvapPAR%EvapSimpCoil !(38) !PAR(53) !ISI - 12/21/06    !RS: Debugging: Formerly PAR(37)
+    FirstTime=EvapPAR%EvapFirstTime !(39) !PAR(54)    !ISI - 12/21/06   !RS: Debugging: Formerly PAR(38)
 
     IF (FirstTime .EQ. 1) THEN
 
-        ODtube      = PAR(EvapCoilTOD)    !RS: Debugging: Formerly PAR(8)
-        TubeThk     = PAR(EvapCoilTWThick)    !RS: Debugging: Formerly PAR(9)
-        Ltube       = PAR(EvapCoilSTLen)   !RS: Debugging: Formerly PAR(10)
-        Ktube       = PAR(EvapCoilTThermCon)   !RS: Debugging: Formerly PAR(11)
-        Pt          = PAR(EvapTspc)   !RS: Debugging: Formerly PAR(12)
-        Pl          = PAR(EvapRspc)   !RS: Debugging: Formerly PAR(13)
-        FinThk      = PAR(EvapFinThick)   !RS: Debugging: Formerly PAR(14)
-        FinPitch    = PAR(EvapFinPitch)   !RS: Debugging: Formerly PAR(15)
-        Kfin        = PAR(EvapFinThermCon)   !RS: Debugging: Formerly PAR(16)
-        Nt          = PAR(EvapNt)   !RS: Debugging: Formerly PAR(17)
-        Nl          = PAR(EvapNl)   !RS: Debugging: Formerly PAR(18)
-        NumOfCkts   = PAR(EvapNumCkt)   !RS: Debugging: Formerly PAR(19)
-        NumOfMods   = PAR(EvapNumMod)   !RS: Debugging: Formerly PAR(21)
-        FinType     = PAR(EvapFinType)   !RS: Debugging: Formerly PAR(22)
-        TubeType    = PAR(EvapTube)   !RS: Debugging: Formerly PAR(30)
+        ODtube      = EvapPAR%EvapCoilTOD    !RS: Debugging: Formerly PAR(8)
+        TubeThk     = EvapPAR%EvapCoilTWThick    !RS: Debugging: Formerly PAR(9)
+        Ltube       = EvapPAR%EvapCoilSTLen   !RS: Debugging: Formerly PAR(10)
+        Ktube       = EvapPAR%EvapCoilTThermCon   !RS: Debugging: Formerly PAR(11)
+        Pt          = EvapPAR%EvapTspc   !RS: Debugging: Formerly PAR(12)
+        Pl          = EvapPAR%EvapRspc   !RS: Debugging: Formerly PAR(13)
+        FinThk      = EvapPAR%EvapFinThick   !RS: Debugging: Formerly PAR(14)
+        FinPitch    = EvapPAR%EvapFinPitch   !RS: Debugging: Formerly PAR(15)
+        Kfin        = EvapPAR%EvapFinThermCon   !RS: Debugging: Formerly PAR(16)
+        Nt          = EvapPAR%EvapNt   !RS: Debugging: Formerly PAR(17)
+        Nl          = EvapPAR%EvapNl   !RS: Debugging: Formerly PAR(18)
+        NumOfCkts   = EvapPAR%EvapNumCkt   !RS: Debugging: Formerly PAR(19)
+        NumOfMods   = EvapPAR%EvapNumMod   !RS: Debugging: Formerly PAR(21)
+        FinType     = EvapPAR%EvapFinType   !RS: Debugging: Formerly PAR(22)
+        TubeType    = EvapPAR%EvapTube   !RS: Debugging: Formerly PAR(30)
         CALL InitEvaporatorCoil(CoilType)
         CALL CalcMaterialWeight(CoilType,Ltube,IDtube,ODtube,TubeHeight,TubeDepth, &
         Dchannel,NumOfChannels,Pt,Pl,Nt,Nl,NumOfCkts, &
         FinThk,FinPitch,WeightAluminum,WeightCopper)
         IF (ErrorFlag .GT. CONVERGEERROR) THEN
-            OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
+            EvapOUT%EOutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(17)
             CALL Evaporator_Helper_1
             RETURN
         END IF
@@ -721,26 +721,26 @@ CONTAINS
  
     END IF
 
-    hciMultiplier   = PAR(EvapMultRefQT)   !RS: Debugging: Formerly PAR(23)
-    DPrefMultiplier = PAR(EvapMultRefPD)   !RS: Debugging: Formerly PAR(24)
-    hcoMultiplier   = PAR(EvapMultAirQT)   !RS: Debugging: Formerly PAR(25)
-    DPairMultiplier = PAR(EvapMultAirPD)   !RS: Debugging: Formerly PAR(26)
+    hciMultiplier   = EvapPAR%EvapMultRefQT   !RS: Debugging: Formerly PAR(23)
+    DPrefMultiplier = EvapPAR%EvapMultRefPD   !RS: Debugging: Formerly PAR(24)
+    hcoMultiplier   = EvapPAR%EvapMultAirQT   !RS: Debugging: Formerly PAR(25)
+    DPairMultiplier = EvapPAR%EvapMultAirPD   !RS: Debugging: Formerly PAR(26)
 
-    PwrFan           = PAR(EvapFanPwr)  !RS: Debugging: Formerly PAR(27)
-    DrawBlow         = PAR(EvapFanLoc)  !RS: Debugging: Formerly PAR(28)
-    SurfAbsorptivity = PAR(EvapSurfAbs)  !RS: Debugging: Formerly PAR(29)
+    PwrFan           = EvapPAR%EvapFanPwr  !RS: Debugging: Formerly PAR(27)
+    DrawBlow         = EvapPAR%EvapFanLoc  !RS: Debugging: Formerly PAR(28)
+    SurfAbsorptivity = EvapPAR%EvapSurfAbs  !RS: Debugging: Formerly PAR(29)
 
-    BaroPressure     = PAR(EvapBarPress)  !RS: Debugging: Formerly PAR(31)
-    QlossCmp         = PAR(EvapCompQLoss)  !RS: Debugging: Formerly PAR(32)
-    SystemType       = PAR(EvapSysType)  !RS: Debugging: Formerly PAR(33)
-    PTol			   = PAR(EvapPressTolConv) !(35) !(50)    !RS: Debugging: Formerly PAR(34)
-    Wabsolute        = PAR(EvapOilMassFrac) !(51)    !RS: Debugging: Formerly PAR(35)
-    CompManufacturer = PAR(EvapCompMan) !(52)    !RS: Debugging: Formerly PAR(36)
+    BaroPressure     = EvapPAR%EvapBarPress  !RS: Debugging: Formerly PAR(31)
+    QlossCmp         = EvapPAR%EvapCompQLoss  !RS: Debugging: Formerly PAR(32)
+    SystemType       = EvapPAR%EvapSysType  !RS: Debugging: Formerly PAR(33)
+    PTol             = EvapPAR%EvapPressTolConv !(35) !(50)    !RS: Debugging: Formerly PAR(34)
+    Wabsolute        = EvapPAR%EvapOilMassFrac !(51)    !RS: Debugging: Formerly PAR(35)
+    CompManufacturer = EvapPAR%EvapCompMan !(52)    !RS: Debugging: Formerly PAR(36)
 
     IF (CoilType .EQ. MCEVAPORATOR) THEN
-        CALL LoadMicrochannelInputs(XIN,PAR,MCXIN,MCPAR)
+        CALL LoadMicrochannelInputs(MCXIN,MCPAR) !(XIN,PAR,MCXIN,MCPAR)
         CALL MicrochannelEvaporator(MCXIN,MCPAR,MCOUT) !(Ref$,MCXIN,MCPAR,MCOUT)    !RS: Debugging: Extraneous Ref$
-        CALL LoadMicrochannelOutputs(MCOUT,OUT)
+        CALL LoadMicrochannelOutputs(MCOUT) !,OUT)
         RETURN
     END IF
 
@@ -775,7 +775,7 @@ CONTAINS
 
     CALL InitBoundaryConditions(CoilType)
     IF (ErrorFlag .GT. CONVERGEERROR) THEN
-        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
+        EvapOUT%EOutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(17)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -853,7 +853,7 @@ CONTAINS
                             END IF
                             CALL CalcCoilSegment(NumSection,I,I,J,K,CoilType)
                             IF (ErrorFlag .GT. CONVERGEERROR) THEN
-                                OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
+                                EvapOUT%EOutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(17)
                                 CALL Evaporator_Helper_1
                                 RETURN
                             END IF
@@ -885,7 +885,7 @@ CONTAINS
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2205'
                         ErrorFlag=REFPROPERROR
-                        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
+                        EvapOUT%EOutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(17)
                         CALL Evaporator_Helper_1
                         RETURN
                     END IF
@@ -893,7 +893,7 @@ CONTAINS
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2211'
                         ErrorFlag=REFPROPERROR
-                        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
+                        EvapOUT%EOutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(17)
                         CALL Evaporator_Helper_1
                         RETURN
                     END IF
@@ -904,7 +904,7 @@ CONTAINS
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2231'
                         ErrorFlag=REFPROPERROR
-                        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
+                        EvapOUT%EOutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(17)
                         CALL Evaporator_Helper_1
                         RETURN
                     END IF
@@ -1088,17 +1088,17 @@ CONTAINS
 
     !Determining inlet and outlet air properties
     AirPropOpt=1
-    AirProp(APTDB)=tAiCoil  !RS: Debugging: Formerly AirProp(1)
-    AirProp(APEnth)=hAiCoil  !RS: Debugging: Formerly AirProp(4)
-    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    DensityIn=AirProp(APDryDens)    !RS: Debugging: Formerly AirProp(7)
+    AirProp%APTDB=tAiCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp%APEnth=hAiCoil  !RS: Debugging: Formerly AirProp(4)
+    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+    DensityIn=AirProp%APDryDens    !RS: Debugging: Formerly AirProp(7)
 
     AirPropOpt=1
-    AirProp(APTDB)=tAoCoil  !RS: Debugging: Formerly AirProp(1)
-    AirProp(APEnth)=hAoCoil  !RS: Debugging: Formerly AirProp(4)
-    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    rhAoCoil=AirProp(APRelHum) !RS: Debugging: Formerly AirProp(3)
-    DensityOut=AirProp(APDryDens)   !RS: Debugging: Formerly AirProp(7)
+    AirProp%APTDB=tAoCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp%APEnth=hAoCoil  !RS: Debugging: Formerly AirProp(4)
+    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+    rhAoCoil=AirProp%APRelHum !RS: Debugging: Formerly AirProp(3)
+    DensityOut=AirProp%APDryDens   !RS: Debugging: Formerly AirProp(7)
 
     WetFlag=0
     RowNum=0
@@ -1119,7 +1119,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
         ErrorFlag=REFPROPERROR
-        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
+        EvapOUT%EOutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(17)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1127,7 +1127,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2652'
         ErrorFlag=REFPROPERROR
-        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
+        EvapOUT%EOutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(17)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1138,7 +1138,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2672'
         ErrorFlag=REFPROPERROR
-        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
+        EvapOUT%EOutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(17)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1165,7 +1165,7 @@ CONTAINS
         IF (RefPropErr .GT. 0) THEN
             WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
             ErrorFlag=REFPROPERROR
-            OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
+            EvapOUT%EOutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(17)
             CALL Evaporator_Helper_1
             RETURN
         END IF
@@ -1186,7 +1186,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2705'
         ErrorFlag=REFPROPERROR
-        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
+        EvapOUT%EOutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(17)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1194,7 +1194,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2711'
         ErrorFlag=REFPROPERROR
-        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
+        EvapOUT%EOutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(17)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1205,7 +1205,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2730'
         ErrorFlag=REFPROPERROR
-        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
+        EvapOUT%EOutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(17)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1217,23 +1217,23 @@ CONTAINS
     END IF
 
     !Populating the OUT array
-    OUT(EOutpRoC)=pRoCoil  !RS: Debugging: Formerly OUT(1)
-    OUT(EOuthRoC)=hRoCoil  !RS: Debugging: Formerly OUT(2)
-    OUT(EOuttAoC)=tAoCoil !RS: Debugging: Formerly OUT(3)
-    OUT(EOutrhAoC)=rhAoCoil    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(4)
-    OUT(EOutDPair)=DPair   !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(5)
-    OUT(EOutpRiC)=pRiCmp   !RS: Debugging: Formerly OUT(6)
-    OUT(EOuthRiC)=hRiCmp   !RS: Debugging: Formerly OUT(7)
-    OUT(EOuttRiC)=tRiCmp   !RS: Debugging: Formerly OUT(8)
-    OUT(EOutxRiC)=xRiCmp   !RS: Debugging: Formerly OUT(9)
-    OUT(EOuttSHiC)=tSHiCmp !RS: Debugging: Formerly OUT(10)
-    OUT(EOutQC)=Qcoil   !RS: Debugging: Formerly OUT(11)
-    OUT(EOutQCSens)=QcoilSens   !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(12)
-    OUT(EOutMSucLn)=MassSucLn   !RS: Debugging: Formerly OUT(13)
-    OUT(EOutMC)=0  !RS: Debugging: Never really used?   !RS: Debugging: Formerly OUT(14)
-    OUT(EOutWtAl)=WeightAluminum  !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(15)
-    OUT(EOutWtCu)=WeightCopper    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(16)
-    OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
+    EvapOUT%EOutpRoC=pRoCoil  !RS: Debugging: Formerly OUT(1)
+    EvapOUT%EOuthRoC=hRoCoil  !RS: Debugging: Formerly OUT(2)
+    EvapOUT%EOuttAoC=tAoCoil !RS: Debugging: Formerly OUT(3)
+    EvapOUT%EOutrhAoC=rhAoCoil    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(4)
+    EvapOUT%EOutDPair=DPair   !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(5)
+    EvapOUT%EOutpRiC=pRiCmp   !RS: Debugging: Formerly OUT(6)
+    EvapOUT%EOuthRiC=hRiCmp   !RS: Debugging: Formerly OUT(7)
+    EvapOUT%EOuttRiC=tRiCmp   !RS: Debugging: Formerly OUT(8)
+    EvapOUT%EOutxRiC=xRiCmp   !RS: Debugging: Formerly OUT(9)
+    EvapOUT%EOuttSHiC=tSHiCmp !RS: Debugging: Formerly OUT(10)
+    EvapOUT%EOutQC=Qcoil   !RS: Debugging: Formerly OUT(11)
+    EvapOUT%EOutQCSens=QcoilSens   !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(12)
+    EvapOUT%EOutMSucLn=MassSucLn   !RS: Debugging: Formerly OUT(13)
+    EvapOUT%EOutMC=0  !RS: Debugging: Never really used?   !RS: Debugging: Formerly OUT(14)
+    EvapOUT%EOutWtAl=WeightAluminum  !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(15)
+    EvapOUT%EOutWtCu=WeightCopper    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(16)
+    EvapOUT%EOutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(17)
 
     CALL Evaporator_Helper_1
 
@@ -3891,11 +3891,11 @@ INTEGER :: NumSection !Loop counter, ISI - 09/10/07
   Cair=mAiCoil*CPAir    !RS Comment: Finding the capacity rate of air
 
   AirPropOpt=2
-  AirProp(APTDB)=tAiCoil    !RS: Debugging: Formerly AirProp(1)
-  AirProp(APRelHum)=rhAiCoil   !RS: Debugging: Formerly AirProp(3)
-  CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-  hAiCoil=AirProp(APEnth)    !RS: Debugging: Formerly AirProp(4)
-  wAiCoil=AirProp(APHumRat) !ISI - 08/07/06    !RS: Debugging: Formerly AirProp(2)
+  AirProp%APTDB=tAiCoil    !RS: Debugging: Formerly AirProp(1)
+  AirProp%APRelHum=rhAiCoil   !RS: Debugging: Formerly AirProp(3)
+  CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+  hAiCoil=AirProp%APEnth    !RS: Debugging: Formerly AirProp(4)
+  wAiCoil=AirProp%APHumRat !ISI - 08/07/06    !RS: Debugging: Formerly AirProp(2)
 
   tAoCoil=tAiCoil
   wAoCoil=wAiCoil
@@ -3910,11 +3910,11 @@ INTEGER :: NumSection !Loop counter, ISI - 09/10/07
   END IF
 
   AirPropOpt=1
-  AirProp(APTDB)=tAiCoil    !RS: Debugging: Formerly AirProp(1)
-  AirProp(APEnth)=hAiCoil    !RS: Debugging: Formerly AirProp(4)
-  CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-  rhAiCoil=AirProp(APRelHum)   !RS: Debugging: Formerly AirProp(3)
-  DensityIn=AirProp(APDryDens)  !RS: Debugging: Formerly AirProp(7)
+  AirProp%APTDB=tAiCoil    !RS: Debugging: Formerly AirProp(1)
+  AirProp%APEnth=hAiCoil    !RS: Debugging: Formerly AirProp(4)
+  CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+  rhAiCoil=AirProp%APRelHum   !RS: Debugging: Formerly AirProp(3)
+  DensityIn=AirProp%APDryDens  !RS: Debugging: Formerly AirProp(7)
 
   !****** Coil calculation ******
 
@@ -4298,13 +4298,13 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%hco=hcoMod
 
 		AirPropOpt=2
-		AirProp(APTDB)=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tAi    !RS: Debugging: Formerly AirProp(1)
-		AirProp(APRelHum)=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%rhAi   !RS: Debugging: Formerly AirProp(3)
-		CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-		hAiMod=AirProp(APEnth)   !RS: Debugging: Formerly AirProp(4)
-		TwbAiMod=AirProp(APTWB) !RS: Debugging: Formerly AirProp(5)
-		TdpAiMod=AirProp(APTDP) !RS: Debugging: Formerly AirProp(6)
-		wAiMod=AirProp(APHumRat)   !RS: Debugging: Formerly AirProp(2)
+		AirProp%APTDB=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tAi    !RS: Debugging: Formerly AirProp(1)
+		AirProp%APRelHum=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%rhAi   !RS: Debugging: Formerly AirProp(3)
+		CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+		hAiMod=AirProp%APEnth  !RS: Debugging: Formerly AirProp(4)
+		TwbAiMod=AirProp%APTWB !RS: Debugging: Formerly AirProp(5)
+		TdpAiMod=AirProp%APTDP !RS: Debugging: Formerly AirProp(6)
+		wAiMod=AirProp%APHumRat   !RS: Debugging: Formerly AirProp(2)
 
 		mRefMod=CoilSection(NumSection)%Ckt(II)%mRef
 		pRiMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%pRi
@@ -4408,13 +4408,13 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%hco=hcoMod
 
 		AirPropOpt=2
-		AirProp(APTDB)=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%tAi   !RS: Debugging: Formerly AirProp(1)
-		AirProp(APRelHum)=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%rhAi  !RS: Debugging: Formerly AirProp(3)
-		CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-		hAiMod=AirProp(APEnth)   !RS: Debugging: Formerly AirProp(4)
-		TwbAiMod=AirProp(APTWB) !RS: Debugging: Formerly AirProp(5)
-		TdpAiMod=AirProp(APTDP) !RS: Debugging: Formerly AirProp(6)
-		wAiMod=AirProp(APHumRat)   !RS: Debugging: Formerly AirProp(2)
+		AirProp%APTDB=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%tAi   !RS: Debugging: Formerly AirProp(1)
+		AirProp%APRelHum=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%rhAi  !RS: Debugging: Formerly AirProp(3)
+		CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+		hAiMod=AirProp%APEnth   !RS: Debugging: Formerly AirProp(4)
+		TwbAiMod=AirProp%APTWB !RS: Debugging: Formerly AirProp(5)
+		TdpAiMod=AirProp%APTDP !RS: Debugging: Formerly AirProp(6)
+		wAiMod=AirProp%APHumRat   !RS: Debugging: Formerly AirProp(2)
 
 		pRiMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%pRi
 		hRiMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%hRi
@@ -5393,13 +5393,13 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 			TdbAoDry=QmodDry/cAir+tAiMod
 
 			AirPropOpt=1
-			AirProp(APTDB)=TdbAoDry !RS: Debugging: Formerly AirProp(1)
-			AirProp(APEnth)=hAoDry   !RS: Debugging: Formerly AirProp(4)
-			CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-			rhAoMod=AirProp(APRelHum)  !RS: Debugging: Formerly AirProp(3)
-			TwbAoMod=AirProp(APTWB) !RS: Debugging: Formerly AirProp(5)
-			TdpAoMod=AirProp(APTDP) !RS: Debugging: Formerly AirProp(6)
-			DensityOut=AirProp(APDryDens)   !RS: Debugging: Formerly AirProp(7)
+			AirProp%APTDB=TdbAoDry !RS: Debugging: Formerly AirProp(1)
+			AirProp%APEnth=hAoDry   !RS: Debugging: Formerly AirProp(4)
+			CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+			rhAoMod=AirProp%APRelHum  !RS: Debugging: Formerly AirProp(3)
+			TwbAoMod=AirProp%APTWB !RS: Debugging: Formerly AirProp(5)
+			TdpAoMod=AirProp%APTDP !RS: Debugging: Formerly AirProp(6)
+			DensityOut=AirProp%APDryDens   !RS: Debugging: Formerly AirProp(7)
 
 			!Calc dry surface temperature
 			NTUsDry=1/(cAir*Rair) 
@@ -5445,10 +5445,10 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 		END IF
 
 		AirPropOpt=1
-		AirProp(APTDB)=tAoMod   !RS: Debugging: Formerly AirProp(1)
-		AirProp(APEnth)=hAoMod   !RS: Debugging: Formerly AirProp(4)
-		CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-		rhAoMod=AirProp(APRelHum)  !RS: Debugging: Formerly AirProp(3)
+		AirProp%APTDB=tAoMod   !RS: Debugging: Formerly AirProp(1)
+		AirProp%APEnth=hAoMod   !RS: Debugging: Formerly AirProp(4)
+		CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+		rhAoMod=AirProp%APRelHum  !RS: Debugging: Formerly AirProp(3)
 
 		IF (CoilType .NE. MCEVAPORATOR) THEN
 			hRoMod=-Qmod/mRefMod+hRiMod 
@@ -5536,12 +5536,12 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 	hAoMod=Qmod/mAiMod+hAiMod
 
 	AirPropOpt=1
-	AirProp(APTDB)=tAoMod   !RS: Debugging: Formerly AirProp(1)
-	AirProp(APEnth)=hAoMod   !RS: Debugging: Formerly AirProp(4)
-	CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)
-	rhAoMod=AirProp(APRelHum)  !RS: Debugging: Formerly AirProp(3)
-	wbAoMod=AirProp(APTWB)  !RS: Debugging: Formerly AirProp(5)
-	wAoMod=AirProp(APHumRat)   !RS: Debugging: Formerly AirProp(2)
+	AirProp%APTDB=tAoMod   !RS: Debugging: Formerly AirProp(1)
+	AirProp%APEnth=hAoMod   !RS: Debugging: Formerly AirProp(4)
+	CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,
+	rhAoMod=AirProp%APRelHum  !RS: Debugging: Formerly AirProp(3)
+	wbAoMod=AirProp%APTWB  !RS: Debugging: Formerly AirProp(5)
+	wAoMod=AirProp%APHumRat   !RS: Debugging: Formerly AirProp(2)
 	 
 RETURN
 
@@ -6011,10 +6011,10 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 
 			!Outlet air enthalpy
 			AirPropOpt=3
-			AirProp(APTDB)=TdbAoWet !RS: Debugging: Formerly AirProp(1)
-			AirProp(APTWB)=TwbAoWet !RS: Debugging: Formerly AirProp(5)
-			CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-			hAoWet=AirProp(APEnth)   !RS: Debugging: Formerly AirProp(4)
+			AirProp%APTDB=TdbAoWet !RS: Debugging: Formerly AirProp(1)
+			AirProp%APTWB=TwbAoWet !RS: Debugging: Formerly AirProp(5)
+			CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+			hAoWet=AirProp%APEnth   !RS: Debugging: Formerly AirProp(4)
 
 			!Update fictitious air specific heat
 			cfprev=cf
@@ -6036,10 +6036,10 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 
 			!Outlet air enthalpy
 			AirPropOpt=3
-			AirProp(APTDB)=TdbAoWet !RS: Debugging: Formerly AirProp(1)
-			AirProp(APTWB)=TwbAoWet !RS: Debugging: Formerly AirProp(5)
-			CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-			hAoWet=AirProp(APEnth)   !RS: Debugging: Formerly AirProp(4)
+			AirProp%APTDB=TdbAoWet !RS: Debugging: Formerly AirProp(1)
+			AirProp%APTWB=TwbAoWet !RS: Debugging: Formerly AirProp(5)
+			CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+			hAoWet=AirProp%APEnth   !RS: Debugging: Formerly AirProp(4)
 
 			DryWet=1
 			Qmod=QmodWet
@@ -6148,16 +6148,16 @@ REAL FrostThk
 !FLOW:
 
 	AirPropOpt=2	
-	AirProp(APTDB)=tRiMod   !RS: Debugging: Formerly AirProp(1)
-	AirProp(APRelHum)=1    !RS: Debugging: Formerly AirProp(3)
-	CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	hRiSat=AirProp(APEnth)   !RS: Debugging: Formerly AirProp(4)
+	AirProp%APTDB=tRiMod   !RS: Debugging: Formerly AirProp(1)
+	AirProp%APRelHum=1    !RS: Debugging: Formerly AirProp(3)
+	CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+	hRiSat=AirProp%APEnth   !RS: Debugging: Formerly AirProp(4)
 
 	AirPropOpt=2	
-	AirProp(APTDB)=tRiMod+DeltaTemp !RS: Debugging: Formerly AirProp(1)
-	AirProp(APRelHum)=1    !RS: Debugging: Formerly AirProp(3)
-	CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	DeltahRiSat=ABS(hRisat-AirProp(APEnth))  !RS: Debugging: Formerly AirProp(4)
+	AirProp%APTDB=tRiMod+DeltaTemp !RS: Debugging: Formerly AirProp(1)
+	AirProp%APRelHum=1    !RS: Debugging: Formerly AirProp(3)
+	CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+	DeltahRiSat=ABS(hRisat-AirProp%APEnth)  !RS: Debugging: Formerly AirProp(4)
 
 	CpSat=DeltahRiSat/DeltaTemp
 
@@ -6339,24 +6339,24 @@ REAL,PARAMETER :: Le=0.89 !1  !Lewis number
 !FLOW:
 
 	AirPropOpt=2	
-	AirProp(APTDB)=tRiMod   !RS: Debugging: Formerly AirProp(1)
-	AirProp(APRelHum)=1    !RS: Debugging: Formerly AirProp(3)
-	CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	hRiSat=AirProp(APEnth)   !RS: Debugging: Formerly AirProp(4)
-	wRiSat=AirProp(APHumRat)   !RS: Debugging: Formerly AirProp(2)
+	AirProp%APTDB=tRiMod   !RS: Debugging: Formerly AirProp(1)
+	AirProp%APRelHum=1    !RS: Debugging: Formerly AirProp(3)
+	CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+	hRiSat=AirProp%APEnth   !RS: Debugging: Formerly AirProp(4)
+	wRiSat=AirProp%APHumRat   !RS: Debugging: Formerly AirProp(2)
 	hfRiSat=hRiSat
 
 	AirPropOpt=2	
-	AirProp(APTDB)=tRiMod   !RS: Debugging: Formerly AirProp(1)
-	AirProp(APRelHum)=0    !RS: Debugging: Formerly AirProp(3)
-	CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	hgRiSat=AirProp(APEnth)  !RS: Debugging: Formerly AirProp(4)
+	AirProp%APTDB=tRiMod   !RS: Debugging: Formerly AirProp(1)
+	AirProp%APRelHum=0    !RS: Debugging: Formerly AirProp(3)
+	CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+	hgRiSat=AirProp%APEnth  !RS: Debugging: Formerly AirProp(4)
 
 	AirPropOpt=2	
-	AirProp(APTDB)=tRiMod+DeltaTemp
-	AirProp(APRelHum)=1    !RS: Debugging: Formerly AirProp(3)
-	CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	DeltahRiSat=ABS(hRisat-AirProp(APEnth))  !RS: Debugging: Formerly AirProp(4)
+	AirProp%APTDB=tRiMod+DeltaTemp
+	AirProp%APRelHum=1    !RS: Debugging: Formerly AirProp(3)
+	CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+	DeltahRiSat=ABS(hRisat-AirProp%APEnth)  !RS: Debugging: Formerly AirProp(4)
 
 	CpMoist=(1+0.09*wAiMod)*CpAir !www.jgsee.kmutt.ac.th/exell/JEE661/JEE661Lecture2.html
 
@@ -6418,11 +6418,11 @@ REAL,PARAMETER :: Le=0.89 !1  !Lewis number
 		tAoMod=TdbAoWet
 
 		AirPropOpt=1	
-		AirProp(APTDB)=tAoMod   !RS: Debugging: Formerly AirProp(1)
-		AirProp(APEnth)=hAoMod   !RS: Debugging: Formerly AirProp(4)
-		CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-		wAoMod=AirProp(APHumRat)   !RS: Debugging: Formerly AirProp(2)
-		TwbAoMod=AirProp(APTWB) !RS: Debugging: Formerly AirProp(5)
+		AirProp%APTDB=tAoMod   !RS: Debugging: Formerly AirProp(1)
+		AirProp%APEnth=hAoMod   !RS: Debugging: Formerly AirProp(4)
+		CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+		wAoMod=AirProp%APHumRat   !RS: Debugging: Formerly AirProp(2)
+		TwbAoMod=AirProp%APTWB !RS: Debugging: Formerly AirProp(5)
 
 		IF (ABS((CCprev-CC)/CCprev) .LT. 1e-3) THEN
 			EXIT 
@@ -6675,11 +6675,11 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
     Cair=mAiCoil*CPAir
 
     AirPropOpt=2
-    AirProp(APTDB)=tAiCoil  !RS: Debugging: Formerly AirProp(1)
-    AirProp(APRelHum)=rhAiCoil !RS: Debugging: Formerly AirProp(3)
-    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    hAiCoil=AirProp(APEnth)  !RS: Debugging: Formerly AirProp(4)
-    wbAiCoil=AirProp(APTWB) !RS: Debugging: Formerly AirProp(5)
+    AirProp%APTDB=tAiCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp%APRelHum=rhAiCoil !RS: Debugging: Formerly AirProp(3)
+    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+    hAiCoil=AirProp%APEnth  !RS: Debugging: Formerly AirProp(4)
+    wbAiCoil=AirProp%APTWB !RS: Debugging: Formerly AirProp(5)
 
     IF (DrawBlow .EQ. BLOWTHROUGH) THEN !Blow through
         tAiCoil=tAiCoil+PwrFan/Cair
@@ -6691,10 +6691,10 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
     END IF
 
     AirPropOpt=1
-    AirProp(APTDB)=tAiCoil  !RS: Debugging: Formerly AirProp(1)
-    AirProp(APEnth)=hAiCoil  !RS: Debugging: Formerly AirProp(4)
-    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    DensityIn=AirProp(APDryDens)    !RS: Debugging: Formerly AirProp(7)
+    AirProp%APTDB=tAiCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp%APEnth=hAiCoil  !RS: Debugging: Formerly AirProp(4)
+    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+    DensityIn=AirProp%APDryDens    !RS: Debugging: Formerly AirProp(7)
 
     !Area calculations
     CALL CalcCoilArea(CoilType,Nl,Nt,Pt,Pl,TubeDepth, &
@@ -6881,10 +6881,10 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
             Slab(I)%rhAi=Slab(I)%Pass(1)%Tube(1)%Seg(1)%rhAi
 
             AirPropOpt=2
-            AirProp(APTDB)=Slab(I)%tAi  !RS: Debugging: Formerly AirProp(1)
-            AirProp(APRelHum)=Slab(I)%rhAi !RS: Debugging: Formerly AirProp(3)
-            CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-            Slab(I)%hAi=AirProp(APEnth)  !RS: Debugging: Formerly AirProp(4)
+            AirProp%APTDB=Slab(I)%tAi  !RS: Debugging: Formerly AirProp(1)
+            AirProp%APRelHum=Slab(I)%rhAi !RS: Debugging: Formerly AirProp(3)
+            CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+            Slab(I)%hAi=AirProp%APEnth  !RS: Debugging: Formerly AirProp(4)
 
             SHR=QcoilSens/Qcoil
 
@@ -6930,10 +6930,10 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
             Slab(I)%hAo=Slab(I)%hAi+Slab(I)%Qslab/mAiCoil
 
             AirPropOpt=1
-            AirProp(APTDP)=Slab(I)%tAo  !RS: Debugging: Formerly AirProp(1)
-            AirProp(APEnth)=Slab(I)%hAo  !RS: Debugging: Formerly AirProp(4)
-            CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-            Slab(I)%rhAo=AirProp(APRelHum) !RS: Debugging: Formerly AirProp(3)
+            AirProp%APTDP=Slab(I)%tAo  !RS: Debugging: Formerly AirProp(1)
+            AirProp%APEnth=Slab(I)%hAo  !RS: Debugging: Formerly AirProp(4)
+            CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+            Slab(I)%rhAo=AirProp%APRelHum !RS: Debugging: Formerly AirProp(3)
 
         END DO !End Slabs
 
@@ -6996,18 +6996,18 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
     END IF
 
     AirPropOpt=1
-    AirProp(APTDB)=tAiCoil  !RS: Debugging: Formerly AirProp(1)
-    AirProp(APEnth)=hAiCoil  !RS: Debugging: Formerly AirProp(4)
-    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    rhAiCoil=AirProp(APRelHum) !RS: Debugging: Formerly AirProp(3)
-    DensityIn=AirProp(APDryDens)    !RS: Debugging: Formerly AirProp(7)
+    AirProp%APTDB=tAiCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp%APEnth=hAiCoil  !RS: Debugging: Formerly AirProp(4)
+    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+    rhAiCoil=AirProp%APRelHum !RS: Debugging: Formerly AirProp(3)
+    DensityIn=AirProp%APDryDens    !RS: Debugging: Formerly AirProp(7)
 
     AirPropOpt=1
-    AirProp(APTDB)=tAoCoil  !RS: Debugging: Formerly AirProp(1)
-    AirProp(APEnth)=hAoCoil  !RS: Debugging: Formerly AirProp(4)
-    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    rhAoCoil=AirProp(APRelHum) !RS: Debugging: Formerly AirProp(3)
-    DensityOut=AirProp(APDryDens)   !RS: Debugging: Formerly AirProp(7)
+    AirProp%APTDB=tAoCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp%APEnth=hAoCoil  !RS: Debugging: Formerly AirProp(4)
+    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+    rhAoCoil=AirProp%APRelHum !RS: Debugging: Formerly AirProp(3)
+    DensityOut=AirProp%APDryDens   !RS: Debugging: Formerly AirProp(7)
 
     WetFlag=0
     RowNum=0   
@@ -7165,7 +7165,7 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
 
 !************************************************************************
 
-SUBROUTINE LoadMicrochannelInputs(FTXIN,FTPAR,MCXIN,MCPAR)
+SUBROUTINE LoadMicrochannelInputs(MCXIN,MCPAR) !(FTXIN,FTPAR,MCXIN,MCPAR)
 
 !-----------------------------------------------------------------------------------
 !
@@ -7185,38 +7185,38 @@ USE DataSimulation
 
 IMPLICIT NONE
 
-REAL, INTENT(IN)  :: FTXIN(9)  !Fin-tube coil input data
-REAL, INTENT(IN)  :: FTPAR(39) !Fin-tube coil input parameters  !RS: Debugging: Formerly FTPAR(49)
+!REAL, INTENT(IN)  :: FTXIN(9)  !Fin-tube coil input data
+!REAL, INTENT(IN)  :: FTPAR(39) !Fin-tube coil input parameters  !RS: Debugging: Formerly FTPAR(49)
 REAL, INTENT(OUT) :: MCXIN(7)  !Microchannel coil input data
 REAL, INTENT(OUT) :: MCPAR(19) !Microchannel coil input parameters  !RS: Debugging: Formerly MCPAR(33)
 
 !FLOW:
 
-  MCXIN(1)=FTXIN(EInmRef) !Refrigerant side mass flow rate, kg/s  !RS: Debugging: Formerly FTXIN(1)
-  MCXIN(2)=FTXIN(EInpRi) !Refrigerant side inlet pressure, kPa   !RS: Debugging: Formerly FTXIN(2)
-  MCXIN(3)=FTXIN(EInhRi) !Refrigerant side inlet enthalpy, kJ/kg !RS: Debugging: Formerly FTXIN(3)
-  MCXIN(4)=FTXIN(EInmAi) !Air side mass flow rate, kg/s  !RS: Debugging: Formerly FTXIN(4)
-  MCXIN(5)=FTXIN(EIntAi) !Air side inlet temp. C !RS: Debugging: Formerly FTXIN(5)
-  MCXIN(6)=FTXIN(EInrhAi) !Air side inlet relative humidity   !RS: Debugging: Formerly FTXIN(6)
-  MCXIN(7)=FTXIN(EIntRdis) !Compressor discharge temperature, C    !RS: Debugging: Formerly FTXIN(7)
+  MCXIN(1)=EvapIN%EInmRef !Refrigerant side mass flow rate, kg/s  !RS: Debugging: Formerly FTXIN(1)
+  MCXIN(2)=EvapIN%EInpRi !Refrigerant side inlet pressure, kPa   !RS: Debugging: Formerly FTXIN(2)
+  MCXIN(3)=EvapIN%EInhRi !Refrigerant side inlet enthalpy, kJ/kg !RS: Debugging: Formerly FTXIN(3)
+  MCXIN(4)=EvapIN%EInmAi !Air side mass flow rate, kg/s  !RS: Debugging: Formerly FTXIN(4)
+  MCXIN(5)=EvapIN%EIntAi !Air side inlet temp. C !RS: Debugging: Formerly FTXIN(5)
+  MCXIN(6)=EvapIN%EInrhAi !Air side inlet relative humidity   !RS: Debugging: Formerly FTXIN(6)
+  MCXIN(7)=EvapIN%EIntRdis !Compressor discharge temperature, C    !RS: Debugging: Formerly FTXIN(7)
 
-  MCPAR(1)=FTPAR(EvapBarPress)  !Barometric pressure, kPa !RS: Debugging: Formerly FTPAR(31)
-  MCPAR(3)=FTPAR(EvapSucLnLen)   !Suction line length, m   !RS: Debugging: Formerly FTPAR(1)
-  MCPAR(4)=FTPAR(EvapSucLnOD)   !Suction line outside diameter, m !RS: Debugging: Formerly FTPAR(2)
-  MCPAR(5)=FTPAR(EvapSucLnTWThick)   !Suction line tube wall thickness, m  !RS: Debugging: Formerly FTPAR(3)
-  MCPAR(6)=FTPAR(EvapSucLnElev)   !Suction line elevation, m    !RS: Debugging: Formerly FTPAR(4)
-  MCPAR(7)=FTPAR(EvapSucLnQLoss)   !Suction line heat loss, kW   !RS: Debugging: Formerly FTPAR(5)
-  MCPAR(8)=FTPAR(EvapSucLnTempChg)   !Suction line temperature change, C   !RS: Debugging: Formerly FTPAR(6)
-  MCPAR(9)=FTPAR(EvapSucLnAddPD)   !Suction line additional pressure drop, kPa   !RS: Debugging: Formerly FTPAR(7)
-  MCPAR(10)=FTPAR(EvapMultRefQT) !Multiplier for ref. side heat transfer correlation   !RS: Debugging: Formerly FTPAR(23)
-  MCPAR(11)=FTPAR(EvapMultRefPD) !Multiplier for ref. side pressure drop correlation   !RS: Debugging: Formerly FTPAR(24)
-  MCPAR(12)=FTPAR(EvapMultAirQT) !Multiplier for air side heat transfer correlation    !RS: Debugging: Formerly FTPAR(25)
-  MCPAR(13)=FTPAR(EvapMultAirPD) !Multiplier for air side pressure drop correlation    !RS: Debugging: Formerly FTPAR(26)
-  MCPAR(14)=FTPAR(EvapFanPwr) !Fan power, kW    !RS: Debugging: Formerly FTPAR(27)
-  MCPAR(15)=FTPAR(EvapFanLoc) !Fan location, 1=draw through; 2=blow through !RS: Debugging: Formerly FTPAR(28)
-  MCPAR(16)=FTPAR(EvapCompQLoss) !Compressor heat loss, kW !RS: Debugging: Formerly FTPAR(32)
-  MCPAR(17)=FTPAR(EvapSysType) !Is compressor in air stream, 1=yes, 0=no !RS: Debugging: Formerly FTPAR(33)
-  MCPAR(18)=FTPAR(EvapPressTolConv) !System Type, 1=A/C, 2=Heat Pump, 3=Condenser Unit, 4=Reheat  !RS: Debugging: Formerly FTPAR(34)
+  MCPAR(1)=EvapPAR%EvapBarPress  !Barometric pressure, kPa !RS: Debugging: Formerly FTPAR(31)
+  MCPAR(3)=EvapPAR%EvapSucLnLen   !Suction line length, m   !RS: Debugging: Formerly FTPAR(1)
+  MCPAR(4)=EvapPAR%EvapSucLnOD   !Suction line outside diameter, m !RS: Debugging: Formerly FTPAR(2)
+  MCPAR(5)=EvapPAR%EvapSucLnTWThick   !Suction line tube wall thickness, m  !RS: Debugging: Formerly FTPAR(3)
+  MCPAR(6)=EvapPAR%EvapSucLnElev   !Suction line elevation, m    !RS: Debugging: Formerly FTPAR(4)
+  MCPAR(7)=EvapPAR%EvapSucLnQLoss   !Suction line heat loss, kW   !RS: Debugging: Formerly FTPAR(5)
+  MCPAR(8)=EvapPAR%EvapSucLnTempChg   !Suction line temperature change, C   !RS: Debugging: Formerly FTPAR(6)
+  MCPAR(9)=EvapPAR%EvapSucLnAddPD   !Suction line additional pressure drop, kPa   !RS: Debugging: Formerly FTPAR(7)
+  MCPAR(10)=EvapPAR%EvapMultRefQT !Multiplier for ref. side heat transfer correlation   !RS: Debugging: Formerly FTPAR(23)
+  MCPAR(11)=EvapPAR%EvapMultRefPD !Multiplier for ref. side pressure drop correlation   !RS: Debugging: Formerly FTPAR(24)
+  MCPAR(12)=EvapPAR%EvapMultAirQT !Multiplier for air side heat transfer correlation    !RS: Debugging: Formerly FTPAR(25)
+  MCPAR(13)=EvapPAR%EvapMultAirPD !Multiplier for air side pressure drop correlation    !RS: Debugging: Formerly FTPAR(26)
+  MCPAR(14)=EvapPAR%EvapFanPwr !Fan power, kW    !RS: Debugging: Formerly FTPAR(27)
+  MCPAR(15)=EvapPAR%EvapFanLoc !Fan location, 1=draw through; 2=blow through !RS: Debugging: Formerly FTPAR(28)
+  MCPAR(16)=EvapPAR%EvapCompQLoss !Compressor heat loss, kW !RS: Debugging: Formerly FTPAR(32)
+  MCPAR(17)=EvapPAR%EvapSysType !Is compressor in air stream, 1=yes, 0=no !RS: Debugging: Formerly FTPAR(33)
+  MCPAR(18)=EvapPAR%EvapPressTolConv !System Type, 1=A/C, 2=Heat Pump, 3=Condenser Unit, 4=Reheat  !RS: Debugging: Formerly FTPAR(34)
 
   RETURN
 
@@ -7224,7 +7224,7 @@ END SUBROUTINE LoadMicrochannelInputs
 
 !************************************************************************
 
-SUBROUTINE LoadMicrochannelOutputs(MCOUT,FTOUT)
+SUBROUTINE LoadMicrochannelOutputs(MCOUT) !,FTOUT)
 
 !-----------------------------------------------------------------------------------
 !
@@ -7243,27 +7243,27 @@ SUBROUTINE LoadMicrochannelOutputs(MCOUT,FTOUT)
 IMPLICIT NONE
 
 REAL, INTENT(IN)  :: MCOUT(21)  !Microchannel coil output data
-REAL, INTENT(OUT) :: FTOUT(17)  !Fin-tube coil output data  !RS: Debugging: Formerly FTOUT(20)
+!REAL, INTENT(OUT) :: FTOUT(17)  !Fin-tube coil output data  !RS: Debugging: Formerly FTOUT(20)
 
 !FLOW:
 
-  FTOUT(EOutpRoC)=MCOUT(3)   !Coil outlet pressure, kPa    !RS: Debugging: Formerly FTOUT(1)
-  FTOUT(EOuthRoC)=MCOUT(4)   !Coil outlet enthalpy, kJ/kg  !RS: Debugging: Formerly FTOUT(2)
-  FTOUT(EOutpRiC)=MCOUT(8)   !Suction line outlet pressure, kPa    !RS: Debugging: Formerly FTOUT(6)
-  FTOUT(EOuthRiC)=MCOUT(9)   !Suction line outlet enthalpy, kJ/kg  !RS: Debugging: Formerly FTOUT(7)
-  FTOUT(EOuttRiC)=MCOUT(10)  !Suction line outlet temperature, C   !RS: Debugging: Formerly FTOUT(8)
-  FTOUT(EOutxRiC)=MCOUT(11)  !Suction line outlet quality  !RS: Debugging: Formerly FTOUT(9)
-  FTOUT(EOuttSHiC)=MCOUT(12) !Suction line outlet superheat, C !RS: Debugging: Formerly FTOUT(10)
-  FTOUT(EOutQC)=MCOUT(1)  !Coil capacity, kW    !RS: Debugging: Formerly FTOUT(11)
-  FTOUT(EOutQCSens)=MCOUT(2)  !Sensible coil capacity, kW   !RS: Debugging: Formerly FTOUT(12)
-  FTOUT(EOutMSucLn)=MCOUT(16) !Mass in suction line, kg !RS: Debugging: Formerly FTOUT(13)
-  FTOUT(EOutMC)=MCOUT(17) !Mass in coil, kg !RS: Debugging: Formerly FTOUT(14)
-  FTOUT(EOuttAoC)=MCOUT(13) !Air side outlet temperature, C   !RS: Debugging: Formerly FTOUT(3)
-  FTOUT(EOutrhAoC)=MCOUT(14) !Air side outlet relative humidity    !RS: Debugging: Formerly FTOUT(4)
-  FTOUT(EOutDPAir)=MCOUT(15) !Air side pressure drop, kPa  !RS: Debugging: Formerly FTOUT(5)
-  FTOUT(EOutErrFlag)=MCOUT(21) !Error flag   !RS: Debugging: Formerly FTOUT(17)
-  FTOUT(EOutWtAl)=MCOUT(20) !Aluminum weight, kg  !RS: Debugging: Formerly FTOUT(15)
-  FTOUT(EOutWtCu)=0         !Copper weight, kg    !RS: Debugging: Formerly FTOUT(16)
+  EvapOUT%EOutpRoC=MCOUT(3)   !Coil outlet pressure, kPa    !RS: Debugging: Formerly FTOUT(1)
+  EvapOUT%EOuthRoC=MCOUT(4)   !Coil outlet enthalpy, kJ/kg  !RS: Debugging: Formerly FTOUT(2)
+  EvapOUT%EOutpRiC=MCOUT(8)   !Suction line outlet pressure, kPa    !RS: Debugging: Formerly FTOUT(6)
+  EvapOUT%EOuthRiC=MCOUT(9)   !Suction line outlet enthalpy, kJ/kg  !RS: Debugging: Formerly FTOUT(7)
+  EvapOUT%EOuttRiC=MCOUT(10)  !Suction line outlet temperature, C   !RS: Debugging: Formerly FTOUT(8)
+  EvapOUT%EOutxRiC=MCOUT(11)  !Suction line outlet quality  !RS: Debugging: Formerly FTOUT(9)
+  EvapOUT%EOuttSHiC=MCOUT(12) !Suction line outlet superheat, C !RS: Debugging: Formerly FTOUT(10)
+  EvapOUT%EOutQC=MCOUT(1)  !Coil capacity, kW    !RS: Debugging: Formerly FTOUT(11)
+  EvapOUT%EOutQCSens=MCOUT(2)  !Sensible coil capacity, kW   !RS: Debugging: Formerly FTOUT(12)
+  EvapOUT%EOutMSucLn=MCOUT(16) !Mass in suction line, kg !RS: Debugging: Formerly FTOUT(13)
+  EvapOUT%EOutMC=MCOUT(17) !Mass in coil, kg !RS: Debugging: Formerly FTOUT(14)
+  EvapOUT%EOuttAoC=MCOUT(13) !Air side outlet temperature, C   !RS: Debugging: Formerly FTOUT(3)
+  EvapOUT%EOutrhAoC=MCOUT(14) !Air side outlet relative humidity    !RS: Debugging: Formerly FTOUT(4)
+  EvapOUT%EOutDPAir=MCOUT(15) !Air side pressure drop, kPa  !RS: Debugging: Formerly FTOUT(5)
+  EvapOUT%EOutErrFlag=MCOUT(21) !Error flag   !RS: Debugging: Formerly FTOUT(17)
+  EvapOUT%EOutWtAl=MCOUT(20) !Aluminum weight, kg  !RS: Debugging: Formerly FTOUT(15)
+  EvapOUT%EOutWtCu=0         !Copper weight, kg    !RS: Debugging: Formerly FTOUT(16)
 
   RETURN
 

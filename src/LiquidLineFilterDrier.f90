@@ -60,7 +60,7 @@
 ! Silly things are fine
 ! Somethings these small silly things are great to grab on to when starting up with the code after being off for a while
 
-SUBROUTINE CalcFilterDrierDP(XIN,PAR,OUT)
+SUBROUTINE CalcFilterDrierDP !(XIN,PAR,OUT)
 
 ! ----------------------------------------------------------------------
 !
@@ -88,14 +88,14 @@ SUBROUTINE CalcFilterDrierDP(XIN,PAR,OUT)
 !
 ! ----------------------------------------------------------------------
 USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
-USE DataSimulation, ONLY: FilFlowCap, FilRatDP, FIDP, FODP  !RS: Debugging: Brings variable names instead of numbers through
+USE DataSimulation !, ONLY: FilFlowCap, FilRatDP, FIDP, FODP  !RS: Debugging: Brings variable names instead of numbers through
 implicit none
 
 !Flow:
 
-REAL, INTENT(IN) :: XIN(1)
-REAL, INTENT(IN) :: PAR(2)
-REAL, INTENT(OUT) :: OUT(1)
+!REAL, INTENT(IN) :: XIN(1)
+!REAL, INTENT(IN) :: PAR(2)
+!REAL, INTENT(OUT) :: OUT(1)
 
 !Constants from ARI std 70 
 REAL,PARAMETER :: FlowRatePerTonR22 = 0.0224 !kg/s/ton '0.0064 'kg/s/kW
@@ -111,10 +111,10 @@ REAL DP !Pressure drop, kPa
 
 !Flow:
 
-	mdot=XIN(FIDP) !RS: Debugging: Formerly XIN(1)
+	mdot=FilterIN%FIDP !RS: Debugging: Formerly XIN(1)
 
-	FlowCapacity=PAR(FilFlowCap) !RS: Debugging: Formerly PAR(1)
-	RatedDP=PAR(FilRatDP)  !RS: Debugging: Formerly PAR(2)
+	FlowCapacity=FilterPAR%FilFlowCap !RS: Debugging: Formerly PAR(1)
+	RatedDP=FilterPAR%FilRatDP  !RS: Debugging: Formerly PAR(2)
 
 	IF (FlowCapacity .GT. 0) THEN
 		SELECT CASE (TRIM(RefName))
@@ -135,7 +135,7 @@ REAL DP !Pressure drop, kPa
 		DP=0
 	END IF
 
-	OUT(FODP)=DP   !RS: Debugging: Formerly OUT(1)
+	FilterOUT%FODP=DP   !RS: Debugging: Formerly OUT(1)
 
 RETURN
 

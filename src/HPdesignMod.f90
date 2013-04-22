@@ -77,7 +77,7 @@
 
     INTEGER(2) AirPropOpt			!Air prop calc. option
     INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error
-    REAL AirProp(8)		!Air properties
+    !REAL AirProp(8)		!Air properties
 
     INTEGER ICHRGE,IMASS,IREFC,LPRINT
     REAL TAIIEI
@@ -104,7 +104,7 @@
     REAL, PARAMETER :: CapTubeDimStep=1E-3
 
     LOGICAL IsSizeDiameter
-    REAL SimpleEvapOUT(17),DetailedEvapOUT(17)  !RS: Debugging: Formerly (20)
+!    REAL SimpleEvapOUT(17),DetailedEvapOUT(17)  !RS: Debugging: Formerly (20)  !RS: Debugging: Not used anymore
     REAL DetailedQevp,DetailedDPevp
     REAL SimpleQevp,SimpleDPevp
     LOGICAL,SAVE :: IsFirstTimeEvaporator = .TRUE. !First time to call evaporator flag
@@ -356,13 +356,13 @@
         AirPropOpt=2
         AirProp%APTDB=(TaiC-32)*5/9    !RS Comment: Unit Conversion, from F to C   !RS: Debugging: Formerly AirProp(1)
         AirProp%APRelHum=RHiC !RS: Debugging: Formerly AirProp(3)
-        CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+        CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
         RhoAiC=AirProp%APDryDens   !RS: Debugging: Formerly AirProp(7)
 
         AirPropOpt=2
         AirProp%APTDB=(TaiE-32)*5/9    !RS Comment: Unit Conversion, from F to C   !RS: Debugging: Formerly AirProp(1)
         AirProp%APRelHum=RHiE !RS: Debugging: Formerly AirProp(3)
-        CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+        CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
         RhoAiE=AirProp%APDryDens   !RS: Debugging: Formerly AirProp(7)
 
         !Actual mass flow rate
@@ -406,7 +406,7 @@
         
         EvapIN%EInmRef=MdotR           !Refrigerant side mass flow rate, kg/s    !RS: Debugging: Formerly EvapIN(1)
         !EvapIN(2)=CompIN(1)       !Compressor inlet pressure
-        EvapIN%EInhRi=CondOUT(COuthRiE     !Exp. device inlet enthalpy, kJ/kg    !RS: Debugging: Formerly EvapIN(3), CondOUT(11)
+        EvapIN%EInhRi=CondOUT%COuthRiE     !Exp. device inlet enthalpy, kJ/kg    !RS: Debugging: Formerly EvapIN(3), CondOUT(11)
         EvapIN%EInmAi=XMaE            !Air side mass flow rate, kg/s    !RS: Debugging: Formerly EvapIN(4)
         EvapIN%EIntAi=(TAIIEI-32)/1.8 !Air side inlet temp. C   !RS: Debugging: Formerly EvapIN(5)
         EvapIN%EInrhAi=RHiE            !Air side inlet relative humidity !RS: Debugging: Formerly EvapIN(6)
@@ -426,7 +426,7 @@
                 !Microchannel coil
                 EvapPAR%EvapFirstTime=1 !First time   !RS: Debugging: Formerly EvapPAR(38)
                 EvapPAR%EvapSimpCoil=0 !Detailed version !RS: Debugging: Formerly EvapPAR(37)
-                CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
+                CALL Evaporator(Ref$) !,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
                 EvapPAR%EvapFirstTime=0 !No longer first time !RS: Debugging: Formerly EvapPAR(38)
             ELSE
                 !Plate-fin coil
@@ -435,32 +435,32 @@
                 IF (IsFirstTimeEvaporator) THEN
                     EvapPAR%EvapFirstTime=1 !First time   !RS: Debugging: Formerly EvapPAR(38)
                     EvapPAR%EvapSimpCoil=0 !Detailed version !RS: Debugging: Formerly EvapPAR(37)
-                    CALL Evaporator(Ref$,EvapIN,EvapPAR,DetailedEvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,DetailedEvapOUT) !RS: Debugging: Extraneous PureRef
-                    DetailedQevp=DetailedEvapOUT%EOutQC    !RS: Debugging: Formerly DetailedEvapOUT(11)
-                    DetailedDPevp=EvapIN%EInpRi-DetailedEvapOUT%EOutpRiC  !RS: Debugging: Formerly EvapIN(2), DetailedEvapOUT(6)
+                    CALL Evaporator(Ref$) !EvapIN,EvapPAR,DetailedEvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,DetailedEvapOUT) !RS: Debugging: Extraneous PureRef
+                    DetailedQevp=EvapOUT%EOutQC    !RS: Debugging: Formerly DetailedEvapOUT(11)
+                    DetailedDPevp=EvapIN%EInpRi-EvapOUT%EOutpRiC  !RS: Debugging: Formerly EvapIN(2), DetailedEvapOUT(6)
 
                     EvapPAR%EvapSimpCoil=1 !Simple version   !RS: Debugging: Formerly EvapPAR(37)
-                    CALL Evaporator(Ref$,EvapIN,EvapPAR,SimpleEvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,SimpleEvapOUT)   !RS: Debugging: Extraneous PureRef
-                    SimpleQevp=SimpleEvapOUT%EOutQC    !RS: Debugging: Formerly SimpleEvapOUT(11)
-                    SimpleDPevp=EvapIN%EInpRi-SimpleEvapOUT%EOutpRiC !RS: Debugging: Formerly EvapIN(2), SimpleEvapOUT(6)
+                    CALL Evaporator(Ref$) !,EvapIN,EvapPAR,SimpleEvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,SimpleEvapOUT)   !RS: Debugging: Extraneous PureRef
+                    SimpleQevp=EvapOUT%EOutQC    !RS: Debugging: Formerly SimpleEvapOUT(11)
+                    SimpleDPevp=EvapIN%EInpRi-EvapOUT%EOutpRiC !RS: Debugging: Formerly EvapIN(2), SimpleEvapOUT(6)
 
                     IF (ABS((SimpleQevp-DetailedQevp)/DetailedQevp) .LT. 0.1 .AND. &
                     ABS((SimpleDPevp-DetailedDPevp)/DetailedDPevp) .LT. 0.1) THEN
                         EvapPAR%EvapSimpCoil=1 !Simple version   !RS: Debugging: Formerly EvapPAR(37)
-                        EvapOUT=SimpleEvapOUT
+                        !EvapOUT=SimpleEvapOUT  !RS: Debugging: No SimpleEvapOUT anymore
                     ELSE
-                        EvapPAR(EvapSimpCoil=0 !Detailed version !RS: Debugging: Formerly EvapPAR(37)
-                        EvapOUT=DetailedEvapOUT
+                        EvapPAR%EvapSimpCoil=0 !Detailed version !RS: Debugging: Formerly EvapPAR(37)
+                        !EvapOUT=DetailedEvapOUT !RS: Debugging: No DetailedEvapOUT anymore
                     END IF
                     IsFirstTimeEvaporator=.FALSE. 
 
                     !Always detailed
                     EvapPAR%EvapSimpCoil=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53)
-                    EvapOUT=DetailedEvapOUT
+                    !EvapOUT=DetailedEvapOUT    !RS: Debugging: No DetailedEvapOUT anymore
 
                 ELSE
-                    CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
-                    EvapPAR%EvapFirstTim=0 !No longer first time !RS: Debugging: Formerly EvapPAR(38)
+                    CALL Evaporator(Ref$) !,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
+                    EvapPAR%EvapFirstTime=0 !No longer first time !RS: Debugging: Formerly EvapPAR(38)
                 END IF
             END IF
 
@@ -527,9 +527,9 @@
                 AccumIN%AccImdot= MdotR    !RS: Debugging: Formerly AccumIN(1)
                 AccumIN%AccIpRo=CompIN%CompInPsuc !Pressure  !RS: Debugging: Formerly CompIN(1), AccumIN(2)
                 AccumIN%AccIhRo=CompIN%CompInHsuc !Enthalpy  !RS: Debugging: Formerly CompIN(3), AccumIN(3)
-                CALL CalcAccumulatorMass(AccumIN,AccumOUT)
+                CALL CalcAccumulatorMass !(AccumIN,AccumOUT)
             ELSE
-                AccumOUT(AccOMass=0
+                AccumOUT%AccOMass=0
             END IF
 
             CALL CalcCondenserInventory(MassCoil,MassLiqCoil,MassVapCoil,CondLiqTubeLength,CondVapTubeLength,CondTwoPhaseTubeLength,CondNumLiqTubes)
@@ -654,7 +654,7 @@
 
                     !CALL ShortTube(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
                     !CALL ShortTubePayne(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
-                    CALL ShortTubePayne(Ref$,ShTbIN,ShTbPAR,ShTbOUT)   !RS: Debugging: Extraneous PureRef
+                    CALL ShortTubePayne(Ref$) !,ShTbIN,ShTbPAR,ShTbOUT)   !RS: Debugging: Extraneous PureRef
                     IF (ShTbOUT%ShTbOErrFlag .NE. 0) THEN !RS: Debugging: Formerly ShTbOUT(7)
                         SELECT CASE (INT(ShTbOUT%ShTbOErrFlag))   !RS: Debugging: Formerly ShTubOUT(7)
                         CASE (1)
@@ -740,7 +740,7 @@
 
                 !CALL CapillaryTubeChoi(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)  
                 !CALL CapillaryTubeORNL(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)
-                CALL CapillaryTubeORNL(Ref$,CapTubeIN,CapTubePAR,CapTubeOUT)    !RS: Debugging: Extraneous PureRef
+                CALL CapillaryTubeORNL !(Ref$) !,CapTubeIN,CapTubePAR,CapTubeOUT)    !RS: Debugging: Extraneous PureRef
 
                 IF (CapTubeOUT%CTOErrFlag .NE. 0) THEN   !RS: Debugging: Formerly CapTubeOUT(2) 
                     SELECT CASE (INT(CapTubeOUT%CTOErrFlag))   !RS: Debugging: Formerly CapTubeOUT(2) 
@@ -818,9 +818,9 @@
                 AccumIN%AccImdot=MdotR    !RS: Debugging: Formerly AccumIN(1)
                 AccumIN%AccIpRo=CompIN%CompInPsuc !Pressure  !RS: Debugging: Formerly CompIN(1), AccumIN(2)
                 AccumIN%AccIhRo=CompIN%CompInHsuc !Enthalpy  !RS: Debugging: Formerly CompIN(3), AccumIN(3)
-                CALL CalcAccumulatorMass(AccumIN,AccumOUT)
+                CALL CalcAccumulatorMass !(AccumIN,AccumOUT)
             ELSE
-                AccumOUT(AccOMass)=0   !RS: Debugging: Formerly AccumOUT(1)
+                AccumOUT%AccOMass=0   !RS: Debugging: Formerly AccumOUT(1)
             END IF
 
             CALL CalcCondenserInventory(MassCoil,MassLiqCoil,MassVapCoil,CondLiqTubeLength,CondVapTubeLength,CondTwoPhaseTubeLength,CondNumLiqTubes)

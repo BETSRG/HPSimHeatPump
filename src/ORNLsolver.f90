@@ -113,7 +113,7 @@
 
     INTEGER(2) AirPropOpt			!Air prop calc. option
     INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error 
-    REAL AirProp(8)		!Air properties ! VL Comment: Array Size Explanation??
+    !REAL AirProp(8)		!Air properties ! VL Comment: Array Size Explanation??
 
     REAL TimeStart,  TimeSpent
 
@@ -244,11 +244,10 @@
         MiniLunit = ' (in)'
     END IF
 
-    CALL UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR, &
-    AccumPAR,CFMcnd,CFMevp,TaiC,TaiE,RHiC,RHiE, &
-    Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure)
+    CALL UnitConvert !(CFMcnd,CFMevp,TaiC,TaiE,RHiC,RHiE, & !Unit,& !CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR,AccumPAR, &
+    !Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure)
     
-    CALL InitAccumulator(AccumPAR)
+    CALL InitAccumulator !(AccumPAR)
 
     !set up Refrigerant variable...why?
     Refrigerant = RefName
@@ -287,10 +286,10 @@
         RHiC=RHiCAct
         RHiE=RHiEAct
         SUPER=SUPERAct
-        EvapIn=0.0
-        EvapOut=0.0
-        CondIn=0.0
-        CondOut=0.0
+        !EvapIn=0.0 !RS: Debugging: Not used
+        !EvapOut=0.0
+        !CondIn=0.0
+        !CondOut=0.0
 
         IF (RHiC .GT. TaiC) THEN
             CALL IssueOutputMessage( '## ERROR ## Main: Condenser wet bulb temperature is greater than dry bulb temperature.')
@@ -299,9 +298,9 @@
         AirPropOpt=3                  ! VL_Magic_Number number	! VL_User_Setting
         AirProp%APTDB=Temperature_F2C(TaiC)  ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(1)
         AirProp%APTWB=RHiC                   ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(5)
-        CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-        RHiC=AirProp(APRelHum)               ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(3)
-        RhoAiC=AirProp(APDryDens)             ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(7)
+        CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+        RHiC=AirProp%APRelHum               ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(3)
+        RhoAiC=AirProp%APDryDens             ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(7)
 
         CondIN%CIntAi=Temperature_F2C(TaiC)   ! VL_Index_Replace    !RS: Debugging: Formerly CondIN(5)
         CondIN%CInrhAi=RHiC                    ! VL_Index_Replace    !RS: Debugging: Formerly CondIN(6)
@@ -313,7 +312,7 @@
         AirPropOpt=3                  ! VL_Magic_Number number	! VL_User_Setting
         AirProp%APTDB=Temperature_F2C(TaiE)  ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(1)
         AirProp%APTWB=RHiE                   ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(5)
-        CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+        CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
         RHiE=AirProp%APRelHum               ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(3)
         RhoAiE=AirProp%APDryDens             ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(7)
 
@@ -371,9 +370,9 @@
         CompIN%CompInPdis=PoCmp	! VL_Index_Replace  !RS: Debugging: Formerly CompIN(2)
         CompIN%CompInHsuc=HiCmp	! VL_Index_Replace  !RS: Debugging: Formerly CompIN(3)
         IF (SystemType .NE. EVAPORATORONLY) THEN
-            CALL Compressor(Ref$,CompIN,CompPAR,CompOUT) !(Ref$,PureRef,CompIN,CompPAR,CompOUT) !RS: Debugging: Extraneous PureRef
-            IF (CompOUT(CmpOErrFlag) .NE. 0) THEN	! VL_Index_Replace  !RS: Debugging: Formerly CompOUT(7)
-                SELECT CASE (INT(CompOUT(CmpOErrFlag)))	! VL_Index_Replace  !RS: Debugging: Formerly CompOUT(7)
+            CALL Compressor(Ref$) !,CompIN,CompPAR,CompOUT) !(Ref$,PureRef,CompIN,CompPAR,CompOUT) !RS: Debugging: Extraneous PureRef
+            IF (CompOUT%CmpOErrFlag .NE. 0) THEN	! VL_Index_Replace  !RS: Debugging: Formerly CompOUT(7)
+                SELECT CASE (INT(CompOUT%CmpOErrFlag))	! VL_Index_Replace  !RS: Debugging: Formerly CompOUT(7)
                 CASE (1)
                     CALL IssueOutputMessage( '## ERROR ## Highside: Compressor solution error!')
                     STOP
@@ -558,12 +557,12 @@
                 EvapIN%EIntRdis=0.0             !Discharge temperature, C, not used for this	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(9)
 
                 EvapPAR%EvapSimpCoil=0 !Detailed model	! VL_Index_Replace  !RS: Debugging: Formerly EvapPAR(53)
-                CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
+                CALL Evaporator(Ref$) !,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
                 DetailedQevp=-EvapOUT%EOutQC	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(11)
                 CALL EndEvaporatorCoil
 
                 EvapPAR%EvapSimpCoil=1 !Simple model	! VL_Index_Replace  !RS: Debugging: Formerly EvapPAR(37)
-                CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
+                CALL Evaporator(Ref$) !,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
                 SimpleQevp=-EvapOUT%EOutQC	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(11)
                 CALL EndEvaporatorCoil
 
@@ -584,7 +583,7 @@
                     EvapIN%EInrhAi=RHiE            !Air side inlet relative humidity	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(6)
                     EvapIN%EIntRdis=0.0             !Discharge temperature, C, not used for this	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(9)
 
-                    CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef	
+                    CALL Evaporator(Ref$) !,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef	
                     EvapPAR%EvapFirstTime=0 !First time	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EvapPAR(38)
 
                     Qevp=-EvapOUT%EOutQC 	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(11)
@@ -594,7 +593,7 @@
                     ELSE
                         WRITE(tmpString,'(I8, F10.4, F12.5)') I,MdotR/Umass*3600,Qevp/UnitPwr
                     END IF
-                    CALL IssueOutputMessage( tmpString)
+                    CALL IssueOutputMessage(tmpString)
 
                     IF (ABS(EvapOUT%EOuthRoC-HoEvp)>0.1 .AND. (mdotRmax-mdotRmin)/mdotR > 0.001) THEN	! VL_Magic_Number   !RS: Debugging: Formerly EvapOUT(2)
 
@@ -645,12 +644,12 @@
 
                 !Determine if detailed model is needed, ISI - 02/07/08
                 CondPAR%CondSimpCoil=1 !Simple version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(44)
-                CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
+                CALL Condenser(Ref$) !,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
                 SimpleQcnd=CondOUT%COutQC	! VL_Index_Replace  !RS: Debugging: Formerly CondOUT(15)
                 CALL EndCondenserCoil
 
                 CondPAR%CondSimpCoil=0 !Detailed version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(44)
-                CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
+                CALL Condenser(Ref$) !,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
                 DetailedQcnd=CondOUT%COutQC	! VL_Index_Replace  !RS: Debugging: Formerly CondOUT(15)
                 CALL EndCondenserCoil
 
@@ -670,7 +669,7 @@
                     CondIN%CIntAi=Temperature_F2C(TAIC)	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(5)
                     CondIN%CInrhAi=RHIC 	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(6)
 
-                    CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef		
+                    CALL Condenser(Ref$) !,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef		
                     CondPAR%CondFirstTime=0 !First time	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(45)
 
                     Qcnd=CondOUT%COutQC 	! VL_Index_Replace  !RS: Debugging: Formerly CondOUT(15)

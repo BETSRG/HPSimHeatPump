@@ -378,7 +378,7 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
   END IF
 
   !*************** Accumulator **************** !RS: Debugging: Moving: ORNLSolver?
-  AccumPAR(AccDTube)=(SucLnPAR(2)-SucLnPAR(3)/1000*2) !J-tube diameter, mm or in   !RS: Debugging: Formerly AccumPAR(6)
+  AccumPAR%AccDTube=(SucLnPAR(2)-SucLnPAR(3)/1000*2) !J-tube diameter, mm or in   !RS: Debugging: Formerly AccumPAR(6)
   !********************************************
 
   !Discharge Line
@@ -711,27 +711,53 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
   EvapPAR%EvapSucLnAddPD=SucLnPAR(7) !Suction line additional pressure drop !RS: Debugging: Formerly EvapPAR(7)
 
   IF (IsCoolingMode .GT. 0) THEN    !Populating arrays
+                !***************** Indoor coil data ***************** !RS: Debugging: Evaporator & Condenser
+
+  CALL GetObjectItem('IndoorCoilData',1,Alphas,NumAlphas, &
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+  EvapPAR%EvapNumCkt = Numbers(13)    !Number of Circuits  !RS: Debugging: Formerly EvapPAR(19)
+  
+  !----------
+  
     CoilParams(1)%AirFlowRate=CFMevp
     CoilParams(2)%AirFlowRate=CFMcnd
 
-	ShTbPAR=CoolingShTbPAR
+	ShTbPAR%ShTbTLen=CoolingShTbPAR(1)
+    ShTbPAR%ShTbTID=CoolingShTbPAR(2)
+    ShTbPAR%ShTbChamDep=CoolingShTbPAR(3)
     ShTbPAR%ShTbECktNum=EvapPAR%EvapNumCkt !Number of circuits in evaporator    !RS: Debugging: Formerly EvapPAR(19), ShTbPAR(4)
     ShTbPAR%ShTbDTubeLen=CoolingDistubeLength !RS: Debugging: Formerly ShTbPAR(5)
 
-	CapTubePAR=CoolingCapTubePAR
+    CapTubePAR%CTTubeID=CoolingCapTubePAR(1)
+	CapTubePAR%CTTubeLen=CoolingCapTubePAR(2)
+    CapTubePAR%CTTubeCoilD=CoolingCapTubePAR(3)
     CapTubePAR%CTEvapCktNum=EvapPAR%EvapNumCkt !Number of circuits in evaporator !RS: Debugging: Formerly EvapPAR(19), CapTubePAR(4)
     CapTubePAR%CTDisTubeLen=CoolingDistubeLength  !RS: Debugging: Formerly CapTubePAR(5)
 
     ExpDevice=CoolingExpDevice
   ELSE
+        CALL GetObjectItem('OutdoorCoilData',1,Alphas,NumAlphas, &  !RS: Debugging:
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+  EvapPAR%EvapNumCkt = Numbers(13)    !Number of Circuits  !RS: Debugging: Formerly EvapPAR(19)
+  
+  !-------
+      
     CoilParams(1)%AirFlowRate=CFMcnd
     CoilParams(2)%AirFlowRate=CFMevp
  
-	ShTbPAR=HeatingShTbPAR
+	ShTbPAR%ShTbTLen=HeatingShTbPAR(1)
+    ShTbPAR%ShTbTID=HeatingShTbPAR(2)
+    ShTbPAR%ShTbChamDep=HeatingShTbPAR(3)
     ShTbPAR%ShTbECktNum=EvapPAR%EvapNumCkt !Number of circuits in evaporator    !RS: Debugging: Formerly EvapPAR(19), ShTbPAR(4)
     ShTbPAR%ShTbDTubeLen=HeatingDistubeLength !RS: Debugging: Formerly ShTbPAR(5)
 
-	CapTubePAR=HeatingCapTubePAR
+	CapTubePAR%CTTubeID=HeatingCapTubePAR(1)
+	CapTubePAR%CTTubeLen=HeatingCapTubePAR(2)
+    CapTubePAR%CTTubeCoilD=HeatingCapTubePAR(3)
     CapTubePAR%CTEvapCktNum=EvapPAR%EvapNumCkt !Number of circuits in evaporator !RS: Debugging: Formerly EvapPAR(19), CapTubePAR(4)
     CapTubePAR%CTDisTubeLen=HeatingDistubeLength  !RS: Debugging: CapTubePAR(5)
 

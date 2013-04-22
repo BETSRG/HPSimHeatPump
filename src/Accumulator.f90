@@ -95,7 +95,7 @@ PRIVATE
 
 CONTAINS
 
-    SUBROUTINE CalcAccumulatorMass(XIN,OUT)
+    SUBROUTINE CalcAccumulatorMass !(XIN,OUT)
 
     ! ----------------------------------------------------------------------
     !
@@ -135,8 +135,8 @@ CONTAINS
     IMPLICIT NONE
 
     !Subroutine argument declarations
-    REAL, INTENT(IN) :: XIN(3)
-    REAL, INTENT(OUT) :: OUT(2) !RS: Debugging: Formerly OUT(6)
+    !REAL, INTENT(IN) :: XIN(3)
+    !REAL, INTENT(OUT) :: OUT(2) !RS: Debugging: Formerly OUT(6)
 
     INTEGER ErrorFlag          !0-No error
     !1-Accumulator solution not converge
@@ -197,9 +197,9 @@ CONTAINS
     ! VL: Initialize default values for GOTO flags
     FLAG_GOTO_40 = .FALSE.
 
-    mdot=XIN(AccImdot) !RS: Debugging: Formerly XIN(1)
-    pRo=XIN(AccIpRo)  !RS: Debugging: Formerly XIN(2)
-    hRo=XIN(AccIhRo)  !RS: Debugging: Formerly XIN(3)
+    mdot=AccumIN%AccImdot !RS: Debugging: Formerly XIN(1)
+    pRo=AccumIN%AccIpRo  !RS: Debugging: Formerly XIN(2)
+    hRo=AccumIN%AccIhRo  !RS: Debugging: Formerly XIN(3)
     RMASS=mdot/0.000126 !Convert from kg/s to lbm/hr
 
     ErrorFlag=0
@@ -377,8 +377,8 @@ CONTAINS
         XLEVEL = HL(1)*12.
     END IF
 
-    OUT(AccOMass)=ACCMAS*0.4563    !Total mass, convert from lbm to kg !RS: Debugging: Formerly OUT(1)
-    OUT(AccODP)=AccumDP  !RS: Debugging: Formerly OUT(2)
+    AccumOUT%AccOMass=ACCMAS*0.4563    !Total mass, convert from lbm to kg !RS: Debugging: Formerly OUT(1)
+    AccumOUT%AccODP=AccumDP  !RS: Debugging: Formerly OUT(2)
 
     RETURN
 
@@ -531,7 +531,7 @@ CONTAINS
 
     !******************************************************************************
 
-    SUBROUTINE InitAccumulator(PAR)
+    SUBROUTINE InitAccumulator !(PAR)
 
     ! ----------------------------------------------------------------------
     !
@@ -564,22 +564,22 @@ CONTAINS
 
     IMPLICIT NONE
 
-    REAL, INTENT(IN) :: PAR(10)
+    !REAL, INTENT(IN) :: PAR(10)
 
     !Flow:
 
     !Convert from m to ft
-    DACC = PAR(AccD)/0.3048 !ACCDIA    !RS: Debugging: Formerly PAR(1)
-    AHGT = PAR(AccH)/0.3048 !ACCHGT    !RS: Debugging: Formerly PAR(2)
-    DHOLE(1)=PAR(AccD1)/0.3048  !RS: Debugging: Formerly PAR(3)
-    DHOLE(2)=PAR(AccD2)/0.3048  !RS: Debugging: Formerly PAR(4)
-    HDIS = PAR(AccHDis)/0.3048 !HOLDIS    !RS: Debugging: Formerly PAR(5)
-    DTUBE = PAR(AccDTube)/0.3048 !ATBDIA   !RS: Debugging: Formerly PAR(6)
+    DACC = AccumPAR%AccD/0.3048 !ACCDIA    !RS: Debugging: Formerly PAR(1)
+    AHGT = AccumPAR%AccH/0.3048 !ACCHGT    !RS: Debugging: Formerly PAR(2)
+    DHOLE(1)=AccumPAR%AccD1/0.3048  !RS: Debugging: Formerly PAR(3)
+    DHOLE(2)=AccumPAR%AccD2/0.3048  !RS: Debugging: Formerly PAR(4)
+    HDIS = AccumPAR%AccHDis/0.3048 !HOLDIS    !RS: Debugging: Formerly PAR(5)
+    DTUBE = AccumPAR%AccDTube/0.3048 !ATBDIA   !RS: Debugging: Formerly PAR(6)
 
-    RatedDP=PAR(AccDP)  !RS: Debugging: Formerly PAR(7)
-    RatedDT=PAR(AccDT)  !RS: Debugging: Formerly PAR(8)
-    CoeffM=PAR(AccCM)   !RS: Debugging: Formerly PAR(9)
-    CoeffB=PAR(AccCB)  !RS: Debugging: Formerly PAR(10)
+    RatedDP=AccumPAR%AccDP  !RS: Debugging: Formerly PAR(7)
+    RatedDT=AccumPAR%AccDT  !RS: Debugging: Formerly PAR(8)
+    CoeffM=AccumPAR%AccCM   !RS: Debugging: Formerly PAR(9)
+    CoeffB=AccumPAR%AccCB  !RS: Debugging: Formerly PAR(10)
 
     RETURN
 

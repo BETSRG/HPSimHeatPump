@@ -254,7 +254,7 @@ REAL CondTubeArea
 REAL CondFinArea
 
 !CondPAR Variables
-TYPE CondPAR
+TYPE CondParameters
     REAL CondDisLnLen
     REAL CondDisLnOD
     REAL CondDisLnTWThick
@@ -262,8 +262,8 @@ TYPE CondPAR
     REAL CondDisLnQLoss
     REAL CondDisLnTempChg
     REAL CondDisLnAddPD
-    REAL CondLiqLen
-    REAL CondLiqLnPD
+    REAL CondLiqLnLen
+    REAL CondLiqLnOD
     REAL CondLiqLnTWThick
     REAL CondLiqLnElev
     REAL CondLiqLnQLoss
@@ -300,7 +300,9 @@ TYPE CondPAR
     INTEGER CondCompMan
     INTEGER CondSimpCoil
     INTEGER CondFirstTime
-END TYPE CondPAR
+END TYPE CondParameters
+
+TYPE(CondParameters) :: CondPAR
 !INTEGER, SAVE:: CondDisLnLen=1
 !INTEGER, SAVE:: CondDisLnOD=2
 !INTEGER, SAVE:: CondDisLnTWThick=3
@@ -348,7 +350,7 @@ END TYPE CondPAR
 !INTEGER, SAVE:: CondFirstTime=45
 
 !CondIN variables
-TYPE CondIN
+TYPE CondInlet
     REAL CInmRef
     REAL CInpRo
     REAL CInhRo
@@ -356,7 +358,9 @@ TYPE CondIN
     REAL CIntAi
     REAL CInrhAi
     REAL CInSolFlux
-END TYPE CondIN
+END TYPE CondInlet
+
+TYPE(CondInlet) :: CondIN
 !INTEGER, SAVE:: CInmRef=1
 !INTEGER, SAVE:: CInpRo=2
 !INTEGER, SAVE:: CInhRo=3
@@ -366,7 +370,7 @@ END TYPE CondIN
 !INTEGER, SAVE:: CInSolFlux=7
 
 !CondOUT variables
-TYPE CondOUT
+TYPE CondOutlet
     REAL COutpRiC
     REAL COuthRiC
     REAL COuttAoC
@@ -387,7 +391,9 @@ TYPE CondOUT
     REAL COutMC
     REAL COutDPAir
     REAL COutErrFlag
-END TYPE CondOUT
+END TYPE CondOutlet
+
+TYPE(CondOutlet) :: CondOUT
 !INTEGER, SAVE:: COutpRiC=1
 !INTEGER, SAVE:: COuthRiC=2
 !INTEGER, SAVE:: COuttAoC=3
@@ -410,7 +416,7 @@ END TYPE CondOUT
 !INTEGER, SAVE:: COutErrFlag=20
 
 !EvapPAR variables
-TYPE EvapPAR
+TYPE EvapParameters
     REAL EvapSucLnLen
     REAL EvapSucLnOD
     REAL CondDisLnTWThick
@@ -418,8 +424,9 @@ TYPE EvapPAR
     REAL EvapSucLnQLoss
     REAL EvapSucLnTempChg
     REAL EvapSucLnAddPD
+    REAL EvapSucLnTWThick
     REAL EvapCoilTOD
-    REAL EvapCoilLnTWThick
+    REAL EvapCoilTWThick
     REAL EvapCoilSTLen
     REAL EvapCoilTThermCon
     REAL EvapTspc
@@ -449,7 +456,9 @@ TYPE EvapPAR
     INTEGER EvapCompMan
     INTEGER EvapSimpCoil
     INTEGER EvapFirstTime
-END TYPE EvapPAR
+END TYPE EvapParameters
+
+TYPE(EvapParameters) :: EvapPAR
 !INTEGER, SAVE:: EvapSucLnLen=1
 !INTEGER, SAVE:: EvapSucLnOD=2
 !INTEGER, SAVE:: EvapSucLnTWThick=3
@@ -490,7 +499,7 @@ END TYPE EvapPAR
 !INTEGER, SAVE:: EvapFirstTime=38
 
 !EvapIN variables
-TYPE EvapIN
+TYPE EvapInlet
     REAL EInmRef
     REAL EInpRi
     REAL EInhRi
@@ -499,7 +508,9 @@ TYPE EvapIN
     REAL EInrhAi
     REAL EInSolFlux
     REAL EIntRdis
-END TYPE EvapIN
+END TYPE EvapInlet
+
+TYPE(EvapInlet) :: EvapIN
 !INTEGER, SAVE:: EInmRef=1
 !INTEGER, SAVE:: EInpRi=2
 !INTEGER, SAVE:: EInhRi=3
@@ -510,7 +521,7 @@ END TYPE EvapIN
 !INTEGER, SAVE:: EIntRdis=9
 !
 !EvapOUT variables
-TYPE EvapOUT
+TYPE EvapOutlet
     REAL EOutpRoC
     REAL EOuthRoC
     REAL EOuttAoC
@@ -528,7 +539,9 @@ TYPE EvapOUT
     REAL EOutWtAl
     REAL EOutWtCu
     REAL EOutErrFlag
-END TYPE EvapOUT
+END TYPE EvapOutlet
+
+TYPE(EvapOutlet) :: EvapOUT
 !INTEGER, SAVE:: EOutpRoC=1
 !INTEGER, SAVE:: EOuthRoC=2
 !INTEGER, SAVE:: EOuttAoC=3
@@ -548,7 +561,7 @@ END TYPE EvapOUT
 !INTEGER, SAVE:: EOutErrFlag=17
 
 !CompPAR variables
-TYPE CompPAR
+TYPE CompParameters
     REAL CompCoeffP1
     REAL CompCoeffP2
     REAL CompCoeffP3
@@ -575,7 +588,9 @@ TYPE CompPAR
     REAL CompPwrCor
     REAL CompPWrMult
     REAL CompMFRMult
-END TYPE CompPAR
+END TYPE CompParameters
+
+TYPE(CompParameters) :: CompPAR
 !INTEGER, SAVE:: CompCoeffP1=1
 !INTEGER, SAVE:: CompCoeffP2=2
 !INTEGER, SAVE:: CompCoeffP3=3
@@ -604,24 +619,28 @@ END TYPE CompPAR
 !INTEGER, SAVE:: CompMFRMult=26
 
 !CompIn variables
-TYPE CompIN
+TYPE CompInlet
     REAL CompInPSuc
     REAL CompInPdis
     REAL CompInHsuc
-END TYPE CompIN
+END TYPE CompInlet
+
+TYPE(CompInlet) :: CompIn
 !INTEGER, SAVE:: CompInPsuc=1
 !INTEGER, SAVE:: CompInPdis=2
 !INTEGER, SAVE:: CompInHsuc=3
 
 !CompOUT variables
-TYPE CompOUT
+TYPE CompOutlet
     REAL CmpOPwr
     REAL CmpOMdot
     REAL CmpOHdis
     REAL CmpOTdis
     REAL CmpOMcmp
     REAL CmpOErrFlag
-END TYPE CompOUT
+END TYPE CompOutlet
+
+TYPE(CompOutlet) :: CompOUT
 !INTEGER, SAVE:: CmpOPwr=1
 !INTEGER, SAVE:: CmpOMdot=2
 !INTEGER, SAVE:: CmpOHdis=3
@@ -630,13 +649,15 @@ END TYPE CompOUT
 !INTEGER, SAVE:: CmpOErrFlag=7
 
 !CapTube PAR variables
-TYPE CapTubePAR
+TYPE CapTubeParameters
     REAL CTTubeID
     REAL CTTubeLen
     REAL CTTubeCoilD
     INTEGER CTEvapCktNum
     REAL CTDisTubeLen
-END TYPE CapTubePAR
+END TYPE CapTubeParameters
+
+TYPE(CapTubeParameters) :: CapTubePAR
 !INTEGER, SAVE:: CTTubeID=1
 !INTEGER, SAVE:: CTTubeLen=2
 !INTEGER, SAVE:: CTTubeCoilD=3
@@ -644,13 +665,15 @@ END TYPE CapTubePAR
 !INTEGER, SAVE:: CTDisTubeLen=5
 
 !CapTube IN variables
-TYPE CapTubeIN
+TYPE CapTubeInlet
     REAL CTIMdot
     REAL CTIPiEx
     REAL CTIHiEx
     REAL CTIPiEv
     REAL CTIPoEv
-END TYPE CapTubeIN
+END TYPE CapTubeInlet
+
+TYPE(CapTubeInlet) :: CapTubeIN
 !INTEGER, SAVE:: CTIMdot=1
 !INTEGER, SAVE:: CTIPiEx=2
 !INTEGER, SAVE:: CTIHiEx=3
@@ -658,14 +681,16 @@ END TYPE CapTubeIN
 !INTEGER, SAVE:: CTIPoEv=5
 
 !CapTube OUT variables
-TYPE CapTubeOUT
+TYPE CapTubeOutlet
     REAL CTOMdot
     INTEGER CTOErrFlag
     REAL CTOToE
     REAL CTOXoE
     REAL CTOMDT
     REAL CTOPoE
-END TYPE CapTubeOUT
+END TYPE CapTubeOutlet
+
+TYPE(CapTubeOutlet) :: CapTubeOUT
 !INTEGER, SAVE:: CTOMdot=1
 !INTEGER, SAVE:: CTOErrFlag=2
 !INTEGER, SAVE:: CTOToE=3
@@ -674,13 +699,15 @@ END TYPE CapTubeOUT
 !INTEGER, SAVE:: CTOPoE=6
 
 !ShortTube PAR variables
-TYPE ShortTubePAR
+TYPE ShTbParameters
     REAL ShTbTLen
     REAL ShTbTID
     REAL ShTbChamDep
     INTEGER ShTbECktNum
     REAL ShTbDTubeLen
-END TYPE ShortTubePAR
+END TYPE ShTbParameters
+
+TYPE(ShTbParameters) :: ShTbPAR
 !INTEGER, SAVE:: ShTbTLen=1
 !INTEGER, SAVE:: ShTbTID=2
 !INTEGER, SAVE:: ShTbChamDep=3
@@ -688,13 +715,15 @@ END TYPE ShortTubePAR
 !INTEGER, SAVE:: ShTbDTubeLen=5
 
 !ShortTube IN variables
-TYPE ShortTubeIN
+TYPE ShTbInlet
     REAL ShTbINMdotC
     REAL ShTbINPiE
     REAL ShTbINHiE
     REAL ShTbINPiEv
     REAL ShTbINPoEv
-END TYPE ShortTubeIN
+END TYPE ShTbInlet
+
+TYPE(ShTbInlet) :: ShTbIN
 !INTEGER, SAVE:: ShTbINMdotC=1
 !INTEGER, SAVE:: ShTbINPiE=2
 !INTEGER, SAVE:: ShTbINHiE=3
@@ -702,14 +731,16 @@ END TYPE ShortTubeIN
 !INTEGER, SAVE:: ShTbINPoEv=5
 
 !ShortTube OUT variables
-TYPE ShortTubeOUT
+TYPE ShTbOutlet
     REAL ShTbOMdotE
     REAL ShTbOPoE
     REAL ShTbOToE
     REAL ShTbOXoE
     REAL ShTbOMDT
     INTEGER ShTbOErrFlag
-END TYPE ShortTubeOUT
+END TYPE ShTbOutlet
+
+TYPE(ShTbOutlet) :: ShTbOUT
 !INTEGER, SAVE:: ShTbOMdotE=1
 !INTEGER, SAVE:: ShTbOPoE=2
 !INTEGER, SAVE:: ShTbOToE=3
@@ -718,7 +749,7 @@ END TYPE ShortTubeOUT
 !INTEGER, SAVE:: ShTbOErrFlag=6
 
 !AirProp variables
-TYPE AirProp
+TYPE AirProperties
     REAL APTDB
     REAL APHumRat
     REAL APRelHum
@@ -727,7 +758,9 @@ TYPE AirProp
     REAL APTDP
     REAL APDryDens
     REAL APWetDens
-END TYPE Airprop
+END TYPE AirProperties
+
+TYPE(AirProperties) :: AirProp
 !INTEGER, SAVE:: APTDB=1
 !INTEGER, SAVE:: APHumRat=2
 !INTEGER, SAVE:: APRelHum=3
@@ -738,7 +771,7 @@ END TYPE Airprop
 !INTEGER, SAVE:: APWetDens=8
 
 !Accumulator PAR variables
-TYPE AccPAR
+TYPE AccumParameters
     REAL AccD
     REAL AccH
     REAL AccD1
@@ -749,7 +782,9 @@ TYPE AccPAR
     REAL AccDT
     REAL AccCM
     REAL AccCB
-END TYPE AccPAR
+END TYPE AccumParameters
+
+TYPE(AccumParameters) :: AccumPAR
 !INTEGER, SAVE:: AccD=1
 !INTEGER, SAVE:: AccH=2
 !INTEGER, SAVE:: AccD1=3
@@ -762,47 +797,59 @@ END TYPE AccPAR
 !INTEGER, SAVE:: AccCB=10
 
 !Accumulator IN variables
-TYPE AccIN
+TYPE AccumInlet
     REAL AccImdot
     REAL AccIpRo
     REAL AccIhRo
-END TYPE AccIN
+END TYPE AccumInlet
+
+TYPE(AccumInlet) :: AccumIN
 !INTEGER, SAVE:: AccImdot=1
 !INTEGER, SAVE:: AccIpRo=2
 !INTEGER, SAVE:: AccIhRo=3
 
 !Accumulator OUT variables
-TYPE AccOUT
+TYPE AccumOutlet
     REAL AccOMass
     REAL AccODP
-END TYPE AccOUT
+END TYPE AccumOutlet
+
+TYPE(AccumOutlet) :: AccumOUT
 !INTEGER, SAVE:: AccOMass=1
 !INTEGER, SAVE:: AccODP=2
 
 !Filter PAR variables
-TYPE FilPAR
+TYPE FilterParameters
     REAL FilFlowCap
     REAL FilRatDP
-END TYPE FilPAR
+END TYPE FilterParameters
+
+TYPE(FilterParameters) :: FilterPAR
 !INTEGER, SAVE:: FilFlowCap=1
 !INTEGER, SAVE:: FilRatDP=2
 !
 !Filter IN variable
-TYPE FilIN
+TYPE FilterInlet
     REAL FIDP
-END TYPE FilIN
+END TYPE FilterInlet
+
+TYPE(FilterInlet) :: FilterIN
 !INTEGER, SAVE:: FIDP=1
 
 !Filter OUT variable
-TYPE FilOUT
+TYPE FilterOutlet
     REAL FODP
-END TYPE FilOUT
+END TYPE FilterOutlet
+
+TYPE(FilterOutlet) :: FilterOUT
 !INTEGER, SAVE:: FODP=1
 
 !TXV PAR variable
-TYPE TXVPAR
+TYPE TXVParameters
     REAL TXVQ
-END TYPE TXVPAR
+END TYPE TXVParameters
+
+TYPE(TXVParameters) :: TXVPAR
 !INTEGER, SAVE:: TXVQ=1
 
 END MODULE DataSimulation

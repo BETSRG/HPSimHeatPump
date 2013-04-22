@@ -100,7 +100,7 @@
     REAL XMR,TSATCI,TSATEI
     REAL XMRFLD,TSAVG,TRIE,CDTRIE,DTRE,CDTRE,DTRIE,SXIE
     REAL FilterDP
-    REAL SimpleCondOUT(20),DetailedCondOUT(20)  !RS: Debugging: Formerly (29), (24)
+    !REAL SimpleCondOUT(20),DetailedCondOUT(20)  !RS: Debugging: Formerly (29), (24)    !RS: Debugging: Not used anymore
     REAL DetailedQcnd,DetailedDPcnd
     REAL SimpleQcnd,SimpleDPcnd
     LOGICAL,SAVE :: IsFirstTimeCondenser = .TRUE. !First time to call condenser flag
@@ -124,10 +124,10 @@
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
-  FilterPAR(FilFlowCap) = Numbers(1) !Flow capacity  !RS: Debugging: Formerly FilterPAR(1)
-  FilterPAR(FilRatDP) = Numbers(2) !Rating DP  !RS: Debugging: Formerly FilterPAR(2)
+  FilterPAR%FilFlowCap = Numbers(1) !Flow capacity  !RS: Debugging: Formerly FilterPAR(1)
+  FilterPAR%FilRatDP = Numbers(2) !Rating DP  !RS: Debugging: Formerly FilterPAR(2)
   
-  FilterPAR(FilRatDP)=FilterPAR(FilRatDP)*UnitP   !RS: Debugging: Bringing in unit conversion !RS: Debugging: Formerly FilterPAR(2)
+  FilterPAR%FilRatDP=FilterPAR%FilRatDP*UnitP   !RS: Debugging: Bringing in unit conversion !RS: Debugging: Formerly FilterPAR(2)
   !-------
 
     IsCondenserAllocated = .FALSE.  !VL: the "SAVE" in the declaration causes a "TRUE" to persist causing a failure on a second call.
@@ -203,12 +203,12 @@
             HiCmp=HiCmp !/1000    !RS Comment: Unit Conversion
         END IF
 
-        CompIN(CompInPsuc)=PiCmp/1000 !RS: Debugging: Formerly CompIN(1)
-        CompIN(CompInPdis)=PoCmp !RS: Debugging: Formerly CompIN(2)
-        CompIN(CompInHsuc)=HiCmp/1000 !RS: Debugging: Formerly CompIN(3)
-        CALL Compressor(Ref$,CompIN,CompPAR,CompOUT) !(Ref$,PureRef,CompIN,CompPAR,CompOUT) !RS: Debugging: Extraneous PureRef
-        IF (CompOUT(CmpOErrFlag) .NE. 0) THEN !RS: Debugging: Formerly CompOUT(7)
-            SELECT CASE (INT(CompOUT(CmpOErrFlag)))   !RS: Debugging: Formerly CompOUT(7)
+        CompIN%CompInPsuc=PiCmp/1000 !RS: Debugging: Formerly CompIN(1)
+        CompIN%CompInPdis=PoCmp !RS: Debugging: Formerly CompIN(2)
+        CompIN%CompInHsuc=HiCmp/1000 !RS: Debugging: Formerly CompIN(3)
+        CALL Compressor(Ref$) !,CompIN,CompPAR,CompOUT) !(Ref$,PureRef,CompIN,CompPAR,CompOUT) !RS: Debugging: Extraneous PureRef
+        IF (CompOUT%CmpOErrFlag .NE. 0) THEN !RS: Debugging: Formerly CompOUT(7)
+            SELECT CASE (INT(CompOUT%CmpOErrFlag))   !RS: Debugging: Formerly CompOUT(7)
             CASE (1,2)
                 CALL IssueOutputMessage('Trying another iterating value....')
                 IERR=1
@@ -216,26 +216,26 @@
             END SELECT
         END IF
 
-        XMR=CompOUT(CmpOMdot) !*3600/UnitM   !RS Comment: Unit Conversion, lbm/s??   !RS: Debugging: Formerly CompOUT(2)
-        HoCmp=CompOUT(CmpOHdis)    !RS: Debugging: Formerly CompOUT(3)
-        ToCmp=CompOUT(CmpOTdis)    !RS: Debugging: Formerly CompOUT(5)
+        XMR=CompOUT%CmpOMdot !*3600/UnitM   !RS Comment: Unit Conversion, lbm/s??   !RS: Debugging: Formerly CompOUT(2)
+        HoCmp=CompOUT%CmpOHdis    !RS: Debugging: Formerly CompOUT(3)
+        ToCmp=CompOUT%CmpOTdis    !RS: Debugging: Formerly CompOUT(5)
 
-        CondIN(CInmRef)=XMR !*UnitM/3600    !RS Comment: Unit Conversion, kg/hr???  !RS: Debugging: Formerly CondIN(1)
-        CondIN(CInpRo)=PoCmp !RS: Debugging: Formerly CondIN(2)
-        CondIN(CInhRo)=HoCmp !RS: Debugging: Formerly CondIN(3)
-        CondIN(CInmAi)=XMaC  !RS: Debugging: Formerly CondIN(4)
-        CondIN(CIntAi)=(TAIC-32)/1.8 !RS Comment: Unit Conversion, from F to C   !RS: Debugging: Formerly CondIN(5)
-        CondIN(CInrhAi)=RHIC  !RS: Debugging: Formerly CondIN(6)
+        CondIN%CInmRef=XMR !*UnitM/3600    !RS Comment: Unit Conversion, kg/hr???  !RS: Debugging: Formerly CondIN(1)
+        CondIN%CInpRo=PoCmp !RS: Debugging: Formerly CondIN(2)
+        CondIN%CInhRo=HoCmp !RS: Debugging: Formerly CondIN(3)
+        CondIN%CInmAi=XMaC  !RS: Debugging: Formerly CondIN(4)
+        CondIN%CIntAi=(TAIC-32)/1.8 !RS Comment: Unit Conversion, from F to C   !RS: Debugging: Formerly CondIN(5)
+        CondIN%CInrhAi=RHIC  !RS: Debugging: Formerly CondIN(6)
 
         IF (SystemType .EQ. 4) THEN !Reheat system
             IF (FirstTimeFlowRateLoop) THEN
-                CondIN(CInmAi)=XMaE  !RS: Debugging: Formerly CondIN(4)
-                CondIN(CIntAi)=(TAIE-32)/1.8 !RS Comment: Unit Conversion, from F to C   !RS: Debugging: Formerly CondIN(5)
-                CondIN(CInrhAi)=RHIE  !RS: Debugging: Formerly CondIN(6)
+                CondIN%CInmAi=XMaE  !RS: Debugging: Formerly CondIN(4)
+                CondIN%CIntAi=(TAIE-32)/1.8 !RS Comment: Unit Conversion, from F to C   !RS: Debugging: Formerly CondIN(5)
+                CondIN%CInrhAi=RHIE  !RS: Debugging: Formerly CondIN(6)
             ELSE
-                CondIN(CInmAi)=XMaE  !RS: Debugging: Formerly CondIN(4)
-                CondIN(CIntAi)=EvapOUT(EOuttAoC)   !RS: Debugging: Formerly EvapOUT(3), CondIN(5)
-                CondIN(CInrhAi)=EvapOUT(EOutrhAoC)   !RS: Debugging: Formerly EvapOUT(4), CondIN(6)
+                CondIN%CInmAi=XMaE  !RS: Debugging: Formerly CondIN(4)
+                CondIN%CIntAi=EvapOUT%EOuttAoC   !RS: Debugging: Formerly EvapOUT(3), CondIN(5)
+                CondIN%CInrhAi=EvapOUT%EOutrhAoC   !RS: Debugging: Formerly EvapOUT(4), CondIN(6)
             END IF
         END IF
 
@@ -250,11 +250,11 @@
         (IsCoolingMode .LT. 1 .AND. IDCcoilType .EQ. MCCONDENSER)) THEN
             !Microchannel coil
             IF (IsFirstTimeCondenser) THEN 
-                CondPAR(CondFirstTime)=1 !First time   !RS: Debugging: Formerly CONDPAR(45)
-                CondPAR(CondSimpCoil)=0 !Detailed version !RS: Debugging: Formerly CONDPAR(44)
+                CondPAR%CondFirstTime=1 !First time   !RS: Debugging: Formerly CONDPAR(45)
+                CondPAR%CondSimpCoil=0 !Detailed version !RS: Debugging: Formerly CONDPAR(44)
                 IsFirstTimeCondenser=.FALSE.
             END IF
-            CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
+            CALL Condenser(Ref$) !,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
             CondPAR%CondFirstTime=0 !No longer first time !RS: Debugging: Formerly CONDPAR(45)
             IsCondenserAllocated=.TRUE.
         ELSE
@@ -264,31 +264,31 @@
                 CondPAR%CondFirstTime=1 !First time   !RS: Debugging: Formerly CONDPAR(45)
 
                 CondPAR%CondSimpCoil=0 !Detailed version !RS: Debugging: Formerly CONDPAR(44)
-                CALL Condenser(Ref$,CondIN,CondPAR,DetailedCondOUT) !(Ref$,PureRef,CondIN,CondPAR,DetailedCondOUT)  !RS: Debugging: Extraneous PureRef
-                DetailedQcnd=DetailedCondOUT%COutQC    !RS: Debugging: Formerly DetailedCondOUT(15)
-                DetailedDPcnd=CondIN%CInpRo-DetailedCondOUT%COutpRiE !RS: Debugging: Formerly CondIN(2), DetailedCondOUT(10)
+                CALL Condenser(Ref$) !,CondIN,CondPAR,DetailedCondOUT) !(Ref$,PureRef,CondIN,CondPAR,DetailedCondOUT)  !RS: Debugging: Extraneous PureRef
+                DetailedQcnd=CondOUT%COutQC    !RS: Debugging: Formerly DetailedCondOUT(15)
+                DetailedDPcnd=CondIN%CInpRo-CondOUT%COutpRiE !RS: Debugging: Formerly CondIN(2), DetailedCondOUT(10)
 
                 CondPAR%CondSimpCoil=1 !Simple version   !RS: Debugging: Formerly CONDPAR(44)
-                CALL Condenser(Ref$,CondIN,CondPAR,SimpleCondOUT) !(Ref$,PureRef,CondIN,CondPAR,SimpleCondOUT)   !RS: Debugging: Extraneous PureRef
-                SimpleQcnd=SimpleCondOUT%COutQC    !RS: Debugging: Formerly SimpleCondOUT(15)
-                SimpleDPcnd=CondIN%CInpRo-SimpleCondOUT%COutpRiE !RS: Debugging: Formerly CondIN(2), SimpleCondOUT(10)
+                CALL Condenser(Ref$) !,CondIN,CondPAR,SimpleCondOUT) !(Ref$,PureRef,CondIN,CondPAR,SimpleCondOUT)   !RS: Debugging: Extraneous PureRef
+                SimpleQcnd=CondOUT%COutQC    !RS: Debugging: Formerly SimpleCondOUT(15)
+                SimpleDPcnd=CondIN%CInpRo-CondOUT%COutpRiE !RS: Debugging: Formerly CondIN(2), SimpleCondOUT(10)
 
                 IF (ABS((SimpleQcnd-DetailedQcnd)/DetailedQcnd) .LT. 0.1 .AND. &
                 ABS((SimpleDPcnd-DetailedDPcnd)/DetailedDPcnd) .LT. 0.1) THEN
                     CondPAR%CondSimpCoil=1   !RS: Debugging: Formerly CONDPAR(44)
-                    CondOUT=SimpleCondOUT
+                    !CondOUT=SimpleCondOUT  !RS: Debugging: No SimpleCondOUT now
                 ELSE
                     CondPAR%CondSimpCoil=0   !RS: Debugging: Formerly CONDPAR(44)
-                    CondOUT=DetailedCondOUT
+                    !CondOUT=DetailedCondOUT   !RS: Debugging: No DetailedCondOUT now
                 END IF 
                 IsFirstTimeCondenser=.FALSE.
 
                 !Always detailed
                 CondPAR%CondSimpCoil=0   !RS: Debugging: Formerly CONDPAR(44)
-                CondOUT=DetailedCondOUT
+                !CondOUT=DetailedCondOUT    !RS: Debugging: No DetailedCondOUT now
 
             ELSE
-                CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
+                CALL Condenser(Ref$) !,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
                 CondPAR%CondFirstTime=0 !No longer first time !RS: Debugging: Formerly CONDPAR(45)
                 IsCondenserAllocated=.TRUE.
             END IF
@@ -338,11 +338,11 @@
 
         IF (FilterPAR%FilFlowCap .GT. 0) THEN !Filter drier exits   !RS: Debugging: Formerly FilterPAR(1)
             FilterIN%FIDP=CondIN%CInmRef !Mass flow rate, kg/s !RS: Debugging: Formerly CondIN(1), FilterIN(1)
-            CALL CalcFilterDrierDP(FilterIN%FIDP,FilterPAR,FilterOUT,Ref$)
+            CALL CalcFilterDrierDP  !(FilterIN%FIDP,FilterPAR,FilterOUT,Ref$)
             FilterDP=FilterOUT%FODP   !RS: Debugging: Formerly FilterOUT(1)
 
             PiExp=PiExp-FilterDP
-            CondOUT%COutpRiE)=PiExp   !RS: Debugging: Formerly CondOut(10)
+            CondOUT%COutpRiE=PiExp   !RS: Debugging: Formerly CondOut(10)
 
             Pressure=PiExp*1000 !RS Comment: Unit Conversion
             Enthalpy=HiExp*1000 !RS Comment: Unit Conversion
@@ -455,7 +455,7 @@
 
             !CALL CapillaryTubeChoi(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)  
             !CALL CapillaryTubeORNL(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)  !RS: Debugging: Extraneous PureRef
-            CALL CapillaryTubeORNL(Ref$,CapTubeIN,CapTubePAR,CapTubeOUT)
+            CALL CapillaryTubeORNL !(Ref$) !,CapTubeIN,CapTubePAR,CapTubeOUT)
 
             XMRFLD=CapTubeOUT%CTOMdot*3600/UnitM !RS Comment: Unit Conversion, lbm/s???  !RS: Debugging: Formerly CapTubeOUT(1)
             ToExp=CapTubeOUT%CTOToE !RS: Debugging: Formerly CapTubeOUT(3)
@@ -463,14 +463,14 @@
 
         ELSE
             ShTbIN%ShTbINMdotC=CompOUT%CmpOMdot !Compressor mass flow rate, kg/s   !RS: Debugging: Formerly CompOUT(2), ShTbIN(1)
-            ShTbIN%ShTbINPiE%=PiExp !RS: Debugging: Formerly ShTbIN(2)
-            ShTbIN%ShTbINHiE%=CondOUT%COuthRiE !HiExp !RS: Debugging: Formerly ShTbIN(3)
-            ShTbIN%ShTbINPiEv%=EvapIN%EInpRi !PiEvp !RS: Debugging: Formerly ShTbIN(4)
-            ShTbIN%ShTbINPoEv%=EvapOUT%EOutpRoC    !RS: Debugging: Formerly EvapOUT(1), ShTbIN(5)
+            ShTbIN%ShTbINPiE=PiExp !RS: Debugging: Formerly ShTbIN(2)
+            ShTbIN%ShTbINHiE=CondOUT%COuthRiE !HiExp !RS: Debugging: Formerly ShTbIN(3)
+            ShTbIN%ShTbINPiEv=EvapIN%EInpRi !PiEvp !RS: Debugging: Formerly ShTbIN(4)
+            ShTbIN%ShTbINPoEv=EvapOUT%EOutpRoC    !RS: Debugging: Formerly EvapOUT(1), ShTbIN(5)
 
             !CALL ShortTube(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
             !CALL ShortTubePayne(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
-            CALL ShortTubePayne(Ref$,ShTbIN,ShTbPAR,ShTbOUT)
+            CALL ShortTubePayne(Ref$) !,ShTbIN,ShTbPAR,ShTbOUT)
             IF (ShTbOUT%ShTbOErrFlag .NE. 0) THEN !RS: Debugging: Formerly ShTbOUT(7)
                 SELECT CASE (INT(ShTbOUT%ShTbOErrFlag))   !RS: Debugging: Formerly ShTbOUT(7)
                 CASE (1)
