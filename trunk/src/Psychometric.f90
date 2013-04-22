@@ -1,4 +1,4 @@
-SUBROUTINE PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)
+SUBROUTINE PsyChart(AirPropOpt,AirPropErr) !(AirProp,AirPropOpt,BaroPressure,AirPropErr)
 
 !-----------------------------------------------------------------------------------
 !
@@ -40,18 +40,18 @@ SUBROUTINE PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)
 !  Date: August 2002
 !
 !-----------------------------------------------------------------------------------
-USE DataSimulation, ONLY: APTDB, APHumRat, APRelHum, APEnth, APTWB, APTDP, APDryDens, APWetDens
+USE DataSimulation !, ONLY: APTDB, APHumRat, APRelHum, APEnth, APTWB, APTDP, APDryDens, APWetDens
 
 IMPLICIT NONE
 
 !Subroutine argument declarations
-REAL, INTENT(IN) :: BaroPressure
+!REAL, INTENT(IN) :: BaroPressure
 INTEGER(2), INTENT(IN) :: AirPropOpt
 INTEGER(2), INTENT(OUT) :: AirPropErr
-REAL, INTENT(INOUT) :: AirProp(8)
+!REAL, INTENT(INOUT) :: AirProp(8)
 
 !Subroutine local vairables
-INTEGER, PARAMETER :: MaxIter=20 !Maximum number of iterations
+!INTEGER, PARAMETER :: MaxIter=20 !Maximum number of iterations
 REAL, PARAMETER :: Small=1E-4 !Small number 
 REAL, PARAMETER :: DT=1.0 !Delta temperature, C
 REAL TDB  !Dry bulb temperature, C
@@ -68,14 +68,14 @@ INTEGER ErrStat       !Error status
   
   OPEN (77,FILE='AirProp.err')
 
-  TDB  = AirProp(APTDB) !RS: Debugging: Formerly AirProp(1)
-  W    = AirProp(APHumRat)  !RS: Debugging: Formerly AirProp(2)
-  RH   = AirProp(APRelHum)  !RS: Debugging: Formerly AirProp(3)
-  H    = AirProp(APEnth)*1000   !RS: Debugging: Formerly AirProp(4)
-  TWB  = AirProp(APTWB) !RS: Debugging: Formerly AirProp(5)
-  TDP  = AirProp(APTDP) !RS: Debugging: Formerly AirProp(6)
-  RhoD = AirProp(APDryDens) !RS: Debugging: Formerly AirProp(7)
-  RhoM = AirProp(APWetDens) !RS: Debugging: Formerly AirProp(8)
+  TDB  = AirProp%APTDB !RS: Debugging: Formerly AirProp(1)
+  W    = AirProp%APHumRat  !RS: Debugging: Formerly AirProp(2)
+  RH   = AirProp%APRelHum  !RS: Debugging: Formerly AirProp(3)
+  H    = AirProp%APEnth*1000   !RS: Debugging: Formerly AirProp(4)
+  TWB  = AirProp%APTWB !RS: Debugging: Formerly AirProp(5)
+  TDP  = AirProp%APTDP !RS: Debugging: Formerly AirProp(6)
+  RhoD = AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
+  RhoM = AirProp%APWetDens !RS: Debugging: Formerly AirProp(8)
   
   SELECT CASE (AirPropOpt)
   CASE (1)
@@ -95,14 +95,14 @@ INTEGER ErrStat       !Error status
       RH = 1
   END IF
 
-  AirProp(APTDB)=TDB    !RS: Debugging: Formerly AirProp(1)
-  AirProp(APHumRat)=W      !RS: Debugging: Formerly AirProp(2)
-  AirProp(APRelHum)=RH     !RS: Debugging: Formerly AirProp(3)
-  AirProp(APEnth)=H/1000 !RS: Debugging: Formerly AirProp(4)
-  AirProp(APTWB)=TWB    !RS: Debugging: Formerly AirProp(5)
-  AirProp(APTDP)=TDP    !RS: Debugging: Formerly AirProp(6)
-  AirProp(APDryDens)=RhoD   !RS: Debugging: Formerly AirProp(7)
-  AirProp(APWetDens)=RhoM   !RS: Debugging: Formerly AirProp(8)
+  AirProp%APTDB=TDB    !RS: Debugging: Formerly AirProp(1)
+  AirProp%APHumRat=W      !RS: Debugging: Formerly AirProp(2)
+  AirProp%APRelHum=RH     !RS: Debugging: Formerly AirProp(3)
+  AirProp%APEnth=H/1000 !RS: Debugging: Formerly AirProp(4)
+  AirProp%APTWB=TWB    !RS: Debugging: Formerly AirProp(5)
+  AirProp%APTDP=TDP    !RS: Debugging: Formerly AirProp(6)
+  AirProp%APDryDens=RhoD   !RS: Debugging: Formerly AirProp(7)
+  AirProp%APWetDens=RhoM   !RS: Debugging: Formerly AirProp(8)
 
   AirPropErr=ErrStat
   IF (AirPropErr .EQ. 0) THEN

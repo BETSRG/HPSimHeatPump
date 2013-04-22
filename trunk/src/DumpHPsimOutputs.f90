@@ -73,7 +73,7 @@ INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
 
 INTEGER(2) AirPropOpt			!Air prop calc. option
 INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error
-REAL AirProp(8)		!Air properties
+!REAL AirProp(8)		!Air properties
 
 REAL Qcnd,Qevp,QevpSens,QevpLat
 REAL PwrCmp,mdot,Qtxv
@@ -265,7 +265,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       AirPropOpt=2
       AirProp%APTDB=TdbiCnd    !RS: Debugging: Formerly AirProp(1)
       AirProp%APRelHum=RHiCnd !RS: Debugging: Formerly AirProp(3)
-      CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+      CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
       hAiCnd=AirProp%APEnth !RS: Debugging: Formerly AirProp(4)
       TwbiCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
       RhoAiC=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
@@ -310,7 +310,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       AirPropOpt=2
       AirProp%APTDB=TdboCnd    !RS: Debugging: Formerly AirProp(1)
       AirProp%APRelHum=RHoCnd !RS: Debugging: Formerly AirProp(3)
-      CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+      CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
       WaoCnd=AirProp%APHumRat !RS: Debugging: Formerly AirProp(2)
       hAoCnd=AirProp%APEnth !RS: Debugging: Formerly AirProp(4)
       TwboCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
@@ -490,12 +490,12 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	      AirPropOpt=2
 	      AirProp%APTDB=TdbiEvp    !RS: Debugging: Formerly AirProp(1)
 	      AirProp%APRelHum=RHiEvp !RS: Debugging: Formerly AirProp(3)
-	      CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+	      CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
 	      hAiEvp=AirProp%APEnth !RS: Debugging: Formerly AirProp(4)
 	      TwbiEvp=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
 	      RhoAiE=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 
-	      CPair=CPA%TdbiEvp
+	      CPair=CPA(TdbiEvp)
 
 	      PoEvp=EvapOUT%EOutpRoC  !RS: Debugging: Formerly EvapOUT(1)
 	      HoEvp=EvapOUT%EOuthRoC  !RS: Debugging: Formerly EvapOUT(2)
@@ -539,7 +539,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	          AirPropOpt=1
 	          AirProp%APTDB=TdboEvp    !RS: Debugging: Formerly AirProp(1)
 	          AirProp%APEnth=hAoEvp !RS: Debugging: Formerly AirProp(4)
-	          CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+	          CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
 	          TwboEvp=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
 	          RHoEvp=AirProp%APRelHum !RS: Debugging: Formerly AirProp(3)
 	      ELSE
@@ -548,7 +548,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	          AirPropOpt=2
 	          AirProp%APTDB=TdboEvp    !RS: Debugging: Formerly AirProp(1)
 	          AirProp%APRelHum=RHoEvp !RS: Debugging: Formerly AirProp(3)
-	          CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+	          CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
 	          TwboEvp=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
 	          RhoAoE=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 	      END IF
@@ -662,7 +662,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           AirPropOpt=2
           AirProp%APTDB=TdbiCnd    !RS: Debugging: Formerly AirProp(1)
           AirProp%APRelHum=RHiCnd !RS: Debugging: Formerly AirProp(3)
-          CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+          CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
           hAiCnd=AirProp%APEnth !RS: Debugging: Formerly AirProp(4)
           TwbiCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
           RhoAiC=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
@@ -707,7 +707,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           AirPropOpt=2
           AirProp%APTDB=TdboCnd    !RS: Debugging: Formerly AirProp(1)
           AirProp%APRelHum=RHoCnd !RS: Debugging: Formerly AirProp(3)
-          CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+          CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
           WaoCnd=AirProp%APHumRat !RS: Debugging: Formerly AirProp(2)
           hAoCnd=AirProp%APEnth !RS: Debugging: Formerly AirProp(4)
           TwboCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
@@ -937,7 +937,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       AirPropOpt=2
       AirProp%APTDB=TdbiCnd    !RS: Debugging: Formerly AirProp(1)
       AirProp%APRelHum=RHiCnd !RS: Debugging: Formerly AirProp(3)
-      CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+      CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
       hAiCnd=AirProp%APEnth !RS: Debugging: Formerly AirProp(4)
       TwbiCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
       RhoAiC=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
@@ -982,7 +982,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       AirPropOpt=2
       AirProp%APTDB=TdboCnd    !RS: Debugging: Formerly AirProp(1)
       AirProp%APRelHum=RHoCnd !RS: Debugging: Formerly AirProp(3)
-      CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+      CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
       WaoCnd=AirProp%APHumRat !RS: Debugging: Formerly AirProp(2)
       hAoCnd=AirProp%APEnth !RS: Debugging: Formerly AirProp(4)
       TwboCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
@@ -1116,7 +1116,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  AirPropOpt=2
 	  AirProp%APTDB=TdbiEvp    !RS: Debugging: Formerly AirProp(1)
 	  AirProp%APRelHum=RHiEvp !RS: Debugging: Formerly AirProp(3)
-	  CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+	  CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
 	  hAiEvp=AirProp%APEnth !RS: Debugging: Formerly AirProp(4)
 	  TwbiEvp=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
 	  RhoAiE=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
@@ -1165,7 +1165,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	      AirPropOpt=1
 	      AirProp%APTDB=TdboEvp    !RS: Debugging: Formerly AirProp(1)
 	      AirProp%APEnth=hAoEvp !RS: Debugging: Formerly AirProp(4)
-	      CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+	      CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
 	      TwboEvp=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
 	      RHoEvp=AirProp%APRelHum !RS: Debugging: Formerly AirProp(3)
 	  ELSE
@@ -1174,7 +1174,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	      AirPropOpt=2
 	      AirProp%APTDB=TdboEvp    !RS: Debugging: Formerly AirProp(1)
 	      AirProp%APRelHum=RHoEvp !RS: Debugging: Formerly AirProp(3)
-	      CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+	      CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
 	      TwboEvp=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
 	      RhoAoE=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 	  END IF
@@ -1240,13 +1240,13 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  TdboCnd=QtotSens/1000/(CFMevp*StandardDensity*CPair)+TdbiEvp
 
 	  AirPropOpt=1
-	  AirProp(APTDB)=TdboCnd    !RS: Debugging: Formerly AirProp(1)
-	  AirProp(APEnth)=hAoCnd !RS: Debugging: Formerly AirProp(4)
-	  CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	  WaoCnd=AirProp(APHumRat) !RS: Debugging: Formerly AirProp(2)
-	  AirProp(APRelHum)=RHoCnd !RS: Debugging: Formerly AirProp(3)
-	  TwboCnd=AirProp(APTWB)    !RS: Debugging: Formerly AirProp(5)
-	  RhoAoC=AirProp(APDryDens) !RS: Debugging: Formerly AirProp(7)
+	  AirProp%APTDB=TdboCnd    !RS: Debugging: Formerly AirProp(1)
+	  AirProp%APEnth=hAoCnd !RS: Debugging: Formerly AirProp(4)
+	  CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+	  WaoCnd=AirProp%APHumRat !RS: Debugging: Formerly AirProp(2)
+	  AirProp%APRelHum=RHoCnd !RS: Debugging: Formerly AirProp(3)
+	  TwboCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
+	  RhoAoC=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 
 	  Qevp=Qtot
 	  QevpSens=QtotSens
@@ -1336,9 +1336,9 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  MassLiqLn=MassLiqLn/UnitM !RS Comment: Unit Conversion, from kg to lbm
 	  MassDisTube=MassDisTube/UnitM !RS Comment: Unit Conversion, from kg to lbm
 	  MassAccum=MassAccum/UnitM     !RS Comment: Unit Conversion, from kg to lbm
-      Dshtb=ShTbPAR(ShTbTID)/UnitL*12         !RS Comment: Unit Conversion, from m to in  !RS: Debugging: Formerly ShTbPAR(2)
-	  DcapTube=CapTubePAR(CTTubeID)/UnitL*12   !RS Comment: Unit Conversion, from m to in  !RS: Debugging: Formerly CapTubePAR(1)
-	  LcapTube=CapTubePAR(CTTubeLen)/UnitL*12   !RS Comment: Unit Conversion, from m to in  !RS: Debugging: Formerly CapTubePAR(2)
+      Dshtb=ShTbPAR%ShTbTID/UnitL*12         !RS Comment: Unit Conversion, from m to in  !RS: Debugging: Formerly ShTbPAR(2)
+	  DcapTube=CapTubePAR%CTTubeID/UnitL*12   !RS Comment: Unit Conversion, from m to in  !RS: Debugging: Formerly CapTubePAR(1)
+	  LcapTube=CapTubePAR%CTTubeLen/UnitL*12   !RS Comment: Unit Conversion, from m to in  !RS: Debugging: Formerly CapTubePAR(2)
 
       TaoEVP=TaoEVP*1.8+32  !RS Comment: Unit Conversion, from C to F
 	  TaoCND=TaoCND*1.8+32  !RS Comment: Unit Conversion, from C to F

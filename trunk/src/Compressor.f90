@@ -67,7 +67,7 @@
 
     CONTAINS
 
-    SUBROUTINE Compressor(Ref$,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT) !RS: Debugging: Extraneous PureRef
+    SUBROUTINE Compressor(Ref$) !,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT) !RS: Debugging: Extraneous PureRef
 
     ! ----------------------------------------------------------------------
     !
@@ -122,9 +122,9 @@
     CHARACTER*80,     INTENT(IN) :: Ref$    !Refrigerant name
     !0-refrigerant mixture
 
-    REAL, INTENT(IN) :: XIN(3)
-    REAL :: PAR(26) !, INTENT(IN)
-    REAL, INTENT(OUT) :: OUT(7)
+    !REAL, INTENT(IN) :: XIN(3)
+    !REAL :: PAR(26) !, INTENT(IN)
+    !REAL, INTENT(OUT) :: OUT(7)
 
     !Subroutine local variables
     REAL Temperature,Quality,Pressure,Enthalpy,Entropy
@@ -205,32 +205,32 @@ INTEGER,PARAMETER :: PANASONIC = 4
 	CompressorManufacturer=BRISTOL
   END SELECT
 
-  PAR(CompQLossFrac) = Numbers(1) !CompressorHeatLossFraction  !RS: Debugging: Formerly PAR(21)
-  PAR(CompQLoss) = Numbers(2) !CompressorHeatLoss  !RS: Debugging: Formerly PAR(22)
-  PAR(CompIntVol) = Numbers(3) !CompressorVolume    !RS: Debugging: Formerly PAR(23)
-  PAR(CompCoeffM1) = Numbers(4) !CompressorMassCoefficient1  !RS: Debugging: Formerly PAR(11)
-  PAR(CompCoeffM2) = Numbers(5) !CompressorMassCoefficient2  !RS: Debugging: Formerly PAR(12)
-  PAR(CompCoeffM3) = Numbers(6) !CompressorMassCoefficient3  !RS: Debugging: Formerly PAR(13)
-  PAR(CompCoeffM4) = Numbers(7) !CompressorMassCoefficient4  !RS: Debugging: Formerly PAR(14)
-  PAR(CompCoeffM5) = Numbers(8) !CompressorMassCoefficient5  !RS: Debugging: Formerly PAR(15)
-  PAR(CompCoeffM6) = Numbers(9) !CompressorMassCoefficient6  !RS: Debugging: Formerly PAR(16)
-  PAR(CompCoeffM7) = Numbers(10) !CompressorMassCoefficient7 !RS: Debugging: Formerly PAR(17)
-  PAR(CompCoeffM8) = Numbers(11) !CompressorMassCoefficient8 !RS: Debugging: Formerly PAR(18)
-  PAR(CompCoeffM9) = Numbers(12) !CompressorMassCoefficient9 !RS: Debugging: Formerly PAR(19)
-  PAR(CompCoeffM10) = Numbers(13) !CompressorMassCoefficient10    !RS: Debugging: Formerly PAR(20)
-  PAR(CompCoeffP1) = Numbers(14) !CompressorPowerCoefficient1 !RS: Debugging: Formerly PAR(1)
-  PAR(CompCoeffP2) = Numbers(15) !CompressorPowerCoefficient2 !RS: Debugging: Formerly PAR(2)
-  PAR(CompCoeffP3) = Numbers(16) !CompressorPowerCoefficient3 !RS: Debugging: Formerly PAR(3)
-  PAR(CompCoeffP4) = Numbers(17) !CompressorPowerCoefficient4 !RS: Debugging: Formerly PAR(4)
-  PAR(CompCoeffP5) = Numbers(18) !CompressorPowerCoefficient5 !RS: Debugging: Formerly PAR(5)
-  PAR(CompCoeffP6) = Numbers(19) !CompressorPowerCoefficient6 !RS: Debugging: Formerly PAR(6)
-  PAR(CompCoeffP7) = Numbers(20) !CompressorPowerCoefficient7 !RS: Debugging: Formerly PAR(7)
-  PAR(CompCoeffP8) = Numbers(21) !CompressorPowerCoefficient8 !RS: Debugging: Formerly PAR(8)
-  PAR(CompCoeffP9) = Numbers(22) !CompressorPowerCoefficient9 !RS: Debugging: Formerly PAR(9)
-  PAR(CompCoeffP10) = Numbers(23) !CompressorPowerCoefficient10   !RS: Debugging: Formerly PAR(10)
+  CompPAR%CompQLossFrac = Numbers(1) !CompressorHeatLossFraction  !RS: Debugging: Formerly PAR(21)
+  CompPAR%CompQLoss = Numbers(2) !CompressorHeatLoss  !RS: Debugging: Formerly PAR(22)
+  CompPAR%CompIntVol = Numbers(3) !CompressorVolume    !RS: Debugging: Formerly PAR(23)
+  CompPAR%CompCoeffM1 = Numbers(4) !CompressorMassCoefficient1  !RS: Debugging: Formerly PAR(11)
+  CompPAR%CompCoeffM2 = Numbers(5) !CompressorMassCoefficient2  !RS: Debugging: Formerly PAR(12)
+  CompPAR%CompCoeffM3 = Numbers(6) !CompressorMassCoefficient3  !RS: Debugging: Formerly PAR(13)
+  CompPAR%CompCoeffM4 = Numbers(7) !CompressorMassCoefficient4  !RS: Debugging: Formerly PAR(14)
+  CompPAR%CompCoeffM5 = Numbers(8) !CompressorMassCoefficient5  !RS: Debugging: Formerly PAR(15)
+  CompPAR%CompCoeffM6 = Numbers(9) !CompressorMassCoefficient6  !RS: Debugging: Formerly PAR(16)
+  CompPAR%CompCoeffM7 = Numbers(10) !CompressorMassCoefficient7 !RS: Debugging: Formerly PAR(17)
+  CompPAR%CompCoeffM8 = Numbers(11) !CompressorMassCoefficient8 !RS: Debugging: Formerly PAR(18)
+  CompPAR%CompCoeffM9 = Numbers(12) !CompressorMassCoefficient9 !RS: Debugging: Formerly PAR(19)
+  CompPAR%CompCoeffM10 = Numbers(13) !CompressorMassCoefficient10    !RS: Debugging: Formerly PAR(20)
+  CompPAR%CompCoeffP1 = Numbers(14) !CompressorPowerCoefficient1 !RS: Debugging: Formerly PAR(1)
+  CompPAR%CompCoeffP2 = Numbers(15) !CompressorPowerCoefficient2 !RS: Debugging: Formerly PAR(2)
+  CompPAR%CompCoeffP3 = Numbers(16) !CompressorPowerCoefficient3 !RS: Debugging: Formerly PAR(3)
+  CompPAR%CompCoeffP4 = Numbers(17) !CompressorPowerCoefficient4 !RS: Debugging: Formerly PAR(4)
+  CompPAR%CompCoeffP5 = Numbers(18) !CompressorPowerCoefficient5 !RS: Debugging: Formerly PAR(5)
+  CompPAR%CompCoeffP6 = Numbers(19) !CompressorPowerCoefficient6 !RS: Debugging: Formerly PAR(6)
+  CompPAR%CompCoeffP7 = Numbers(20) !CompressorPowerCoefficient7 !RS: Debugging: Formerly PAR(7)
+  CompPAR%CompCoeffP8 = Numbers(21) !CompressorPowerCoefficient8 !RS: Debugging: Formerly PAR(8)
+  CompPAR%CompCoeffP9 = Numbers(22) !CompressorPowerCoefficient9 !RS: Debugging: Formerly PAR(9)
+  CompPAR%CompCoeffP10 = Numbers(23) !CompressorPowerCoefficient10   !RS: Debugging: Formerly PAR(10)
   
-  PAR(CompPwrMult) = Numbers(24) !PowerMultiplier    !RS: Debugging: Formerly PAR(25)
-  PAR(CompMFRMult) = Numbers(25) !MassFlowRateMultiplier !RS: Debugging: Formerly PAR(26)
+  CompPAR%CompPwrMult = Numbers(24) !PowerMultiplier    !RS: Debugging: Formerly PAR(25)
+  CompPAR%CompMFRMult = Numbers(25) !MassFlowRateMultiplier !RS: Debugging: Formerly PAR(26)
   !TsiCmp = Numbers(26) !UserSpecifiedRatingEvapTemperature
   !TsoCmp = Numbers(27) !UserSpecifiedRatingCondTemperature
   !Subcool = Numbers(28) !UserSpecifiedRatingSubcooling
@@ -239,21 +239,21 @@ INTEGER,PARAMETER :: PANASONIC = 4
 
     !Flow:
 
-    Psuc = XIN(CompInPsuc)   !RS: Debugging: Formerly XIN(1)
-    Pdis = XIN(CompInPdis)   !RS: Debugging: Formerly XIN(2)
-    Hsuc = XIN(CompInHsuc)   !RS: Debugging: Formerly XIN(3)
+    Psuc = CompIN%CompInPsuc   !RS: Debugging: Formerly XIN(1)
+    Pdis = CompIN%CompInPdis   !RS: Debugging: Formerly XIN(2)
+    Hsuc = CompIN%CompInHsuc   !RS: Debugging: Formerly XIN(3)
 
     DO I=1,10
-        A(I)=PAR(I)
-        B(I)=PAR(I+10) 
+        A(I)= Numbers(3+I) !CompPAR%(I)
+        B(I)= Numbers(13+I) !CompPAR%(I+10) 
     END DO
     
-    Qshellfrac = PAR(CompQLossFrac)    !RS: Debugging: Formerly PAR(21)
-    Qshell = PAR(CompQLoss)    !RS: Debugging: Formerly PAR(22)
-    VolCmp = PAR(CompIntVol)    !RS: Debugging: Formerly PAR(23)
-    Wcorrect = PAR(CompPwrCor)  !RS: Debugging: Formerly PAR(24)
-    PwrMultiplier=PAR(CompPwrMult)   !RS: Debugging: Formerly PAR(25)
-    mdotMultiplier=PAR(CompMFRMult)  !RS: Debugging: Formerly PAR(26)
+    Qshellfrac = CompPAR%CompQLossFrac    !RS: Debugging: Formerly PAR(21)
+    Qshell = CompPAR%CompQLoss    !RS: Debugging: Formerly PAR(22)
+    VolCmp = CompPAR%CompIntVol    !RS: Debugging: Formerly PAR(23)
+    Wcorrect = CompPAR%CompPwrCor  !RS: Debugging: Formerly PAR(24)
+    PwrMultiplier=CompPAR%CompPwrMult   !RS: Debugging: Formerly PAR(25)
+    mdotMultiplier=CompPAR%CompMFRMult  !RS: Debugging: Formerly PAR(26)
 
     Wcorrect = 1 !1.21 !1.25
 
@@ -262,14 +262,14 @@ INTEGER,PARAMETER :: PANASONIC = 4
     Pressure=Psuc*1000  !RS Comment: Unit Conversion
     Quality=1
     TDPsuc=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Suction Dew Point Temperature, C
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
     Pressure=Pdis*1000  !RS Comment: Unit Conversion
     Quality=1
     TDPdis=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Discharge Dew Point Temperature, C
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
@@ -284,18 +284,18 @@ INTEGER,PARAMETER :: PANASONIC = 4
     Temperature=TsucMap
     Pressure=Psuc*1000  !RS Comment: Unit Conversion
     HsucMap=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr) !Map-Based Suction Enthalpy
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
     HsucMap=HsucMap/1000    !RS Comment: Unit Conversion
     rhoMap=TP(Ref$,Temperature,Pressure,'density',RefrigIndex,RefPropErr)   !Map-Based Density
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
     SsucMap=TP(Ref$,Temperature,Pressure,'entropy',RefrigIndex,RefPropErr)  !Map-Based Suction Entropy
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
     SsucMap=SsucMap/1000    !RS Comment: Unit Conversion
@@ -303,7 +303,7 @@ INTEGER,PARAMETER :: PANASONIC = 4
     Pressure=Pdis*1000      !RS Comment: Unit Conversion
     Entropy=SsucMap*1000    !RS Comment: Unit Conversion
     HdisIsenMap=PS(Ref$,Pressure,Entropy,'enthalpy',RefrigIndex,RefPropErr) !Map-Based Isentropic Discharge Enthalpy
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
     HdisIsenMap=HdisIsenMap/1000    !RS Comment: Unit Conversion
@@ -311,17 +311,17 @@ INTEGER,PARAMETER :: PANASONIC = 4
     Pressure=Psuc*1000  !RS Comment: Unit Conversion
     Enthalpy=Hsuc*1000  !RS Comment: Unit Conversion
     Tsuc=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)    !Suction Temperature
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
     rhosuc=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)  !Suction Density
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
     Ssuc=PH(Ref$,Pressure,Enthalpy,'entropy',RefrigIndex,RefPropErr)    !Suction Entropy
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
     Ssuc=Ssuc/1000  !RS Comment: Unit Conversion
@@ -329,7 +329,7 @@ INTEGER,PARAMETER :: PANASONIC = 4
     Pressure=Pdis*1000  !RS Comment: Unit Conversion
     Entropy=Ssuc*1000   !RS Comment: Unit Conversion
     HdisIsen=PS(Ref$,Pressure,Entropy,'enthalpy',RefrigIndex,RefPropErr)    !Isentropic Discharge Enthalpy
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
     HdisIsen=HdisIsen/1000  !RS Comment: Unit Conversion
@@ -356,17 +356,17 @@ INTEGER,PARAMETER :: PANASONIC = 4
     Pressure=Pdis*1000  !RS Comment: Unit Conversion
     Enthalpy=Hdis*1000  !RS Comment: Unit Conversion
     Tdis=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)    !Discharge Temperature
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7)
             RETURN
     END IF
 
     Xdis=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)    !Discharge Quality
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
     rhoDis=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)  !Discharge Density
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN !RS: Debugging: Formerly OUT(7)
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
@@ -374,17 +374,17 @@ INTEGER,PARAMETER :: PANASONIC = 4
 
     IF (Power .LT. 0 .OR. MassCmp .LT. 0) THEN
         ErrorFlag=1
-        OUT(CmpOErrFlag)=ErrorFlag    !RS: Debugging: Formerly OUT(7)
+        CompOUT%CmpOErrFlag=ErrorFlag    !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
-    OUT(CmpOPwr)=Power    !RS: Debugging: Formerly OUT(1)
-    OUT(CmpOMdot)=mdot !RS: Debugging: Formerly OUT(2)
-    OUT(CmpOHdis)=Hdis !RS: Debugging: Formerly OUT(3)
+    CompOUT%CmpOPwr=Power    !RS: Debugging: Formerly OUT(1)
+    CompOUT%CmpOMdot=mdot !RS: Debugging: Formerly OUT(2)
+    CompOUT%CmpOHdis=Hdis !RS: Debugging: Formerly OUT(3)
     !OUT(4)=Xdis    !RS: Debugging: Never used
-    OUT(CmpOTdis)=Tdis !RS: Debugging: Formerly OUT(5)
-    OUT(CmpOMCmp)=MassCmp  !RS: Debugging: Formerly OUT(6)
-    OUT(CmpOErrFlag)=ErrorFlag    !RS: Debugging: Formerly OUT(7)
+    CompOUT%CmpOTdis=Tdis !RS: Debugging: Formerly OUT(5)
+    CompOUT%CmpOMCmp=MassCmp  !RS: Debugging: Formerly OUT(6)
+    CompOUT%CmpOErrFlag=ErrorFlag    !RS: Debugging: Formerly OUT(7)
 
     RETURN
 

@@ -84,7 +84,7 @@
     CONTAINS
     !***********************************************************************************
 
-    SUBROUTINE ShortTube(Ref$,XIN,PAR,OUT)  !(Ref$,PureRef,XIN,PAR,OUT) !RS: Debugging: Extraneous PureRef
+    SUBROUTINE ShortTube !(Ref$) !,XIN,PAR,OUT)  !(Ref$,PureRef,XIN,PAR,OUT) !RS: Debugging: Extraneous PureRef
 
     !-----------------------------------------------------------------------------------
     !
@@ -150,19 +150,19 @@
 
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
-    USE DataSimulation, ONLY: ShTbTLen, ShTbTID, ShTbChamDep, ShTbECktNum, ShTbDTubeLen, &  !RS: Debugging: Replacing array numbers with variables
-                            ShTbINMdotC, ShTbINPiE, ShTbINHiE, ShTbINPiEv, ShTbINPoEv, ShTbOMdotE, ShTbOPoE, ShTbOToE, &
-                            ShTbOXoE, ShTbOMDT, ShTbOErrFlag
+    USE DataSimulation !, ONLY: ShTbTLen, ShTbTID, ShTbChamDep, ShTbECktNum, ShTbDTubeLen, &  !RS: Debugging: Replacing array numbers with variables
+    !                        ShTbINMdotC, ShTbINPiE, ShTbINHiE, ShTbINPiEv, ShTbINPoEv, ShTbOMdotE, ShTbOPoE, ShTbOToE, &
+    !                        ShTbOXoE, ShTbOMDT, ShTbOErrFlag
 
     IMPLICIT NONE
 
     !Subroutine argument declarations
-    CHARACTER*80,     INTENT(IN)  :: Ref$    !Refrigerant name
+    !CHARACTER*80,     INTENT(IN)  :: Ref$    !Refrigerant name
     !INTEGER(2),       INTENT(IN)  :: PureRef !Refrigerant flag: 1-pure refrigerant !RS: Debugging: Extraneous PureRef
     !0-refrigerant mixture
-    REAL, INTENT(IN)  :: XIN(5)
-    REAL, INTENT(IN)  :: PAR(5)
-    REAL, INTENT(OUT) :: OUT(7)
+    !REAL, INTENT(IN)  :: XIN(5)
+    !REAL, INTENT(IN)  :: PAR(5)
+    !REAL, INTENT(OUT) :: OUT(7)
 
     !Subroutine local variables         
     !INTEGER            :: RefrigIndex =0
@@ -175,20 +175,20 @@
     REAL :: VolDisTube  !Distributor tube volumn, m^3
     REAL :: MassDisTube !Mass in distributor tube, kg
     REAL :: Depth       !Short tube 45 deg chamfer depth, m
-    REAL :: PiExp       !Inlet pressure of exp. device (Up stream pressure), kPa
-    REAL :: HiExp       !Exp. device inlet enthalpy, kJ/kg
-    REAL :: TiExp       !Exp. device inlet temperature, C
-    REAL :: XiExp       !Exp. device inlet quality
-    REAL :: PoExp       !Exp. device outlet pressure, kPa
-    REAL :: HoExp       !Exp. device outlet enthalpy, kJ/kg
-    REAL :: ToExp       !Exp. device outlet temperature, C
-    REAL :: XoExp       !Exp. device outlet quality
+    !REAL :: PiExp       !Inlet pressure of exp. device (Up stream pressure), kPa
+    !REAL :: HiExp       !Exp. device inlet enthalpy, kJ/kg
+    !REAL :: TiExp       !Exp. device inlet temperature, C
+    !REAL :: XiExp       !Exp. device inlet quality
+    !REAL :: PoExp       !Exp. device outlet pressure, kPa
+    !REAL :: HoExp       !Exp. device outlet enthalpy, kJ/kg
+    !REAL :: ToExp       !Exp. device outlet temperature, C
+    !REAL :: XoExp       !Exp. device outlet quality
     REAL :: DPdisTot    !Total pressure drop in distributor, kPa
-    REAL :: PiEvp       !Evaporator inlet pressure, kPa
-    REAL :: HiEvp       !Evaporator inlet enthalpy, kJ/kg
-    REAL :: TiEvp       !Evaporator inlet temperature, C
-    REAL :: XiEvp       !Evaporator inlet quality
-    REAL :: PoEvp       !Evaporator outlet pressure, kPa
+    !REAL :: PiEvp       !Evaporator inlet pressure, kPa
+    !REAL :: HiEvp       !Evaporator inlet enthalpy, kJ/kg
+    !REAL :: TiEvp       !Evaporator inlet temperature, C
+    !REAL :: XiEvp       !Evaporator inlet quality
+    !REAL :: PoEvp       !Evaporator outlet pressure, kPa
     REAL :: mdotCmp     !Mass flow rate from compressor, kg/s
     REAL :: mdotExp     !Mass flow rate from exp. device, kg/s
     REAL :: TsiExp      !Liquid saturation temperature of the upstream fluid, C
@@ -228,17 +228,17 @@
 
     !Flow:
 
-    mdotCmp=XIN(ShTbINMdotC)  !RS: Debugging: Formerly XIN(1)
-    PiExp=XIN(ShTbINPiE)    !RS: Debugging: Formerly XIN(2)
-    HiExp=XIN(ShTbINHiE)    !RS: Debugging: Formerly XIN(3)
-    PiEvp=XIN(ShTbINPiEv)    !RS: Debugging: Formerly XIN(4)
-    PoEvp=XIN(ShTbINPoEv)    !RS: Debugging: Formerly XIN(5)
+    mdotCmp=ShTbIN%ShTbINMdotC  !RS: Debugging: Formerly XIN(1)
+    PiExp=ShTbIN%ShTbINPiE    !RS: Debugging: Formerly XIN(2)
+    HiExp=ShTbIN%ShTbINHiE    !RS: Debugging: Formerly XIN(3)
+    PiEvp=ShTbIN%ShTbINPiEv    !RS: Debugging: Formerly XIN(4)
+    PoEvp=ShTbIN%ShTbINPoEv    !RS: Debugging: Formerly XIN(5)
 
-    LshTube=PAR(ShTbTLen)  !RS: Debugging: Formerly PAR(1)
-    DshTube=PAR(ShTbTID)  !RS: Debugging: Formerly PAR(2)
-    Depth=PAR(ShTbChamDep)    !RS: Debugging: Formerly PAR(3)
-    Nckts=PAR(ShTbECktNum)    !RS: Debugging: Formerly PAR(4)
-    LdisTube=PAR(ShTbDTubeLen) !RS: Debugging: Formerly PAR(5)
+    LshTube=ShTbPAR%ShTbTLen  !RS: Debugging: Formerly PAR(1)
+    DshTube=ShTbPAR%ShTbTID  !RS: Debugging: Formerly PAR(2)
+    Depth=ShTbPAR%ShTbChamDep    !RS: Debugging: Formerly PAR(3)
+    Nckts=ShTbPAR%ShTbECktNum    !RS: Debugging: Formerly PAR(4)
+    LdisTube=ShTbPAR%ShTbDTubeLen !RS: Debugging: Formerly PAR(5)
 
     ErrorFlag=0 !Initialize
 
@@ -417,11 +417,11 @@
 
         ErrorFlag=1
         !VL: Previously: GOTO 200
-        OUT(ShTbOErrFlag)=ErrorFlag !RS: Debugging: Formerly OUT(7)
-        PiExpDev = XIN(ShTbINPiE)   !RS: Debugging: Formerly XIN(2)
-        HiExpDev = XIN(ShTbINHiE)   !RS: Debugging: Formerly XIN(3)
-        PoExpDev = OUT(ShTbOPoE)   !RS: Debugging: Formerly OUT(2)
-        ToExpDev = OUT(ShTbOToE)   !RS: Debugging: Formerly OUT(3)
+        ShTbOUT%ShTbOErrFlag=ErrorFlag !RS: Debugging: Formerly OUT(7)
+        PiExpDev = ShTbIN%ShTbINPiE   !RS: Debugging: Formerly XIN(2)
+        HiExpDev = ShTbIN%ShTbINHiE   !RS: Debugging: Formerly XIN(3)
+        PoExpDev = ShTbOUT%ShTbOPoE   !RS: Debugging: Formerly OUT(2)
+        ToExpDev = ShTbOUT%ShTbOToE   !RS: Debugging: Formerly OUT(3)
         hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !Expansion Device Outlet Enthalpy?
         RETURN
 
@@ -442,29 +442,29 @@
     IF (mdotExp .LT. 0) THEN
 
         ErrorFlag=1
-        OUT(ShTbOErrFlag)=ErrorFlag !RS: Debugging: Formerly OUT(7)
-        PiExpDev = XIN(ShTbINPiE)   !RS: Debugging: Formerly XIN(2)
-        HiExpDev = XIN(ShTbINHiE)   !RS: Debugging: Formerly XIN(3)
-        PoExpDev = OUT(ShTbOPoE)   !RS: Debugging: Formerly OUT(2)
-        ToExpDev = OUT(ShTbOToE)   !RS: Debugging: Formerly OUT(3)
+        ShTbOUT%ShTbOErrFlag=ErrorFlag !RS: Debugging: Formerly OUT(7)
+        PiExpDev = ShTbIN%ShTbINPiE   !RS: Debugging: Formerly XIN(2)
+        HiExpDev = ShTbIN%ShTbINHiE   !RS: Debugging: Formerly XIN(3)
+        PoExpDev = ShTbOUT%ShTbOPoE   !RS: Debugging: Formerly OUT(2)
+        ToExpDev = ShTbOUT%ShTbOToE   !RS: Debugging: Formerly OUT(3)
         hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !Expansion Device Outlet Enthalpy?
         RETURN
 
     END IF
 
-    OUT(ShTbOMdotE)=mdotExp  !RS: Debugging: Formerly OUT(1)
-    OUT(ShTbOPoE)=PoExp    !RS: Debugging: Formerly OUT(2)
-    OUT(ShTbOToE)=ToExp    !RS: Debugging: Formerly OUT(3)
-    OUT(ShTbOXoE)=XoExp    !RS: Debugging: Formerly OUT(4)
-    OUT(ShTbOMDT)=MassDisTube  !RS: Debugging: Formerly OUT(5)
+    ShTbOUT%ShTbOMdotE=mdotExp  !RS: Debugging: Formerly OUT(1)
+    ShTbOUT%ShTbOPoE=PoExp    !RS: Debugging: Formerly OUT(2)
+    ShTbOUT%ShTbOToE=ToExp    !RS: Debugging: Formerly OUT(3)
+    ShTbOUT%ShTbOXoE=XoExp    !RS: Debugging: Formerly OUT(4)
+    ShTbOUT%ShTbOMDT=MassDisTube  !RS: Debugging: Formerly OUT(5)
     !OUT(6)=QdisTube    !RS: Debugging: Never used
 
-    OUT(ShTbOErrFlag)=ErrorFlag    !RS: Debugging: Formerly OUT(7)
+    ShTbOUT%ShTbOErrFlag=ErrorFlag    !RS: Debugging: Formerly OUT(7)
 
-    PiExpDev = XIN(ShTbINPiE)   !RS: Debugging: Formerly XIN(2)
-    HiExpDev = XIN(ShTbINHiE)   !RS: Debugging: Formerly XIN(3)
-    PoExpDev = OUT(ShTbOPoE)   !RS: Debugging: Formerly OUT(2)
-    ToExpDev = OUT(ShTbOToE)   !RS: Debugging: Formerly OUT(3)
+    PiExpDev = ShTbIN%ShTbINPiE   !RS: Debugging: Formerly XIN(2)
+    HiExpDev = ShTbIN%ShTbINHiE   !RS: Debugging: Formerly XIN(3)
+    PoExpDev = ShTbOUT%ShTbOPoE   !RS: Debugging: Formerly OUT(2)
+    ToExpDev = ShTbOUT%ShTbOToE   !RS: Debugging: Formerly OUT(3)
     hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !Expansion Device Outlet Enthalpy
 
     RETURN
@@ -473,7 +473,7 @@
 
     !***********************************************************************************
 
-    SUBROUTINE ShortTubeChoi(Ref$,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT)  !RS: Debugging: Extraneous PureRef
+    SUBROUTINE ShortTubeChoi(Ref$) !,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT)  !RS: Debugging: Extraneous PureRef
 
     !-----------------------------------------------------------------------------------
     !
@@ -527,9 +527,9 @@
 
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
-    USE DataSimulation, ONLY: ShTbTLen, ShTbTID, ShTbChamDep, ShTbECktNum, ShTbDTubeLen, &  !RS: Debugging: Replacing array numbers with variables
-                            ShTbINMdotC, ShTbINPiE, ShTbINHiE, ShTbINPiEv, ShTbINPoEv, ShTbOMdotE, ShTbOPoE, ShTbOToE, &
-                            ShTbOXoE, ShTbOMDT, ShTbOErrFlag
+    USE DataSimulation !, ONLY: ShTbTLen, ShTbTID, ShTbChamDep, ShTbECktNum, ShTbDTubeLen, &  !RS: Debugging: Replacing array numbers with variables
+    !                        ShTbINMdotC, ShTbINPiE, ShTbINHiE, ShTbINPiEv, ShTbINPoEv, ShTbOMdotE, ShTbOPoE, ShTbOToE, &
+    !                        ShTbOXoE, ShTbOMDT, ShTbOErrFlag
 
     IMPLICIT NONE
 
@@ -537,9 +537,9 @@
     CHARACTER*80,     INTENT(IN)  :: Ref$    !Refrigerant name
     !INTEGER(2),       INTENT(IN)  :: PureRef !Refrigerant flag: 1-pure refrigerant !RS: Debugging: Extraneous PureRef
     !0-refrigerant mixture
-    REAL, INTENT(IN)  :: XIN(5)
-    REAL, INTENT(IN)  :: PAR(5)
-    REAL, INTENT(OUT) :: OUT(7)
+    !REAL, INTENT(IN)  :: XIN(5)
+    !REAL, INTENT(IN)  :: PAR(5)
+    !REAL, INTENT(OUT) :: OUT(7)
 
     !Subroutine local variables         
     REAL Temperature,Quality,Pressure,Enthalpy
@@ -552,20 +552,20 @@
     REAL :: MassDisTube !Mass in distributor tube, kg
     REAL :: Depth       !Short tube 45 deg chamfer depth, m
     REAL :: Subcooling  !Degree of subcooling, C
-    REAL :: PiExp       !Inlet pressure of exp. device (Up stream pressure), kPa
-    REAL :: HiExp       !Exp. device inlet enthalpy, kJ/kg
-    REAL :: TiExp       !Exp. device inlet temperature, C
-    REAL :: XiExp       !Exp. device inlet quality
-    REAL :: PoExp       !Exp. device outlet pressure, kPa
-    REAL :: HoExp       !Exp. device outlet enthalpy, kJ/kg
-    REAL :: ToExp       !Exp. device outlet temperature, C
-    REAL :: XoExp       !Exp. device outlet quality
+    !REAL :: PiExp       !Inlet pressure of exp. device (Up stream pressure), kPa
+    !REAL :: HiExp       !Exp. device inlet enthalpy, kJ/kg
+    !REAL :: TiExp       !Exp. device inlet temperature, C
+    !REAL :: XiExp       !Exp. device inlet quality
+    !REAL :: PoExp       !Exp. device outlet pressure, kPa
+    !REAL :: HoExp       !Exp. device outlet enthalpy, kJ/kg
+    !REAL :: ToExp       !Exp. device outlet temperature, C
+    !REAL :: XoExp       !Exp. device outlet quality
     REAL :: DPdisTot    !Total pressure drop in distributor, kPa
-    REAL :: PiEvp       !Evaporator inlet pressure, kPa
-    REAL :: HiEvp       !Evaporator inlet enthalpy, kJ/kg
-    REAL :: TiEvp       !Evaporator inlet temperature, C
-    REAL :: XiEvp       !Evaporator inlet quality
-    REAL :: PoEvp       !Evaporator outlet pressure, kPa
+    !REAL :: PiEvp       !Evaporator inlet pressure, kPa
+    !REAL :: HiEvp       !Evaporator inlet enthalpy, kJ/kg
+    !REAL :: TiEvp       !Evaporator inlet temperature, C
+    !REAL :: XiEvp       !Evaporator inlet quality
+    !REAL :: PoEvp       !Evaporator outlet pressure, kPa
     REAL :: mdotCmp     !Mass flow rate from compressor, kg/s
     REAL :: mdotExp     !Mass flow rate from exp. device, kg/s
     REAL :: TsiExp      !Liquid saturation temperature of the upstream fluid, C
@@ -597,17 +597,17 @@
 
     !Flow:
 
-    mdotCmp=XIN(ShTbINMdotC)  !RS: Debugging: Formerly XIN(1)
-    PiExp=XIN(ShTbINPiE)    !RS: Debugging: Formerly XIN(2)
-    HiExp=XIN(ShTbINHiE)    !RS: Debugging: Formerly XIN(3)
-    PiEvp=XIN(ShTbINPiEv)    !RS: Debugging: Formerly XIN(4)
-    PoEvp=XIN(ShTbINPoEv)    !RS: Debugging: Formerly XIN(5)
+    mdotCmp=ShTbIN%ShTbINMdotC  !RS: Debugging: Formerly XIN(1)
+    PiExp=ShTbIN%ShTbINPiE    !RS: Debugging: Formerly XIN(2)
+    HiExp=ShTbIN%ShTbINHiE    !RS: Debugging: Formerly XIN(3)
+    PiEvp=ShTbIN%ShTbINPiEv    !RS: Debugging: Formerly XIN(4)
+    PoEvp=ShTbIN%ShTbINPoEv    !RS: Debugging: Formerly XIN(5)
 
-    LshTube=PAR(ShTbTLen)  !RS: Debugging: Formerly PAR(1)
-    DshTube=PAR(ShTbTID)  !RS: Debugging: Formerly PAR(2)
-    Depth=PAR(ShTbChamDep)    !RS: Debugging: Formerly PAR(3)
-    Nckts=PAR(ShTbECktNum)    !RS: Debugging: Formerly PAR(4)
-    LdisTube=PAR(ShTbDTubeLen) !RS: Debugging: Formerly PAR(5)
+    LshTube=ShTbPAR%ShTbTLen  !RS: Debugging: Formerly PAR(1)
+    DshTube=ShTbPAR%ShTbTID  !RS: Debugging: Formerly PAR(2)
+    Depth=ShTbPAR%ShTbChamDep    !RS: Debugging: Formerly PAR(3)
+    Nckts=ShTbPAR%ShTbECktNum    !RS: Debugging: Formerly PAR(4)
+    LdisTube=ShTbPAR%ShTbDTubeLen !RS: Debugging: Formerly PAR(5)
 
     ErrorFlag=0 !Initialize
 
@@ -761,20 +761,20 @@
     IF (mdotExp .LT. 0) THEN
         ErrorFlag=1
     ELSE
-        OUT(ShTbOMdotE)=mdotExp  !RS: Debugging: Formerly OUT(1)
-        OUT(ShTbOPoE)=PoExp    !RS: Debugging: Formerly OUT(2)
-        OUT(ShTbOToE)=ToExp    !RS: Debugging: Formerly OUT(3)
-        OUT(ShTbOXoE)=XoExp    !RS: Debugging: Formerly OUT(4)
-        OUT(ShTbOMDT)=MassDisTube  !RS: Debugging: Formerly OUT(5)
+        ShTbOUT%ShTbOMdotE=mdotExp  !RS: Debugging: Formerly OUT(1)
+        ShTbOUT%ShTbOPoE=PoExp    !RS: Debugging: Formerly OUT(2)
+        ShTbOUT%ShTbOToE=ToExp    !RS: Debugging: Formerly OUT(3)
+        ShTbOUT%ShTbOXoE=XoExp    !RS: Debugging: Formerly OUT(4)
+        ShTbOUT%ShTbOMDT=MassDisTube  !RS: Debugging: Formerly OUT(5)
         !OUT(6)=QdisTube    !RS: Debugging: Never used
     END IF
 
-    OUT(ShTbOErrFlag)=ErrorFlag    !RS: Debugging: Formerly OUT(7)
+    ShTbOUT%ShTbOErrFlag=ErrorFlag    !RS: Debugging: Formerly OUT(7)
 
-    PiExpDev = XIN(ShTbINPiE)   !RS: Debugging: Formerly XIN(2)
-    HiExpDev = XIN(ShTbINHiE)   !RS: Debugging: Formerly XIN(3)
-    PoExpDev = OUT(ShTbOPoE)   !RS: Debugging: Formerly OUT(2)
-    ToExpDev = OUT(ShTbOToE)   !RS: Debugging: Formerly OUT(3)
+    PiExpDev = ShTbIN%ShTbINPiE   !RS: Debugging: Formerly XIN(2)
+    HiExpDev = ShTbIN%ShTbINHiE   !RS: Debugging: Formerly XIN(3)
+    PoExpDev = ShTbOUT%ShTbOPoE   !RS: Debugging: Formerly OUT(2)
+    ToExpDev = ShTbOUT%ShTbOToE   !RS: Debugging: Formerly OUT(3)
     hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !Expansion Device Outlet Enthalpy?
 
     RETURN
@@ -783,7 +783,7 @@
 
     !***********************************************************************************
 
-    SUBROUTINE ShortTubePayne(Ref$,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT) !RS: Debugging: Extraneous PureRef
+    SUBROUTINE ShortTubePayne(Ref$) !,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT) !RS: Debugging: Extraneous PureRef
 
     !-----------------------------------------------------------------------------------
     !
@@ -836,9 +836,9 @@
 
     USE FluidProperties_HPSim
     USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
-    USE DataSimulation, ONLY: ShTbTLen, ShTbTID, ShTbChamDep, ShTbECktNum, ShTbDTubeLen, &  !RS: Debugging: Replacing array numbers with variables
-                            ShTbINMdotC, ShTbINPiE, ShTbINHiE, ShTbINPiEv, ShTbINPoEv, ShTbOMdotE, ShTbOPoE, ShTbOToE, &
-                            ShTbOXoE, ShTbOMDT, ShTbOErrFlag
+    USE DataSimulation !, ONLY: ShTbTLen, ShTbTID, ShTbChamDep, ShTbECktNum, ShTbDTubeLen, &  !RS: Debugging: Replacing array numbers with variables
+    !                        ShTbINMdotC, ShTbINPiE, ShTbINHiE, ShTbINPiEv, ShTbINPoEv, ShTbOMdotE, ShTbOPoE, ShTbOToE, &
+    !                        ShTbOXoE, ShTbOMDT, ShTbOErrFlag
 
     IMPLICIT NONE
 
@@ -846,9 +846,9 @@
     CHARACTER*80,     INTENT(IN)  :: Ref$    !Refrigerant name
     !INTEGER(2),       INTENT(IN)  :: PureRef !Refrigerant flag: 1-pure refrigerant !RS: Debugging: Extraneous
     !0-refrigerant mixture
-    REAL, INTENT(IN)  :: XIN(5)
-    REAL, INTENT(IN)  :: PAR(5)
-    REAL, INTENT(OUT) :: OUT(7)
+    !REAL, INTENT(IN)  :: XIN(5)
+    !REAL, INTENT(IN)  :: PAR(5)
+    !REAL, INTENT(OUT) :: OUT(7)
 
     !Subroutine local variables           
     REAL Temperature,Quality,Pressure,Enthalpy
@@ -861,20 +861,20 @@
     REAL :: MassDisTube !Mass in distributor tube, kg
     REAL :: Depth       !Short tube 45 deg chamfer depth, m
     REAL :: Subcooling  !Degree of subcooling, C
-    REAL :: PiExp       !Inlet pressure of exp. device (Up stream pressure), kPa
-    REAL :: HiExp       !Exp. device inlet enthalpy, kJ/kg
-    REAL :: TiExp       !Exp. device inlet temperature, C
-    REAL :: XiExp       !Exp. device inlet quality
-    REAL :: PoExp       !Exp. device outlet pressure, kPa
-    REAL :: HoExp       !Exp. device outlet enthalpy, kJ/kg
-    REAL :: ToExp       !Exp. device outlet temperature, C
-    REAL :: XoExp       !Exp. device outlet quality
+    !REAL :: PiExp       !Inlet pressure of exp. device (Up stream pressure), kPa
+    !REAL :: HiExp       !Exp. device inlet enthalpy, kJ/kg
+    !REAL :: TiExp       !Exp. device inlet temperature, C
+    !REAL :: XiExp       !Exp. device inlet quality
+    !REAL :: PoExp       !Exp. device outlet pressure, kPa
+    !REAL :: HoExp       !Exp. device outlet enthalpy, kJ/kg
+    !REAL :: ToExp       !Exp. device outlet temperature, C
+    !REAL :: XoExp       !Exp. device outlet quality
     REAL :: DPdisTot    !Total pressure drop in distributor, kPa
-    REAL :: PiEvp       !Evaporator inlet pressure, kPa
-    REAL :: HiEvp       !Evaporator inlet enthalpy, kJ/kg
-    REAL :: TiEvp       !Evaporator inlet temperature, C
-    REAL :: XiEvp       !Evaporator inlet quality
-    REAL :: PoEvp       !Evaporator outlet pressure, kPa
+    !REAL :: PiEvp       !Evaporator inlet pressure, kPa
+    !REAL :: HiEvp       !Evaporator inlet enthalpy, kJ/kg
+    !REAL :: TiEvp       !Evaporator inlet temperature, C
+    !REAL :: XiEvp       !Evaporator inlet quality
+    !REAL :: PoEvp       !Evaporator outlet pressure, kPa
     REAL :: mdotCmp     !Mass flow rate from compressor, kg/s
     REAL :: mdotExp     !Mass flow rate from exp. device, kg/s
     REAL :: Gref        !Mass flux, kg/s-m2
@@ -911,17 +911,17 @@
 
     !Flow:
 
-    mdotCmp=XIN(ShTbINMdotC)  !RS: Debugging: Formerly XIN(1)
-    PiExp=XIN(ShTbINPiE)    !RS: Debugging: Formerly XIN(2)
-    HiExp=XIN(ShTbINHiE)    !RS: Debugging: Formerly XIN(3)
-    PiEvp=XIN(ShTbINPiEv)    !RS: Debugging: Formerly XIN(4)
-    PoEvp=XIN(ShTbINPoEv)    !RS: Debugging: Formerly XIN(5)
+    mdotCmp=ShTbIN%ShTbINMdotC  !RS: Debugging: Formerly XIN(1)
+    PiExp=ShTbIN%ShTbINPiE    !RS: Debugging: Formerly XIN(2)
+    HiExp=ShTbIN%ShTbINHiE    !RS: Debugging: Formerly XIN(3)
+    PiEvp=ShTbIN%ShTbINPiEv    !RS: Debugging: Formerly XIN(4)
+    PoEvp=ShTbIN%ShTbINPoEv    !RS: Debugging: Formerly XIN(5)
 
-    LshTube=PAR(ShTbTLen)  !RS: Debugging: Formerly PAR(1)
-    DshTube=PAR(ShTbTID)  !RS: Debugging: Formerly PAR(2)
-    Depth=PAR(ShTbChamDep)    !RS: Debugging: Formerly PAR(3)
-    Nckts=PAR(ShTbECktNum)    !RS: Debugging: Formerly PAR(4)
-    LdisTube=PAR(ShTbDTubeLen) !RS: Debugging: Formerly PAR(5)
+    LshTube=ShTbPAR%ShTbTLen  !RS: Debugging: Formerly PAR(1)
+    DshTube=ShTbPAR%ShTbTID  !RS: Debugging: Formerly PAR(2)
+    Depth=ShTbPAR%ShTbChamDep    !RS: Debugging: Formerly PAR(3)
+    Nckts=ShTbPAR%ShTbECktNum    !RS: Debugging: Formerly PAR(4)
+    LdisTube=ShTbPAR%ShTbDTubeLen !RS: Debugging: Formerly PAR(5)
 
     ErrorFlag=0 !Initialize
 
@@ -1090,25 +1090,26 @@
         ErrorFlag=1
         !mdotExp=0   !RS: Debugging: No backwards flow allowed!
     ELSE
-        OUT(ShTbOMdotE)=mdotExp  !RS: Debugging: Formerly OUT(1)
-        OUT(ShTbOPoE)=PoExp    !RS: Debugging: Formerly OUT(2)
-        OUT(ShTbOToE)=ToExp    !RS: Debugging: Formerly OUT(3)
-        OUT(ShTbOXoE)=XoExp    !RS: Debugging: Formerly OUT(4)
-        OUT(ShTbOMDT)=MassDisTube  !RS: Debugging: Formerly OUT(5)
+        ShTbOUT%ShTbOMdotE=mdotExp  !RS: Debugging: Formerly OUT(1)
+        ShTbOUT%ShTbOPoE=PoExp    !RS: Debugging: Formerly OUT(2)
+        ShTbOUT%ShTbOToE=ToExp    !RS: Debugging: Formerly OUT(3)
+        ShTbOUT%ShTbOXoE=XoExp    !RS: Debugging: Formerly OUT(4)   
+        ShTbOUT%ShTbOMDT=MassDisTube  !RS: Debugging: Formerly OUT(5)
         !OUT(6)=QdisTube    !RS: Debugging: Not used  
     END IF
 
-    OUT(ShTbOErrFlag)=ErrorFlag    !RS: Debugging: Formerly OUT(7)
+    ShTbOUT%ShTbOErrFlag=ErrorFlag    !RS: Debugging: Formerly OUT(7)
 
-    PiExpDev = XIN(ShTbINPiE)   !RS: Debugging: Formerly XIN(2)
-    HiExpDev = XIN(ShTbINHiE)   !RS: Debugging: Formerly XIN(3)
-    PoExpDev = OUT(ShTbOPoE)   !RS: Debugging: Formerly OUT(2)
-    ToExpDev = OUT(ShTbOToE)   !RS: Debugging: Formerly OUT(3)
+    PiExpDev = ShTbIN%ShTbINPiE   !RS: Debugging: Formerly XIN(2)
+    HiExpDev = ShTbIN%ShTbINHiE   !RS: Debugging: Formerly XIN(3)
+    PoExpDev = ShTbOUT%ShTbOPoE   !RS: Debugging: Formerly OUT(2)
+    ToExpDev = ShTbOUT%ShTbOToE   !RS: Debugging: Formerly OUT(3)
     !hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !RS Comment: Expansion Device Outlet Enthalpy?
     
     IF (XoExp .LT. 0) THEN  !RS: Debugging: Trying to deal with the case when it's subcooled
         hoExpDev = TP(Ref$,ToExpDev,PoExpDev,'enthalpy',RefrigIndex,RefPropErr)
     ELSE
+        XoExp=XoExp/100 !RS: Debugging: Added "/100" to deal with the output of 100 when it wanted it as 1
         hoExpDev = PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !RS Comment: Expansion Device Outlet Enthalpy?
     END IF
 

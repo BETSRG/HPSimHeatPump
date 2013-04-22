@@ -90,10 +90,9 @@ CONTAINS
 
 !***********************************************************************************
 
-SUBROUTINE UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR, & !TxvPAR,  &
+SUBROUTINE UnitConvert !( !TaiC,TaiE,RHiC,RHiE, & !XMaC,XMaE, !Unit,& !CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR, & !TxvPAR,  &
                        !AccumPAR,FilterPAR,XMaC,XMaE,TaiC,TaiE,RHiC,RHiE, &
-                       AccumPAR,XMaC,XMaE,TaiC,TaiE,RHiC,RHiE, &
-				       Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure) !, &
+				       !Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure) !, &
 					   !ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength, &    !RS: Debugging: Removing these
 					   !Tdis,Tliq)
 ! ----------------------------------------------------------------------
@@ -112,47 +111,47 @@ SUBROUTINE UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR, & !TxvPA
 !
 ! ----------------------------------------------------------------------
 
-USE DataSimulation, ONLY: CondDisLnOD,CondDisLnTWThick,CondDisLnQLoss, & !RS: Debugging: For replacement of array numbers with variable names
-                        CondLiqLnOD,CondLiqLnTWThick,CondLiqLnQLoss,CondCoilTOD,CondCoilTWThick,CondTspc,CondRspc, &
-                        CondFinThick,CondFanPwr,CondBarPress,CondDisLnLen,CondDisLnElev,CondDisLnTempChg,CondDisLnAddPD,CondLiqLnLen, &
-                        CondLiqLnElev,CondLiqLnTempChg,CondLiqLnAddPD,CondCoilSTLen,CondCoilTThermCon,CondFinThick,CondFinPitch, &
-                        CondFinThermCon,EvapSucLnOD,EvapSucLnTWThick,EvapSucLnQLoss,EvapCoilTOD,EvapCoilTWThick,EvapTspc,EvapRspc, &
-                        EvapFinThick,EvapFanPwr,EvapSucLnLen,EvapSucLnElev,EvapSucLnTempChg,EvapSucLnAddPD,EvapCoilTThermCon, &
-                        EvapCoilSTLen,EvapFinPitch,EvapFinThermCon,EvapBarPress,ShTbTLen,ShTbTID,ShTbChamDep,ShTbDTubeLen,CTTubeID, &
-                        CTTubeLen,CTTubeCoilD,CTDisTubeLen,AccD,AccH,AccD1,AccD2,AccHDis,AccDTube,AccDP,AccDT,CompIntVol,CompQLoss
+USE DataSimulation !, ONLY: CondDisLnOD,CondDisLnTWThick,CondDisLnQLoss, & !RS: Debugging: For replacement of array numbers with variable names
+!                        CondLiqLnOD,CondLiqLnTWThick,CondLiqLnQLoss,CondCoilTOD,CondCoilTWThick,CondTspc,CondRspc, &
+!                        CondFinThick,CondFanPwr,CondBarPress,CondDisLnLen,CondDisLnElev,CondDisLnTempChg,CondDisLnAddPD,CondLiqLnLen, &
+!                        CondLiqLnElev,CondLiqLnTempChg,CondLiqLnAddPD,CondCoilSTLen,CondCoilTThermCon,CondFinThick,CondFinPitch, &
+!                        CondFinThermCon,EvapSucLnOD,EvapSucLnTWThick,EvapSucLnQLoss,EvapCoilTOD,EvapCoilTWThick,EvapTspc,EvapRspc, &
+!                        EvapFinThick,EvapFanPwr,EvapSucLnLen,EvapSucLnElev,EvapSucLnTempChg,EvapSucLnAddPD,EvapCoilTThermCon, &
+!                        EvapCoilSTLen,EvapFinPitch,EvapFinThermCon,EvapBarPress,ShTbTLen,ShTbTID,ShTbChamDep,ShTbDTubeLen,CTTubeID, &
+!                        CTTubeLen,CTTubeCoilD,CTDisTubeLen,AccD,AccH,AccD1,AccD2,AccHDis,AccDTube,AccDP,AccDT,CompIntVol,CompQLoss
 
 IMPLICIT NONE
 
 !Subroutine parameters
 
 !Subroutine arguments
-INTEGER(2), INTENT(IN) :: Unit !Unit flag: 1=SI; 2=IP
-REAL, INTENT(INOUT) :: CompPAR(26) !Compressor model input data
-REAL, INTENT(INOUT) :: CondPAR(45) !Condenser model real number input data  !RS: Debugging: Formerly CondPAR(61)
-REAL, INTENT(INOUT) :: EvapPAR(39) !Evaporator model real number input data !RS: Debugging: Formerly EvapPAR(54)
-REAL, INTENT(INOUT) :: ShTbPAR(5)  !Short tube model input data
-REAL, INTENT(INOUT) :: CapTubePAR(5) !Capillary tube model input data
+!INTEGER(2), INTENT(IN) :: Unit !Unit flag: 1=SI; 2=IP
+!REAL, INTENT(INOUT) :: CompPAR(26) !Compressor model input data
+!REAL, INTENT(INOUT) :: CondPAR(45) !Condenser model real number input data  !RS: Debugging: Formerly CondPAR(61)
+!REAL, INTENT(INOUT) :: EvapPAR(39) !Evaporator model real number input data !RS: Debugging: Formerly EvapPAR(54)
+!REAL, INTENT(INOUT) :: ShTbPAR(5)  !Short tube model input data
+!REAL, INTENT(INOUT) :: CapTubePAR(5) !Capillary tube model input data
 !REAL, INTENT(INOUT) :: TxvPAR(7)   !TXV model input data   !RS: Debugging: Not ever used
-REAL, INTENT(INOUT) :: AccumPAR(10) !Accumulator input data
+!REAL, INTENT(INOUT) :: AccumPAR(10) !Accumulator input data
 !REAL, INTENT(INOUT) :: FilterPAR(2) !Filter drier input data
-REAL, INTENT(INOUT) :: XMaC      !Condenser inlet air flow rate, kg/s
-REAL, INTENT(INOUT) :: XMaE      !Evaporator inlet air flow rate, kg/s
-REAL, INTENT(INOUT) :: TaiC      !Condenser inlet air DB temp, F
-REAL, INTENT(INOUT) :: TaiE      !Evaporator inlet air DB temp, F
-REAL, INTENT(INOUT) :: RHiC      !Condenser inlet air RH
-REAL, INTENT(INOUT) :: RHiE      !Evaporator inlet air RH
-REAL, INTENT(INOUT) :: RefChg    !Refrigerant charge, Lbm
-REAL, INTENT(INOUT) :: TSOCMP    !High side saturation temp., F
-REAL, INTENT(INOUT) :: TSICMP    !Low side saturation temp., F
-REAL, INTENT(INOUT) :: SUPER     !Superheat, F
-REAL, INTENT(INOUT) :: SUBCOOL   !Subcooling, F
-REAL, INTENT(INOUT) :: BaroPressure !Barometric pressure, kPa
+!REAL, INTENT(INOUT) :: XMaC      !Condenser inlet air flow rate, kg/s
+!REAL, INTENT(INOUT) :: XMaE      !Evaporator inlet air flow rate, kg/s
+!REAL, INTENT(INOUT) :: TaiC      !Condenser inlet air DB temp, F
+!REAL, INTENT(INOUT) :: TaiE      !Evaporator inlet air DB temp, F
+!REAL, INTENT(INOUT) :: RHiC      !Condenser inlet air RH
+!REAL, INTENT(INOUT) :: RHiE      !Evaporator inlet air RH
+!REAL, INTENT(INOUT) :: RefChg    !Refrigerant charge, Lbm
+!REAL, INTENT(INOUT) :: TSOCMP    !High side saturation temp., F
+!REAL, INTENT(INOUT) :: TSICMP    !Low side saturation temp., F
+!REAL, INTENT(INOUT) :: SUPER     !Superheat, F
+!REAL, INTENT(INOUT) :: SUBCOOL   !Subcooling, F
+!REAL, INTENT(INOUT) :: BaroPressure !Barometric pressure, kPa
 !REAL, INTENT(INOUT) ::  Tdis !Discharge temperature, C !RS: Debugging: Only used for CoilOnlySim, which isn't used by us
 !REAL, INTENT(INOUT) ::  Tliq !Liquid temperature, C    !RS: Debugging: Only used for CoilOnlySim, which isn't used by us
 
   IF (Unit .EQ. SI)THEN !SI unit inputs
     
-	CompPAR(CompIntVol)=CompPAR(CompIntVol)/(100**3) !Compressor internal volume, m^3   !RS: Formerly CompPAR(23)
+	CompPAR%CompIntVol=CompPAR%CompIntVol/(100**3) !Compressor internal volume, m^3   !RS: Formerly CompPAR(23)
 
 	!****Condenser input data****
     !CondPAR(1)                   !Discharge line length, m

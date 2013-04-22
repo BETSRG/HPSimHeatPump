@@ -140,7 +140,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
         EvapPAR%EvapCompQLoss=CompPAR%CompQLoss/1000    !RS Comment: Unit Conversion    !RS: Debugging: Formerly EvapPAR(32) & CompPAR(22)
     END IF
 
-    CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
+    CALL Evaporator(Ref$) !,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
     CALL PrintEvaporatorResult 
     EvapPAR%EvapFirstTime=0 !No longer first time !RS: Debugging: Formerly EvapPAR(38)
     IF (EvapOUT%EOutErrFlag .NE. 0) THEN    !RS: Debugging: Formerly EvapOUT(17)
@@ -160,7 +160,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     HiCmp=EvapOUT%EOuthRiC    !RS: Debugging: Formerly EvapOUT(7)
     XiCmp=EvapOUT%EOutxRiC    !RS: Debugging: Formerly EvapOUT(9)
 
-    IF (AccumPAR(AccH) .GT. 0) THEN !Accumulator exists    !RS: Debugging: Formerly AccumPAR(2)
+    IF (AccumPAR%AccH .GT. 0) THEN !Accumulator exists    !RS: Debugging: Formerly AccumPAR(2)
         TsatEvp=(TSICMP-32)*5/9     !RS Comment: Unit Conversion, from F to C
         TsatCnd=(TSOCMP-32)*5/9     !RS Comment: Unit Conversion, from F to C
         Subcooling=CondOUT%COuttSCiE  !RS: Debugging: Formerly CondOUT(14)

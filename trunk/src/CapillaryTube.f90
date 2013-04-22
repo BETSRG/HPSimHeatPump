@@ -79,7 +79,7 @@
 
     !***********************************************************************
 
-    SUBROUTINE CapillaryTubeORNL(Ref$,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT)
+    SUBROUTINE CapillaryTubeORNL !(Ref$) !,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT)
 
     ! ----------------------------------------------------------------------
     !
@@ -153,18 +153,18 @@
     !
     ! ----------------------------------------------------------------------
     
-    USE DataSimulation, ONLY: CTTubeID,CTTubeLen,CTTubeCoilD,CTEvapCktNum,CTDisTubeLen, &   !RS: Debugging: Replacing PAR() numbers with variables
-                            CTIMdot, CTIPiEx, CTIHiEx, CTIPiEv, CTIPoEv, CTOMdot, CTOErrFlag, CTOToE, CTOXoE, CTOMDT, CTOPoE
-
+    USE DataSimulation !, ONLY: CTTubeID,CTTubeLen,CTTubeCoilD,CTEvapCktNum,CTDisTubeLen, &   !RS: Debugging: Replacing PAR() numbers with variables
+    !                        CTIMdot, CTIPiEx, CTIHiEx, CTIPiEv, CTIPoEv, CTOMdot, CTOErrFlag, CTOToE, CTOXoE, CTOMDT, CTOPoE
+    
     IMPLICIT NONE
 
     !Subroutine argument declarations
-    CHARACTER*80,     INTENT(IN) :: Ref$    !Refrigerant name
+    !CHARACTER*80,     INTENT(IN) :: Ref$    !Refrigerant name
     !INTEGER(2),       INTENT(IN) :: PureRef !Refrigerant flag: 1-pure refrigerant  !RS: Debugging: Extraneous
     !0-refrigerant mixture
-    REAL, INTENT(IN) :: XIN(5)
-    REAL, INTENT(IN) :: PAR(5)
-    REAL, INTENT(OUT) :: OUT(6)   !RS: Debugging: Formerly OUT(7) 
+    !REAL, INTENT(IN) :: XIN(5)
+    !REAL, INTENT(IN) :: PAR(5)
+    !REAL, INTENT(OUT) :: OUT(6)   !RS: Debugging: Formerly OUT(7) 
 
     REAL Quality,Pressure,Enthalpy
 
@@ -177,18 +177,18 @@
     REAL :: IDDISTUBE   !Distributor inside diameter, in
     REAL :: VolDisTube  !Distributor tube volume, m^3
     REAL :: MassDisTube !Mass in distributor tube, kg
-    REAL :: PiExp       !Inlet pressure of exp. device (Up stream pressure), kPa or psi
-    REAL :: HiExp       !Exp. device inlet enthalpy, kJ/kg
-    REAL :: TiExp       !Exp. device inlet temperature, C
-    REAL :: XiExp       !Exp. device inlet quality
-    REAL :: PoExp       !Exp. device outlet pressure, kPa or psi
-    REAL :: HoExp       !Exp. device outlet enthalpy, kJ/kg
-    REAL :: ToExp       !Exp. device outlet temperature, C
-    REAL :: XoExp       !Exp. device outlet quality
+    !REAL :: PiExp       !Inlet pressure of exp. device (Up stream pressure), kPa or psi
+    !REAL :: HiExp       !Exp. device inlet enthalpy, kJ/kg
+    !REAL :: TiExp       !Exp. device inlet temperature, C
+    !REAL :: XiExp       !Exp. device inlet quality
+    !REAL :: PoExp       !Exp. device outlet pressure, kPa or psi
+    !REAL :: HoExp       !Exp. device outlet enthalpy, kJ/kg
+    !REAL :: ToExp       !Exp. device outlet temperature, C
+    !REAL :: XoExp       !Exp. device outlet quality
     REAL :: DPdisTot    !Total pressure drop in distributor, kPa
-    REAL :: PiEvp       !Evaporator inlet pressure, kPa
-    REAL :: HiEvp       !Evaporator inlet enthalpy, kJ/kg
-    REAL :: PoEvp       !Evaporator outlet pressure, kPa
+    !REAL :: PiEvp       !Evaporator inlet pressure, kPa
+    !REAL :: HiEvp       !Evaporator inlet enthalpy, kJ/kg
+    !REAL :: PoEvp       !Evaporator outlet pressure, kPa
     REAL :: mdotCmp     !Mass flow rate from compressor, kg/s
     REAL :: mdotExp     !Mass flow rate from exp. device, kg/s or lbm/hr
     REAL :: TsiExp      !Liquid saturation temperature of the upstream fluid, C
@@ -218,35 +218,35 @@
 
     !Flow:
 
-    mdotCmp = XIN(CTIMdot)    !RS: Debugging: Formerly XIN(1)
-    PiExp   = XIN(CTIPiEx)    !RS: Debugging: Formerly XIN(2)
-    HiExp   = XIN(CTIHiEx)    !RS: Debugging: Formerly XIN(3)
-    PiEvp   = XIN(CTIPiEv)    !RS: Debugging: Formerly XIN(4)
-    PoEvp   = XIN(CTIPoEv)    !RS: Debugging: Formerly XIN(5)
+    mdotCmp = CapTubeIN%CTIMdot    !RS: Debugging: Formerly XIN(1)
+    PiExp   = CapTubeIN%CTIPiEx    !RS: Debugging: Formerly XIN(2)
+    HiExp   = CapTubeIN%CTIHiEx    !RS: Debugging: Formerly XIN(3)
+    PiEvp   = CapTubeIN%CTIPiEv    !RS: Debugging: Formerly XIN(4)
+    PoEvp   = CapTubeIN%CTIPoEv    !RS: Debugging: Formerly XIN(5)
 
-    DcapTube = PAR(CTTubeID)   !RS: Debugging: Formerly PAR(1)
-    LcapTube = PAR(CTTubeLen)   !RS: Debugging: Formerly PAR(2)
-    Dcoil    = PAR(CTTubeCoilD)   !RS: Debugging: Formerly PAR(3)
-    Nckts    = PAR(CTEvapCktNum)   !RS: Debugging: Formerly PAR(4)
-    LdisTube = PAR(CTDisTubeLen)   !RS: Debugging: Formerly PAR(5)
+    DcapTube = CapTubePAR%CTTubeID   !RS: Debugging: Formerly PAR(1)
+    LcapTube = CapTubePAR%CTTubeLen   !RS: Debugging: Formerly PAR(2)
+    Dcoil    = CapTubePAR%CTTubeCoilD   !RS: Debugging: Formerly PAR(3)
+    Nckts    = CapTubePAR%CTEvapCktNum   !RS: Debugging: Formerly PAR(4)
+    LdisTube = CapTubePAR%CTDisTubeLen   !RS: Debugging: Formerly PAR(5)
 
     ErrorFlag = 0 !Initialize
 
     Pressure=PiExp*1000 !RS Comment: Unit Conversion
     Enthalpy=HiExp*1000 !RS Comment: Unit Conversion
     TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Inlet Temperature
-     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(2))) THEN   !RS: Debugging: Formerly OUT(7)   
+     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, CapTubeOUT%CTOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7)   
         RETURN
     END IF
 
     XiExp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Expansion Device Inlet Quality
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(2))) THEN   !RS: Debugging: Formerly OUT(7) 
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag,CapTubeOUT%CTOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7) 
         RETURN
     END IF
 
     Quality=0
     TsiExp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Inlet Liquid Saturation Temperature
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(2))) THEN   !RS: Debugging: Formerly OUT(7) 
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, CapTubeOUT%CTOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7) 
         RETURN
     END IF
 
@@ -256,7 +256,7 @@
     Enthalpy=HiEvp*1000 !RS Comment: Unit Conversion
     
     rhoiEvp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr) !Evaporator Inlet Density
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(2))) THEN       !RS: Debugging: Formerly OUT(7) 
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, CapTubeOUT%CTOErrFlag)) THEN       !RS: Debugging: Formerly OUT(7) 
         RETURN
     END IF
 
@@ -288,12 +288,12 @@
     Pressure=PoExp*1000 !RS Comment: Unit Conversion
     Enthalpy=HoExp*1000 !RS Comment: Unit Conversion
     ToExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Outlet Temperature
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(2))) THEN    !RS: Debugging: Formerly OUT(7)
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, CapTubeOUT%CTOErrFlag)) THEN    !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
     XoExp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !Expansion Device Outlet Quality
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(2))) THEN   !RS: Debugging: Formerly OUT(7) 
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, CapTubeOUT%CTOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7) 
         RETURN
     END IF
 
@@ -362,12 +362,12 @@
     mdotExp=mdotExp*1.26E-4 !Convert from lbm/hr to kg/s
     PoExp=POEXP/0.14503798 !Convert from psi to kPa
 
-    OUT(CTOMdot)=mdotExp  !RS: Debugging: Formerly OUT(1)
-    OUT(CTOToE)=ToExp    !RS: Debugging: Formerly OUT(3)
-    OUT(CTOXoE)=XoExp    !RS: Debugging: Formerly OUT(4)
-    OUT(CTOMDT)=MassDisTube !RS: Debugging: Only used for output !RS: Debugging: Formerly OUT(5)
-    OUT(CTOPoE)=PoExp   !RS: Debugging: Formerly the pressure
-    OUT(CTOErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(2) 
+    CapTubeOUT%CTOMdot=mdotExp  !RS: Debugging: Formerly OUT(1)
+    CapTubeOUT%CTOToE=ToExp    !RS: Debugging: Formerly OUT(3)
+    CapTubeOUT%CTOXoE=XoExp    !RS: Debugging: Formerly OUT(4)
+    CapTubeOUT%CTOMDT=MassDisTube !RS: Debugging: Only used for output !RS: Debugging: Formerly OUT(5)
+    CapTubeOUT%CTOPoE=PoExp   !RS: Debugging: Formerly the pressure
+    CapTubeOUT%CTOErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(2) 
 
     RETURN
 

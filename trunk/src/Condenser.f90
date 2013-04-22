@@ -260,7 +260,7 @@
     REAL Wabsolute   !Asolute oil mass fraction  
     INTEGER(2) AirPropOpt     !Air prop calc. option
     INTEGER(2) AirPropErr     !Error flag:1-error; 0-no error
-    REAL AirProp(8)
+    !REAL AirProp(8)
 
     !Variables for coil
     REAL mRiCoil
@@ -429,7 +429,7 @@
 
     !***********************************************************************************
 
-    SUBROUTINE Condenser(Ref$,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT)  !RS: Debugging: Extraneous PureRef
+    SUBROUTINE Condenser(Ref$) !(Ref$,PureRef,XIN,PAR,OUT)  !RS: Debugging: Extraneous PureRef
 
     !-----------------------------------------------------------------------------------
     !
@@ -559,9 +559,9 @@
     !Subroutine argument declarations
     CHARACTER*80,     INTENT(IN)  :: Ref$
     !INTEGER(2),       INTENT(IN)  :: PureRef   !RS: Debugging: Extraneous
-    REAL, INTENT(IN)  :: XIN(7) !RS: Debugging: Formerly XIN(9)
-    REAL, INTENT(IN)  :: PAR(45) !ISI - 12/21/06 !RS: Debugging: Formerly PAR(62)
-    REAL, INTENT(OUT) :: OUT(20)    !RS: Debugging: Formerly OUT(29), OUT(24)
+    !REAL, INTENT(IN)  :: XIN(7) !RS: Debugging: Formerly XIN(9)
+    !REAL, INTENT(IN)  :: PAR(45) !ISI - 12/21/06 !RS: Debugging: Formerly PAR(62)
+    !REAL, INTENT(OUT) :: OUT(20)    !RS: Debugging: Formerly OUT(29), OUT(24)
 
     !Subroutine lcoal variables
     REAL :: MCXIN(7)  !Microchannel coil input data
@@ -597,56 +597,56 @@
     
     !Flow:
 
-    mRefTot =XIN(CInmRef)   !RS: Debugging: Formerly XIN(1)
-    pRoCmp  =XIN(CInpRo) !RS: Debugging: Formerly XIN(2)
-    hRoCmp  =XIN(CInhRo) !RS: Debugging: Formerly XIN(3)
-    mAiCoil =XIN(CInmAi) !RS: Debugging: Formerly XIN(4)
-    tAiCoil =XIN(CIntAi) !RS: Debugging: Formerly XIN(5)
-    rhAiCoil=XIN(CInrhAi) !RS: Debugging: Formerly XIN(6)
-    SolarFlux=XIN(CInSolFlux)    !RS: Debugging: Used once but was set equal to 0    !RS: Debugging: Formerly XIN(7)
+    mRefTot =CondIN%CInmRef   !RS: Debugging: Formerly XIN(1)
+    pRoCmp  =CondIN%CInpRo !RS: Debugging: Formerly XIN(2)
+    hRoCmp  =CondIN%CInhRo !RS: Debugging: Formerly XIN(3)
+    mAiCoil =CondIN%CInmAi !RS: Debugging: Formerly XIN(4)
+    tAiCoil =CondIN%CIntAi !RS: Debugging: Formerly XIN(5)
+    rhAiCoil=CondIN%CInrhAi !RS: Debugging: Formerly XIN(6)
+    SolarFlux=CondIN%CInSolFlux    !RS: Debugging: Used once but was set equal to 0    !RS: Debugging: Formerly XIN(7)
 
-    LdisLn    = PAR(CondDisLnLen)  !RS: Debugging: Formerly PAR(1)
-    ODdisLn   = PAR(CondDisLnOD)  !RS: Debugging: Formerly PAR(2)
-    DisLnThk  = PAR(CondDisLnTWThick)  !RS: Debugging: Formerly PAR(3)
-    ElevDisLn = PAR(CondDisLnElev)  !RS: Debugging: Formerly PAR(4)
-    QdisLn    = PAR(CondDisLnQLoss)  !RS: Debugging: Formerly PAR(5)
-    DTdisLn   = PAR(CondDisLnTempChg)  !RS: Debugging: Formerly PAR(6)
-    AddDPdisLn = PAR(CondDisLnAddPD) !RS: Debugging: Formerly PAR(7)
+    LdisLn    = CondPAR%CondDisLnLen  !RS: Debugging: Formerly PAR(1)
+    ODdisLn   = CondPAR%CondDisLnOD  !RS: Debugging: Formerly PAR(2)
+    DisLnThk  = CondPAR%CondDisLnTWThick  !RS: Debugging: Formerly PAR(3)
+    ElevDisLn = CondPAR%CondDisLnElev  !RS: Debugging: Formerly PAR(4)
+    QdisLn    = CondPAR%CondDisLnQLoss  !RS: Debugging: Formerly PAR(5)
+    DTdisLn   = CondPAR%CondDisLnTempChg  !RS: Debugging: Formerly PAR(6)
+    AddDPdisLn = CondPAR%CondDisLnAddPD !RS: Debugging: Formerly PAR(7)
 
-    LliqLn    = PAR(CondLiqLnLen)  !RS: Debugging: Formerly PAR(8)
-    ODliqLn   = PAR(CondLiqLnOD)  !RS: Debugging: Formerly PAR(9)
-    LiqLnThk  = PAR(CondLiqLnTWThick) !RS: Debugging: Formerly PAR(10)
-    ElevLiqLn = PAR(CondLiqLnElev) !RS: Debugging: Formerly PAR(11)
-    QliqLn    = PAR(CondLiqLnQLoss) !RS: Debugging: Formerly PAR(12)
-    DTliqLn   = PAR(CondLiqLnTempChg) !RS: Debugging: Formerly PAR(13)
-    AddDPLiqLn = PAR(CondLiqLnAddPD)    !RS: Debugging: Formerly PAR(14)
+    LliqLn    = CondPAR%CondLiqLnLen  !RS: Debugging: Formerly PAR(8)
+    ODliqLn   = CondPAR%CondLiqLnOD  !RS: Debugging: Formerly PAR(9)
+    LiqLnThk  = CondPAR%CondLiqLnTWThick !RS: Debugging: Formerly PAR(10)
+    ElevLiqLn = CondPAR%CondLiqLnElev !RS: Debugging: Formerly PAR(11)
+    QliqLn    = CondPAR%CondLiqLnQLoss !RS: Debugging: Formerly PAR(12)
+    DTliqLn   = CondPAR%CondLiqLnTempChg !RS: Debugging: Formerly PAR(13)
+    AddDPLiqLn = CondPAR%CondLiqLnAddPD    !RS: Debugging: Formerly PAR(14)
 
-    IsSimpleCoil=PAR(CondSimpCoil) !ISI - 12/22/06    !RS: Debugging: Formerly PAR(44)
-    FirstTime=PAR(CondFirstTime)    !ISI - 12/22/06    !RS: Debugging: Formerly PAR(45)
+    IsSimpleCoil=CondPAR%CondSimpCoil !ISI - 12/22/06    !RS: Debugging: Formerly PAR(44)
+    FirstTime=CondPAR%CondFirstTime    !ISI - 12/22/06    !RS: Debugging: Formerly PAR(45)
 
     !Initialize circuiting and refrigerant parameters
     IF (FirstTime .EQ. 1) THEN
-        ODtube      = PAR(CondCoilTOD)   !RS: Debugging: Formerly PAR(15)
-        TubeThk     = PAR(CondCoilTWThick)   !RS: Debugging: Formerly PAR(16)
-        Ltube       = PAR(CondCoilSTLen)   !RS: Debugging: Formerly PAR(17)
-        Ktube       = PAR(CondCoilTThermCon)   !RS: Debugging: Formerly PAR(18)
-        Pt          = PAR(CondTspc)   !RS: Debugging: Formerly PAR(19)
-        Pl          = PAR(CondRspc)   !RS: Debugging: Formerly PAR(20)
-        FinThk      = PAR(CondFinThick)   !RS: Debugging: Formerly PAR(21)
-        FinPitch    = PAR(CondFinPitch)   !RS: Debugging: Formerly PAR(22)
-        Kfin        = PAR(CondFinThermCon)   !RS: Debugging: Formerly PAR(23)
-        Nt          = PAR(CondNt)   !RS: Debugging: Formerly PAR(24)
-        Nl          = PAR(CondNl)   !RS: Debugging: Formerly PAR(25)
-        NumOfCkts   = PAR(CondNumCkt)   !RS: Debugging: Formerly PAR(26)
-        NumOfMods   = PAR(CondNumMod)   !RS: Debugging: Formerly PAR(28)
-        FinType     = PAR(CondFinType)   !RS: Debugging: Formerly PAR(29)
-        TubeType    = PAR(CondTube)   !RS: Debugging: Formerly PAR(37)
+        ODtube      = CondPAR%CondCoilTOD   !RS: Debugging: Formerly PAR(15)
+        TubeThk     = CondPAR%CondCoilTWThick   !RS: Debugging: Formerly PAR(16)
+        Ltube       = CondPAR%CondCoilSTLen   !RS: Debugging: Formerly PAR(17)
+        Ktube       = CondPAR%CondCoilTThermCon   !RS: Debugging: Formerly PAR(18)
+        Pt          = CondPAR%CondTspc   !RS: Debugging: Formerly PAR(19)
+        Pl          = CondPAR%CondRspc   !RS: Debugging: Formerly PAR(20)
+        FinThk      = CondPAR%CondFinThick   !RS: Debugging: Formerly PAR(21)
+        FinPitch    = CondPAR%CondFinPitch   !RS: Debugging: Formerly PAR(22)
+        Kfin        = CondPAR%CondFinThermCon   !RS: Debugging: Formerly PAR(23)
+        Nt          = CondPAR%CondNt   !RS: Debugging: Formerly PAR(24)
+        Nl          = CondPAR%CondNl   !RS: Debugging: Formerly PAR(25)
+        NumOfCkts   = CondPAR%CondNumCkt   !RS: Debugging: Formerly PAR(26)
+        NumOfMods   = CondPAR%CondNumMod   !RS: Debugging: Formerly PAR(28)
+        FinType     = CondPAR%CondFinType   !RS: Debugging: Formerly PAR(29)
+        TubeType    = CondPAR%CondTube   !RS: Debugging: Formerly PAR(37)
         CALL InitCondenserCoil(CoilType)
         CALL CalcMaterialWeight(CoilType,Ltube,IDtube,ODtube,TubeHeight,TubeDepth, &
         Dchannel,NumOfChannels,Pt,Pl,Nt,Nl,NumOfCkts, &
         FinThk,FinPitch,WeightAluminum,WeightCopper)
         IF (ErrorFlag .NE. NOERROR) THEN
-            OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
+            CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(24)
             CALL Condenser_Helper_1
             RETURN
         END IF
@@ -664,26 +664,26 @@
         
     END IF
 
-    hciMultiplier   = PAR(CondMultRefQT)   !RS: Debugging: Formerly PAR(30)
-    DPrefMultiplier = PAR(CondMultRefPD)   !RS: Debugging: Formerly PAR(31)
-    hcoMultiplier   = PAR(CondMultAirQT)   !RS: Debugging: Formerly PAR(32)
-    DPairMultiplier = PAR(CondMultAirPD)   !RS: Debugging: Formerly PAR(33)
+    hciMultiplier   = CondPAR%CondMultRefQT   !RS: Debugging: Formerly PAR(30)
+    DPrefMultiplier = CondPAR%CondMultRefPD   !RS: Debugging: Formerly PAR(31)
+    hcoMultiplier   = CondPAR%CondMultAirQT   !RS: Debugging: Formerly PAR(32)
+    DPairMultiplier = CondPAR%CondMultAirPD   !RS: Debugging: Formerly PAR(33)
 
-    PwrFan           = PAR(CondFanPwr)  !RS: Debugging: Formerly PAR(34)
-    DrawBlow         = PAR(CondFanLoc)  !RS: Debugging: Formerly PAR(35)
-    SurfAbsorptivity = PAR(CondSurfAbs)  !RS: Debugging: Formerly PAR(36)
+    PwrFan           = CondPAR%CondFanPwr  !RS: Debugging: Formerly PAR(34)
+    DrawBlow         = CondPAR%CondFanLoc  !RS: Debugging: Formerly PAR(35)
+    SurfAbsorptivity = CondPAR%CondSurfAbs  !RS: Debugging: Formerly PAR(36)
 
-    BaroPressure     = PAR(CondBarPress)  !RS: Debugging: Formerly PAR(38)
-    QlossCmp         = PAR(CondCompQLoss)  !RS: Debugging: Formerly PAR(39)
-    PTol			   = PAR(CondPressTolConv) !(56)  !RS: Debugging: Formerly PAR(40)
-    SystemType       = PAR(CondSysType) !ISI - 07/14/06  !RS: Debugging: Formerly PAR(41)
-    Wabsolute        = PAR(CondOilMassFrac)  !RS: Debugging: Formerly PAR(42)
-    CompManufacturer = PAR(CondCompMan)  !RS: Debugging: Formerly PAR(43)
+    BaroPressure     = CondPAR%CondBarPress  !RS: Debugging: Formerly PAR(38)
+    QlossCmp         = CondPAR%CondCompQLoss  !RS: Debugging: Formerly PAR(39)
+    PTol             = CondPAR%CondPressTolConv !(56)  !RS: Debugging: Formerly PAR(40)
+    SystemType       = CondPAR%CondSysType !ISI - 07/14/06  !RS: Debugging: Formerly PAR(41)
+    Wabsolute        = CondPAR%CondOilMassFrac  !RS: Debugging: Formerly PAR(42)
+    CompManufacturer = CondPAR%CondCompMan  !RS: Debugging: Formerly PAR(43)
 
     IF (CoilType .EQ. MCCONDENSER) THEN
-        CALL LoadMicrochannelInputs(XIN,PAR,MCXIN,MCPAR)
+        CALL LoadMicrochannelInputs(MCXIN,MCPAR) !(XIN,PAR,MCXIN,MCPAR)
         CALL MicrochannelCondenser(MCXIN,MCPAR,MCOUT) !(Ref$,MCXIN,MCPAR,MCOUT)    !RS: Debugging: Extraneous Ref$
-        CALL LoadMicrochannelOutputs(MCOUT,OUT)
+        CALL LoadMicrochannelOutputs(MCOUT) !,OUT)
         RETURN
     END IF
 
@@ -724,7 +724,7 @@
 
     CALL InitBoundaryConditions(CoilType)
     IF (ErrorFlag .NE. NOERROR) THEN
-        OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
+        CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(24)
         CALL Condenser_Helper_1
         RETURN
     END IF
@@ -790,7 +790,7 @@
                         END IF
                         CALL CalcCoilSegment(I,I,J,K,CoilType)
                         IF (ErrorFlag .GT. CONVERGEERROR) THEN
-                            OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
+                            CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(24)
                             CALL Condenser_Helper_1
                             RETURN
                         END IF
@@ -820,7 +820,7 @@
                 IF (RefPropErr .GT. 0) THEN
                     WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
                     ErrorFlag=REFPROPERROR
-                    OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
+                    CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(24)
                     CALL Condenser_Helper_1
                     RETURN
                 END IF
@@ -828,7 +828,7 @@
                 IF (RefPropErr .GT. 0) THEN
                     WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
                     ErrorFlag=REFPROPERROR
-                    OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
+                    CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(24)
                     CALL Condenser_Helper_1
                     RETURN
                 END IF
@@ -839,7 +839,7 @@
                 IF (RefPropErr .GT. 0) THEN
                     WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
                     ErrorFlag=REFPROPERROR
-                    OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
+                    CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(24)
                     CALL Condenser_Helper_1
                     RETURN
                 END IF
@@ -988,18 +988,18 @@
 
     !RS Comment: Inlet and Outlet Air Properties
     AirPropOpt=1
-    AirProp(APTDB)=tAiCoil  !RS: Debugging: Formerly AirProp(1)
-    AirProp(APEnth)=hAiCoil  !RS: Debugging: Formerly AirProp(4)
-    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    rhAiCoil=AirProp(APRelHum) !RS: Debugging: Formerly AirProp(3)
-    DensityIn=AirProp(APDryDens)    !RS: Debugging: Formerly AirProp(7)
+    AirProp%APTDB=tAiCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp%APEnth=hAiCoil  !RS: Debugging: Formerly AirProp(4)
+    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,
+    rhAiCoil=AirProp%APRelHum !RS: Debugging: Formerly AirProp(3)
+    DensityIn=AirProp%APDryDens    !RS: Debugging: Formerly AirProp(7)
 
     AirPropOpt=1
-    AirProp(APTDB)=tAoCoil  !RS: Debugging: Formerly AirProp(1)
-    AirProp(APEnth)=hAoCoil  !RS: Debugging: Formerly AirProp(4)
-    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    rhAoCoil=AirProp(APRelHum) !RS: Debugging: Formerly AirProp(3)
-    DensityOut=AirProp(APDryDens)   !RS: Debugging: Formerly AirProp(7)
+    AirProp%APTDB=tAoCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp%APEnth=hAoCoil  !RS: Debugging: Formerly AirProp(4)
+    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,
+    rhAoCoil=AirProp%APRelHum !RS: Debugging: Formerly AirProp(3)
+    DensityOut=AirProp%APDryDens   !RS: Debugging: Formerly AirProp(7)
 
     WetFlag=0
     RowNum=0   
@@ -1021,7 +1021,7 @@
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
         ErrorFlag=REFPROPERROR
-        OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
+        CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(24)
         CALL Condenser_Helper_1
         RETURN
     END IF
@@ -1030,7 +1030,7 @@
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
         ErrorFlag=REFPROPERROR
-        OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
+        CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(24)
         CALL Condenser_Helper_1
         RETURN
     END IF
@@ -1041,7 +1041,7 @@
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
         ErrorFlag=REFPROPERROR
-        OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
+        CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(24)
         CALL Condenser_Helper_1
         RETURN
     END IF
@@ -1060,7 +1060,7 @@
             CALL LiquidLine
             IF (ErrorFlag .GT. CONVERGEERROR) THEN
                 WRITE(*,*)'LiquidLine: Refprop error.'
-                OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
+                CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(24)
                 CALL Condenser_Helper_1
                 RETURN
             END IF
@@ -1076,7 +1076,7 @@
             CALL LiquidLine
             IF (ErrorFlag .GT. CONVERGEERROR) THEN
                 WRITE(*,*)'LiquidLine: Refprop error.'
-                OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
+                CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(24)
                 CALL Condenser_Helper_1
                 RETURN
             END IF
@@ -1093,7 +1093,7 @@
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
         ErrorFlag=REFPROPERROR
-        OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
+        CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(24)
         CALL Condenser_Helper_1
         RETURN
     END IF
@@ -1101,7 +1101,7 @@
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
         ErrorFlag=REFPROPERROR
-        OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
+        CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(24)
         CALL Condenser_Helper_1
         RETURN
     END IF
@@ -1112,7 +1112,7 @@
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
         ErrorFlag=REFPROPERROR
-        OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
+        CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(24)
         CALL Condenser_Helper_1
         RETURN
     END IF
@@ -1128,27 +1128,27 @@
         tSCiExp=0
     END IF
 
-    OUT(COutpRiC)=pRiCoil  !RS: Debugging: Formerly OUT(1)
-    OUT(COuthRiC)=hRiCoil  !RS: Debugging: Used only for output    !RS: Debugging: Formerly OUT(1)
-    OUT(COuttAoC)=tAoCoil !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(3)
-    OUT(COutrhAoC)=rhAoCoil    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(4)
-    OUT(COutpRoC)=pRoCoil  !RS: Debugging: Used only for output    !RS: Debugging: Formerly OUT(5)
-    OUT(COuthRoC)=hRoCoil  !RS: Debugging: Formerly OUT(6)
-    OUT(COuttRoC)=tRoCoil  !RS: Debugging: Used only for output    !RS: Debugging: Formerly OUT(7)
-    OUT(COutWtAl)=WeightAluminum  !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(8)
-    OUT(COutWtCu)=WeightCopper    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(9)
-    OUT(COutpRiE)=pRiExp  !RS: Debugging: Formerly OUT(10)
-    OUT(COuthRiE)=hRiExp  !RS: Debugging: Formerly OUT(11)
-    OUT(COuttRiE)=tRiExp  !RS: Debugging: Formerly OUT(12)
-    OUT(COutxRiE)=xRiExp  !RS: Debugging: Formerly OUT(13)
-    OUT(COuttSCiE)=tSCiExp !RS: Debugging: Formerly OUT(14)
-    OUT(COutQC)=Qcoil   !RS: Debugging: Formerly OUT(15)
-    OUT(COutMDisLn)=MassDisLn   !RS: Debugging: Formerly OUT(16)
-    OUT(COutMLiqLn)=MassLiqLn   !RS: Debugging: Formerly OUT(17)
+    CondOUT%COutpRiC=pRiCoil  !RS: Debugging: Formerly OUT(1)
+    CondOUT%COuthRiC=hRiCoil  !RS: Debugging: Used only for output    !RS: Debugging: Formerly OUT(1)
+    CondOUT%COuttAoC=tAoCoil !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(3)
+    CondOUT%COutrhAoC=rhAoCoil    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(4)
+    CondOUT%COutpRoC=pRoCoil  !RS: Debugging: Used only for output    !RS: Debugging: Formerly OUT(5)
+    CondOUT%COuthRoC=hRoCoil  !RS: Debugging: Formerly OUT(6)
+    CondOUT%COuttRoC=tRoCoil  !RS: Debugging: Used only for output    !RS: Debugging: Formerly OUT(7)
+    CondOUT%COutWtAl=WeightAluminum  !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(8)
+    CondOUT%COutWtCu=WeightCopper    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(9)
+    CondOUT%COutpRiE=pRiExp  !RS: Debugging: Formerly OUT(10)
+    CondOUT%COuthRiE=hRiExp  !RS: Debugging: Formerly OUT(11)
+    CondOUT%COuttRiE=tRiExp  !RS: Debugging: Formerly OUT(12)
+    CondOUT%COutxRiE=xRiExp  !RS: Debugging: Formerly OUT(13)
+    CondOUT%COuttSCiE=tSCiExp !RS: Debugging: Formerly OUT(14)
+    CondOUT%COutQC=Qcoil   !RS: Debugging: Formerly OUT(15)
+    CondOUT%COutMDisLn=MassDisLn   !RS: Debugging: Formerly OUT(16)
+    CondOUT%COutMLiqLn=MassLiqLn   !RS: Debugging: Formerly OUT(17)
     !OUT(18)=0  !RS: Debugging: Set elsewhere
-    OUT(COutDPAir)=DPair   !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(19)
+    CondOUT%COutDPAir=DPair   !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(19)
 
-    OUT(COutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
+    CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(20)
 
     CALL Condenser_Helper_1
 
@@ -3832,11 +3832,11 @@ END IF
     Cair=mAiCoil*CPAir
 
     AirPropOpt=2
-    AirProp(APTDB)=tAiCoil  !RS: Debugging: Formerly AirProp(1)
-    AirProp(APRelHum)=rhAiCoil !RS: Debugging: Formerly AirProp(3)
-    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    hAiCoil=AirProp(APEnth)  !RS: Debugging: Formerly AirProp(4)
-    wbAiCoil=AirProp(APTWB) !RS: Debugging: Formerly AirProp(5)
+    AirProp%APTDB=tAiCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp%APRelHum=rhAiCoil !RS: Debugging: Formerly AirProp(3)
+    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,
+    hAiCoil=AirProp%APEnth  !RS: Debugging: Formerly AirProp(4)
+    wbAiCoil=AirProp%APTWB !RS: Debugging: Formerly AirProp(5)
 
     IF (DrawBlow .EQ. BLOWTHROUGH) THEN !Blow through
         tAiCoil=tAiCoil+PwrFan/Cair
@@ -3849,10 +3849,10 @@ END IF
     END IF
 
     AirPropOpt=1
-    AirProp(APRelHum)=tAiCoil  !RS: Debugging: Formerly AirProp(1)
-    AirProp(APEnth)=hAiCoil  !RS: Debugging: Formerly AirProp(4)
-    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    DensityIn=AirProp(APDryDens)    !RS: Debugging: Formerly AirProp(7)
+    AirProp%APRelHum=tAiCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp%APEnth=hAiCoil  !RS: Debugging: Formerly AirProp(4)
+    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,
+    DensityIn=AirProp%APDryDens    !RS: Debugging: Formerly AirProp(7)
 
     !Area calculations
     CALL CalcCoilarea(CoilType,Nl,Nt,Pt,Pl,TubeDepth, &
@@ -4240,10 +4240,10 @@ END IF
         Ckt(II)%Tube(III)%Seg(IV)%hco=hcoMod
 
         AirPropOpt=2
-        AirProp(APTDB)=Ckt(II)%Tube(III)%Seg(IV)%tAi    !RS: Debugging: Formerly AirProp(1)
-        AirProp(APRelHum)=Ckt(II)%Tube(III)%Seg(IV)%rhAi   !RS: Debugging: Formerly AirProp(3)
-        CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-        hAiMod=AirProp(APEnth)   !RS: Debugging: Formerly AirProp(4)
+        AirProp%APTDB=Ckt(II)%Tube(III)%Seg(IV)%tAi    !RS: Debugging: Formerly AirProp(1)
+        AirProp%APRelHum=Ckt(II)%Tube(III)%Seg(IV)%rhAi   !RS: Debugging: Formerly AirProp(3)
+        CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+        hAiMod=AirProp%APEnth   !RS: Debugging: Formerly AirProp(4)
 
         mRefMod=Ckt(II)%mRef
         pRiMod=Ckt(II)%Tube(III)%Seg(IV)%pRi
@@ -4358,10 +4358,10 @@ END IF
         Slab(I)%Pass(II)%Tube(III)%Seg(IV)%hco=hcoMod
 
         AirPropOpt=2
-        AirProp(APTDB)=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%tAi   !RS: Debugging: Formerly AirProp(1)
-        AirProp(APRelHum)=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%rhAi  !RS: Debugging: Formerly AirProp(3)
-        CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-        hAiMod=AirProp(APEnth)   !RS: Debugging: Formerly AirProp(4)
+        AirProp%APTDB=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%tAi   !RS: Debugging: Formerly AirProp(1)
+        AirProp%APRelHum=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%rhAi  !RS: Debugging: Formerly AirProp(3)
+        CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+        hAiMod=AirProp%APEnth   !RS: Debugging: Formerly AirProp(4)
 
         pRiMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%pRi
         hRiMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%hRi
@@ -5182,11 +5182,11 @@ END IF
     hAoMod=Qmod/mAiMod+hAiMod
 
     AirPropOpt=1
-    AirProp(APTDB)=tAoMod   !RS: Debugging: Formerly AirProp(1)
-    AirProp(APEnth)=hAoMod   !RS: Debugging: Formerly AirProp(4)
-    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)
-    rhAoMod=AirProp(APRelHum)  !RS: Debugging: Formerly AirProp(3)
-    wbAoMod=AirProp(APTWB)  !RS: Debugging: Formerly AirProp(5)
+    AirProp%APTDB=tAoMod   !RS: Debugging: Formerly AirProp(1)
+    AirProp%APEnth=hAoMod   !RS: Debugging: Formerly AirProp(4)
+    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,
+    rhAoMod=AirProp%APRelHum  !RS: Debugging: Formerly AirProp(3)
+    wbAoMod=AirProp%APTWB  !RS: Debugging: Formerly AirProp(5)
 
     RETURN
 
@@ -6102,11 +6102,11 @@ END IF
     Cair=mAiCoil*CPAir
 
     AirPropOpt=2
-    AirProp(APTDB)=tAiCoil  !RS: Debugging: Formerly AirProp(1)
-    AirProp(APRelHum)=rhAiCoil !RS: Debugging: Formerly AirProp(3)
-    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    hAiCoil=AirProp(APEnth)  !RS: Debugging: Formerly AirProp(4)
-    wbAiCoil=AirProp(APTWB) !RS: Debugging: Formerly AirProp(5)
+    AirProp%APTDB=tAiCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp%APRelHum=rhAiCoil !RS: Debugging: Formerly AirProp(3)
+    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+    hAiCoil=AirProp%APEnth  !RS: Debugging: Formerly AirProp(4)
+    wbAiCoil=AirProp%APTWB !RS: Debugging: Formerly AirProp(5)
 
     IF (DrawBlow .EQ. BLOWTHROUGH) THEN !Blow through
         tAiCoil=tAiCoil+PwrFan/Cair
@@ -6118,10 +6118,10 @@ END IF
     END IF
 
     AirPropOpt=1
-    AirProp(APTDB)=tAiCoil  !RS: Debugging: Formerly AirProp(1)
-    AirProp(APEnth)=hAiCoil  !RS: Debugging: Formerly AirProp(4)
-    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    DensityIn=AirProp(APDryDens)    !RS: Debugging: Formerly AirProp(7)
+    AirProp%APTDB=tAiCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp%APEnth=hAiCoil  !RS: Debugging: Formerly AirProp(4)
+    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+    DensityIn=AirProp%APDryDens    !RS: Debugging: Formerly AirProp(7)
 
     !Area calculations
     CALL CalcCoilArea(CoilType,Nl,Nt,Pt,Pl,TubeDepth, &
@@ -6318,10 +6318,10 @@ END IF
             Slab(I)%rhAi=Slab(I)%Pass(1)%Tube(1)%Seg(1)%rhAi
 
             AirPropOpt=2
-            AirProp(APTDB)=Slab(I)%tAi  !RS: Debugging: Formerly AirProp(1)
-            AirProp(APRelHum)=Slab(I)%rhAi !RS: Debugging: Formerly AirProp(3)
-            CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-            Slab(I)%hAi=AirProp(APEnth)  !RS: Debugging: Formerly AirProp(4)
+            AirProp%APTDB=Slab(I)%tAi  !RS: Debugging: Formerly AirProp(1)
+            AirProp%APRelHum=Slab(I)%rhAi !RS: Debugging: Formerly AirProp(3)
+            CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+            Slab(I)%hAi=AirProp%APEnth  !RS: Debugging: Formerly AirProp(4)
 
             IF (Slab(1)%Npass .EQ. 1 .AND. Slab(1)%Ninlet .GT. 1) THEN !1-pass, multi-inlet
                 pRoSlab=pRoCkt
@@ -6365,10 +6365,10 @@ END IF
             Slab(I)%hAo=Slab(I)%hAi+Slab(I)%Qslab/mAiCoil
 
             AirPropOpt=1
-            AirProp(APTDB)=Slab(I)%tAo  !RS: Debugging: Formerly AirProp(1)
-            AirProp(APEnth)=Slab(I)%hAo  !RS: Debugging: Formerly AirProp(4)
-            CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-            Slab(I)%rhAo=AirProp(APRelHum) !RS: Debugging: Formerly AirProp(3)
+            AirProp%APTDB=Slab(I)%tAo  !RS: Debugging: Formerly AirProp(1)
+            AirProp%APEnth=Slab(I)%hAo  !RS: Debugging: Formerly AirProp(4)
+            CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+            Slab(I)%rhAo=AirProp%APRelHum !RS: Debugging: Formerly AirProp(3)
 
         END DO !End Slabs
 
@@ -6431,18 +6431,18 @@ END IF
     END IF
 
     AirPropOpt=1
-    AirProp(APTDB)=tAiCoil  !RS: Debugging: Formerly AirProp(1)
-    AirProp(APEnth)=hAiCoil  !RS: Debugging: Formerly AirProp(4)
-    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    rhAiCoil=AirProp(APRelHum) !RS: Debugging: Formerly AirProp(3)
-    DensityIn=AirProp(APDryDens)    !RS: Debugging: Formerly AirProp(7)
+    AirProp%APTDB=tAiCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp%APEnth=hAiCoil  !RS: Debugging: Formerly AirProp(4)
+    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+    rhAiCoil=AirProp%APRelHum !RS: Debugging: Formerly AirProp(3)
+    DensityIn=AirProp%APDryDens    !RS: Debugging: Formerly AirProp(7)
 
     AirPropOpt=1
-    AirProp(APTDB)=tAoCoil  !RS: Debugging: Formerly AirProp(1)
-    AirProp(APEnth)=hAoCoil  !RS: Debugging: Formerly AirProp(4)
-    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    rhAoCoil=AirProp(APRelHum) !RS: Debugging: Formerly AirProp(3)
-    DensityOut=AirProp(APDryDens)   !RS: Debugging: Formerly AirProp(7)
+    AirProp%APTDB=tAoCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp%APEnth=hAoCoil  !RS: Debugging: Formerly AirProp(4)
+    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+    rhAoCoil=AirProp%APRelHum !RS: Debugging: Formerly AirProp(3)
+    DensityOut=AirProp%APDryDens   !RS: Debugging: Formerly AirProp(7)
 
     WetFlag=0
     RowNum=0   
@@ -6565,7 +6565,7 @@ END IF
 
     !************************************************************************
 
-    SUBROUTINE LoadMicrochannelInputs(FTXIN,FTPAR,MCXIN,MCPAR)
+    SUBROUTINE LoadMicrochannelInputs(MCXIN,MCPAR) !(FTXIN,FTPAR,MCXIN,MCPAR)
 
     !-----------------------------------------------------------------------------------
     !
@@ -6583,44 +6583,44 @@ END IF
 
     IMPLICIT NONE
 
-    REAL, INTENT(IN)  :: FTXIN(7)  !Fin-tube coil input data    !RS: Debugging: Formerly FTXIN(8)
-    REAL, INTENT(IN)  :: FTPAR(45) !Fin-tube coil input parameters  !RS: Debugging: Formerly FTPAR(55)
+    !REAL, INTENT(IN)  :: FTXIN(7)  !Fin-tube coil input data    !RS: Debugging: Formerly FTXIN(8)
+    !REAL, INTENT(IN)  :: FTPAR(45) !Fin-tube coil input parameters  !RS: Debugging: Formerly FTPAR(55)
     REAL, INTENT(OUT) :: MCXIN(7)  !Microchannel coil input data
     REAL, INTENT(OUT) :: MCPAR(24) !Microchannel coil input parameters  !RS: Debugging: Formerly MCPAR(39)
 
     !FLOW:
 
-    MCXIN(1)=FTXIN(CInmRef) !Refrigerant side mass flow rate, kg/s    !RS: Debugging: Formerly FTXIN(1)
-    MCXIN(2)=FTXIN(CInpRo) !Refrigerant side inlet (compressor outlet) pressure, kPa !RS: Debugging: Formerly FTXIN(2)
-    MCXIN(3)=FTXIN(CInhRo) !Refrigerant side inlet (compressor outlet) enthalpy, kJ/kg   !RS: Debugging: Formerly FTXIN(3)
-    MCXIN(4)=FTXIN(CInmAi) !Air side mass flow rate, kg/s    !RS: Debugging: Formerly FTXIN(4)
-    MCXIN(5)=FTXIN(CIntAi) !Air side inlet temp. C   !RS: Debugging: Formerly FTXIN(5)
-    MCXIN(6)=FTXIN(CInrhAi) !Air side inlet relative humidity !RS: Debugging: Formerly FTXIN(6)
+    MCXIN(1)=CondIN%CInmRef !Refrigerant side mass flow rate, kg/s    !RS: Debugging: Formerly FTXIN(1)
+    MCXIN(2)=CondIN%CInpRo !Refrigerant side inlet (compressor outlet) pressure, kPa !RS: Debugging: Formerly FTXIN(2)
+    MCXIN(3)=CondIN%CInhRo !Refrigerant side inlet (compressor outlet) enthalpy, kJ/kg   !RS: Debugging: Formerly FTXIN(3)
+    MCXIN(4)=CondIN%CInmAi !Air side mass flow rate, kg/s    !RS: Debugging: Formerly FTXIN(4)
+    MCXIN(5)=CondIN%CIntAi !Air side inlet temp. C   !RS: Debugging: Formerly FTXIN(5)
+    MCXIN(6)=CondIN%CInrhAi !Air side inlet relative humidity !RS: Debugging: Formerly FTXIN(6)
 
-    MCPAR(1)=FTPAR(CondBarPress) !Barometric pressure, kPa    !RS: Debugging: Formerly FTPAR(38)
-    MCPAR(2)=FTPAR(CondCoolMode) !Cooling mode? 1=yes; 0=no   !RS: Debugging: Formerly FTPAR(27)
-    MCPAR(3)=FTPAR(CondDisLnLen)  !Discharge line length, m    !RS: Debugging: Formerly FTPAR(1)
-    MCPAR(4)=FTPAR(CondDisLnOD)  !Discharge line outside diameter, m  !RS: Debugging: Formerly FTPAR(2)
-    MCPAR(5)=FTPAR(CondDisLnTWThick)  !Discharge line tube wall thickness, m   !RS: Debugging: Formerly FTPAR(3)
-    MCPAR(6)=FTPAR(CondDisLnElev)  !Discharge line elevation, m !RS: Debugging: Formerly FTPAR(4)
-    MCPAR(7)=FTPAR(CondDisLnQLoss)  !Discharge line heat loss, kW    !RS: Debugging: Formerly FTPAR(5)
-    MCPAR(8)=FTPAR(CondDisLnTempChg)  !Discharge line temperature change, C    !RS: Debugging: Formerly FTPAR(6)
-    MCPAR(9)=FTPAR(CondDisLnAddPD)  !Discharge line additional pressure drop, kPa    !RS: Debugging: Formerly FTPAR(7)
-    MCPAR(10)=FTPAR(CondLiqLnLen) !Liquid line length, m   !RS: Debugging: Formerly FTPAR(8)
-    MCPAR(11)=FTPAR(CondLiqLnOD) !Liquid line outside diameter, m !RS: Debugging: Formerly FTPAR(9)
-    MCPAR(12)=FTPAR(CondLiqLnTWThick) !Liquid line tube wall thickness, m     !RS: Debugging: Formerly FTPAR(10)
-    MCPAR(13)=FTPAR(CondLiqLnElev) !Liquid line elevation, m   !RS: Debugging: Formerly FTPAR(11)
-    MCPAR(14)=FTPAR(CondLiqLnQLoss) !Liquid line heat loss, kW  !RS: Debugging: Formerly FTPAR(12)
-    MCPAR(15)=FTPAR(CondLiqLnTempChg) !Liquid line temperature change, C  !RS: Debugging: Formerly FTPAR(13)
-    MCPAR(16)=FTPAR(CondLiqLnAddPD) !Liquid line additional pressure drop, kPa  !RS: Debugging: Formerly FTPAR(14)
-    MCPAR(17)=FTPAR(CondMultRefQT) !Multiplier for ref. side heat transfer correlation !RS: Debugging: Formerly FTPAR(30)
-    MCPAR(18)=FTPAR(CondMultRefPD) !Multiplier for ref. side pressure drop correlation !RS: Debugging: Formerly FTPAR(31)
-    MCPAR(19)=FTPAR(CondMultAirQT) !Multiplier for air side heat transfer correlation  !RS: Debugging: Formerly FTPAR(32)
-    MCPAR(20)=FTPAR(CondMultAirPD) !Multiplier for air side pressure drop correlation  !RS: Debugging: Formerly FTPAR(33)
-    MCPAR(21)=FTPAR(CondFanPwr) !Fan power, kW  !RS: Debugging: Formerly FTPAR(34)
-    MCPAR(22)=FTPAR(CondFanLoc) !Fan location, 1=draw through; 2=blow through   !RS: Debugging: Formerly FTPAR(35)
-    MCPAR(23)=FTPAR(CondCompQLoss) !Compressor heat loss, kW   !RS: Debugging: Formerly FTPAR(39)
-    MCPAR(24)=FTPAR(CondPressTolConv) !Is compressor in air stream, 1=yes, 0=no   !RS: Debugging: Formerly FTPAR(40)
+    MCPAR(1)=CondPAR%CondBarPress !Barometric pressure, kPa    !RS: Debugging: Formerly FTPAR(38)
+    MCPAR(2)=CondPAR%CondCoolMode !Cooling mode? 1=yes; 0=no   !RS: Debugging: Formerly FTPAR(27)
+    MCPAR(3)=CondPAR%CondDisLnLen  !Discharge line length, m    !RS: Debugging: Formerly FTPAR(1)
+    MCPAR(4)=CondPAR%CondDisLnOD  !Discharge line outside diameter, m  !RS: Debugging: Formerly FTPAR(2)
+    MCPAR(5)=CondPAR%CondDisLnTWThick  !Discharge line tube wall thickness, m   !RS: Debugging: Formerly FTPAR(3)
+    MCPAR(6)=CondPAR%CondDisLnElev  !Discharge line elevation, m !RS: Debugging: Formerly FTPAR(4)
+    MCPAR(7)=CondPAR%CondDisLnQLoss  !Discharge line heat loss, kW    !RS: Debugging: Formerly FTPAR(5)
+    MCPAR(8)=CondPAR%CondDisLnTempChg  !Discharge line temperature change, C    !RS: Debugging: Formerly FTPAR(6)
+    MCPAR(9)=CondPAR%CondDisLnAddPD  !Discharge line additional pressure drop, kPa    !RS: Debugging: Formerly FTPAR(7)
+    MCPAR(10)=CondPAR%CondLiqLnLen !Liquid line length, m   !RS: Debugging: Formerly FTPAR(8)
+    MCPAR(11)=CondPAR%CondLiqLnOD !Liquid line outside diameter, m !RS: Debugging: Formerly FTPAR(9)
+    MCPAR(12)=CondPAR%CondLiqLnTWThick !Liquid line tube wall thickness, m     !RS: Debugging: Formerly FTPAR(10)
+    MCPAR(13)=CondPAR%CondLiqLnElev !Liquid line elevation, m   !RS: Debugging: Formerly FTPAR(11)
+    MCPAR(14)=CondPAR%CondLiqLnQLoss !Liquid line heat loss, kW  !RS: Debugging: Formerly FTPAR(12)
+    MCPAR(15)=CondPAR%CondLiqLnTempChg !Liquid line temperature change, C  !RS: Debugging: Formerly FTPAR(13)
+    MCPAR(16)=CondPAR%CondLiqLnAddPD !Liquid line additional pressure drop, kPa  !RS: Debugging: Formerly FTPAR(14)
+    MCPAR(17)=CondPAR%CondMultRefQT !Multiplier for ref. side heat transfer correlation !RS: Debugging: Formerly FTPAR(30)
+    MCPAR(18)=CondPAR%CondMultRefPD !Multiplier for ref. side pressure drop correlation !RS: Debugging: Formerly FTPAR(31)
+    MCPAR(19)=CondPAR%CondMultAirQT !Multiplier for air side heat transfer correlation  !RS: Debugging: Formerly FTPAR(32)
+    MCPAR(20)=CondPAR%CondMultAirPD !Multiplier for air side pressure drop correlation  !RS: Debugging: Formerly FTPAR(33)
+    MCPAR(21)=CondPAR%CondFanPwr !Fan power, kW  !RS: Debugging: Formerly FTPAR(34)
+    MCPAR(22)=CondPAR%CondFanLoc !Fan location, 1=draw through; 2=blow through   !RS: Debugging: Formerly FTPAR(35)
+    MCPAR(23)=CondPAR%CondCompQLoss !Compressor heat loss, kW   !RS: Debugging: Formerly FTPAR(39)
+    MCPAR(24)=CondPAR%CondPressTolConv !Is compressor in air stream, 1=yes, 0=no   !RS: Debugging: Formerly FTPAR(40)
 
     RETURN
 
@@ -6628,7 +6628,7 @@ END IF
 
     !************************************************************************
 
-    SUBROUTINE LoadMicrochannelOutputs(MCOUT,FTOUT)
+    SUBROUTINE LoadMicrochannelOutputs(MCOUT) !,FTOUT)
 
     !-----------------------------------------------------------------------------------
     !
@@ -6647,39 +6647,39 @@ END IF
     IMPLICIT NONE
 
     REAL, INTENT(IN)  :: MCOUT(22)  !Microchannel coil output data
-    REAL, INTENT(OUT) :: FTOUT(20)  !Fin-tube coil output data  !RS: Debugging: Formerly FTOUT(29), FTOUT(24)
+    !REAL, INTENT(OUT) :: FTOUT(20)  !Fin-tube coil output data  !RS: Debugging: Formerly FTOUT(29), FTOUT(24)
 
     !FLOW:
 
-    FTOUT(1)=MCOUT(2)   !Coil inlet pressure, kPa
-    FTOUT(2)=MCOUT(3)   !Coil inlet enthalpy, kJ/kg
+    CondOUT%COutpRiC=MCOUT(2)   !Coil inlet pressure, kPa
+    CondOUT%COuthRiC=MCOUT(3)   !Coil inlet enthalpy, kJ/kg
     !FTOUT(3)=MCOUT(4)   !Coil inlet temperature, C
     !FTOUT(4)=MCOUT(5)   !Coil inlet quality
-    FTOUT(5)=MCOUT(6)   !Coil outlet pressure, kPa
-    FTOUT(6)=MCOUT(7)   !Coil outlet enthalpy, kJ/kg
-    FTOUT(7)=MCOUT(8)   !Coil outlet temperature, C
-    FTOUT(8)=MCOUT(9)   !Coil outlet quality
+    CondOUT%COutpRoC=MCOUT(6)   !Coil outlet pressure, kPa
+    CondOUT%COuthRoC=MCOUT(7)   !Coil outlet enthalpy, kJ/kg
+    CondOUT%COuttRoC=MCOUT(8)   !Coil outlet temperature, C
+    !CondOUT%8=MCOUT(9)   !Coil outlet quality  !RS: Debugging: Not really used?
     !FTOUT(9)=MCOUT(10)  !Coil outlet subcooling, C !RS: Debugging: Never used
-    FTOUT(10)=MCOUT(11) !Liquid line outlet pressure, kPa
-    FTOUT(11)=MCOUT(12) !Liquid line outlet enthalpy, kJ/kg
-    FTOUT(12)=MCOUT(13) !Liquid line outlet temperature, C
-    FTOUT(13)=MCOUT(14) !Liquid line outlet quality
-    FTOUT(14)=MCOUT(15) !Liquid line outlet subcooling, C
-    FTOUT(15)=MCOUT(1)  !Coil capacity, kW
-    FTOUT(16)=MCOUT(21) !Mass in discharge line, kg
-    FTOUT(17)=MCOUT(22) !Mass in liquid line, kg
-    FTOUT(18)=0         !Mass in coil, kg
+    CondOUT%COutpRiE=MCOUT(11) !Liquid line outlet pressure, kPa
+    CondOUT%COuthRiE=MCOUT(12) !Liquid line outlet enthalpy, kJ/kg
+    CondOUT%COuttRiE=MCOUT(13) !Liquid line outlet temperature, C
+    CondOUT%COutxRiE=MCOUT(14) !Liquid line outlet quality
+    CondOUT%COuttSCiE=MCOUT(15) !Liquid line outlet subcooling, C
+    CondOUT%COutQC=MCOUT(1)  !Coil capacity, kW
+    CondOUT%COutMDisLn=MCOUT(21) !Mass in discharge line, kg
+    CondOUT%COutMLiqLn=MCOUT(22) !Mass in liquid line, kg
+    CondOUT%COutMC=0         !Mass in coil, kg
     !FTOUT(19)=0         !Liquid mass in coil, kg   !RS: Debugging: Never used
     !FTOUT(20)=0         !Vapor mass in coil, kg    !RS: Debugging: Never used
-    FTOUT(3)=MCOUT(16) !Air side outlet temperature, C !RS: Debugging: Formerly FTOUT(21)
-    FTOUT(4)=MCOUT(17) !Air side outlet relative humidity   !RS: Debugging: Formerly FTOUT(22)
-    FTOUT(19)=MCOUT(18) !Air side pressure drop, kPa    !RS: Debugging: Formerly FTOUT(23)
-    FTOUT(20)=MCOUT(20) !Error flag !RS: Debugging: Formerly FTOUT(24)
+    CondOUT%COuttAoC=MCOUT(16) !Air side outlet temperature, C !RS: Debugging: Formerly FTOUT(21)
+    CondOUT%COutrhAoC=MCOUT(17) !Air side outlet relative humidity   !RS: Debugging: Formerly FTOUT(22)
+    CondOUT%COutDPAir=MCOUT(18) !Air side pressure drop, kPa    !RS: Debugging: Formerly FTOUT(23)
+    CondOUT%COutErrFlag=MCOUT(20) !Error flag !RS: Debugging: Formerly FTOUT(24)
     !FTOUT(25)=0         !Air side heat transfer coefficients, kW/m^2-K !RS: Debugging: Never used
     !FTOUT(26)=0         !Inlet coil surface temperature, C !RS: Debugging: Never used
     !FTOUT(27)=0         !Outlet coil surface temperature, C    !RS: Debugging: Never used
-    FTOUT(8)=MCOUT(19) !Aluminum weight, kg    !RS: Debugging: Formerly FTOUT(28), FTOUT(19)
-    FTOUT(9)=0         !Copper weight, kg  !RS: Debugging: Formerly FTOUT(29), FTOUT(20)
+    CondOUT%COutWtAl=MCOUT(19) !Aluminum weight, kg    !RS: Debugging: Formerly FTOUT(28), FTOUT(19)
+    CondOUT%COutWtCu=0         !Copper weight, kg  !RS: Debugging: Formerly FTOUT(29), FTOUT(20)
 
     RETURN
 
