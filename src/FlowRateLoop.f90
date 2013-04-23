@@ -216,11 +216,11 @@
             END SELECT
         END IF
 
-        XMR=CompOUT%CmpOMdot !*3600/UnitM   !RS Comment: Unit Conversion, lbm/s??   !RS: Debugging: Formerly CompOUT(2)
+        XMR=CompOUT%CmpOMdot*3600/UnitM   !RS Comment: Unit Conversion, lbm/s??   !RS: Debugging: Formerly CompOUT(2)
         HoCmp=CompOUT%CmpOHdis    !RS: Debugging: Formerly CompOUT(3)
         ToCmp=CompOUT%CmpOTdis    !RS: Debugging: Formerly CompOUT(5)
 
-        CondIN%CInmRef=XMR !*UnitM/3600    !RS Comment: Unit Conversion, kg/hr???  !RS: Debugging: Formerly CondIN(1)
+        CondIN%CInmRef=CompOUT%CmpOMdot !XMR*UnitM/3600    !RS Comment: Unit Conversion, kg/hr???  !RS: Debugging: Formerly CondIN(1)
         CondIN%CInpRo=PoCmp !RS: Debugging: Formerly CondIN(2)
         CondIN%CInhRo=HoCmp !RS: Debugging: Formerly CondIN(3)
         CondIN%CInmAi=XMaC  !RS: Debugging: Formerly CondIN(4)
@@ -494,21 +494,21 @@
         !HoExp=HiExp
         EvapIN%EInhRi=CondOUT%COuthRiE !HiExp !HoExp !RS: Debugging: Formerly EvapIN(3)
 
-        CNDNSR = ( XMRFLD - (XMR*3600/UnitM) )
+        CNDNSR = ( XMRFLD - XMR ) !(XMR*3600/UnitM)
 
-        MdotR=XMR !*UnitM/3600    !RS Comment: Unit Conversion, kg/hr?
+        MdotR=XMR*UnitM/3600    !RS Comment: Unit Conversion, kg/hr?
 
         IF(.NOT. PRINT) THEN
             CYCLE
         END IF
 
         IF (Unit .EQ. 1) THEN
-            WRITE(tmpString, '(F10.4)')XMR !*UnitM
+            WRITE(tmpString, '(F10.4)')XMR*UnitM
             CALL IssueOutputMessage('     Compressor flow rate = '//TRIM(tmpString)//MdotUnit)
             WRITE(tmpString, '(F10.4)')XMRFLD*UnitM
             CALL IssueOutputMessage('    Exp. device flow rate = '//TRIM(tmpString)//MdotUnit)
         ELSE
-            WRITE(tmpString, '(F10.4)')XMR/UnitM
+            WRITE(tmpString, '(F10.4)')XMR !/UnitM
             CALL IssueOutputMessage('     Compressor flow rate = '//TRIM(tmpString)//MdotUnit)
             WRITE(tmpString, '(F10.4)')XMRFLD
             CALL IssueOutputMessage('    Exp. device flow rate = '//TRIM(tmpString)//MdotUnit)

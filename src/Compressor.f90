@@ -115,6 +115,7 @@
     USE FluidProperties_HPSim
     USE DataGlobals_HPSim, ONLY: RefrigIndex, MaxNameLength,RefName   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
     USE InputProcessor_HPSim    !RS: Debugging: Brought over from GetHPSimInputs
+    USE UnitConvertMod
 
     IMPLICIT NONE
 
@@ -125,6 +126,7 @@
     !REAL, INTENT(IN) :: XIN(3)
     !REAL :: PAR(26) !, INTENT(IN)
     !REAL, INTENT(OUT) :: OUT(7)
+    INTEGER,PARAMETER :: SI=1
 
     !Subroutine local variables
     REAL Temperature,Quality,Pressure,Enthalpy,Entropy
@@ -244,9 +246,16 @@ INTEGER,PARAMETER :: PANASONIC = 4
     Hsuc = CompIN%CompInHsuc   !RS: Debugging: Formerly XIN(3)
 
     DO I=1,10
-        A(I)= Numbers(3+I) !CompPAR%(I)
-        B(I)= Numbers(13+I) !CompPAR%(I+10) 
+        A(I)= Numbers(13+I) !CompPAR%(I)
+        B(I)= Numbers(3+I) !CompPAR%(I+10) 
     END DO
+    
+    IF (Unit .EQ. SI)THEN !SI unit inputs   !RS: Debugging: 
+    	CompPAR%CompIntVol=CompPAR%CompIntVol/(100**3) !Compressor internal volume, m^3   !RS: Formerly CompPAR(23)
+    ELSE
+        CompPAR%CompQLoss=CompPAR%CompQLoss*UnitPwr*1000 !Compressor shell heat loss W  !RS: Debugging: Formerly CompPAR(22)
+        CompPAR%CompIntVol=CompPAR%CompIntVol/(12**3)*(UnitL**3) !Compressor internal volume, m^3 !RS: Debugging: Formerly CompPAR(23)
+    END IF
     
     Qshellfrac = CompPAR%CompQLossFrac    !RS: Debugging: Formerly PAR(21)
     Qshell = CompPAR%CompQLoss    !RS: Debugging: Formerly PAR(22)
@@ -254,7 +263,7 @@ INTEGER,PARAMETER :: PANASONIC = 4
     Wcorrect = CompPAR%CompPwrCor  !RS: Debugging: Formerly PAR(24)
     PwrMultiplier=CompPAR%CompPwrMult   !RS: Debugging: Formerly PAR(25)
     mdotMultiplier=CompPAR%CompMFRMult  !RS: Debugging: Formerly PAR(26)
-
+    
     Wcorrect = 1 !1.21 !1.25
 
     ErrorFlag=0 !Initialize

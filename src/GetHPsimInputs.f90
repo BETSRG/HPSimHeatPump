@@ -766,6 +766,11 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
 
   EvapPAR%EvapBarPress=BaroPressure    !RS: Debugging: Formerly EvapPAR(31)
   CondPAR%CondBarPress=BaroPressure    !RS: Debugging: Formerly CondPAR(38)
+  
+  !IF (UNIT .EQ. IP) THEN
+  !    CondPAR%CondBarPress=CondPAR%CondBarPress*UnitP
+  !    EvapPAR%EvapBarPress=EvapPAR%EvapBarPress*UnitP
+  !END IF
 
   EvapPAR%EvapSysType=SystemType !RS: Debugging: Formerly EvapPAR(34)
   CondPAR%CondSysType=SystemType !ISI - 07/14/06    !RS: Debugging: Formerly CONDPAR(57)

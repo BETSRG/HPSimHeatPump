@@ -78,6 +78,7 @@
     REAL,PARAMETER :: SMALL=1.0E-4  !Small number 
     REAL,PARAMETER :: BIG=1.0E20    !Big number
     REAL, PARAMETER :: Hout = 0.009937536 !Bare tube outside film heat transfer coefficient, kW/(m2-K)
+    INTEGER,PARAMETER :: SI=1   !RS: Debugging: For unit conversion
 
     !Error Flags
     INTEGER,PARAMETER :: NOERROR       = 0
@@ -583,6 +584,10 @@
     !ISI - 07/14/06
     
     INTEGER, PARAMETER :: MaxNameLength = 200
+    REAL, PARAMETER :: UnitP     = 6.8947453 !(psi X UnitP = kPa)
+    REAL, PARAMETER :: UnitM     = 0.4536    !(lbm X UnitM = kg)
+    REAL, PARAMETER :: UnitL     = 0.3048    !(ft X UnitL = m)
+    REAL, PARAMETER :: UnitK     = 0.1442E-3 !(Btu-in/hr-ft2-F X UnitK = kW/m-C)
 
     CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
     INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
@@ -593,10 +598,39 @@
     
     CHARACTER(LEN=11),PARAMETER :: FMT_107 = "(A66,F10.3)"
 
+    INTEGER, SAVE :: FirstTimeUnit=1
     !TestH=AirProp(4)    !RS: Debugging: Finding the entering air enthalpy hopefully
     
     !Flow:
-
+    
+    !IF (FirstTimeUnit .EQ. 1) THEN
+    !IF (UNIT .EQ. SI) THEN  !RS: Debugging: Unit conversions
+    !    CondPAR%CondDisLnOD=CondPAR%CondDisLnOD/1000   !Discharge line outside diameter, m    !RS: Debugging: Formerly CondPAR(2)
+	   ! CondPAR%CondDisLnTWThick=CondPAR%CondDisLnTWThick/1000   !Discharge line tube wall thickness, m !RS: Debugging: Formerly CondPAR(3)
+	   ! CondPAR%CondDisLnQLoss=CondPAR%CondDisLnQLoss/1000   !Discharge line heat loss, kW  !RS: Debugging: Formerly CondPAR(5)
+	   ! CondPAR%CondLiqLnOD=CondPAR%CondLiqLnOD/1000   !Liquid line outside diameter, m   !RS: Debugging: Formerly CondPAR(9)
+	   ! CondPAR%CondLiqLnTWThick=CondPAR%CondLiqLnTWThick/1000   !Liquid line tube wall thickness, m  !RS: Debugging: Formerly CondPAR(10)
+	   ! CondPAR%CondLiqLnQLoss=CondPAR%CondLiqLnQLoss/1000 !Liquid line heat loss, kW !RS: Debugging: Formerly CondPAR(12)
+    !ELSE
+    !    CondPAR%CondDisLnLen=CondPAR%CondDisLnLen*UnitL            !Discharge line length, m    !RS: Debugging: Formerly CondPAR(1)
+	   ! CondPAR%CondDisLnOD=CondPAR%CondDisLnOD/12*UnitL         !Discharge line outside diameter, m  !RS: Debugging: Formerly CondPAR(2)
+	   ! CondPAR%CondDisLnTWThick=CondPAR%CondDisLnTWThick*0.001/12*UnitL   !Discharge line tube wall thickness, m   !RS: Debugging: Formerly CondPAR(3)
+	   ! CondPAR%CondDisLnElev=CondPAR%CondDisLnElev*UnitL            !Discharge line elevation, m !RS: Debugging: Formerly CondPAR(4)
+	   ! CondPAR%CondDisLnQLoss=CondPAR%CondDisLnQLoss*UnitPwr          !Discharge line heat loss, kW    !RS: Debugging: Formerly CondPAR(5)
+	   ! CondPAR%CondDisLnTempChg=CondPAR%CondDisLnTempChg/1.8              !Discharge line temperature drop, C  !RS: Debugging: Formerly CondPAR(6)
+	   ! CondPAR%CondDisLnAddPD=CondPAR%CondDisLnAddPD*UnitP            !Discharge line additional pressure drop, kPa    !RS: Debugging: Formerly CondPAR(7)
+	   ! CondPAR%CondLiqLnLen=CondPAR%CondLiqLnLen*UnitL          !Liquid line length, m !RS: Debugging: Formerly CondPAR(8)
+	   ! CondPAR%CondLiqLnOD=CondPAR%CondLiqLnOD/12*UnitL       !Liquid line outside diameter, m   !RS: Debugging: Formerly CondPAR(9)
+	   ! CondPAR%CondLiqLnTWThick=CondPAR%CondLiqLnTWThick*0.001/12*UnitL !Liquid line tube wall thickness, m  !RS: Debugging: Formerly CondPAR(10)
+	   ! CondPAR%CondLiqLnElev=CondPAR%CondLiqLnElev*UnitL          !Liquid line elevation, m    !RS: Debugging: Formerly CondPAR(11)
+	   ! CondPAR%CondLiqLnQLoss=CondPAR%CondLiqLnQLoss*UnitPwr        !Liquid line heat loss, kW   !RS: Debugging: Formerly CondPAR(12)
+	   ! CondPAR%CondLiqLnTempChg=CondPAR%CondLiqLnTempChg/1.8            !Liquid line temperature drop, C !RS: Debugging: Formerly CondPAR(13)
+    !    CondPAR%CondLiqLnAddPD=CondPAR%CondLiqLnAddPD*UnitP          !Liquid line additional pressure drop, kPa   !RS: Debugging: Formerly CondPAR(14)
+    !END IF
+    !    FirstTimeUnit=2
+    !END IF
+    
+    
     mRefTot =CondIN%CInmRef   !RS: Debugging: Formerly XIN(1)
     pRoCmp  =CondIN%CInpRo !RS: Debugging: Formerly XIN(2)
     hRoCmp  =CondIN%CInhRo !RS: Debugging: Formerly XIN(3)
@@ -652,7 +686,8 @@
         END IF
         CALL RefrigerantParameters(Ref$)
         CALL GetRefID(Ref$,RefID)
-        tAoCoil=tAiCoil !ISI - 05/27/2008
+        tAoCoil=tAiCoil !ISI - 05/27/2008   
+        
         
                   !********************Refrigerant Cycle Data (Heating)***********************  !RS: Debugging: Moving: Stay here? Compressor? ORNLSolver?
 
@@ -669,7 +704,7 @@
     hcoMultiplier   = CondPAR%CondMultAirQT   !RS: Debugging: Formerly PAR(32)
     DPairMultiplier = CondPAR%CondMultAirPD   !RS: Debugging: Formerly PAR(33)
 
-    PwrFan           = CondPAR%CondFanPwr  !RS: Debugging: Formerly PAR(34)
+    PwrFan           = CondPAR%CondFanPwr/1000  !RS: Debugging: Formerly PAR(34)    !RS: Debugging: Converting
     DrawBlow         = CondPAR%CondFanLoc  !RS: Debugging: Formerly PAR(35)
     SurfAbsorptivity = CondPAR%CondSurfAbs  !RS: Debugging: Formerly PAR(36)
 
@@ -2107,6 +2142,11 @@
     LOGICAL IsShift !Is shift tube flag (for staggered tubes)
 
   INTEGER, PARAMETER :: MaxNameLength = 200
+  
+    REAL, PARAMETER :: UnitP     = 6.8947453 !(psi X UnitP = kPa)
+    REAL, PARAMETER :: UnitM     = 0.4536    !(lbm X UnitM = kg)
+    REAL, PARAMETER :: UnitL     = 0.3048    !(ft X UnitL = m)
+    REAL, PARAMETER :: UnitK     = 0.1442E-3 !(Btu-in/hr-ft2-F X UnitK = kW/m-C)
 
   CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
   INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
@@ -2123,7 +2163,7 @@
     REAL :: ODC_TubeID
     REAL :: IDC_TubeID
     
-    !INTEGER,PARAMETER :: SI=1
+    INTEGER,PARAMETER :: SI=1
     INTEGER,PARAMETER :: IP=2
     
     !FLOW:
@@ -2252,6 +2292,27 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
   CondPAR%CondFanPwr = Numbers(1) !Fan Power   !RS: Debugging: Formerly CondPAR(34)
   !VdotODfan = Numbers(2)    !Fan Air Flow Rate
   CondPAR%CondFanLoc = Numbers(3)   !Draw Through (1) or Blow Through (2)  !RS: Debugging: Formerly CondPAR(35)
+  
+    !IF (UNIT .EQ. SI) THEN  !RS: Debugging: Unit conversions
+	   ! CondPAR%CondCoilTOD=CondPAR%CondCoilTOD/1000   !Tube outside diameter, m    !RS: Debugging: Formerly CondPAR(15)
+    !    CondPAR%CondCoilTWThick=CondPAR%CondCoilTWThick/1000   !Tube wall thickness, m  !RS: Debugging: Formerly CondPAR(16)
+    !    CondPAR%CondTspc=CondPAR%CondTspc/1000   !Tube spacing in transverse direction (normal to air flow), m    !RS: Debugging: Formerly CondPAR(19)
+    !    CondPAR%CondRspc=CondPAR%CondRspc/1000   !Tube spacing in longitudinal direction (parallel to air flow), m    !RS: Debugging: Formerly CondPAR(20)
+    !    CondPAR%CondFinThick=CondPAR%CondFinThick/1000   !Fin thickness, m    !RS: Debugging: Formerly CondPAR(21)
+	   ! CondPAR%CondFanPwr=CondPAR%CondFanPwr/1000   !Fan power, kW   !RS: Debugging: Formerly CondPAR(34)
+    !ELSE
+	   ! CondPAR%CondCoilTOD=CondPAR%CondCoilTOD/12*UnitL       !Tube outside diameter, m    !RS: Debugging: Formerly CondPAR(15)
+    !    CondPAR%CondCoilTWThick=CondPAR%CondCoilTWThick*0.001/12*UnitL !Tube wall thickness, m  !RS: Debugging: Formerly CondPAR(16)
+    !    CondPAR%CondCoilSTLen=CondPAR%CondCoilSTLen/12*UnitL       !Tube length, m  !RS: Debugging: Formerly CondPAR(17)
+    !    CondPAR%CondCoilTThermCon=CondPAR%CondCoilTThermCon*UnitK          !Tube thermal conductivity, kW/m-C   !RS: Debugging: Formerly CondPAR(18)
+    !    CondPAR%CondTspc=CondPAR%CondTspc/12*UnitL       !Tube spacing in transverse direction (normal to air flow), m    !RS: Debugging: Formerly CondPAR(19)
+    !    CondPAR%CondRspc=CondPAR%CondRspc/12*UnitL       !Tube spacing in longitudinal direction (parallel to air flow), m    !RS: Debugging: Formerly CondPAR(20)
+    !    CondPAR%CondFinThick=CondPAR%CondFinThick*0.001/12*UnitL !Fin thickness, m    !RS: Debugging: Formerly CondPAR(21)
+    !    CondPAR%CondFinPitch=CondPAR%CondFinPitch*12/UnitL       !Fin pitch, fin/m    !RS: Debugging: Formerly CondPAR(22)
+    !    CondPAR%CondFinThermCon=CondPAR%CondFinThermCon*UnitK          !Fin thermal conductivity, kW/m-C    !RS: Debugging: Formerly CondPAR(23)
+	   ! CondPAR%CondFanPwr=CondPAR%CondFanPwr*1E-3           !Fan power, kW   !RS: Debugging: Formerly CondPAR(34)
+	   ! !CondPAR%CondBarPress=CondPAR%CondBarPress*UnitP          !Barometric pressure, kPa    !RS: Debugging: Formerly CondPAR(38)
+    !END IF
 
 
             !*************************** Circuiting ************************************
@@ -2714,6 +2775,28 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
   CondPAR%CondFanPwr = Numbers(1) !Fan Power   !RS: Debugging: Formerly CondPAR(34)
   !VdotIDfan = Numbers(2)    !Fan Air Flow Rate
   CondPAR%CondFanLoc = Numbers(3)   !Draw Through or Blow Through  !RS: Debugging: Formerly CondPAR(35)
+  
+  !IF (UNIT .EQ. SI) THEN  !RS: Debugging: Unit conversions
+	 !   CondPAR%CondCoilTOD=CondPAR%CondCoilTOD/1000   !Tube outside diameter, m    !RS: Debugging: Formerly CondPAR(15)
+  !      CondPAR%CondCoilTWThick=CondPAR%CondCoilTWThick/1000   !Tube wall thickness, m  !RS: Debugging: Formerly CondPAR(16)
+  !      CondPAR%CondTspc=CondPAR%CondTspc/1000   !Tube spacing in transverse direction (normal to air flow), m    !RS: Debugging: Formerly CondPAR(19)
+  !      CondPAR%CondRspc=CondPAR%CondRspc/1000   !Tube spacing in longitudinal direction (parallel to air flow), m    !RS: Debugging: Formerly CondPAR(20)
+  !      CondPAR%CondFinThick=CondPAR%CondFinThick/1000   !Fin thickness, m    !RS: Debugging: Formerly CondPAR(21)
+	 !   CondPAR%CondFanPwr=CondPAR%CondFanPwr/1000   !Fan power, kW   !RS: Debugging: Formerly CondPAR(34)
+  !  ELSE
+	 !   CondPAR%CondCoilTOD=CondPAR%CondCoilTOD/12*UnitL       !Tube outside diameter, m    !RS: Debugging: Formerly CondPAR(15)
+  !      CondPAR%CondCoilTWThick=CondPAR%CondCoilTWThick*0.001/12*UnitL !Tube wall thickness, m  !RS: Debugging: Formerly CondPAR(16)
+  !      CondPAR%CondCoilSTLen=CondPAR%CondCoilSTLen/12*UnitL       !Tube length, m  !RS: Debugging: Formerly CondPAR(17)
+  !      CondPAR%CondCoilTThermCon=CondPAR%CondCoilTThermCon*UnitK          !Tube thermal conductivity, kW/m-C   !RS: Debugging: Formerly CondPAR(18)
+  !      CondPAR%CondTspc=CondPAR%CondTspc/12*UnitL       !Tube spacing in transverse direction (normal to air flow), m    !RS: Debugging: Formerly CondPAR(19)
+  !      CondPAR%CondRspc=CondPAR%CondRspc/12*UnitL       !Tube spacing in longitudinal direction (parallel to air flow), m    !RS: Debugging: Formerly CondPAR(20)
+  !      CondPAR%CondFinThick=CondPAR%CondFinThick*0.001/12*UnitL !Fin thickness, m    !RS: Debugging: Formerly CondPAR(21)
+  !      CondPAR%CondFinPitch=CondPAR%CondFinPitch*12/UnitL       !Fin pitch, fin/m    !RS: Debugging: Formerly CondPAR(22)
+  !      CondPAR%CondFinThermCon=CondPAR%CondFinThermCon*UnitK          !Fin thermal conductivity, kW/m-C    !RS: Debugging: Formerly CondPAR(23)
+	 !   CondPAR%CondFanPwr=CondPAR%CondFanPwr*1E-3           !Fan power, kW   !RS: Debugging: Formerly CondPAR(34)
+	 !   !CondPAR%CondBarPress=CondPAR%CondBarPress*UnitP          !Barometric pressure, kPa    !RS: Debugging: Formerly CondPAR(38)
+  !  END IF
+
         
   
             !*************************** Circuiting ************************************

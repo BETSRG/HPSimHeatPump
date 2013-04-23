@@ -90,7 +90,7 @@ CONTAINS
 
 !***********************************************************************************
 
-SUBROUTINE UnitConvert !( !TaiC,TaiE,RHiC,RHiE, & !XMaC,XMaE, !Unit,& !CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR, & !TxvPAR,  &
+SUBROUTINE UnitConvert !(CFMcnd,CFMevp) !( !TaiC,TaiE,RHiC,RHiE, & !XMaC,XMaE, !Unit,& !CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR, & !TxvPAR,  &
                        !AccumPAR,FilterPAR,XMaC,XMaE,TaiC,TaiE,RHiC,RHiE, &
 				       !Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure) !, &
 					   !ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength, &    !RS: Debugging: Removing these
@@ -134,8 +134,8 @@ IMPLICIT NONE
 !REAL, INTENT(INOUT) :: TxvPAR(7)   !TXV model input data   !RS: Debugging: Not ever used
 !REAL, INTENT(INOUT) :: AccumPAR(10) !Accumulator input data
 !REAL, INTENT(INOUT) :: FilterPAR(2) !Filter drier input data
-!REAL, INTENT(INOUT) :: XMaC      !Condenser inlet air flow rate, kg/s
-!REAL, INTENT(INOUT) :: XMaE      !Evaporator inlet air flow rate, kg/s
+!REAL, INTENT(INOUT) :: CFMcnd      !Condenser inlet air flow rate, kg/s
+!REAL, INTENT(INOUT) :: CFMevp      !Evaporator inlet air flow rate, kg/s
 !REAL, INTENT(INOUT) :: TaiC      !Condenser inlet air DB temp, F
 !REAL, INTENT(INOUT) :: TaiE      !Evaporator inlet air DB temp, F
 !REAL, INTENT(INOUT) :: RHiC      !Condenser inlet air RH
@@ -151,8 +151,8 @@ IMPLICIT NONE
 
   IF (Unit .EQ. SI)THEN !SI unit inputs
     
-	CompPAR%CompIntVol=CompPAR%CompIntVol/(100**3) !Compressor internal volume, m^3   !RS: Formerly CompPAR(23)
-
+	!CompPAR%CompIntVol=CompPAR%CompIntVol/(100**3) !Compressor internal volume, m^3   !RS: Formerly CompPAR(23)
+ !
 	!****Condenser input data****
     !CondPAR(1)                   !Discharge line length, m
 	CondPAR%CondDisLnOD=CondPAR%CondDisLnOD/1000   !Discharge line outside diameter, m    !RS: Debugging: Formerly CondPAR(2)
@@ -160,7 +160,7 @@ IMPLICIT NONE
 	!CondPAR(4)                   !Discharge line elevation, m
 	CondPAR%CondDisLnQLoss=CondPAR%CondDisLnQLoss/1000   !Discharge line heat loss, kW  !RS: Debugging: Formerly CondPAR(5)
 	!CondPAR(6)                   !Discharge line temperature drop, C
-	!CondPAR(7)                   !Discharge line addiational pressure drop, kPa
+	!CondPAR(7)                   !Discharge line additional pressure drop, kPa
 	!CondPAR(8)                   !Liquid line length, m
 	CondPAR%CondLiqLnOD=CondPAR%CondLiqLnOD/1000   !Liquid line outside diameter, m   !RS: Debugging: Formerly CondPAR(9)
 	CondPAR%CondLiqLnTWThick=CondPAR%CondLiqLnTWThick/1000   !Liquid line tube wall thickness, m  !RS: Debugging: Formerly CondPAR(10)
@@ -280,9 +280,9 @@ IMPLICIT NONE
     !CompPAR(11-20) !DO - nothing
       
     !Compressor shell heat loss
-	CompPAR%CompQLoss=CompPAR%CompQLoss*UnitPwr*1000 !Compressor shell heat loss W  !RS: Debugging: Formerly CompPAR(22)
+	!CompPAR%CompQLoss=CompPAR%CompQLoss*UnitPwr*1000 !Compressor shell heat loss W  !RS: Debugging: Formerly CompPAR(22)
    
-	CompPAR%CompIntVol=CompPAR%CompIntVol/(12**3)*(UnitL**3) !Compressor internal volume, m^3 !RS: Debugging: Formerly CompPAR(23)
+	!CompPAR%CompIntVol=CompPAR%CompIntVol/(12**3)*(UnitL**3) !Compressor internal volume, m^3 !RS: Debugging: Formerly CompPAR(23)
 
 	!****Condenser input data****
 	CondPAR%CondDisLnLen=CondPAR%CondDisLnLen*UnitL            !Discharge line length, m    !RS: Debugging: Formerly CondPAR(1)
@@ -315,7 +315,7 @@ IMPLICIT NONE
     !CondPAR(28)                           !Number of modules per tube 
     !CondPAR(29)                           !Fin type (1-smooth; 2-Wavy; 3-louvered) 
 	CondPAR%CondFanPwr=CondPAR%CondFanPwr*1E-3           !Fan power, kW   !RS: Debugging: Formerly CondPAR(34)
-
+ 
 	CondPAR%CondBarPress=CondPAR%CondBarPress*UnitP          !Barometric pressure, kPa    !RS: Debugging: Formerly CondPAR(38)
 
 	!****Evaporator input data****
@@ -388,12 +388,12 @@ IMPLICIT NONE
     !RefChg !Refrigerant charge lbm, , ORNL solver uses IP unit
 
     !Air side boundary conditions
-	XMaC=XMaC*UnitArFlw                 !Condenser inlet air flow rate, m^3/s
+	CFMcnd=CFMcnd*UnitArFlw !XMaC=XMaC*UnitArFlw                 !Condenser inlet air flow rate, m^3/s
     !TaiC                               !Condenser inlet DB temperature F,  ORNL solver uses IP unit
     IF (RHiC .GT. 1) THEN
         RHiC=(RHiC-32)/1.8 !Condenser inlet RH or WB temp
     END IF
-    XMaE=XMaE*UnitArFlw                 !Evaporator inlet air flow rate, m^3/s
+    CFMevp=CFMevp*UnitArFlw !XMaE=XMaE*UnitArFlw                 !Evaporator inlet air flow rate, m^3/s
     !TaiE                               !Evaporator inlet DB temperature F,  ORNL solver uses IP unit
     IF (RHiE .GT. 1) THEN
         RHiE=(RHiE-32)/1.8 !Evaporator inlet RH or WB temp
