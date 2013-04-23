@@ -1080,8 +1080,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  PiEvp=EvapIN%EInpRi   !RS: Debugging: Formerly EvapIN(2)
 	  HiEvp=EvapIN%EInhRi   !RS: Debugging: Formerly EvapIN(3)
       
-      PwrODfan=CondPAR%CondFanPwr*1000 !RS Comment: 1000 accounts for CondPAR conversion !RS: Debugging: Formerly CondPAR(34)
-      PwrIDfan=EvapPAR%EvapFanPwr*1000 !RS Comment: 1000 accounts for EvapPAR conversion !RS: Debugging: Formerly EvapPAR(27)
+      PwrODfan=CondPAR%CondFanPwr !*1000 !RS Comment: 1000 accounts for CondPAR conversion !RS: Debugging: Formerly CondPAR(34)
+      PwrIDfan=EvapPAR%EvapFanPwr !*1000 !RS Comment: 1000 accounts for EvapPAR conversion !RS: Debugging: Formerly EvapPAR(27)
 
 	  Pressure=PiEvp*1000   !RS Comment: Unit Conversion
 	  Enthalpy=HiEvp*1000   !RS Comment: Unit Conversion

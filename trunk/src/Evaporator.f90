@@ -726,7 +726,7 @@ CONTAINS
     hcoMultiplier   = EvapPAR%EvapMultAirQT   !RS: Debugging: Formerly PAR(25)
     DPairMultiplier = EvapPAR%EvapMultAirPD   !RS: Debugging: Formerly PAR(26)
 
-    PwrFan           = EvapPAR%EvapFanPwr  !RS: Debugging: Formerly PAR(27)
+    PwrFan           = EvapPAR%EvapFanPwr/1000  !RS: Debugging: Formerly PAR(27) Conversion
     DrawBlow         = EvapPAR%EvapFanLoc  !RS: Debugging: Formerly PAR(28)
     SurfAbsorptivity = EvapPAR%EvapSurfAbs  !RS: Debugging: Formerly PAR(29)
 
