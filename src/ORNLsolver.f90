@@ -109,8 +109,9 @@
     CHARACTER(LEN=15),PARAMETER :: FMT_2001 = "(A13,F10.3,A10)"
     CHARACTER(LEN=15),PARAMETER :: FMT_2004 = "(A56,F10.3,A10)"
     CHARACTER(LEN=14),PARAMETER :: FMT_2007 = "(A16,F10.3,A9)"
-    INTEGER :: LogFile       =13 !RS: Debugging file denotion, hopefully this works.
+    INTEGER :: LogFile       =153 !RS: Debugging file denotion, hopefully this works.
     INTEGER(2),SAVE :: LastCoolingMode !RS: Debugging: Trying to only allocate/reallocate if cooling mode changes
+    INTEGER:: ErrorFlag !RS: Debugging: Trying to clean out ErrorFlag at the start of every run; don't think it'll actually work, though
     
   OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
     
@@ -132,13 +133,16 @@
 
     OPEN(5,FILE='YorkHP.out')     ! VL_User_Setting -- file name
     OPEN(6,FILE='YorkHP.log')     ! VL_User_Setting -- file name
+    !OPEN(154,FILE='YorkHP.out')     ! VL_User_Setting -- file name
+    !OPEN(155,FILE='YorkHP.log')     ! VL_User_Setting -- file name
 
     !Oil fraction
     CondPAR(59)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
     EvapPAR(51)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
     
-    !CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
-    !EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
+    CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
+    EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
+    ErrorFlag=0   !RS: Debugging: Resetting this at the beginning of each run so that errors don't carry over
     
     !RS: Debugging: Commenting out this section since we're only running cooling-only right now
     IF (ZoneSysEnergyDemand(1)%TotalOutputRequired .EQ. 0) THEN
@@ -158,8 +162,8 @@
     IF (IsCoolingMode .NE. LastCoolingMode) THEN   !RS: Debugging: Only deallocating and reallocating if cooling mode changed between iterations
         CALL EndCondenserCoil
         CALL EndEvaporatorCoil
-        CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" only when needed
-        EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" only when needed
+        !CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" only when needed
+        !EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" only when needed
     END IF
     
     !TaiE=  !MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
@@ -573,7 +577,7 @@
 
         TimeSpent=SECNDS(TimeStart)
         WRITE(*,*)
-        WRITE(*,*)'Calculation completed successfully.'
+        WRITE(*,*)'HPSim Calculation completed successfully.'
         WRITE(*,FMT_103)'Time Spent (Min):',TimeSpent/60
         WRITE(5,*) 
         WRITE(5,FMT_103)'Time Spent (Min):',TimeSpent/60  

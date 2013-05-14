@@ -119,7 +119,7 @@
     CHARACTER(LEN=13),PARAMETER :: FMT_700 = "(A44,F7.2,A5)"
     CHARACTER(LEN=13),PARAMETER :: FMT_704 = "(A13,F7.2,A5)"
     
-    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
+    INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
     

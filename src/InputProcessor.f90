@@ -180,7 +180,7 @@ INTEGER :: TotalAuditErrors=0      ! Counting some warnings that go onto only th
 INTEGER :: NumSecretObjects=0      ! Number of objects in "Secret Mode"
 LOGICAL :: ProcessingIDD=.false.   ! True when processing IDD, false when processing IDF
 
-INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
 
 !Real Variables for Module
 !na
@@ -1348,7 +1348,7 @@ SUBROUTINE ProcessInputDataFile
    LOGICAL BlankLine
    INTEGER Pos
    
-     INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+     INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -1595,7 +1595,7 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
   INTEGER NextChr
   CHARACTER(len=32) :: String1
 
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
   
@@ -4312,7 +4312,7 @@ SUBROUTINE ReportOrphanRecordObjects
   INTEGER ObjFound
   INTEGER NumOrphObjNames
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
   
@@ -4850,7 +4850,7 @@ SUBROUTINE PreProcessorCheck(PreP_Fatal)
   INTEGER :: CountP
   INTEGER :: CountM
   CHARACTER(len=1) :: Multiples
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
 
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -4948,7 +4948,7 @@ SUBROUTINE CompactObjectsCheck
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL :: CompactObjectsFound
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -5005,7 +5005,7 @@ SUBROUTINE ParametricObjectsCheck
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
     OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 

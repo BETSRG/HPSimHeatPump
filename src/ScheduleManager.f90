@@ -305,7 +305,7 @@ SUBROUTINE ProcessScheduleInput
   CHARACTER(len=1) :: ColumnSep
   LOGICAL :: firstLine
 
-    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
     OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -2902,7 +2902,7 @@ SUBROUTINE ProcessIntervalFields(Untils,Numbers,NumUntils,NumNumbers,MinuteValue
   INTEGER EMin
   INTEGER sFld
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -3073,7 +3073,7 @@ SUBROUTINE DecodeHHMMField(FieldValue,RetHH,RetMM,ErrorsFound,DayScheduleName)
   CHARACTER(len=LEN(FieldValue)) String
   INTEGER IOS
   
-    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
     OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -3158,7 +3158,7 @@ SUBROUTINE ProcessForDayTypes(ForDayField,TheseDays,AlReady,ErrorsFound)
   LOGICAL :: OneValid
   LOGICAL :: DupAssignment
   
-    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -4415,7 +4415,7 @@ SUBROUTINE ReportOrphanSchedules
   INTEGER :: Item
   INTEGER :: NumCount
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 

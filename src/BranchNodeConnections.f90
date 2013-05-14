@@ -280,7 +280,7 @@ SUBROUTINE CheckNodeConnections(ErrorsFound)
   LOGICAL MatchedAtLeastOne
   INTEGER :: ErrorCounter
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -1375,7 +1375,7 @@ SUBROUTINE SetUpCompSets(ParentType,ParentName,CompType,CompName,InletNode,Outle
   INTEGER Count, Count2
   INTEGER Found, Found2
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 

@@ -1306,7 +1306,7 @@ SUBROUTINE GetBranchInput
   INTEGER PressureCurveType
   INTEGER PressureCurveIndex
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -1555,7 +1555,7 @@ SUBROUTINE GetBranchListInput
   INTEGER :: NumParams
   CHARACTER(len=MaxNameLength) :: TestName
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -2820,7 +2820,7 @@ SUBROUTINE AuditBranches(mustprint,CompType,CompName)
   CHARACTER(len=MaxNameLength) :: FoundBranchName  ! Branch matching compname/type
   LOGICAL :: NeverFound
   
-    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
     OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
     

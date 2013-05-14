@@ -667,7 +667,9 @@
     CHARACTER(LEN=10),PARAMETER :: FMT_106 = "(I4,F18.9)"
     CHARACTER(LEN=11),PARAMETER :: FMT_107 = "(A66,F10.3)"
 
-    INTEGER :: LogFile       =13 !RS: Debugging file denotion, hopefully this works.
+    INTEGER :: LogFile       =153 !RS: Debugging file denotion, hopefully this works.
+    !  INTEGER, EXTERNAL :: GetNewUnitNumber  ! External  function to "get" a unit number    !RS: Debugging
+    !LogFile=GetNewUnitNumber()  !RS: Debugging: Trying to prevent errors with E+ by not hardcoding
     
     OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
   
@@ -1777,7 +1779,7 @@
     CHARACTER(LEN=13),PARAMETER :: FMT_100 = "(50(A12,','))"
     CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 
-    OPEN (16,FILE='Condenser.csv')
+    OPEN (156,FILE='Condenser.csv')
     !OPEN (16,FILE='Condenser_longtubes.csv')
 
     MassCoil=0
@@ -1792,7 +1794,7 @@
 
     IF (CoilType .NE. MCCONDENSER) THEN
 
-        WRITE(16,FMT_100)'Nckt','Ntube','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
+        WRITE(156,FMT_100)'Nckt','Ntube','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
         'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
         'rhAi','rhAo','hci(W/m2K)','EF','hco(W/m2K)', &
         'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
@@ -1969,7 +1971,7 @@
                     END IF
 
                     MassMod=Ckt(I)%Tube(J)%Seg(K)%Mass
-                    WRITE(16,FMT_104)I,J,K,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
+                    WRITE(156,FMT_104)I,J,K,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
                     xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
                     hciMod*1000,EFref,hcoMod*1000,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
                     Qmod*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
@@ -1983,7 +1985,7 @@
 
     ELSE
 
-        WRITE(16,FMT_100)'Nslab','Npass','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
+        WRITE(156,FMT_100)'Nslab','Npass','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
         'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
         'rhAi','rhAo','hci(W/m2K)','hco(W/m2K)', &
         'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
@@ -2142,7 +2144,7 @@
                         END IF
 
                         MassMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Mass
-                        WRITE(16,FMT_104)I,II,IV,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
+                        WRITE(156,FMT_104)I,II,IV,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
                         xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
                         hciMod*1000,hcoMod*1000,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
                         Qmod*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
@@ -2158,7 +2160,7 @@
 
     END IF
 
-    CLOSE(16)
+    CLOSE(156)
     RETURN
 
     END SUBROUTINE PrintCondenserResult
@@ -2724,7 +2726,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             END IF
         
             !Branch#,#Tubes
-            IF (ErrorFlag .NE. NOERROR) THEN 
+            !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN
                 ErrorFlag=CKTFILEERROR
                 CALL InitCondenserCoil_Helper_1
                 RETURN
@@ -2814,7 +2817,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 END IF
             END DO
         
-            IF (ErrorFlag .NE. NOERROR) THEN 
+            !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN 
                 ErrorFlag=CKTFILEERROR
                 CALL InitCondenserCoil_Helper_1
                 RETURN
@@ -2844,7 +2848,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                     DO J=1, Ckt(I)%Ntube
                         Ckt(I)%TubeSequence(J)=Numbers(J)   !RS Comment: Populating the tube sequence arrays
                     END DO 
-                IF (ErrorFlag .NE. NOERROR) THEN 
+                !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN
                     ErrorFlag=CKTFILEERROR
                     CALL InitCondenserCoil_Helper_1
                     RETURN
@@ -2856,7 +2861,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
               CoilSection(NumOfSections)%NumOfCkts=NumOfCkts
               
             DO I=1,2
-                IF (ErrorFlag .NE. NOERROR) THEN  !Tube#, velocity Deviation from mean value
+                !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN !Tube#, velocity Deviation from mean value
                     ErrorFlag=CKTFILEERROR
                     CALL InitCondenserCoil_Helper_1
                     RETURN
@@ -2871,7 +2877,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 DO J=1,NumOfMods !1 !NumOfMods    !RS: Debugging: Adding in a J-value  !RS: Debugging: Only doing it for one module right now
                     Tube(I)%Seg(J)%VelDev = Numbers(J)  !RS Comment: Bringing in the velocity deviation values
                 END DO
-                IF (ErrorFlag .NE. NOERROR) THEN 
+                !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN
                     ErrorFlag=CKTFILEERROR
                     CALL InitCondenserCoil_Helper_1
                     RETURN
@@ -2902,7 +2909,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 END DO
             END DO
         
-            IF (ErrorFlag .NE. NOERROR) THEN 
+            !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN
                 ErrorFlag=CKTFILEERROR
                 CALL InitCondenserCoil_Helper_1
                 RETURN
@@ -4901,7 +4909,7 @@ END IF
     INTEGER RefBCiter             !Iteration loop counter
     LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
     
-    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
+    INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     INTEGER :: J = 0   !RS: Debugging: Loop Counter
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
@@ -5560,7 +5568,7 @@ END IF
     !LOCAL VARIABLES:
     REAL Wlocal !Local oil mass fraction
     
-    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
+    INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     !INTEGER :: J = 0   !RS: Debugging: Loop Counter    !RS: Debugging: Extraneous
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging

@@ -2554,7 +2554,7 @@ CHARACTER(len=1000) :: CharTableData      ! used to echo each line of table data
 LOGICAL            :: EchoTableDataToEio  ! logical set equal to global and used to report to eio file
 LOGICAL            :: FileExists
 
-INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 

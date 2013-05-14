@@ -151,6 +151,10 @@ SUBROUTINE ManageSimulation     ! Main driver routine for this module
 !  CHARACTER(len=138) :: tdstringlong
 
   INTEGER :: EnvCount
+  
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
           ! FLOW:
   CALL PostIPProcessing
@@ -309,6 +313,7 @@ SUBROUTINE ManageSimulation     ! Main driver routine for this module
         NumOfWarmupDays=NumOfWarmupDays+1
         cWarmupDay=TrimSigDigits(NumOfWarmupDays)
         CALL DisplayString('Warming up {'//TRIM(cWarmUpDay)//'}')
+        WRITE(DebugFile,*) 'Warming up {'//TRIM(cWarmUpDay)//'}'    !RS: Debugging: Wanting to keep track of what day we're on
       ELSEIF (DayOfSim == 1)   THEN
         CALL DisplayString('Starting Simulation at '//TRIM(CurMnDy)//' for '//TRIM(EnvironmentName))
         WRITE(OutputFileInits,700)   NumOfWarmupDays
@@ -490,7 +495,7 @@ SUBROUTINE GetProjectData
   CHARACTER(len=MaxNameLength) :: CurrentModuleObject
   LOGICAL :: CondFDAlgo
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -877,7 +882,7 @@ SUBROUTINE CheckForMisMatchedEnvironmentSpecifications
   LOGICAL :: WeatherFileAttached
   LOGICAL :: ErrorsFound
 
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -1638,7 +1643,7 @@ SUBROUTINE ReportLoopConnections
   LOGICAL :: WarningOut=.true.
   INTEGER :: NumOfControlledZones
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -2388,7 +2393,7 @@ SUBROUTINE PostIPProcessing
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
    LOGICAL :: PreP_Fatal=.false.  ! True if a preprocessor flags a fatal error
    
-    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
+    INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
     OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -2673,7 +2678,7 @@ use omp_lib, ONLY: omp_get_max_threads,omp_get_num_threads,omp_set_num_threads
     IF (lIDFSetThreadsInput) NumberIntRadThreads=iIDFSetThreadsInput
   ENDIF
 #else
-INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
+INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 

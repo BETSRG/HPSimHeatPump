@@ -1317,7 +1317,7 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
   REAL(r64)    :: MaxHeatVolFlow     ! max of user specified design heating max flow [m3/s]
   CHARACTER(len=8) :: HrMinString   ! store hour/minute string before assigning to peak string array
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -2207,10 +2207,14 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
   REAL(r64) :: AirSysOutput
   REAL(r64) :: NonAirSysOutput
   LOGICAL, SAVE :: OneTime = .TRUE.  !RS: Debugging
-  INTEGER :: LogFile       =13 !RS: Debugging file denotion, hopefully this works.
-  INTEGER :: TimeTemp   =17 !RS: Debugging: File for plotting temp vs. time
+  INTEGER :: LogFile       =153 !RS: Debugging file denotion, hopefully this works.
+  INTEGER :: TimeTemp   =151 !RS: Debugging: File for plotting temp vs. time
   CHARACTER(LEN=13),PARAMETER :: FMT_100 = "(2(A12,','))" !RS: Debugging
   CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(2(F10.4,','))"    !RS: Debugging
+  !INTEGER :: LogFile       !=13 !RS: Debugging file denotion, hopefully this works.
+  !INTEGER, EXTERNAL :: GetNewUnitNumber  ! External  function to "get" a unit number    !RS: Debugging
+  !  
+  !  LogFile=GetNewUnitNumber()  !RS: Debugging: Trying to prevent errors with E+ by not hardcoding
     
   OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
     

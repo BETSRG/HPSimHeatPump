@@ -346,7 +346,7 @@ INTEGER :: WaterCoilNodeNum               ! numeric equivalent for water coil no
 !INTEGER :: ComponentType_Num
 CHARACTER(len=MaxNameLength), DIMENSION(3) :: MatchNodeName
 
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -1339,7 +1339,7 @@ SUBROUTINE InitAirLoops(FirstHVACIteration)
   LOGICAL :: ErrorsFound
   REAL(r64) :: OAReliefDiff = 0.d0 ! local for massflow change across OA system, kg/s
 
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
   

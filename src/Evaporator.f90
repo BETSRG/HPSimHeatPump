@@ -223,11 +223,6 @@ REAL pRiCmp
 REAL hRiCmp
 REAL xRiCmp
 REAL vRiCmp
-!REAL vfRiCmp   !RS: Debugging: Extraneous
-!REAL vgRiCmp   !RS: Debugging: Extraneous
-!REAL muRiCmp   !RS: Debugging: Extraneous
-!REAL mufRiCmp  !RS: Debugging: Extraneous
-!REAL mugRiCmp  !RS: Debugging: Extraneous
 
 !Heat transfer calc. variables
 REAL mRefTot  !Refrigerant mass flow rate, kg/s
@@ -355,12 +350,7 @@ REAL xRiCoil,xRoCoil
 REAL tAiCoil,tAoCoil
 REAL rhAiCoil,rhAoCoil
 REAL wAiCoil,wAoCoil
-REAL wbAiCoil !,wbAoCoil    !RS: Debugging: Extraneous
-!REAL vRiCoil,vRoCoil   !RS: Debugging: Extraneous
-!REAL vfRiCoil,vfRoCoil !RS: Debugging: Extraneous
-!REAL vgRiCoil,vgRoCoil !RS: Debugging: Extraneous
-!REAL muRiCoil,muRoCoil !RS: Debugging: Extraneous
-!REAL mufRiCoil,mufRoCoil
+REAL wbAiCoil
 REAL tSHoCoil     !Coil outlet superheat, C 
 REAL tSHiCmp      !Compressor inlet superheat, C 
 REAL Wabsolute    !Asolute oil mass fraction  
@@ -698,16 +688,10 @@ CONTAINS
     REAL tSiSUM    !Sum of inlet surface temperature, C
     REAL tSoSUM    !Sum of outlet surface temperature, C
     REAL QcktSens !Sensible Circuit heat transfer, kW
-    !REAL DPreturnbend !Pressure drop at return bend, kPa   !RS: Debugging: Extraneous
     REAL DPair        !Air side pressure drop, kPa
-    !REAL DPckt        !Refrigerant pressure drop in circuit, kPa   !RS: Debugging: Extraneous
-    !REAL Gckt         !Mass flux in circuit, kg/m^2    !RS: Debugging: Extraneous
-    !REAL DiffpRoMod     !Difference in pRoMod  !RS: Debugging: Extraneous
-    !REAL PrevpRoMod     !Previous value of pRoMod  !RS: Debugging: Extraneous
     LOGICAL Converged   !Solution convergence flag
     REAL MaxResidual    !Maximum residual in iteration
     Real PTol           !Evaporator Outlet Pressure convergence criteria,kPa
-    !REAL Wlocal         !Local oil mass fraction   !RS: Debugging: Extraneous
     REAL tRdis          !Compressor discharge temperature, C
     REAL DPvalve        !Reversing valve pressure drop, kPa
     REAL hRsuc          !Suction enthalpy, kPa
@@ -718,7 +702,7 @@ CONTAINS
     CHARACTER(LEN=10),PARAMETER :: FMT_106 = "(I4,F18.9)"
     CHARACTER(LEN=39),PARAMETER :: FMT_107 = "(A67,F5.6)" !VL Comment: previously !10
     
-    INTEGER :: LogFile       =13 !RS: Debugging file denotion, hopefully this works.
+    INTEGER :: LogFile       =153 !RS: Debugging file denotion, hopefully this works.
     
     OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
 
@@ -1851,10 +1835,10 @@ REAL :: MassLiqCoil !Total liquid refrigerant inventory in coil, kg
 REAL :: MassVapCoil !Total vapor refrigerant inventory in coil, kg
 
 INTEGER NumSection,I,J,K,II,III,IV !Loop Counter
-CHARACTER(LEN=13),PARAMETER :: FMT_100 = "(50(A12,','))"
-CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
+CHARACTER(LEN=13),PARAMETER :: FMT_100 = "(32(A12,','))"
+CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),29(F10.3,','))"
 
-  OPEN (17,FILE='Evaporator.csv')
+  OPEN (157,FILE='Evaporator.csv')
   !OPEN (17,FILE='Evaporator_longtubes.csv')
   !RS: Debugging: Setting each QModTot to 0 at the beginning, so previous values don't carry over
   QModLatTot=0
@@ -1872,18 +1856,18 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 
   IF (CoilType .NE. MCEVAPORATOR) THEN
 
-	  !WRITE(17,FMT_100)'Nckt','Ntube','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
-			!	   'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
-			!	   'rhAi','rhAo','hci(kW/m2K)','hco(kW/m2K)', &
-			!	   'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
-			!	   'QmodTot(W)','QmodSens(W)','MassLiq(g)','MassVap(g)','Mass(g)','DryWet', &
-			!	   'mdotR(kg/hr)','mdotA(kg/s)'
-      WRITE(17,FMT_100)'Nckt','Ntube','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
+	  WRITE(157,FMT_100)'Nckt','Ntube','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
 				   'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
 				   'rhAi','rhAo','hci(kW/m2K)','hco(kW/m2K)', &
 				   'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
-				   'QmodTot(W)','QmodSens(W)','QmodLat(W)','MassLiq(g)','MassVap(g)','Mass(g)','DryWet', &
-				   'mdotR(kg/hr)','mdotA(kg/s)' !, 'cpAir', 'hAiMod kJ/kg', 'hAoMod' !RS: Adding in the latent heat !RS: Debugging: Adding in air specific heat and h's
+				   'QmodTot(W)','QmodSens(W)','MassLiq(g)','MassVap(g)','Mass(g)','DryWet', &
+				   'mdotR(kg/hr)','mdotA(kg/s)'
+      !WRITE(17,FMT_100)'Nckt','Ntube','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
+	!			   'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
+!				   'rhAi','rhAo','hci(kW/m2K)','hco(kW/m2K)', &
+!				   'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
+!				   'QmodTot(W)','QmodSens(W)','QmodLat(W)','MassLiq(g)','MassVap(g)','Mass(g)','DryWet', &
+!				   'mdotR(kg/hr)','mdotA(kg/s)' !, 'cpAir', 'hAiMod kJ/kg', 'hAoMod' !RS: Adding in the latent heat !RS: Debugging: Adding in air specific heat and h's
 
 	  DO NumSection=1, NumOfSections
 
@@ -2080,16 +2064,16 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
                           xRoMod=1.0
                       END IF
 
-				      !WRITE(17,FMT_104)I,J,K,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
-							   !    xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
-							   !    hciMod,hcoMod,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
-							   !    Qmod*1000,QmodSens*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
-							   !    FLOAT(DryWet),mRefCkt*3600,mAiMod
-                     WRITE(17,FMT_104)I,J,K,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
+				      WRITE(157,FMT_104)I,J,K,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
 							       xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
 							       hciMod,hcoMod,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
-							       Qmod*1000,QmodSens*1000,QmodLat*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
-							       FLOAT(DryWet),mRefCkt*3600, mAiMod !, cpAIR, hAiMod, hAoMod, AirProp(4), TestH   !RS: Trying to find the latent heat !RS: Debugging: Adding in the air cp and h's
+							       Qmod*1000,QmodSens*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
+							       FLOAT(DryWet),mRefCkt*3600,mAiMod
+                !     WRITE(17,FMT_104)I,J,K,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
+				!			       xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
+				!			       hciMod,hcoMod,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
+				!			       Qmod*1000,QmodSens*1000,QmodLat*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
+				!			       FLOAT(DryWet),mRefCkt*3600, mAiMod !, cpAIR, hAiMod, hAoMod, AirProp(4), TestH   !RS: Trying to find the latent heat !RS: Debugging: Adding in the air cp and h's
 
 			      END DO !end Nmod
 
@@ -2105,7 +2089,7 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
   
   ELSE
 
-	  WRITE(16,FMT_100)'Nslab','Npass','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
+	  WRITE(157,FMT_100)'Nslab','Npass','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
 				   'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
   				   'rhAi','rhAo','hci(W/m2K)','hco(W/m2K)', &
 				   'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
@@ -2267,7 +2251,7 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
                       END IF
 
 					  MassMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Mass
-					  WRITE(16,FMT_104)I,II,IV,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
+					  WRITE(157,FMT_104)I,II,IV,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
 								   xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
 								   hciMod*1000,hcoMod*1000,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
 								   Qmod*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
@@ -2283,7 +2267,7 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 
   END IF
 
-  CLOSE(17)
+  CLOSE(157)
 
   RETURN
 

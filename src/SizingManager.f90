@@ -659,7 +659,7 @@ SUBROUTINE GetOARequirements
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
 
-    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
     OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
   
@@ -837,7 +837,7 @@ SUBROUTINE GetZoneAirDistribution
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
 
-    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
     OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
     
@@ -985,7 +985,7 @@ SUBROUTINE GetSizingParams
   INTEGER :: NumSizParams
   INTEGER :: Temp
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -1125,7 +1125,7 @@ SUBROUTINE GetZoneSizingInput
   INTEGER OAIndex ! Index of design specification object
   INTEGER ObjIndex ! Index of zone air distribution effectiveness object name
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
