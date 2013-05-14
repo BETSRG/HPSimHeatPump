@@ -924,7 +924,7 @@ SUBROUTINE GetReportVariableInput
   INTEGER Item
   LOGICAL :: ErrorsFound = .false.   ! If errors detected in input
   
-    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -5669,7 +5669,7 @@ SUBROUTINE FlushHPOutput()
 
     LOGICAL, SAVE :: OneTime = .TRUE.
     REAL :: CurTime
-    Integer:: OutputFile=1
+    Integer:: OutputFile=152 !1 !RS: Debugging: Trying to avoid problems with E+/HPSim due to hardcoding too low of values
     REAL :: QSens, QLat
 
     CurTime=CurrentTime
@@ -6564,7 +6564,7 @@ SUBROUTINE GenOutputVariablesAuditReport
   INTEGER :: Loop
   LOGICAL,SAVE :: OpaqSurfWarned=.false.
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -6695,7 +6695,7 @@ SUBROUTINE UpdateMeterReporting
 
   LOGICAL :: ErrorsFound = .false.   ! If errors detected in input
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 

@@ -1864,6 +1864,9 @@ SUBROUTINE InitializeWeather(PrintEnvrnStamp)
   INTEGER :: JDay5Start
   INTEGER :: JDay5End
   INTEGER :: TWeekDay
+    INTEGER :: DebugFile       =150 !RS: Debugging file denotion
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
           ! FLOW:
 
@@ -2090,7 +2093,9 @@ SUBROUTINE InitializeWeather(PrintEnvrnStamp)
   ENDIF
 
   IF (EndEnvrnFlag .and. (Environment(Envrn)%KindOfEnvrn /= ksDesignDay) ) THEN
+    WRITE(DebugFile,*) 'Before Rewinding: ', WeatherFileUnitNumber
     REWIND(WeatherFileUnitNumber)
+    WRITE(DebugFile,*) 'After Rewinding: ', WeatherFileUnitNumber
     CALL SkipEPlusWFHeader
     CALL ReportMissing_RangeData
   ENDIF
@@ -3669,7 +3674,7 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
   REAL(r64) :: BeamRad, DiffRad     ! working calculated beam and diffuse rad, W/m2
 !     For reporting purposes, set year to current system year
 
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
   
@@ -4956,7 +4961,7 @@ SUBROUTINE CheckLocationValidity
   REAL(r64)    :: StdTimeMerid   ! Standard time meridian
   REAL(r64)    :: Diffcalc       ! Difference between Standard Time Meridian and TimeZone
   
-    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -5090,7 +5095,7 @@ SUBROUTINE CheckWeatherFileValidity
 
           ! FLOW:
 
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
   
@@ -5333,7 +5338,7 @@ SUBROUTINE ReadUserWeatherInput
    Integer :: RP    ! number of run periods
    Integer :: RPAW  ! number of run periods, actual weather
    
-     INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+     INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -5962,7 +5967,7 @@ SUBROUTINE GetRunPeriodDesignData(ErrorsFound)
   INTEGER :: WhichPeriod
 !unused1208  CHARACTER(len=MaxNameLength) :: ThisObject
 
-INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -7240,7 +7245,7 @@ SUBROUTINE GetWeatherProperties(ErrorsFound)
   INTEGER :: Count
   LOGICAL :: MultipleEnvironments
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -7766,7 +7771,7 @@ SUBROUTINE GetWaterMainsTemperatures(ErrorsFound)
   CHARACTER(len=MaxNameLength),DIMENSION(2) :: AlphArray ! Character string data
   REAL(r64), DIMENSION(2)                        :: NumArray  ! Numeric data
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 

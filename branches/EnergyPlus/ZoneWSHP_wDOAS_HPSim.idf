@@ -7,6 +7,7 @@
 !
 ! Simulation Location/Run: Denver Stapleton Intl Arpt CO USA WMO=724690, 2 design days, 1 run period,
 !                          Run Control executes two design days (see RUN PERIOD object)
+!RS: Debugging: Changing this location to Golden since it matches more closely.
 !
 ! Location:                Denver, CO
 !
@@ -110,14 +111,14 @@
     No,                      !- Do System Sizing Calculation
     No,                      !- Do Plant Sizing Calculation
     Yes,                     !- Run Simulation for Sizing Periods
-    No;                      !- Run Simulation for Weather File Run Periods
+    Yes; !No;                      !- Run Simulation for Weather File Run Periods
 
   RunPeriod,
     ,                        !- Name
-    7, !12,                       !- Begin Month	!RS: Changing to single day instead of whole year
-    1, !21,                       !- Begin Day of Month
-    7, !12,                      !- End Month
-    1, !21,                      !- End Day of Month
+    8, !12,                       !- Begin Month	!RS: Changing to single day instead of whole year
+    1, !1, !21,                       !- Begin Day of Month
+    8, !12,                      !- End Month
+    1, !10, !21,                      !- End Day of Month
     Tuesday,                 !- Day of Week for Start Day
     Yes,                     !- Use Weather File Holidays and Special Days
     Yes,                     !- Use Weather File Daylight Saving Period
@@ -144,7 +145,7 @@
 
   SizingPeriod:DesignDay,	!RS: Switching back
     Denver Centennial Ann Clg 1% Condns DB=>MWB,  !- Name
-    7,                       !- Month
+    8,                       !- Month
     1,                      !- Day of Month
     SummerDesignDay,         !- Day Type
     32,                      !- Maximum Dry-Bulb Temperature {C}

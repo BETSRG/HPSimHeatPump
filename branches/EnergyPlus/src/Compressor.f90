@@ -118,7 +118,9 @@
     !REAL RefProp(28)   !RS: Debugging: Extraneous
     LOGICAL, EXTERNAL :: IssueRefPropError
     
-    INTEGER :: LogFile       =13 !RS: Debugging file denotion, hopefully this works.
+    INTEGER :: LogFile       =153 !RS: Debugging file denotion, hopefully this works.
+    !  INTEGER, EXTERNAL :: GetNewUnitNumber  ! External  function to "get" a unit number    !RS: Debugging
+    !LogFile=GetNewUnitNumber()  !RS: Debugging: Trying to prevent errors with E+ by not hardcoding
     
     OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
 

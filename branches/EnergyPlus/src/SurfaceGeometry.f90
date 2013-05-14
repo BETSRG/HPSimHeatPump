@@ -2475,7 +2475,7 @@ SUBROUTINE GetDetShdSurfaceData(ErrorsFound,SurfNum,TotDetachedFixed,TotDetached
   REAL(r64) :: SchedMinValue
   REAL(r64) :: SchedMaxValue
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -6261,7 +6261,7 @@ SUBROUTINE GetVertices(SurfNum,NSides,Vertices)
 !unused    LOGICAL   :: SurfaceCCW
     REAL(r64) :: dotp
     
-    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 

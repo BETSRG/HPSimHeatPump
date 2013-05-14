@@ -20,23 +20,13 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
 
     REAL TINPUT
     INTEGER IERR
-
-    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    !REAL RefProp(28)	!Refrigerant properties !RS: Debugging: Extraneous
-
-    !INTEGER(2) AirPropOpt			!Air prop calc. option  !RS: Debugging: Extraneous
-    !INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error !RS: Debugging: Extraneous
-    !REAL AirProp(8)		!Air properties !RS: Debugging: Extraneous
 
     REAL,PARAMETER :: StandardDensity=1.2 !kg/m3
 
     REAL TAIIE,TSATEI,SUPCAL,SUPCL,TSATCI !XMR, !TROE,TSATEO,SXOE    !RS: Debugging: Set once but never used & Extraneous
     REAL SUPR,TSAVG,SXIC !TRIC,!DIFFER,Hsuc  !RS: Debugging: Set once but never used & Extraneous
-    !REAL ID,L,Elevation,mdot,xi,xo,mu,muVap,muLiq,rhoi,rhoo,rhoiVap    !RS: Debugging: Extraneous
-    !REAL rhoiLiq,rhooVap,rhooLiq,DPfric,DPmom,DPgrav,DPtot,DPvalve !RS: Debugging: Extraneous
     REAL TsatEvp,TsatCnd,Subcooling,Superheat,AccumDP,Xliq,Xvap
-    !INTEGER I  !RS: Debugging: Extraneous
     
     CHARACTER(LEN=13),PARAMETER :: FMT_800 = "(A41,F7.2,A5)"
     CHARACTER(LEN=13),PARAMETER :: FMT_804 = "(A32,F7.2,A5)"

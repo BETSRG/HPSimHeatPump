@@ -203,7 +203,7 @@ SUBROUTINE GetExteriorEnergyUseInput
   REAL(r64)    :: SchMin           ! Min value of schedule for item
   REAL(r64)    :: sumDesignLevel = 0 !for predefined report of design level total
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging      
 

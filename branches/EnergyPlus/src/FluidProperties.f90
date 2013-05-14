@@ -376,7 +376,7 @@ SUBROUTINE GetFluidPropertiesData
   LOGICAL ::  IsBlank
   INTEGER :: FluidNum
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
