@@ -8488,6 +8488,9 @@ SUBROUTINE ProduceRDDMDD
   LOGICAL :: SortByName
   INTEGER :: ItemPtr
   INTEGER :: write_stat
+  !INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
+  !  
+  !OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   !  See if Report Variables should be turned on
 
@@ -8508,14 +8511,14 @@ SUBROUTINE ProduceRDDMDD
   ENDIF
 
   IF (ProduceReportVDD == ReportVDD_Yes) THEN
-    OutputFileRVDD=GetNewUnitNumber()
+    OutputFileRVDD=GetNewUnitNumber() !149  !RS: Debugging: Trying to find error in WeatherDataFileNumber
     OPEN(OutputFileRVDD,File='eplusout.rdd', Action='write', iostat=write_stat)
     IF (write_stat /= 0) THEN
      CALL ShowFatalError('ProduceRDDMDD: Could not open file "eplusout.rdd" for output (write).')
     ENDIF
     WRITE(OutputFileRVDD,fmta) 'Program Version,'//TRIM(VerString)//','//TRIM(IDDVerString)
     WRITE(OutputFileRVDD,fmta) 'Var Type (reported time step),Var Report Type,Variable Name [Units]'
-    OutputFileMVDD=GetNewUnitNumber()
+    OutputFileMVDD=GetNewUnitNumber() !148  !RS: Debugging: Trying to find error in WeatherDataFileNumber
     OPEN(OutputFileMVDD,File='eplusout.mdd', Action='write', iostat=write_stat)
     IF (write_stat /= 0) THEN
      CALL ShowFatalError('ProduceRDDMDD: Could not open file "eplusout.mdd" for output (write).')
@@ -8523,14 +8526,14 @@ SUBROUTINE ProduceRDDMDD
     WRITE(OutputFileMVDD,fmta) 'Program Version,'//TRIM(VerString)//','//TRIM(IDDVerString)
     WRITE(OutputFileMVDD,fmta) 'Var Type (reported time step),Var Report Type,Variable Name [Units]'
   ELSEIF  (ProduceReportVDD == ReportVDD_IDF) THEN
-    OutputFileRVDD=GetNewUnitNumber()
+    OutputFileRVDD=GetNewUnitNumber() !149 !RS: Debugging: Trying to find error in WeatherDataFileNumber
     OPEN(OutputFileRVDD,File='eplusout.rdd', Action='write', iostat=write_stat)
     IF (write_stat /= 0) THEN
      CALL ShowFatalError('ProduceRDDMDD: Could not open file "eplusout.rdd" for output (write).')
     ENDIF
     WRITE(OutputFileRVDD,fmta) '! Program Version,'//TRIM(VerString)//','//TRIM(IDDVerString)
     WRITE(OutputFileRVDD,fmta) '! Output:Variable Objects (applicable to this run)'
-    OutputFileMVDD=GetNewUnitNumber()
+    OutputFileMVDD=GetNewUnitNumber() !148  !RS: Debugging: Trying to find error in WeatherDataFileNumber
     OPEN(OutputFileMVDD,File='eplusout.mdd', Action='write', iostat=write_stat)
     IF (write_stat /= 0) THEN
      CALL ShowFatalError('ProduceRDDMDD: Could not open file "eplusout.mdd" for output (write).')
@@ -8538,6 +8541,8 @@ SUBROUTINE ProduceRDDMDD
     WRITE(OutputFileMVDD,fmta) '! Program Version,'//TRIM(VerString)//','//TRIM(IDDVerString)
     WRITE(OutputFileMVDD,fmta) '! Output:Meter Objects (applicable to this run)'
   ENDIF
+  !WRITE(DebugFile,*) 'OutputFileRVDD=',OutputFileRVDD    !RS: Debugging: Trying to find error in WeatherDataFileNumber
+  !WRITE(DebugFile,*) 'OutputFileMVDD=',OutputFileMVDD    !RS: Debugging: Trying to find error in WeatherDataFileNumber
 
   ALLOCATE(VariableNames(NumVariablesForOutput))
   VariableNames(1:NumVariablesForOutput)=DDVariableTypes(1:NumVariablesForOutput)%VarNameOnly

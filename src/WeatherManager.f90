@@ -695,7 +695,7 @@ SUBROUTINE GetNextEnvironment(Available,ErrorsFound)
   LOGICAL, SAVE   :: FirstCall=.true.
   LOGICAL, SAVE   :: PrntEnvHeaders=.true.
   INTEGER :: Loop
-  !INTEGER :: Loop1 !RS: Debugging: Extraneous
+  INTEGER :: Loop1 !RS: Debugging: Extraneous
   CHARACTER(len=10) :: StDate
   CHARACTER(len=10) :: EnDate
   CHARACTER(len=10) :: string
@@ -712,9 +712,9 @@ SUBROUTINE GetNextEnvironment(Available,ErrorsFound)
   INTEGER :: TWeekDay
   INTEGER, DIMENSION(12) :: MonWeekDay
   INTEGER, DIMENSION(12) :: ActEndDayOfMonth
-  !INTEGER :: ThisDay   !RS: Debugging: Extraneous
-  !INTEGER :: JDay  !RS: Debugging: Extraneous
-  !INTEGER :: JDay1 !RS: Debugging: Extraneous
+  INTEGER :: ThisDay   !RS: Debugging: Extraneous
+  INTEGER :: JDay  !RS: Debugging: Extraneous
+  INTEGER :: JDay1 !RS: Debugging: Extraneous
   INTEGER :: JDay5Start
   INTEGER :: JDay5End
   CHARACTER(len=20) :: Source
@@ -2554,7 +2554,7 @@ SUBROUTINE ReadEPlusWeatherForDay(DayToRead,Environ,BackSpaceAfterRead)
   REAL(r64), SAVE :: NextHrBeamSolarRad
   REAL(r64), SAVE :: NextHrDifSolarRad
   LOGICAL :: RecordDateMatch
-  !INTEGER :: JDay5Start,JDay5End,Loop,TWeekDay !RS: Debugging: Extraneous
+  INTEGER :: JDay5Start,JDay5End,Loop,TWeekDay !RS: Debugging: Extraneous
 
   IF (DayToRead == 1) THEN
 
@@ -3352,6 +3352,11 @@ SUBROUTINE InterpretWeatherDataLine(Line,ErrorFound,WYear,WMonth,WDay,Whour,WMin
   INTEGER Count
   INTEGER, SAVE :: LCount=0
   LOGICAL :: DateInError
+  
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+
 
   LCount=LCount+1
   IF (StripCR) THEN
@@ -3536,15 +3541,24 @@ SUBROUTINE InterpretWeatherDataLine(Line,ErrorFound,WYear,WMonth,WDay,Whour,WMin
 
   RETURN
 
-  900 CALL ShowSevereError('Invalid Date info in Weather Line')
-      CALL ShowContinueError('Entire Data Line='//TRIM(SaveLine))
-      CALL ShowFatalError('Error in Reading Weather Data')
+  900 WRITE(DebugFile,*) 'Invalid Date Info in Weather Line'
+      WRITE(DebugFile,*) 'Entire Data Line='//TRIM(SaveLine)
+      WRITE(DebugFile,*) 'Error in Reading Weather Data'
+      WRITE(*,*) 'Error in Reading Weather Data'
+      !CALL ShowSevereError('Invalid Date info in Weather Line')    !RS: Debugging: Secret Search String
+      !CALL ShowContinueError('Entire Data Line='//TRIM(SaveLine))
+      !CALL ShowFatalError('Error in Reading Weather Data')
 
   901 WRITE(DateError,"(I4,'/',I2,'/',I2,' Hour#=',I2,' Min#=',I2)") WYear,WMonth,WDay,WHour,WMinute
-      CALL ShowSevereError('Invalid Weather Line at date='//TRIM(DateError))
-      CALL ShowContinueError('Full Data Line='//trim(SaveLine))
-      CALL ShowContinueError('Remainder of line='//TRIM(Line))
-      CALL ShowFatalError('Error in Reading Weather Data')
+      WRITE(DebugFile,*) 'Invalid Weather Line at date='//TRIM(DateError)
+      WRITE(DebugFile,*) 'Full Data Line='//trim(SaveLine)
+      WRITE(DebugFile,*) 'Remainder of line='//TRIM(Line)
+      WRITE(DebugFile,*) 'Error in Reading Weather Data'
+      !WRITE(DateError,"(I4,'/',I2,'/',I2,' Hour#=',I2,' Min#=',I2)") WYear,WMonth,WDay,WHour,WMinute
+      !CALL ShowSevereError('Invalid Weather Line at date='//TRIM(DateError))
+      !CALL ShowContinueError('Full Data Line='//trim(SaveLine))
+      !CALL ShowContinueError('Remainder of line='//TRIM(Line))
+      !CALL ShowFatalError('Error in Reading Weather Data') !RS: Debugging: Secret Search String
 
   902 WRITE(DateError,"(I4,'/',I2,'/',I2,' Hour#=',I2,' Min#=',I2)") WYear,WMonth,WDay,WHour,WMinute
       CALL ShowSevereError('Invalid Weather Line (no commas) at date='//TRIM(DateError))
@@ -3652,15 +3666,15 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
   LOGICAL, SAVE :: PrintDDHeader
   CHARACTER(len=3) AlpUseRain
   CHARACTER(len=3) AlpUseSnow
-  !REAL(r64) ::  LastHrBeamSolarRad     ! Direct normal solar irradiance    !RS: Debugging: Extraneous
-  !REAL(r64) ::  LastHrDifSolarRad      ! Sky diffuse horizontal solar irradiance   !RS: Debugging: Extraneous
-  !REAL(r64) ::  NextHrBeamSolarRad     ! Direct normal solar irradiance    !RS: Debugging: Extraneous
-  !REAL(r64) ::  NextHrDifSolarRad      ! Sky diffuse horizontal solar irradiance   !RS: Debugging: Extraneous
+  REAL(r64) ::  LastHrBeamSolarRad     ! Direct normal solar irradiance    !RS: Debugging: Extraneous
+  REAL(r64) ::  LastHrDifSolarRad      ! Sky diffuse horizontal solar irradiance   !RS: Debugging: Extraneous
+  REAL(r64) ::  NextHrBeamSolarRad     ! Direct normal solar irradiance    !RS: Debugging: Extraneous
+  REAL(r64) ::  NextHrDifSolarRad      ! Sky diffuse horizontal solar irradiance   !RS: Debugging: Extraneous
   LOGICAL :: ConstantHumidityRatio
   REAL(r64) OutHumRat
-  !REAL(r64) WgtHourNow !RS: Debugging: Extraneous
-  !REAL(r64) WgtPrevHour    !RS: Debugging: Extraneous
-  !REAL(r64) WgtNextHour    !RS: Debugging: Extraneous
+  REAL(r64) WgtHourNow !RS: Debugging: Extraneous
+  REAL(r64) WgtPrevHour    !RS: Debugging: Extraneous
+  REAL(r64) WgtNextHour    !RS: Debugging: Extraneous
   CHARACTER(len=75) :: StringOut
   TYPE (HourlyWeatherData) :: Wthr
   LOGICAL :: SaveWarmupFlag

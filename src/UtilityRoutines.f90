@@ -72,7 +72,7 @@ SUBROUTINE IssueOutputMessage(PrnLog, PrnCon, Message)
     CHARACTER(LEN=*), INTENT(IN) :: Message
 
     IF (PrnLog .EQ. 1) THEN
-        WRITE(6,*) Message
+        !WRITE(6,*) Message !RS: Debugging: File Check
     END IF
     IF (PrnCon .EQ. 1) THEN
         WRITE(*,*) Message

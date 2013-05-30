@@ -122,7 +122,7 @@
     !  INTEGER, EXTERNAL :: GetNewUnitNumber  ! External  function to "get" a unit number    !RS: Debugging
     !LogFile=GetNewUnitNumber()  !RS: Debugging: Trying to prevent errors with E+ by not hardcoding
     
-    OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
+    !OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
 
     !Flow:
 
@@ -273,7 +273,7 @@
     OUT(6)=MassCmp
     OUT(7)=ErrorFlag
     
-    WRITE(LogFile,*) 'Wcomp: ',Power    !RS: Debugging: Printing out the power
+    !WRITE(LogFile,*) 'Wcomp: ',Power    !RS: Debugging: Printing out the power !RS: Debugging: File Check
 
     RETURN
 

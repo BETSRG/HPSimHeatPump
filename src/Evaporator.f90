@@ -704,7 +704,7 @@ CONTAINS
     
     INTEGER :: LogFile       =153 !RS: Debugging file denotion, hopefully this works.
     
-    OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
+    !OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
 
     mRefTot =XIN(1)
     pRiCoil =XIN(2)
@@ -1304,7 +1304,7 @@ CONTAINS
 
     OUT(20)=ErrorFlag
     
-    WRITE(LogFile,*) 'Qevaporator: ',QCoil  !RS: Debugging: Printing out the heat transfer
+    !WRITE(LogFile,*) 'Qevaporator: ',QCoil  !RS: Debugging: Printing out the heat transfer
 
     CALL Evaporator_Helper_1
 
@@ -1838,7 +1838,7 @@ INTEGER NumSection,I,J,K,II,III,IV !Loop Counter
 CHARACTER(LEN=13),PARAMETER :: FMT_100 = "(32(A12,','))"
 CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),29(F10.3,','))"
 
-  OPEN (157,FILE='Evaporator.csv')
+  !OPEN (157,FILE='Evaporator.csv') !RS: Debugging: File Check
   !OPEN (17,FILE='Evaporator_longtubes.csv')
   !RS: Debugging: Setting each QModTot to 0 at the beginning, so previous values don't carry over
   QModLatTot=0
@@ -1856,12 +1856,12 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),29(F10.3,','))"
 
   IF (CoilType .NE. MCEVAPORATOR) THEN
 
-	  WRITE(157,FMT_100)'Nckt','Ntube','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
-				   'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
-				   'rhAi','rhAo','hci(kW/m2K)','hco(kW/m2K)', &
-				   'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
-				   'QmodTot(W)','QmodSens(W)','MassLiq(g)','MassVap(g)','Mass(g)','DryWet', &
-				   'mdotR(kg/hr)','mdotA(kg/s)'
+	  !WRITE(157,FMT_100)'Nckt','Ntube','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &   !RS: Debugging: File Check
+			!	   'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
+			!	   'rhAi','rhAo','hci(kW/m2K)','hco(kW/m2K)', &
+			!	   'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
+			!	   'QmodTot(W)','QmodSens(W)','MassLiq(g)','MassVap(g)','Mass(g)','DryWet', &
+			!	   'mdotR(kg/hr)','mdotA(kg/s)'
       !WRITE(17,FMT_100)'Nckt','Ntube','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
 	!			   'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
 !				   'rhAi','rhAo','hci(kW/m2K)','hco(kW/m2K)', &
@@ -2064,11 +2064,11 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),29(F10.3,','))"
                           xRoMod=1.0
                       END IF
 
-				      WRITE(157,FMT_104)I,J,K,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
-							       xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
-							       hciMod,hcoMod,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
-							       Qmod*1000,QmodSens*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
-							       FLOAT(DryWet),mRefCkt*3600,mAiMod
+				      !WRITE(157,FMT_104)I,J,K,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, & !RS: Debugging: File Check
+							   !    xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
+							   !    hciMod,hcoMod,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
+							   !    Qmod*1000,QmodSens*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
+							   !    FLOAT(DryWet),mRefCkt*3600,mAiMod
                 !     WRITE(17,FMT_104)I,J,K,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
 				!			       xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
 				!			       hciMod,hcoMod,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
@@ -2089,11 +2089,11 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),29(F10.3,','))"
   
   ELSE
 
-	  WRITE(157,FMT_100)'Nslab','Npass','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
-				   'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
-  				   'rhAi','rhAo','hci(W/m2K)','hco(W/m2K)', &
-				   'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
-				   'Qmod(W)','MassLiq(g)','MassVap(g)','MassTot(g)','mdotR(kg/h)','mdotA(kg/s)' 
+	  !WRITE(157,FMT_100)'Nslab','Npass','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &  !RS: Debugging: File Check
+			!	   'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
+  	!			   'rhAi','rhAo','hci(W/m2K)','hco(W/m2K)', &
+			!	   'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
+			!	   'Qmod(W)','MassLiq(g)','MassVap(g)','MassTot(g)','mdotR(kg/h)','mdotA(kg/s)' 
 
 	  DO I=1, Nl    !Number of Rows
 
@@ -2251,11 +2251,11 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),29(F10.3,','))"
                       END IF
 
 					  MassMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Mass
-					  WRITE(157,FMT_104)I,II,IV,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
-								   xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
-								   hciMod*1000,hcoMod*1000,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
-								   Qmod*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
-								   mRefMod*3600,mAiMod
+					  !WRITE(157,FMT_104)I,II,IV,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &   !RS: Debugging: File Check
+							!	   xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
+							!	   hciMod*1000,hcoMod*1000,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
+							!	   Qmod*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
+							!	   mRefMod*3600,mAiMod
 
 				  END DO !end Nmod
 
@@ -2267,7 +2267,7 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),29(F10.3,','))"
 
   END IF
 
-  CLOSE(157)
+  !CLOSE(157)   !RS: Debugging: File Check
 
   RETURN
 

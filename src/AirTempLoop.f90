@@ -44,9 +44,9 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     END IF
 
     IF (Unit .EQ. 1) THEN
-        WRITE (PrintString, FMT_800) '>> Evaporator entering air temperature: ',Temperature_F2C(TAIIE),Tunit
+       ! WRITE (PrintString, FMT_800) '>> Evaporator entering air temperature: ',Temperature_F2C(TAIIE),Tunit   !RS: Debugging: File Check
     ELSE
-        WRITE(*,FMT_800)'>> Evaporator entering air temperature: ',TAIIE,Tunit
+        !WRITE(*,FMT_800)'>> Evaporator entering air temperature: ',TAIIE,Tunit !RS: Debugging: File Check
     END IF
     CALL IssueOutputMessage(PrnLog, PrnCon, '')
     CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(PrintString))    
@@ -170,12 +170,12 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
 
     IF(SUPER.LT.0.0) THEN
         SXIC = -SUPER
-        WRITE(PrintString,FMT_804) '           Desired quality = ',SXIC*100,Xunit
+        !WRITE(PrintString,FMT_804) '           Desired quality = ',SXIC*100,Xunit  !RS: Debugging: File Check
     ELSE
         IF (Unit .EQ. 1) THEN
-            WRITE(PrintString,FMT_804) '           Desired superheat = ',SUPER/1.8,DTunit
+            !WRITE(PrintString,FMT_804) '           Desired superheat = ',SUPER/1.8,DTunit  !RS: Debugging: File Check
         ELSE
-            WRITE(PrintString,FMT_804) '           Desired superheat = ',SUPER,DTunit
+            !WRITE(PrintString,FMT_804) '           Desired superheat = ',SUPER,DTunit  !RS: Debugging: File Check
         END IF
     END IF
     CALL IssueOutputMessage(PrnLog, PrnCon, PrintString)
@@ -183,17 +183,17 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     !This IF block will always report one and only one message based on calculated "quality"
     IF (XICMP .LT. 0.0) THEN
         IF (Unit .EQ. 1) THEN
-            WRITE(PrintString,FMT_804) '       Calculated subcooling = ',-SUPCAL/1.8,DTunit
+            !WRITE(PrintString,FMT_804) '       Calculated subcooling = ',-SUPCAL/1.8,DTunit    !RS: Debugging: File Check
         ELSE
-            WRITE(PrintString,FMT_804) '       Calculated subcooling = ',-SUPCAL,DTunit
+            !WRITE(PrintString,FMT_804) '       Calculated subcooling = ',-SUPCAL,DTunit    !RS: Debugging: File Check
         END IF
     ELSEIF (XICMP.LT.1.0) THEN
-        WRITE(PrintString,FMT_804)'        Calculated quality = ',XICMP*100,Xunit
+        !WRITE(PrintString,FMT_804)'        Calculated quality = ',XICMP*100,Xunit  !RS: Debugging: File Check
     ELSE
         IF (Unit .EQ. 1) THEN
-            WRITE(PrintString,FMT_804)'        Calculated superheat = ',SUPCAL/1.8,DTunit
+            !WRITE(PrintString,FMT_804)'        Calculated superheat = ',SUPCAL/1.8,DTunit  !RS: Debugging: File Check
         ELSE  
-            WRITE(PrintString,FMT_804)'        Calculated superheat = ',SUPCAL,DTunit
+            !WRITE(PrintString,FMT_804)'        Calculated superheat = ',SUPCAL,DTunit  !RS: Debugging: File Check
         END IF
     END IF
     CALL IssueOutputMessage(PrnLog, PrnCon, PrintString)

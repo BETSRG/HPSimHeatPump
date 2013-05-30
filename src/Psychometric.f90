@@ -70,7 +70,7 @@ INTEGER ErrStat       !Error status
 
 !Flow**
   
-  OPEN (77,FILE='AirProp.err')
+  !OPEN (77,FILE='AirProp.err') !RS: Debugging: File Check
 
   TDB  = AirProp(1)
   W    = AirProp(2)
@@ -119,7 +119,7 @@ INTEGER ErrStat       !Error status
 !    END IF
   CASE DEFAULT
     ErrStat=1
-    WRITE(77,*)'AirProp error: Invalid input data'
+    !WRITE(77,*)'AirProp error: Invalid input data' !RS: Debugging: File Check
   END SELECT
 
   IF (TWB .GE. TDB) THEN
@@ -138,11 +138,11 @@ INTEGER ErrStat       !Error status
   AirPropErr=ErrStat
   IF (AirPropErr .EQ. 0) THEN
     IF (W .LT. 0 .OR. H .LT. 0 .OR. RhoD .LT. 0 .OR. RhoM .LT. 0) THEN
-      WRITE(77,*)'AirProp error: Invalid input data'
+      !WRITE(77,*)'AirProp error: Invalid input data'   !RS: Debugging: File Check
 	  AirPropErr=1
 	END IF
   END IF
   
-  CLOSE (77)   !RS: Debugging: This is crashing; just want to see if this line is the actual problem
+  !CLOSE (77)   !RS: Debugging: File Check
 
 END SUBROUTINE

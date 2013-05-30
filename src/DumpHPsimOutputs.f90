@@ -1340,102 +1340,102 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 CoilSurfTemp = 0.0
 CoilSurfTemp=CoilParams(2)%TSurfCoil*9/5+32 !RS Comment: Unit Conversion, from C to F
   !VB program report format
-  WRITE(5,*)
-  WRITE(5,FMT_2200)'Title (ver. 2.0 12/17/09): ',Title
-  WRITE(5,*)
-  WRITE(5,FMT_2204)'*** System Performance Summary ***'
-  WRITE(5,*)
-  WRITE(5,FMT_2208)'Evaporator gross capacity       ',QEVP,CapUnit
-  WRITE(5,FMT_2208)'Condenser gross capacity        ',QCND,CapUnit
-  WRITE(5,FMT_2208)'Gross sensible capacity         ',QEVPSENS,CapUnit
-  WRITE(5,FMT_2208)'Gross latent capacity           ',QEVPLAT,CapUnit
-  WRITE(5,FMT_2208)'Compressor power                ',PWRCMP,PwrUnit
-  WRITE(5,FMT_2208)'Refrigerant mass flow rate      ',MDOT,mdotUnit
-  WRITE(5,FMT_2208)'COP (coefficient of performance)',COP,NoUnit
-  WRITE(5,FMT_2208)'EER (energy efficiency ratio)   ',EER,EERunit
-  WRITE(5,FMT_2208)'SHR (sensible heat ratio)       ',SHR,NoUnit
-  WRITE(5,FMT_2208)'Condenser subcooling            ',TSUBOCND,DTunit
-  WRITE(5,FMT_2208)'Expansion device subcooling     ',TSUBIEXP,DTunit
-  WRITE(5,FMT_2208)'Evaporator superheat            ',TSUPOEVP,DTunit
-  WRITE(5,FMT_2208)'Compressor superheat            ',TSUPICMP,DTunit
-  WRITE(5,FMT_2208)'System charge                   ',CALCHG,MassUnit
-  WRITE(5,FMT_2208)'Refrigerant in compressor       ',MassCmp,MassUnit
-  WRITE(5,FMT_2208)'Refrigerant in condenser        ',MassCnd,MassUnit
-  WRITE(5,FMT_2208)'Refrigerant in evaporator       ',MassEvp,MassUnit
-  WRITE(5,FMT_2208)'Refrigerant in suction line     ',MassSucLn,MassUnit
-  WRITE(5,FMT_2208)'Refrigerant in discharge line   ',MassDisLn,MassUnit
-  WRITE(5,FMT_2208)'Refrigerant in liquid line      ',MassLiqLn,MassUnit
-  WRITE(5,FMT_2208)'Refrigerant in distributor tubes',MassDistube,MassUnit
-  WRITE(5,FMT_2208)'Refrigerant in accumulator      ',MassAccum,MassUnit
-  WRITE(5,FMT_2208)'Short tube diameter             ',Dshtb,MiniLunit
-  WRITE(5,FMT_2208)'TXV capacity                    ',Qtxv,SysUnit
-  WRITE(5,FMT_2208)'Capillary tube diameter         ',DcapTube,MiniLunit !Added for Cap. tube 04/13/2009 - ISI
-  WRITE(5,FMT_2208)'Capillary tube length           ',LcapTube,MiniLunit !Added for Cap. tube 04/13/2009 - ISI 
-  WRITE(5,*)
-  WRITE(5,FMT_2204)'***** Refrigerant Side Data *****'
-  WRITE(5,*)
-  IF (Unit .EQ. 2) THEN
-      WRITE(5,FMT_2212)'Location               ','Temperature (F)','Pressure (psig)','Enthalpy (Btu/lbm)','Saturation Temperature (F)','Quality (%)','Subcooling (R)','Superheat (R)','Location               '
-  ELSE
-      WRITE(5,FMT_2212)'Location               ','Temperature (C)','Pressure (kPa)','Enthalpy (kJ/kg)','Saturation Temperature (C)','Quality (%)','Subcooling (K)','Superheat (K)','Location               '
-  END IF
-  WRITE(5,FMT_2216)'Compressor suction     ',TICMP,PICMP,HICMP,TSATICMP,XICMP*100,TSUBICMP,TSUPICMP,'Compressor suction     '
-  WRITE(5,FMT_2216)'Compressor discharge   ',TOCMP,POCMP,HOCMP,TSATOCMP,XOCMP*100,TSUBOCMP,TSUPOCMP,'Compressor discharge   '
-  WRITE(5,FMT_2216)'Condenser inlet        ',TICND,PICND,HICND,TSATICND,XICND*100,TSUBICND,TSUPICND,'Condenser inlet        '
-  WRITE(5,FMT_2216)'Condenser outlet       ',TOCND,POCND,HOCND,TSATOCND,XOCND*100,TSUBOCND,TSUPOCND,'Condenser outlet       '
-  WRITE(5,FMT_2216)'Expansion device inlet ',TIEXP,PIEXP,HIEXP,TSATIEXP,XIEXP*100,TSUBIEXP,TSUPIEXP,'Expansion device inlet '
-  WRITE(5,FMT_2216)'Expansion device outlet',TOEXP,POEXP,HOEXP,TSATOEXP,XOEXP*100,TSUBOEXP,TSUPOEXP,'Expansion device outlet'
-  WRITE(5,FMT_2216)'Evaporator inlet       ',TIEVP,PIEVP,HIEVP,TSATIEVP,XIEVP*100,TSUBIEVP,TSUPIEVP,'Evaporator inlet       '
-  WRITE(5,FMT_2216)'Evaporator outlet      ',TOEVP,POEVP,HOEVP,TSATOEVP,XOEVP*100,TSUBOEVP,TSUPOEVP,'Evaporator outlet      '
-  WRITE(5,*)
-  WRITE(5,FMT_2204)'********* Air Side Data *********'
-  WRITE(5,*)
-  IF (Unit .EQ. 2) THEN
-      WRITE(5,FMT_2220)'Location         ','Dry bulb temperature (F)','Wet bulb temperature (F)','Relative Humidity (%)','Volumetric flow rate (CFM)','Pressure Drop (in-H2O)','Location         '
-  ELSE
-      WRITE(5,FMT_2220)'Location         ','Dry bulb temperature (C)','Wet bulb temperature (C)','Relative Humidity (%)','Volumetric flow rate (m^3/min)','Pressure Drop (Pa)','Location         '
-  END IF
-  WRITE(5,FMT_2224)'Condenser inlet  ',TDBICND,TWBICND,RHICND*100,CFMCND,0.0d0,'Condenser inlet  '
-  WRITE(5,FMT_2224)'Condenser outlet ',TDBOCND,TWBOCND,RHOCND*100,CFMCND,DPACND,'Condenser outlet '
-  WRITE(5,FMT_2224)'Evaporator inlet ',TDBIEVP,TWBIEVP,RHIEVP*100,CFMEVP,0.0d0,'Evaporator inlet '
-  WRITE(5,FMT_2224)'Evaporator outlet',TDBOEVP,TWBOEVP,RHOEVP*100,CFMEVP,DPAEVP,'Evaporator outlet'
-  WRITE(5,*)
-  WRITE(5,FMT_2204)'********* Pressure Drop *********'
-  WRITE(5,*)
-  WRITE(5,FMT_2208)'Accumulator                     ',AccumDP,Punit
-  WRITE(5,FMT_2208)'Filter Drier                    ',FilterDP,Punit   
-  WRITE(5,*)
-  WRITE(5,FMT_2204)'*********** Material ************'
-  WRITE(5,*)
-  WRITE(5,FMT_2208)'Aluminum Evaporator             ',WeightEvpAluminum,MassUnit
-  WRITE(5,FMT_2208)'Aluminum Condenser              ',WeightCndAluminum,MassUnit
-  WRITE(5,FMT_2208)'Copper Evaporator               ',WeightEvpCopper,MassUnit
-  WRITE(5,FMT_2208)'Copper Condenser                ',WeightCndCopper,MassUnit
-  WRITE(5,FMT_2208)'Copper Suction Line             ',WeightSucLn,MassUnit
-  WRITE(5,FMT_2208)'Copper Discharge Line           ',WeightDisLn,MassUnit
-  WRITE(5,FMT_2208)'Copper Valve-Indoor Coil Line   ',WeightValveIDCLn,MassUnit
-  WRITE(5,FMT_2208)'Copper Valve-Outdoor Coil Line  ',WeightValveODCLn,MassUnit
-  WRITE(5,FMT_2208)'Copper Liquid Line              ',WeightLiqLn,MassUnit
-  WRITE(5,*)
-  WRITE(5,FMT_2204)'*** Refrigerant Distributions ***'
-  WRITE(5,*)
-  WRITE(5,FMT_2208)'Condenser liquid length         ',CondLiqTubeLength,Lunit
-  WRITE(5,FMT_2208)'Condenser two-phase length      ',CondTwoPhaseTubeLength,Lunit
-  WRITE(5,FMT_2208)'Condenser vapor length          ',CondVapTubeLength,Lunit
-  WRITE(5,FMT_2208)'Evaporator two-phase length     ',EvapTwoPhaseTubeLength,Lunit
-  WRITE(5,FMT_2208)'Evaporator vapor length         ',EvapVapTubeLength,Lunit
-  WRITE(5,*)
-  WRITE(5,FMT_2204)'*** Frost Parameters ***'
-  WRITE(5,*)
-  WRITE(5,FMT_2208)'Evaporator Tube Area            ',EvapTubeArea,NoUnit
-  WRITE(5,FMT_2208)'Evaporator Fin Area             ',EvapFinArea,NoUnit
-  WRITE(5,FMT_2208)'Evaporator Total Area           ',EvapTotArea,NoUnit
-  WRITE(5,FMT_2208)'Evaporator Bare Area            ',EvapBareArea,NoUnit
-  WRITE(5,FMT_2208)'Evaporator Min Area             ',EvapMinArea,NoUnit
-  WRITE(5,FMT_2208)'Condenser Tube Area             ',CondTubeArea,NoUnit
-  WRITE(5,FMT_2208)'Condenser Fin Area              ',CondFinArea,NoUnit
-  WRITE(5,FMT_2208)'Evaporator Surface Temperature  ',CoilSurfTemp,NoUnit
-
+  !WRITE(5,*)   !RS: Debugging: File Check
+  !WRITE(5,FMT_2200)'Title (ver. 2.0 12/17/09): ',Title
+  !WRITE(5,*)
+  !WRITE(5,FMT_2204)'*** System Performance Summary ***'
+  !WRITE(5,*)
+  !WRITE(5,FMT_2208)'Evaporator gross capacity       ',QEVP,CapUnit
+  !WRITE(5,FMT_2208)'Condenser gross capacity        ',QCND,CapUnit
+  !WRITE(5,FMT_2208)'Gross sensible capacity         ',QEVPSENS,CapUnit
+  !WRITE(5,FMT_2208)'Gross latent capacity           ',QEVPLAT,CapUnit
+  !WRITE(5,FMT_2208)'Compressor power                ',PWRCMP,PwrUnit
+  !WRITE(5,FMT_2208)'Refrigerant mass flow rate      ',MDOT,mdotUnit
+  !WRITE(5,FMT_2208)'COP (coefficient of performance)',COP,NoUnit
+  !WRITE(5,FMT_2208)'EER (energy efficiency ratio)   ',EER,EERunit
+  !WRITE(5,FMT_2208)'SHR (sensible heat ratio)       ',SHR,NoUnit
+  !WRITE(5,FMT_2208)'Condenser subcooling            ',TSUBOCND,DTunit
+  !WRITE(5,FMT_2208)'Expansion device subcooling     ',TSUBIEXP,DTunit
+  !WRITE(5,FMT_2208)'Evaporator superheat            ',TSUPOEVP,DTunit
+  !WRITE(5,FMT_2208)'Compressor superheat            ',TSUPICMP,DTunit
+  !WRITE(5,FMT_2208)'System charge                   ',CALCHG,MassUnit
+  !WRITE(5,FMT_2208)'Refrigerant in compressor       ',MassCmp,MassUnit
+  !WRITE(5,FMT_2208)'Refrigerant in condenser        ',MassCnd,MassUnit
+  !WRITE(5,FMT_2208)'Refrigerant in evaporator       ',MassEvp,MassUnit
+  !WRITE(5,FMT_2208)'Refrigerant in suction line     ',MassSucLn,MassUnit
+  !WRITE(5,FMT_2208)'Refrigerant in discharge line   ',MassDisLn,MassUnit
+  !WRITE(5,FMT_2208)'Refrigerant in liquid line      ',MassLiqLn,MassUnit
+  !WRITE(5,FMT_2208)'Refrigerant in distributor tubes',MassDistube,MassUnit
+  !WRITE(5,FMT_2208)'Refrigerant in accumulator      ',MassAccum,MassUnit
+  !WRITE(5,FMT_2208)'Short tube diameter             ',Dshtb,MiniLunit
+  !WRITE(5,FMT_2208)'TXV capacity                    ',Qtxv,SysUnit
+  !WRITE(5,FMT_2208)'Capillary tube diameter         ',DcapTube,MiniLunit !Added for Cap. tube 04/13/2009 - ISI
+  !WRITE(5,FMT_2208)'Capillary tube length           ',LcapTube,MiniLunit !Added for Cap. tube 04/13/2009 - ISI 
+  !WRITE(5,*)
+  !WRITE(5,FMT_2204)'***** Refrigerant Side Data *****'
+  !WRITE(5,*)
+  !IF (Unit .EQ. 2) THEN
+  !    WRITE(5,FMT_2212)'Location               ','Temperature (F)','Pressure (psig)','Enthalpy (Btu/lbm)','Saturation Temperature (F)','Quality (%)','Subcooling (R)','Superheat (R)','Location               '
+  !ELSE
+  !    WRITE(5,FMT_2212)'Location               ','Temperature (C)','Pressure (kPa)','Enthalpy (kJ/kg)','Saturation Temperature (C)','Quality (%)','Subcooling (K)','Superheat (K)','Location               '
+  !END IF
+  !WRITE(5,FMT_2216)'Compressor suction     ',TICMP,PICMP,HICMP,TSATICMP,XICMP*100,TSUBICMP,TSUPICMP,'Compressor suction     '
+  !WRITE(5,FMT_2216)'Compressor discharge   ',TOCMP,POCMP,HOCMP,TSATOCMP,XOCMP*100,TSUBOCMP,TSUPOCMP,'Compressor discharge   '
+  !WRITE(5,FMT_2216)'Condenser inlet        ',TICND,PICND,HICND,TSATICND,XICND*100,TSUBICND,TSUPICND,'Condenser inlet        '
+  !WRITE(5,FMT_2216)'Condenser outlet       ',TOCND,POCND,HOCND,TSATOCND,XOCND*100,TSUBOCND,TSUPOCND,'Condenser outlet       '
+  !WRITE(5,FMT_2216)'Expansion device inlet ',TIEXP,PIEXP,HIEXP,TSATIEXP,XIEXP*100,TSUBIEXP,TSUPIEXP,'Expansion device inlet '
+  !WRITE(5,FMT_2216)'Expansion device outlet',TOEXP,POEXP,HOEXP,TSATOEXP,XOEXP*100,TSUBOEXP,TSUPOEXP,'Expansion device outlet'
+  !WRITE(5,FMT_2216)'Evaporator inlet       ',TIEVP,PIEVP,HIEVP,TSATIEVP,XIEVP*100,TSUBIEVP,TSUPIEVP,'Evaporator inlet       '
+  !WRITE(5,FMT_2216)'Evaporator outlet      ',TOEVP,POEVP,HOEVP,TSATOEVP,XOEVP*100,TSUBOEVP,TSUPOEVP,'Evaporator outlet      '
+  !WRITE(5,*)
+  !WRITE(5,FMT_2204)'********* Air Side Data *********'
+  !WRITE(5,*)
+  !IF (Unit .EQ. 2) THEN
+  !    WRITE(5,FMT_2220)'Location         ','Dry bulb temperature (F)','Wet bulb temperature (F)','Relative Humidity (%)','Volumetric flow rate (CFM)','Pressure Drop (in-H2O)','Location         '
+  !ELSE
+  !    WRITE(5,FMT_2220)'Location         ','Dry bulb temperature (C)','Wet bulb temperature (C)','Relative Humidity (%)','Volumetric flow rate (m^3/min)','Pressure Drop (Pa)','Location         '
+  !END IF
+  !WRITE(5,FMT_2224)'Condenser inlet  ',TDBICND,TWBICND,RHICND*100,CFMCND,0.0d0,'Condenser inlet  '
+  !WRITE(5,FMT_2224)'Condenser outlet ',TDBOCND,TWBOCND,RHOCND*100,CFMCND,DPACND,'Condenser outlet '
+  !WRITE(5,FMT_2224)'Evaporator inlet ',TDBIEVP,TWBIEVP,RHIEVP*100,CFMEVP,0.0d0,'Evaporator inlet '
+  !WRITE(5,FMT_2224)'Evaporator outlet',TDBOEVP,TWBOEVP,RHOEVP*100,CFMEVP,DPAEVP,'Evaporator outlet'
+  !WRITE(5,*)
+  !WRITE(5,FMT_2204)'********* Pressure Drop *********'
+  !WRITE(5,*)
+  !WRITE(5,FMT_2208)'Accumulator                     ',AccumDP,Punit
+  !WRITE(5,FMT_2208)'Filter Drier                    ',FilterDP,Punit   
+  !WRITE(5,*)
+  !WRITE(5,FMT_2204)'*********** Material ************'
+  !WRITE(5,*)
+  !WRITE(5,FMT_2208)'Aluminum Evaporator             ',WeightEvpAluminum,MassUnit
+  !WRITE(5,FMT_2208)'Aluminum Condenser              ',WeightCndAluminum,MassUnit
+  !WRITE(5,FMT_2208)'Copper Evaporator               ',WeightEvpCopper,MassUnit
+  !WRITE(5,FMT_2208)'Copper Condenser                ',WeightCndCopper,MassUnit
+  !WRITE(5,FMT_2208)'Copper Suction Line             ',WeightSucLn,MassUnit
+  !WRITE(5,FMT_2208)'Copper Discharge Line           ',WeightDisLn,MassUnit
+  !WRITE(5,FMT_2208)'Copper Valve-Indoor Coil Line   ',WeightValveIDCLn,MassUnit
+  !WRITE(5,FMT_2208)'Copper Valve-Outdoor Coil Line  ',WeightValveODCLn,MassUnit
+  !WRITE(5,FMT_2208)'Copper Liquid Line              ',WeightLiqLn,MassUnit
+  !WRITE(5,*)
+  !WRITE(5,FMT_2204)'*** Refrigerant Distributions ***'
+  !WRITE(5,*)
+  !WRITE(5,FMT_2208)'Condenser liquid length         ',CondLiqTubeLength,Lunit
+  !WRITE(5,FMT_2208)'Condenser two-phase length      ',CondTwoPhaseTubeLength,Lunit
+  !WRITE(5,FMT_2208)'Condenser vapor length          ',CondVapTubeLength,Lunit
+  !WRITE(5,FMT_2208)'Evaporator two-phase length     ',EvapTwoPhaseTubeLength,Lunit
+  !WRITE(5,FMT_2208)'Evaporator vapor length         ',EvapVapTubeLength,Lunit
+  !WRITE(5,*)
+  !WRITE(5,FMT_2204)'*** Frost Parameters ***'
+  !WRITE(5,*)
+  !WRITE(5,FMT_2208)'Evaporator Tube Area            ',EvapTubeArea,NoUnit
+  !WRITE(5,FMT_2208)'Evaporator Fin Area             ',EvapFinArea,NoUnit
+  !WRITE(5,FMT_2208)'Evaporator Total Area           ',EvapTotArea,NoUnit
+  !WRITE(5,FMT_2208)'Evaporator Bare Area            ',EvapBareArea,NoUnit
+  !WRITE(5,FMT_2208)'Evaporator Min Area             ',EvapMinArea,NoUnit
+  !WRITE(5,FMT_2208)'Condenser Tube Area             ',CondTubeArea,NoUnit
+  !WRITE(5,FMT_2208)'Condenser Fin Area              ',CondFinArea,NoUnit
+  !WRITE(5,FMT_2208)'Evaporator Surface Temperature  ',CoilSurfTemp,NoUnit
+  !
 !!VL: Previously: 
 !!1007 FORMAT(A17,A42)
 !!1008 FORMAT(A13,F10.3,A10,A10,A13,F10.3,A10)
