@@ -2171,7 +2171,7 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
   USE HVACVariableRefrigerantFlow, ONLY: SimulateVRF
   USE RefrigeratedCase, ONLY: SimAirChillerSet
   USE UserDefinedComponents, ONLY: SimZoneAirUserDefined
-  USE DataGlobals   !RS: Debugging: CurrentTime
+  USE DataGlobals, ONLY: CurrentTime   !RS: Debugging: CurrentTime
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 

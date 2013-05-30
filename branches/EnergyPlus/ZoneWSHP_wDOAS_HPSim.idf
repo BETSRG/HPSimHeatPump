@@ -116,9 +116,9 @@
   RunPeriod,
     ,                        !- Name
     8, !12,                       !- Begin Month	!RS: Changing to single day instead of whole year
-    1, !1, !21,                       !- Begin Day of Month
+    2, !1, !21,                       !- Begin Day of Month
     8, !12,                      !- End Month
-    1, !10, !21,                      !- End Day of Month
+    3, !10, !21,                      !- End Day of Month
     Tuesday,                 !- Day of Week for Start Day
     Yes,                     !- Use Weather File Holidays and Special Days
     Yes,                     !- Use Weather File Daylight Saving Period
@@ -127,11 +127,11 @@
     Yes;                     !- Use Weather File Snow Indicators
 
   Site:Location,
-    Denver Centennial CO USA WMO=724666,  !- Name
-    39.57,                   !- Latitude {deg}
-    -104.85,                 !- Longitude {deg}
+    Denver Centennial Golden Nr CO USA WMO=724666,  !- Name !RS: Debugging: Golden Nr added in
+    39.74, !57,                   !- Latitude {deg}
+    -105.18, !4.85,                 !- Longitude {deg}
     -7.00,                   !- Time Zone {hr}
-    1793.00;                 !- Elevation {m}
+    1829; !793.00;                 !- Elevation {m}
 
  !  WMO=724666 Time Zone=NAM        (GMT-07:00) Mountain Time (US & Canada)
  !  Data Source=ASHRAE 2009 Annual Design Conditions
@@ -145,8 +145,8 @@
 
   SizingPeriod:DesignDay,	!RS: Switching back
     Denver Centennial Ann Clg 1% Condns DB=>MWB,  !- Name
-    8,                       !- Month
-    1,                      !- Day of Month
+    7,                       !- Month
+    21,                      !- Day of Month
     SummerDesignDay,         !- Day Type
     32,                      !- Maximum Dry-Bulb Temperature {C}
     15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}

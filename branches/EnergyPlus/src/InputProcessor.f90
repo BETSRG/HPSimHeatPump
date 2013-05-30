@@ -318,7 +318,7 @@ SUBROUTINE ProcessInput
 
    CALL InitSecretObjects
    
-   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+   !OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging !RS: Debugging: File Check
 
    EchoInputFile=GetNewUnitNumber()
    OPEN(unit=EchoInputFile,file='eplusout.audit',action='write',iostat=write_stat)
@@ -497,7 +497,7 @@ SUBROUTINE ProcessInput
      IF (CountErr == 0) THEN
 !       CALL ShowSevereError('IP: Potential errors in IDF processing -- see .audit file for details.')  !RS: Secret Search String
        WRITE(EchoInputFile,fmta) ' Potential errors in IDF processing:'
-       WRITE(DebugFile,*) CountErr  !RS: Debugging
+       !WRITE(DebugFile,*) CountErr  !RS: Debugging !RS: Debugging: File Check
      ENDIF
      CountErr=CountErr+1
      Which=SectionsOnFile(Loop)%FirstRecord
@@ -539,7 +539,7 @@ SUBROUTINE ProcessInput
      IF (.not. ObjectDef(Loop)%RequiredObject) CYCLE
      IF (ObjectDef(Loop)%NumFound > 0) CYCLE
 !     CALL ShowSevereError('IP: Required Object="'//trim(ObjectDef(Loop)%Name)//'" not found in IDF.')  !RS: Secret Search String
-    WRITE(DebugFile,*) 'Required Object="'//TRIM(ObjectDef(Loop)%Name)//'" not found in IDF.'
+    !WRITE(DebugFile,*) 'Required Object="'//TRIM(ObjectDef(Loop)%Name)//'" not found in IDF.'  !RS: Debugging: File Check
      NumMiscErrorsFound=NumMiscErrorsFound+1
    ENDDO
 
@@ -558,7 +558,7 @@ SUBROUTINE ProcessInput
 
    IF (NumMiscErrorsFound > 0) THEN
      !CALL ShowSevereError('IP: Other miscellaneous errors found in input') !RS: Secret Search String
-     WRITE(DebugFile,*) 'Other miscellaneous errors found in input'
+     !WRITE(DebugFile,*) 'Other miscellaneous errors found in input'    !RS: Debugging: File Check
    ENDIF
 
    IF (OverallErrorFlag) THEN
@@ -841,6 +841,10 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
   INTEGER,SAVE :: PrevSizeNumNumeric = -1
   INTEGER,SAVE :: PrevCount  = -1
   INTEGER,SAVE :: PrevSizeNumAlpha = -1
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+
 
   IF (.not. ALLOCATED(AlphaorNumeric)) THEN
     ALLOCATE (AlphaorNumeric(0:MaxANArgs))
@@ -1080,7 +1084,8 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
           ErrorsFound=.true.
         ENDIF
         IF (InputLine(InputLineLength:InputLineLength) /= '\') THEN
-          CALL ShowWarningError('IP: IDD line~'//TRIM(IPTrimSigDigits(NumLines))//' \ expected on this line',EchoInputFile)
+          !CALL ShowWarningError('IP: IDD line~'//TRIM(IPTrimSigDigits(NumLines))//' \ expected on this line',EchoInputFile)    !RS: Secret Search String
+          WRITE(DebugFile,*) 'IP: IDD line~'//TRIM(IPTrimSigDigits(NumLines))//' \ expected on this line',EchoInputFile
         ENDIF
       ELSE
         CALL ReadInputLine(IDDFile,CurPos,BlankLine,InputLineLength,EndofFile)
@@ -1350,7 +1355,7 @@ SUBROUTINE ProcessInputDataFile
    
      INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
-  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  !OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging  !RS: Debugging: File Check
 
    MaxIDFRecords=ObjectsIDFAllocInc
    NumIDFRecords=0
@@ -1409,7 +1414,7 @@ SUBROUTINE ProcessInputDataFile
      DO Pos=1,NumObjectDefs
        IF (ObjectDef(Pos)%RequiredObject .and. ObjectDef(Pos)%NumFound == 0) THEN
 !         CALL ShowSevereError('IP: No items found for Required Object='//TRIM(ObjectDef(Pos)%Name)) !RS: Debugging: Removing error msg. call so it won't crash
-         WRITE(DebugFile,*) 'IP: No items found for Required Object=' //TRIM(ObjectDef(Pos)%Name)   !RS: Secret Search String
+         !WRITE(DebugFile,*) 'IP: No items found for Required Object=' //TRIM(ObjectDef(Pos)%Name)   !RS: Secret Search String  !RS: Debugging: File Check
          NumMiscErrorsFound=NumMiscErrorsFound+1
        ENDIF
      ENDDO
@@ -1597,7 +1602,7 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
 
   INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
-  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  !OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
   
   SqueezedObject=MakeUPPERCase(ADJUSTL(ProposedObject))
   IF (LEN_TRIM(ADJUSTL(ProposedObject)) > MaxObjectNameLength) THEN
@@ -1660,8 +1665,8 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
       IF (Found == 0) THEN
         !CALL ShowSevereError('IP: IDF line~'//TRIM(IPTrimSigDigits(NumLines))//  &
         !   ' Did not find "'//TRIM(ADJUSTL(ProposedObject))//'" in list of Objects',EchoInputFile) !RS: Secret Search String
-        WRITE(DebugFile,*) 'IP: IDF line~'//TRIM(IPTrimSigDigits(NumLines))//' Did not find "'&
-            //TRIM(ADJUSTL(ProposedObject))//'" in list of Objects'
+        !WRITE(DebugFile,*) 'IP: IDF line~'//TRIM(IPTrimSigDigits(NumLines))//' Did not find "'&    !RS: Debugging: File Check
+        !    //TRIM(ADJUSTL(ProposedObject))//'" in list of Objects'
         ! Will need to parse to next ;
         ErrFlag=.true.
       ELSEIF (RepObjects(Found)%Deleted) THEN
@@ -2847,7 +2852,7 @@ SUBROUTINE ReadInputLine(UnitNumber,CurPos,BlankLine,InputLineLength,EndofFile, 
           INTEGER endcol
           CHARACTER(len=52) cNumLines
           LOGICAL LineTooLong
-
+          
       ErrFlag=.false.
       LineTooLong=.false.
       READ(UnitNumber,fmta,IOSTAT=ReadStat) InputLine
@@ -3862,7 +3867,7 @@ SUBROUTINE VerifyName(NameToVerify,NamesList,NumOfNames,ErrorFound,IsBlank,Strin
     Found=FindItem(NameToVerify,NamesList,NumOfNames)
     IF (Found /= 0) THEN
       !CALL ShowSevereError(TRIM(StringToDisplay)//', duplicate name='//TRIM(NameToVerify))  !RS: Secret Search String
-      WRITE(DebugFile,*) TRIM(StringToDisplay)//', duplicate name='//TRIM(NameToVerify)
+      !WRITE(DebugFile,*) TRIM(StringToDisplay)//', duplicate name='//TRIM(NameToVerify)    !RS: Debugging: File Check
       ErrorFound=.true.
     ENDIF
   ENDIF
@@ -4314,7 +4319,7 @@ SUBROUTINE ReportOrphanRecordObjects
   
   INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
-  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  !OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
   
   
   ALLOCATE(OrphanObjectNames(NumIDFRecords),OrphanNames(NumIDFRecords))
@@ -4396,9 +4401,11 @@ SUBROUTINE ReportOrphanRecordObjects
   ELSEIF (NumOrphObjNames > 0) THEN
     !CALL ShowMessage('There are '//trim(IPTrimSigDigits(NumOrphObjNames))//' unused objects in input.')
     !CALL ShowMessage('Use Output:Diagnostics,DisplayUnusedObjects; to see them.')  !RS: Secret Search String
-    WRITE(DebugFile,*) 'There are '//TRIM(IPTrimSigDigits(NumOrphObjNames))//' unused objects in input.'
-    WRITE(DebugFile,*) 'Use Output:Diagnostics,DisplayUnusedObjects; to see them.'
+    !WRITE(DebugFile,*) 'There are '//TRIM(IPTrimSigDigits(NumOrphObjNames))//' unused objects in input.'   !RS: Debugging: File Check
+    !WRITE(DebugFile,*) 'Use Output:Diagnostics,DisplayUnusedObjects; to see them.' !RS: Debugging: File Check
   ENDIF
+  
+  !WRITE(DebugFile,*) 'EchoInputFile=',EchoInputFile    !RS: Debugging: Trying to find error in WeatherDataFileNumber   !RS: Debugging: File Check
 
   DEALLOCATE(OrphanObjectNames)
   DEALLOCATE(OrphanNames)
@@ -4852,7 +4859,7 @@ SUBROUTINE PreProcessorCheck(PreP_Fatal)
   CHARACTER(len=1) :: Multiples
   INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
 
-  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  !OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   cCurrentModuleObject='Output:PreprocessorMessage'
   NumPrePM=GetNumObjectsFound(TRIM(cCurrentModuleObject))
@@ -4883,7 +4890,7 @@ SUBROUTINE PreProcessorCheck(PreP_Fatal)
         CASE('FATAL')
           !CALL ShowSevereError(TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//  &  !RS: Secret Search String
           !   '" has the following Fatal condition'//TRIM(Multiples)//':')
-          WRITE(DebugFile,*) TRIM(cCurrentModuleObject), ', ', TRIM(cALphaArgs(1)), ', ', TRIM(Multiples)
+          !WRITE(DebugFile,*) TRIM(cCurrentModuleObject), ', ', TRIM(cALphaArgs(1)), ', ', TRIM(Multiples)  !RS: Debugging: File Check
           PreP_Fatal=.true.
         CASE DEFAULT
           CALL ShowSevereError(TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//  &
@@ -4900,7 +4907,7 @@ SUBROUTINE PreProcessorCheck(PreP_Fatal)
           CountM=CountM+2
         ELSE
           !CALL ShowContinueError(TRIM(cAlphaArgs(CountM))) !RS: Secret Search String
-          WRITE(DebugFile,*) TRIM(cAlphaArgs(CountM))
+          !WRITE(DebugFile,*) TRIM(cAlphaArgs(CountM))  !RS: Debugging: File Check
           CountM=CountM+1
         ENDIF
       ENDDO
@@ -4950,20 +4957,20 @@ SUBROUTINE CompactObjectsCheck
   LOGICAL :: CompactObjectsFound
   INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
-  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  !OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   CompactObjectsFound=.false.
 
   IF ( ANY(IDFRecords%Name(1:13) == 'HVACTEMPLATE:') .or. ANY(IDFRecords%Name(1:13) == 'HVACTemplate:') ) THEN
 !    CALL ShowSevereError('HVACTemplate objects are found in the IDF File.')    !RS: Secret Search String
-    WRITE(DebugFile, *) 'HVACTemplate objects are found in the IDF File.'
+    !WRITE(DebugFile, *) 'HVACTemplate objects are found in the IDF File.'  !RS: Debugging: File Check
     CompactObjectsFound=.true.
   ENDIF
 
   IF (CompactObjectsFound) THEN
     !CALL ShowFatalError('Program Terminates: The ExpandObjects program has'// &
     !  ' not been run or is not in your EnergyPlus.exe folder.')    !RS: Secret Search String
-    WRITE (DebugFile, *) 'They wanted the program to terminate, but we are forcing it through anyhow'
+    !WRITE (DebugFile, *) 'They wanted the program to terminate, but we are forcing it through anyhow'  !RS: Debugging: File Check
   ENDIF
 
   RETURN
@@ -5007,7 +5014,7 @@ SUBROUTINE ParametricObjectsCheck
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
-    OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+    !OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
 
   IF ( ANY(IDFRecords%Name(1:11) == 'PARAMETRIC:') .or. ANY(IDFRecords%Name(1:11) == 'Parametric:') .or.   &
@@ -5015,7 +5022,7 @@ SUBROUTINE ParametricObjectsCheck
     !CALL ShowSevereError('Parametric objects are found in the IDF File.')
     !CALL ShowFatalError('Program Terminates: The ParametricPreprocessor program has'// &
     !  ' not been run.')    !RS: Secret Search String
-    WRITE(DebugFile,*) 'Parametric objects are found in the IDF file. The ParametricPreprocessor program has not been run.'
+    !WRITE(DebugFile,*) 'Parametric objects are found in the IDF file. The ParametricPreprocessor program has not been run.'    !RS: Debugging: File Check
   ENDIF
 
   RETURN

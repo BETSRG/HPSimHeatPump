@@ -76,7 +76,3 @@ REAL DP !Pressure drop, kPa
 RETURN
 
 END SUBROUTINE CalcFilterDrierDP
-
-
-
-

@@ -43,9 +43,9 @@ REAL FUNCTION CHARGM(DTVALU,IERR)
     IF(ICHRGE.EQ.2) THEN
         IF(DTVALU.LT.0.0) THEN
             DTVAL = -DTVALU/200.
-            WRITE(sPrint,FMT_1004) DTVAL
+            !WRITE(sPrint,FMT_1004) DTVAL
         ELSE
-            WRITE(sPrint,FMT_1003) DTVAL
+            !WRITE(sPrint,FMT_1003) DTVAL
         END IF
         
     ELSE
@@ -53,28 +53,28 @@ REAL FUNCTION CHARGM(DTVALU,IERR)
             Xunit=' (%)'
             IF (MODE .EQ. 1) THEN
                 DTVAL = 1.0 + DTVALU/500.
-                WRITE(sPrint,FMT_1000)'Compressor suction quality: ',DTVAL*100,Xunit
+                !WRITE(sPrint,FMT_1000)'Compressor suction quality: ',DTVAL*100,Xunit   !RS: Debugging: File Check
             ELSE
                 DTVAL = 1.0 + DTVALU/500.
                 DTVAL = -DTVALU/200.
-                WRITE(sPrint,FMT_1000)'Condenser quality: ',DTVAL*100,Xunit
+                !WRITE(sPrint,FMT_1000)'Condenser quality: ',DTVAL*100,Xunit    !RS: Debugging: File Check
             END IF
         ELSE
             IF (MODE .EQ. 1) THEN
                 IF (Unit .EQ. 1) THEN
                     DTunit=' (K)'
-                    WRITE(sPrint,FMT_1000)'Compressor suction supreheat: ',DTVAL/1.8,DTunit
+                    !WRITE(sPrint,FMT_1000)'Compressor suction supreheat: ',DTVAL/1.8,DTunit    !RS: Debugging: File Check
                 ELSE
                     DTunit=' (R)'
-                    WRITE(sPrint,FMT_1000)'Compressor suction supreheat: ',DTVAL,DTunit
+                    !WRITE(sPrint,FMT_1000)'Compressor suction supreheat: ',DTVAL,DTunit    !RS: Debugging: File Check
                 END IF
             ELSE
                 IF (Unit .EQ. 1) THEN
                     DTunit=' (K)'
-                    WRITE(sPrint,FMT_1000)'Condenser subcooling: ',DTVAL/1.8,DTunit
+                    !WRITE(sPrint,FMT_1000)'Condenser subcooling: ',DTVAL/1.8,DTunit    !RS: Debugging: File Check
                 ELSE
                     DTunit=' (R)'
-                    WRITE(sPrint,FMT_1000)'Condenser subcooling: ',DTVAL,DTunit
+                    !WRITE(sPrint,FMT_1000)'Condenser subcooling: ',DTVAL,DTunit    !RS: Debugging: File Check
                 END IF
             END IF
 
@@ -86,15 +86,15 @@ REAL FUNCTION CHARGM(DTVALU,IERR)
 
     IF (Unit .EQ. 1) THEN
         MassUnit = ' (kg)'
-        WRITE(sPrint,FMT_1000)'           Desired charge = ',REFCHG*0.4536,MassUnit
+        !WRITE(sPrint,FMT_1000)'           Desired charge = ',REFCHG*0.4536,MassUnit    !RS: Debugging: File Check
         CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(sPrint))
-        WRITE(sPrint,FMT_1000)'        Calculated charge = ',CALCHG*0.4536,MassUnit
+        !WRITE(sPrint,FMT_1000)'        Calculated charge = ',CALCHG*0.4536,MassUnit    !RS: Debugging: File Check
         CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(sPrint))
     ELSE
         MassUnit = ' (lbm)'
-        WRITE(sPrint,FMT_1000)'           Desired charge = ',REFCHG,MassUnit
+        !WRITE(sPrint,FMT_1000)'           Desired charge = ',REFCHG,MassUnit   !RS: Debugging: File Check
         CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(sPrint))
-        WRITE(sPrint,FMT_1000)'        Calculated charge = ',CALCHG,MassUnit
+        !WRITE(sPrint,FMT_1000)'        Calculated charge = ',CALCHG,MassUnit   !RS: Debugging: File Check
         CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(sPrint))
     END IF
 

@@ -407,7 +407,7 @@
           SA=SS(P,TA)
       END DO
 
-      WRITE(1,FMT_1)
+      !WRITE(1,FMT_1)   !RS: Debugging: File Check
       
       TPSS=T
 
@@ -437,7 +437,7 @@
       T1=TK/100.
       CPS=(C1+C2*T1**E1+C3*T1**E2+C4*T1)/18.015
       IF(TK.LT.300..OR.TK.GT.3500.) THEN
-          WRITE(1,FMT_13)
+          !WRITE(1,FMT_13)  !RS: Debugging: File Check
       END IF
       
       RETURN
