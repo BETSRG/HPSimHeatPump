@@ -3,7 +3,7 @@
 MODULE HeatPumpInput
 
 USE DataSimulation
-USE DataGlobals, ONLY: RefName !RS: Using to define RefName
+USE DataGlobals, ONLY: RefName, DOASFlag !RS: Using to define RefName !RS: Used to define a DOAS Flag
 USE DataInterfaces, ONLY: SetupOutputVariable
 
 PRIVATE
@@ -256,6 +256,15 @@ REAL :: IDC_TubeID
   Ref$=Alphas(4)    !Refrigerant Name
   
   RefChg = Numbers(2)    !Design Refrigerant Charge Mass
+  
+  SELECT CASE(TRIM(MakeUPPERcase(Alphas(5))))
+  CASE('TRUE')
+      DOASFlag=1
+  CASE('FALSE')
+      DOASFlag=0
+  CASE DEFAULT
+      DOASFlag=0    !RS: Default to having return air
+  END SELECT
 
 
   !***************** Compressor data *****************

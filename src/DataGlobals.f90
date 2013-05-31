@@ -166,6 +166,7 @@ INTEGER :: CacheIPErrorFile    =0 ! Cache IP errors until IDF processing done.
 LOGICAL :: AnyIdealCondEntSetPointInModel=.FALSE.  ! true if there is any ideal condenser entering set point manager in model. 
 LOGICAL :: RunOptCondEntTemp =.FALSE. ! true if the ideal condenser entering set point optimization is running
 INTEGER :: RefrigIndex = 0  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+INTEGER :: DOASFlag=0   !RS: This tells if the system has return air or is a DOAS
 
 
 !     NOTICE
