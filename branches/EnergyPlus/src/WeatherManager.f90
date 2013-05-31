@@ -4738,11 +4738,15 @@ SUBROUTINE OpenEPlusWeatherFile(ErrorsFound,ProcessHeader)
   integer, external :: FindNonSpace
   LOGICAL EPWOpen
   integer :: unitnumber
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   INQUIRE(FILE='in.epw',NUMBER=unitnumber,OPENED=EPWOpen)
   IF (EPWOpen) CLOSE(unitnumber)
 
   WeatherFileUnitNumber=GetNewUnitNumber()
+  WRITE(DebugFile,*) 'WeatherFileUnitNumber=',WeatherFileUnitNumber !RS: Debugging: Finding out what all the Weather file numbers are
   OPEN(WeatherFileUnitNumber,File='in.epw',ERR=9999,action='read')
 
   IF (ProcessHeader) THEN

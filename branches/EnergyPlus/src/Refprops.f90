@@ -3452,14 +3452,14 @@ REAL FUNCTION GetInterpolatedSatProp(Temperature, PropTemps, LiqProp, VapProp, Q
       IF (TempRangeErrCount <= 15) THEN
         CALL ShowSevereError('GetInterpolatedSatProp: Saturation temperature for interpolation is out of range '// &
                              'of data supplied: **')
-        !WRITE(CErrCount,*) Temperature !RS: Debugging: File Check
+        WRITE(CErrCount,*) Temperature 
         CErrCount=ADJUSTL(CErrCount)
         CALL ShowContinueError('Refrigerant temperature = '//TRIM(CErrCount))
-        !WRITE(CErrCount,*) GetInterpolatedSatProp  !RS: Debugging: File Check
+        WRITE(CErrCount,*) GetInterpolatedSatProp 
         CErrCount=ADJUSTL(CErrCount)
         CALL ShowContinueError('Returned saturated property value = '//TRIM(CErrCount))
       ELSEIF (TempRangeErrCount>1 .AND. MOD(TempRangeErrCount,500) == 0) THEN
-        !WRITE(CErrCount,*) TempRangeErrCount   !RS: Debugging: File Check
+        WRITE(CErrCount,*) TempRangeErrCount
         CErrCount=ADJUSTL(CErrCount)
         CALL ShowSevereError('GetInterpolatedSatProp: Refrigerant temperature for interpolation out of range error '// &
                               'continues: saturated pressure error count = '//TRIM(CErrCount)//' **')

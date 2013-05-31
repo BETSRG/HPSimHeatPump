@@ -199,6 +199,9 @@ SUBROUTINE ShowPsychrometricSummary
   EchoInputFile=FindUnitNumber('eplusout.audit')
   IF (EchoInputFile == 0) RETURN
   IF (ANY(NumTimesCalled>0)) THEN
+      IF(EchoInputFile .EQ. 9 .OR. EchoInputFile .EQ. 10 .OR. EchoInputFile .EQ. 12) THEN
+        WRITE(*,*) 'Error with EchoInputFile'    !RS: Debugging: Searching for a mis-set file number
+      END IF
     WRITE(EchoInputFile,fmta) 'RoutineName,#times Called,Avg Iterations'
     DO Loop=1,NumToReport
       write(istring,*) NumTimesCalled(Loop)
@@ -1719,7 +1722,9 @@ FUNCTION PsyTwbFnTdbWPb(TDB,dW,Patm,calledfrom) RESULT(TWB)
       IF (TWB .GT. TDB)  Then
         TWB = TDB
       End IF
-
+    IF(OutputFileDebug .EQ. 9 .OR. OutputFileDebug .EQ. 10 .OR. OutputFileDebug .EQ. 12) THEN
+        WRITE(*,*) 'Error with OutputFileDebug'    !RS: Debugging: Searching for a mis-set file number
+    END IF
 #ifdef generatetestdata
    write(outputfiledebug,*) Tdb,dW,Patm,Twb
 #endif

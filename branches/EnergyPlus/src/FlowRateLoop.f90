@@ -101,10 +101,10 @@
         IF (Unit .EQ. 1) THEN
 
             IF (PrnLog .EQ. 1) THEN
-                !WRITE(6,*) !RS: Debugging: File Check
+                WRITE(6,*)
             END IF
             IF (PrnLog .EQ. 1) THEN
-                !WRITE(6,FMT_900)'>> Compressor discharge saturation temperature: ',(TSOCMP-32)*5/9,Tunit   !RS: Debugging: File Check
+                WRITE(6,FMT_900)'>> Compressor discharge saturation temperature: ',(TSOCMP-32)*5/9,Tunit 
             END IF
             WRITE(*,*)
             WRITE(*,FMT_900)'>> Compressor discharge saturation temperature: ',(TSOCMP-32)*5/9,Tunit
@@ -112,10 +112,10 @@
         ELSE
 
             IF (PrnLog .EQ. 1) THEN
-                !WRITE(6,*) !RS: Debugging: File Check
+                WRITE(6,*)
             END IF
             IF (PrnLog .EQ. 1) THEN
-                !WRITE(6,FMT_900)'>> Compressor discharge saturation temperature: ',TSOCMP,Tunit    !RS: Debugging: File Check
+                WRITE(6,FMT_900)'>> Compressor discharge saturation temperature: ',TSOCMP,Tunit
             END IF
             WRITE(*,*)
             WRITE(*,FMT_900)'>> Compressor discharge saturation temperature: ',TSOCMP,Tunit
@@ -361,7 +361,7 @@
                 WRITE(*,*)'-- WARNING -- Highside: Refprop error.'
             END IF
             IF (PrnLog .EQ. 1) THEN
-                !WRITE(6,*)'-- WARNING -- Highside: Refprop error.' !RS: Debugging: File Check
+                WRITE(6,*)'-- WARNING -- Highside: Refprop error.' 
             END IF
             WRITE(*,*)'Trying another iterating value....'
             IERR=1
@@ -376,7 +376,7 @@
                 WRITE(*,*)'-- WARNING -- Highside: Ref. temperature lower than inlet air temperature.'
             END IF
             IF (PrnLog .EQ. 1) THEN
-                !WRITE(6,*)'-- WARNING -- Highside: Ref. temperature lower than inlet air temperature.' !RS: Debugging: File Check
+                WRITE(6,*)'-- WARNING -- Highside: Ref. temperature lower than inlet air temperature.' 
             END IF
             WRITE(*,*)'Trying another iterating value....'
             IF (TSOCMP .LE. TSICMP) THEN
@@ -385,8 +385,8 @@
                     WRITE(*,*)'Try another condenser or compressor.'
                 END IF
                 IF (PrnLog .EQ. 1) THEN
-                    !WRITE(6,*)'## ERROR ## Highside: No solution for this configuration.'  !RS: Debugging: File Check
-                    !WRITE(6,*)'Try another condenser or compressor.'   !RS: Debugging: File Check
+                    WRITE(6,*)'## ERROR ## Highside: No solution for this configuration.' 
+                    WRITE(6,*)'Try another condenser or compressor.'  
                 END IF
                 STOP
             END IF
@@ -422,7 +422,7 @@
             IF(DTRIE.LT.0.0) THEN
                 SXIE = -DTRIE
                 IF (PrnLog .EQ. 1) THEN
-                    !WRITE(6,FMT_904)'           Desired quality = ',SXIE*100,Xunit !RS: Debugging: File Check
+                    WRITE(6,FMT_904)'           Desired quality = ',SXIE*100,Xunit 
                 END IF
                 IF (PrnCon .EQ. 1) THEN
                     WRITE(*,FMT_904)'           Desired quality = ',SXIE*100,Xunit
@@ -430,14 +430,14 @@
             ELSE
                 IF (Unit .EQ. 1) THEN
                     IF (PrnLog .EQ. 1) THEN
-                        !WRITE(6,FMT_904)'           Desired subcooling = ',DTRIE/1.8,DTunit    !RS: Debugging: File Check
+                        WRITE(6,FMT_904)'           Desired subcooling = ',DTRIE/1.8,DTunit    
                     END IF
                     IF (PrnCon .EQ. 1) THEN
                         WRITE(*,FMT_904)'           Desired subcooling = ',DTRIE/1.8,DTunit
                     END IF
                 ELSE
                     IF (PrnLog .EQ. 1) THEN
-                        !WRITE(6,FMT_904)'           Desired subcooling = ',DTRIE,DTunit    !RS: Debugging: File Check
+                        WRITE(6,FMT_904)'           Desired subcooling = ',DTRIE,DTunit    
                     END IF
                     IF (PrnCon .EQ. 1) THEN
                         WRITE(*,FMT_904)'           Desired subcooling = ',DTRIE,DTunit
@@ -448,14 +448,14 @@
             IF(XIEXP.GT.0.0) THEN
                 IF (XIEXP .LT. 1) THEN
                     IF (PrnLog .EQ. 1) THEN
-                        !WRITE(6,FMT_904)'        Calculated quality = ',XIEXP*100,Xunit    !RS: Debugging: File Check
+                        WRITE(6,FMT_904)'        Calculated quality = ',XIEXP*100,Xunit
                     END IF
                     IF (PrnCon .EQ. 1) THEN
                         WRITE(*,FMT_904)'        Calculated quality = ',XIEXP*100,Xunit
                     END IF
                 ELSE
                     IF (PrnLog .EQ. 1) THEN
-                        !WRITE(6,FMT_904)'      Calculated superheat = ',-CDTRIE,DTunit !RS: Debugging: File Check
+                        WRITE(6,FMT_904)'      Calculated superheat = ',-CDTRIE,DTunit
                     END IF
                     IF (PrnCon .EQ. 1) THEN
                         WRITE(*,FMT_904)'      Calculated superheat = ',-CDTRIE,DTunit
@@ -464,14 +464,14 @@
             ELSE
                 IF (Unit .EQ. 1) THEN
                     IF (PrnLog .EQ. 1) THEN
-                        !WRITE(6,FMT_904)'        Calculated subcooling = ',CDTRIE/1.8,DTunit   !RS: Debugging: File Check
+                        WRITE(6,FMT_904)'        Calculated subcooling = ',CDTRIE/1.8,DTunit
                     END IF
                     IF (PrnCon .EQ. 1) THEN
                         WRITE(*,FMT_904)'        Calculated subcooling = ',CDTRIE/1.8,DTunit
                     END IF
                 ELSE  
                     IF (PrnLog .EQ. 1) THEN
-                        !WRITE(6,FMT_904)'        Calculated subcooling = ',CDTRIE,DTunit   !RS: Debugging: File Check
+                        WRITE(6,FMT_904)'        Calculated subcooling = ',CDTRIE,DTunit
                     END IF
                     IF (PrnCon .EQ. 1) THEN
                         WRITE(*,FMT_904)'        Calculated subcooling = ',CDTRIE,DTunit
@@ -517,8 +517,8 @@
                         WRITE(*,*)'## ERROR ## Highside: Short tube solution error.'
                     END IF
                     IF (PrnLog .EQ. 1) THEN
-                        !WRITE(6,*) !RS: Debugging: File Check
-                        !WRITE(6,*)'## ERROR ## Highside: Short tube solution error.'   !RS: Debugging: File Check
+                        WRITE(6,*)
+                        WRITE(6,*)'## ERROR ## Highside: Short tube solution error.'
                     END IF
                     ShTbPAR(2)=ShTbPAR(2) !*1.2   !RS: Debugging: Pulled from HPDM 761
                             CYCLE
@@ -551,26 +551,26 @@
                 WRITE(*,FMT_904)'     Compressor flow rate = ',XMR*UnitM,MdotUnit
             END IF
             IF (PrnLog .EQ. 1) THEN
-                !WRITE(6,FMT_904)'     Compressor flow rate = ',XMR*UnitM,MdotUnit  !RS: Debugging: File Check
+                WRITE(6,FMT_904)'     Compressor flow rate = ',XMR*UnitM,MdotUnit
             END IF
             IF (PrnCon .EQ. 1) THEN
                 WRITE(*,FMT_904)'    Exp. device flow rate = ',XMRFLD*UnitM,MdotUnit
             END IF
             IF (PrnLog .EQ. 1) THEN
-                !WRITE(6,FMT_904)'    Exp. device flow rate = ',XMRFLD*UnitM,MdotUnit   !RS: Debugging: File Check
+                WRITE(6,FMT_904)'    Exp. device flow rate = ',XMRFLD*UnitM,MdotUnit 
             END IF
         ELSE
             IF (PrnCon .EQ. 1) THEN
                 WRITE(*,FMT_904)'     Compressor flow rate = ',XMR,MdotUnit
             END IF
             IF (PrnLog .EQ. 1) THEN
-                !WRITE(6,FMT_904)'     Compressor flow rate = ',XMR,MdotUnit    !RS: Debugging: File Check
+                WRITE(6,FMT_904)'     Compressor flow rate = ',XMR,MdotUnit
             END IF
             IF (PrnCon .EQ. 1) THEN
                 WRITE(*,FMT_904)'    Exp. device flow rate = ',XMRFLD,MdotUnit
             END IF
             IF (PrnLog .EQ. 1) THEN
-                !WRITE(6,FMT_904)'    Exp. device flow rate = ',XMRFLD,MdotUnit !RS: Debugging: File Check
+                WRITE(6,FMT_904)'    Exp. device flow rate = ',XMRFLD,MdotUnit
             END IF
         END IF
 

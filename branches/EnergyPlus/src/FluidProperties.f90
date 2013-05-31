@@ -3389,6 +3389,9 @@ SUBROUTINE GetFluidPropertiesData
         !CALL ShowContinueError('First Occurance at Temp('//TRIM(RoundSigDigits(TempLoop-1))//  &
         !         ') {'//TRIM(RoundSigDigits(FluidTemps(Loop)%Temps(TempLoop-1),3))//'} >= Temp('//  &
         !         TRIM(RoundSigDigits(TempLoop))//') {'//TRIM(RoundSigDigits(FluidTemps(Loop)%Temps(TempLoop),3))//'}') !RS: Secret Search String
+        IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10) THEN
+            WRITE(*,*) 'Error with DebugFile'    !RS: Debugging: Searching for a mis-set file number
+        END IF
         WRITE(DebugFile,*) 'GetFluidPropertiesData: '//TRIM(CurrentModuleObject)//' lists must have data in ascending order'
         WRITE(DebugFile,*) 'Error occurs in '//TRIM(CurrentModuleObject)//' name='//TRIM(FluidTemps(Loop)%Name)
         WRITE(DebugFile,*) 'First Occurance at Temp('//TRIM(RoundSigDigits(TempLoop-1))// &
@@ -3477,6 +3480,9 @@ SUBROUTINE GetFluidPropertiesData
         !CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
         !CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="Pressure" and '//trim(cAlphaFieldNames(3))//  &
         !   '="FluidGas".') !RS: Secret Search String
+        IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10) THEN
+            WRITE(*,*) 'Error with OutputFileDebug'    !RS: Debugging: Searching for a mis-set file number
+        END IF
         WRITE(DebugFile,*) 'GetFluidPropertiesData: No Gas/Fluid Saturation Pressure found'
         WRITE(DebugFile,*) 'Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name)
         WRITE(DebugFile,*) 'with '//TRIM(cAlphaFieldNames(2))//'="Pressure" and '//TRIM(cAlphaFieldNames(3))//'="FluidGas".'
@@ -3550,6 +3556,9 @@ SUBROUTINE GetFluidPropertiesData
         !CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object:')
         !CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="Enthalpy" and '//trim(cAlphaFieldNames(3))//  &
         !   '="Fluid".')
+        IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10) THEN
+            WRITE(*,*) 'Error with OutputFileDebug'    !RS: Debugging: Searching for a mis-set file number
+        END IF
         WRITE(DebugFile,*) 'GetFluidPropertiesData: No Saturated Fluid Enthalpy found'
         WRITE(DebugFile,*) 'Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name)
         WRITE(DebugFile,*) 'Need properties to be entered for '//TRIM(CurrentModuleObject)//' object:'
@@ -3626,6 +3635,9 @@ SUBROUTINE GetFluidPropertiesData
         !CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
         !CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="Enthalpy" and '//trim(cAlphaFieldNames(3))//  &
         !   '="FluidGas".') !RS: Secret Search String
+        IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10) THEN
+            WRITE(*,*) 'Error with OutputFileDebug'    !RS: Debugging: Searching for a mis-set file number
+        END IF
         WRITE(DebugFile,*) 'GetFluidPropertiesData: No Saturated Gas/Fluid Enthalpy found'
         WRITE(DebugFile,*) 'Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name)
         WRITE(DebugFile,*) 'Need properties to be entered for '//TRIM(CurrentModuleObject)//' object.'
@@ -3699,6 +3711,9 @@ SUBROUTINE GetFluidPropertiesData
         !CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
         !CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="SpecificHeat" and '//trim(cAlphaFieldNames(3))//  &
         !   '="Fluid".')    !RS: Secret Search String
+        IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10) THEN
+            WRITE(*,*) 'Error with OutputFileDebug'    !RS: Debugging: Searching for a mis-set file number
+        END IF
         WRITE(DebugFile,*) 'GetFluidPropertiesData: No Saturated Fluid Specific Heat found'
         WRITE(DebugFile,*) 'Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name)
         WRITE(DebugFile,*) 'Need properties to be entered for '//TRIM(CurrentModuleObject)//' object.'
@@ -3775,6 +3790,9 @@ SUBROUTINE GetFluidPropertiesData
         !CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
         !CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="SpecificHeat" and '//trim(cAlphaFieldNames(3))//  &
         !   '="FluidGas".') !RS: Secret Search String
+        IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10) THEN
+            WRITE(*,*) 'Error with OutputFileDebug'    !RS: Debugging: Searching for a mis-set file number
+        END IF
         WRITE(DebugFile,*) 'GetFluidPropertiesData: No Saturated Gas/Fluid Specific Heat found'
         WRITE(DebugFile,*) 'Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name)
         WRITE(DebugFile,*) 'Need properties to be entered for '//TRIM(CurrentModuleObject)//' object.'
@@ -3848,6 +3866,9 @@ SUBROUTINE GetFluidPropertiesData
         !CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
         !CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="Density" and '//trim(cAlphaFieldNames(3))//  &
         !   '="Fluid".')    !RS: Secret Search String
+        IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10) THEN
+            WRITE(*,*) 'Error with OutputFileDebug'    !RS: Debugging: Searching for a mis-set file number
+        END IF
         WRITE(DebugFile,*) 'GetFluidPropertiesData: No Saturated Fluid Density found'
         WRITE(DebugFile,*) 'Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name)
         WRITE(DebugFile,*) 'Need properties to be entered for '//TRIM(CurrentModuleObject)//' object.'
@@ -3926,6 +3947,9 @@ SUBROUTINE GetFluidPropertiesData
         !CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
         !CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="Density" and '//trim(cAlphaFieldNames(3))//  &
         !   '="FluidGas".') !RS: Secret Search String
+        IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10) THEN
+            WRITE(*,*) 'Error with OutputFileDebug'    !RS: Debugging: Searching for a mis-set file number
+        END IF
         WRITE(DebugFile,*) 'GetFluidPropertiesData: No Saturated Gas/Fluid Density found.'
         WRITE(DebugFile,*) 'Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name)
         WRITE(DebugFile,*) 'Need properties to be entered for '//TRIM(CurrentModuleObject)//' object.'
@@ -3991,6 +4015,9 @@ SUBROUTINE GetFluidPropertiesData
     IF (NumOfPressPts == 0) THEN
       !CALL ShowSevereError('GetFluidPropertiesData: No pressure data found for superheated enthalpy')
       !CALL ShowContinueError('Error occurs in '//TRIM(CurrentModuleObject)//' Name='//TRIM(RefrigData(Loop)%Name)) !RS: Secret Search String
+      IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10) THEN
+            WRITE(*,*) 'Error with OutputFileDebug'    !RS: Debugging: Searching for a mis-set file number
+        END IF
       WRITE(DebugFile,*) 'GetFluidPropertiesData: No pressure data found for superheated enthalpy'
       WRITE(DebugFile,*) 'Error occurs in '//TRIM(CurrentModuleObject)//' Name='//TRIM(RefrigData(Loop)%Name)
       ErrorsFound=.true.
@@ -4009,6 +4036,9 @@ SUBROUTINE GetFluidPropertiesData
         !CALL ShowSevereError('GetFluidPropertiesData: No match for temperature array name found with '// &
         !                     'superheated enthalpy data')
         !CALL ShowContinueError('Error occurs in '//TRIM(CurrentModuleObject)//' Name='//TRIM(RefrigData(Loop)%Name))   !RS: Secret Search String
+        IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10) THEN
+            WRITE(*,*) 'Error with OutputFileDebug'    !RS: Debugging: Searching for a mis-set file number
+        END IF
         WRITE(DebugFile,*) 'GetFluidPropertiesData: No match for temperature array name found with superheated enthalpy data'
         WRITE(DebugFile,*) 'Error occurs in '//TRIM(CurrentModuleObject)//' Name='//TRIM(RefrigData(Loop)%Name)
         ErrorsFound=.true.
@@ -4163,6 +4193,9 @@ SUBROUTINE GetFluidPropertiesData
     IF (NumOfPressPts == 0) THEN
       !CALL ShowSevereError('GetFluidPropertiesData: No pressure data found for superheated density')
       !CALL ShowContinueError('Error occurs in '//TRIM(CurrentModuleObject)//' Name='//TRIM(RefrigData(Loop)%Name)) !RS: Secret Search String
+      IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10) THEN
+            WRITE(*,*) 'Error with OutputFileDebug'    !RS: Debugging: Searching for a mis-set file number
+        END IF
       WRITE(DebugFile,*) 'GetFluidPropertiesData: No pressure data found for superheated density'
       WRITE(DebugFile,*) 'Error occurs in '//TRIM(CurrentModuleObject)//' Name='//TRIM(RefrigData(Loop)%Name)
       ErrorsFound=.true.
@@ -4818,6 +4851,9 @@ SUBROUTINE GetFluidPropertiesData
 
   IF (ErrorsFound) THEN
     !CALL ShowFatalError('GetFluidPropertiesData: Previous errors in input cause program termination.') !RS: Secret Search String
+    IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10) THEN
+            WRITE(*,*) 'Error with OutputFileDebug'    !RS: Debugging: Searching for a mis-set file number
+        END IF
     WRITE(DebugFile,*) 'GetFluidPropertiesData: Previous errors in input cause program termination. Or, at least, they should. We are currently still ignoring them.'
   ENDIF
 
@@ -5398,6 +5434,9 @@ SUBROUTINE ReportAndTestGlycols
   DO GlycolNum=1,NumOfGlycols
     GlycolIndex=0     ! used in routine calls -- value is returned when first 0
     ! Lay out the basic values:
+    IF(OutputFileDebug .EQ. 9 .OR. OutputFileDebug .EQ. 10 .OR. OutputFileDebug .EQ. 12) THEN
+        WRITE(*,*) 'Error with OutputFileDebug'    !RS: Debugging: Searching for a mis-set file number
+    END IF
     IF (GlycolData(GlycolNum)%GlycolName /= ' ') THEN
       write(OutputFileDebug,fmta) 'Glycol='//TRIM(GlycolData(GlycolNum)%Name)//  &
             ', Mixture fluid='//TRIM(GlycolData(GlycolNum)%GlycolName)
@@ -5682,6 +5721,9 @@ SUBROUTINE ReportAndTestRefrigerants
   DO RefrigNum=1,NumOfRefrigerants
     RefrigIndex=0     ! used in routine calls -- value is returned when first 0
     ! Lay out the basic values:
+    IF(OutputFileDebug .EQ. 9 .OR. OutputFileDebug .EQ. 10 .OR. OutputFileDebug .EQ. 12) THEN
+        WRITE(*,*) 'Error with OutputFileDebug'    !RS: Debugging: Searching for a mis-set file number
+    END IF
     IF (RefrigData(RefrigNum)%Name /= ' ') THEN
       write(OutputFileDebug,fmta) 'Refrigerant='//TRIM(RefrigData(RefrigNum)%Name)
     ENDIF

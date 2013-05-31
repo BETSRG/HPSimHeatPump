@@ -113,7 +113,7 @@
     INTEGER(2),SAVE :: LastCoolingMode !RS: Debugging: Trying to only allocate/reallocate if cooling mode changes
     INTEGER:: ErrorFlag !RS: Debugging: Trying to clean out ErrorFlag at the start of every run; don't think it'll actually work, though
     
-  !OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
+  OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
     
     !Flow**:
 
@@ -131,8 +131,8 @@
     EvapIN(8)=0   !VL Comment: EvapIN(8)=0*WinTrans !stillwater 0.63 kW/m2 !Harbin 0.52 kW/m2 !Singapore 0.88 kW/m2   ! VL_Index_Replace	! VL_User_Setting
     EvapPAR(29)=0.8   ! VL_Magic_Number    ! VL_Index_Replace
 
-    !OPEN(5,FILE='YorkHP.out')     ! VL_User_Setting -- file name
-    !OPEN(6,FILE='YorkHP.log')     ! VL_User_Setting -- file name
+    OPEN(5,FILE='YorkHP.out')     ! VL_User_Setting -- file name
+    OPEN(6,FILE='YorkHP.log')     ! VL_User_Setting -- file name
     !OPEN(154,FILE='YorkHP.out')     ! VL_User_Setting -- file name
     !OPEN(155,FILE='YorkHP.log')     ! VL_User_Setting -- file name
 
@@ -379,18 +379,18 @@
         EvapOUT(3)=Temperature_F2C(TSICMP) !Initialize for reversing valve calculation        
 
         !IsCoolingMode=CondPAR(27)	! VL_Index_Replace  !RS: Debugging: Removing as IsCoolingMode is set above
-        !WRITE(6,*)'Heat Pump Design Tool (ver. 2.0 12/17/09)'  !RS: Debugging: File Check
+        WRITE(6,*)'Heat Pump Design Tool (ver. 2.0 12/17/09)'  
         WRITE(*,*)'Heat Pump Design Tool (ver. 2.0 12/17/09)'
         IF (IsCoolingMode .EQ. 1) THEN
             IF (PrnLog .EQ. 1) THEN
-                !WRITE(6,*)'***** Cooling Mode *****'   !RS: Debugging: File Check
+                WRITE(6,*)'***** Cooling Mode *****'
             END IF
             IF (PrnCon .EQ. 1) THEN
                 WRITE(*,*)'***** Cooling Mode *****'
             END IF
         ELSE
             IF (PrnLog .EQ. 1) THEN
-                !WRITE(6,*)'***** Heating Mode *****'   !RS: Debugging: File Check
+                WRITE(6,*)'***** Heating Mode *****' 
             END IF
             IF (PrnCon .EQ. 1) THEN
                 WRITE(*,*)'***** Heating Mode *****'
@@ -405,7 +405,7 @@
 
         CASE(FIXEDORIFICESIM)
             IF (PrnLog .EQ. 1) THEN
-                !WRITE(6,*)'***** System Simulation (Fixed Orifice) *****'  !RS: Debugging: File Check
+                WRITE(6,*)'***** System Simulation (Fixed Orifice) *****'
             END IF
             IF (PrnCon .EQ. 1) THEN
                 WRITE(*,*)'***** System Simulation (Fixed Orifice) *****'
@@ -425,7 +425,7 @@
 
         CASE(FIXEDSUPERHEATSIM)
             IF (PrnLog .EQ. 1) THEN
-                !WRITE(6,*)'***** Design Calculation (Fixed Orifice) *****' !RS: Debugging: File Check
+                WRITE(6,*)'***** Design Calculation (Fixed Orifice) *****' 
             END IF
             IF (PrnCon .EQ. 1) THEN
                 WRITE(*,*)'***** Design Calculation (Fixed Orifice) *****'
@@ -444,7 +444,7 @@
 
         CASE(TXVSIMULATION)
             IF (PrnLog .EQ. 1) THEN
-                !WRITE(6,*)'***** System Simulation (TXV) *****'    !RS: Debugging: File Check
+                WRITE(6,*)'***** System Simulation (TXV) *****' 
             END IF
             IF (PrnCon .EQ. 1) THEN
                 WRITE(*,*)'***** System Simulation (TXV) *****'
@@ -546,7 +546,7 @@
         
                 DTROC=SUBCOOL !Specified subcooling
                 !1st run is for coarse convergence criteria
-                CALL HPDM(DTVALU)
+                CALL HPDM(DTVALU)  !RS: Debugging: Testing 123
 
                 FLAG_GOTO_30 = .TRUE.
                 IF (FLAG_GOTO_30 .EQ. .FALSE.) THEN
@@ -579,8 +579,8 @@
         WRITE(*,*)
         WRITE(*,*)'HPSim Calculation completed successfully.'
         WRITE(*,FMT_103)'Time Spent (Min):',TimeSpent/60
-        !WRITE(5,*)     !RS: Debugging: File Check
-        !WRITE(5,FMT_103)'Time Spent (Min):',TimeSpent/60   !RS: Debugging: File Check 
+        WRITE(5,*)
+        WRITE(5,FMT_103)'Time Spent (Min):',TimeSpent/60
         !WRITE(*,*)'Press return to end program.'      
         !READ(*,*)                                     !For parametric run, comment this line
 
@@ -614,7 +614,7 @@
 
     CLOSE(5)
     CLOSE(6)
-    CLOSE(9)
+    !CLOSE(9)   !RS: Debugging: Not sure what this is attached to...
 
     CALL PrintCondenserResult
     !CALL EndCondenserCoil  !RS: Debugging: Removing for the moment
@@ -622,10 +622,13 @@
     CALL GetQOut(QUnitOut,LatOutputProvided)    !RS: Testing: Trying to read variables from PrintEvaporator File
     
     QRemain=ZoneSysEnergyDemand(1)%RemainingOutputRequired-QUnitOut !-LatOutputProvided    !RS: Debugging: Qouts are load into zone
-    !WRITE(LogFile,*) 'QSensOut: ',QUnitOut  !RS: Debugging: Printing out some data !RS: Debugging: File Check
-    !WRITE(LogFile,*) 'QLatOut: ',LatOutputProvided
-    !WRITE(LogFile,*) 'QZone: ',ZoneSysEnergyDemand(1)%TotalOutputRequired
-    !WRITE(LogFile,*) 'Q left to meet required Q: ',QRemain
+    IF(LogFile .EQ. 9 .OR. LogFile .EQ. 10) THEN
+        WRITE(*,*) 'Error with OutputFileDebug'    !RS: Debugging: Searching for a mis-set file number
+    END IF
+    WRITE(LogFile,*) 'QSensOut: ',QUnitOut  !RS: Debugging: Printing out some data
+    WRITE(LogFile,*) 'QLatOut: ',LatOutputProvided
+    WRITE(LogFile,*) 'QZone: ',ZoneSysEnergyDemand(1)%TotalOutputRequired
+    WRITE(LogFile,*) 'Q left to meet required Q: ',QRemain
     
     IF (MODE .NE. CONDENSERUNITSIM) THEN
         CALL PrintEvaporatorResult 

@@ -116,9 +116,9 @@
   RunPeriod,
     ,                        !- Name
     8, !12,                       !- Begin Month	!RS: Changing to single day instead of whole year
-    2, !1, !21,                       !- Begin Day of Month
+    1, !1, !21,                       !- Begin Day of Month
     8, !12,                      !- End Month
-    3, !10, !21,                      !- End Day of Month
+    7, !10, !21,                      !- End Day of Month
     Tuesday,                 !- Day of Week for Start Day
     Yes,                     !- Use Weather File Holidays and Special Days
     Yes,                     !- Use Weather File Daylight Saving Period

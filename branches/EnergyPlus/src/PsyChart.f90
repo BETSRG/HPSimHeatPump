@@ -1218,7 +1218,7 @@
     !!*** Saturation temperature has not converged after maximum specified
     !!*** iterations. Print error message, set return error flag, and RETURN
 
-    !WRITE(77,FMT_1001) itmax   !RS: Debugging: File Check
+    WRITE(77,FMT_1001) itmax  
     
     !!VL: Previously: 
 !!1001 FORMAT(/1X,'*** ERROR IN FUNCTION SatTemp ***'/ 1X,'    Saturation temperature has not converged after ',I2,' iterations'/)
@@ -1317,7 +1317,7 @@
     !!*** Temperature has not converged after maximum specified
     !!*** iterations. Print error message and RETURN
 
-    !WRITE(77,FMT_1001) itmax   !RS: Debugging: File Check
+    WRITE(77,FMT_1001) itmax 
     !!VL: Previously: 
 !!1001 FORMAT(/1X,'*** ERROR IN FUNCTION TAIRSAT ***'/1X,'    Temperature has not converged after ',I2,' iterations'/)
 
@@ -1462,7 +1462,7 @@
     !*** Wet bulb temperature has not converged after maximum specified
     !*** iterations. Print error message, set return error flag, and RETURN
 
-    !WRITE(77,FMT_1009) itmax   !RS: Debugging: File Check
+    WRITE(77,FMT_1009) itmax
     IsCvg=.FALSE.
     
     !!VL: Previously:
