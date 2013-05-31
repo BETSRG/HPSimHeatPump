@@ -1310,7 +1310,6 @@ SUBROUTINE GetBranchInput
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
-
     IF (GetInputFlag) THEN
       CurrentModuleObject='Branch'
       NumOfBranches=GetNumObjectsFound(TRIM(CurrentModuleObject))

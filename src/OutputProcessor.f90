@@ -927,11 +927,18 @@ SUBROUTINE GetReportVariableInput
     INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  
+  IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10) THEN
+    WRITE(*,*) 'Error with DebugFile'    !RS: Debugging: Searching for a mis-set file number
+  END IF
 
   ! First check environment variable to see of possible override for minimum reporting frequency
   IF (cMinReportFrequency /= ' ') THEN
     CALL DetermineFrequency(cMinReportFrequency,Item)  ! Use local variable Item so as not to possibly confuse things
     MinReportFrequency=MAX(MinReportFrequency,Item)
+    IF(OutputFileInits .EQ. 9 .OR. OutputFileInits .EQ. 10 .OR. OutputFileInits .EQ. 12) THEN
+        WRITE(*,*) 'Error with DebugFile'    !RS: Debugging: Searching for a mis-set file number
+    END IF
     WRITE(OutputFileInits,800)
     WRITE(OutputFileInits,801) TRIM(FreqNotice(MinReportFrequency,1)),TRIM(cMinReportFrequency)
   ENDIF

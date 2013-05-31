@@ -628,6 +628,10 @@ SUBROUTINE ValidateComponent(CompType,CompName,IsNotOK,CallString)
   IsNotOK=.false.
 
   ItemNum=GetObjectItemNum(CompType,CompName)
+  
+  IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10) THEN
+    WRITE(*,*) 'Error with DebugFile'    !RS: Debugging: Searching for a mis-set file number
+  END IF
 
   IF (ItemNum < 0) THEN
     !CALL ShowSevereError('During '//TRIM(CallString)//' Input, Invalid Component Type input='//TRIM(CompType))

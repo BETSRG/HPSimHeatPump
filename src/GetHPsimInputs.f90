@@ -1270,7 +1270,7 @@ REAL :: IDC_TubeID
 	  END IF
   END IF
 
-  CLOSE(11)
+  !CLOSE(11)    !RS: Debugging: Not sure what this is attached to...
   
   !ZoneName='Zone1'    !RS: Debugging: Only one zone for this case
   !

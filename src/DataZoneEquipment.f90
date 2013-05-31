@@ -638,6 +638,9 @@ DO ControlledZoneLoop = 1,NumOfControlledZones
       IF (IsNotOK) THEN
         !CALL ShowContinueError('In '//TRIM(CurrentModuleObject)//'='//TRIM(ZoneEquipList(ControlledZoneNum)%Name))!RS: Secret Search String
         WRITE(DebugFile, *) 'In '//TRIM(CurrentModuleObject)//'='//TRIM(ZoneEquipList(ControlledZoneNum)%Name)
+        IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10 .OR. DebugFile .EQ. 12) THEN
+            WRITE(*,*) 'Error with DebugFile'    !RS: Debugging: Searching for a mis-set file number
+        END IF
         !ErrorsFound=.true. 
       ENDIF
       ZoneEquipList(ControlledZoneNum)%CoolingPriority(ZoneEquipTypeNum) = &

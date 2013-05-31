@@ -243,6 +243,9 @@ SUBROUTINE GetExteriorEnergyUseInput
         !   ' for '//TRIM(cAlphaFieldNames(1))//'='//TRIM(cAlphaArgs(1)))   !RS: Secret Search String
         WRITE(DebugFile,*) RoutineName//TRIM(cCurrentModuleObject)//': invalid '//TRIM(cAlphaFieldNames(2))// &
             'entered='//TRIM(cAlphaArgs(2))//' for '//TRIM(cAlphaFieldNames(1))//'='//TRIM(cAlphaArgs(1))
+        IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10 .OR. DebugFile .EQ. 12) THEN
+            WRITE(*,*) 'Error with DebugFile'    !RS: Debugging: Searching for a mis-set file number
+        END IF
       ENDIF
       ErrorsFound=.true.
     ELSE  ! check min/max on schedule
