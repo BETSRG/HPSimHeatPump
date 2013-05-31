@@ -39,8 +39,8 @@
     USE DataSimulation
     USE FrostModel
     USE InputProcessor 
-    USE DataGlobals, ONLY: RefName, RefrigIndex
-    USE DataHeatBalFanSys, ONLY: ZoneAirHumRat, TempControlType  !RS: Debugging
+    USE DataGlobals, ONLY: RefName, RefrigIndex, DOASFlag
+    USE DataHeatBalFanSys, ONLY: MAT, ZoneAirHumRat, TempControlType  !RS: Debugging
     USE WeatherManager !RS: Debugging: OutWetBulbTemp, OutDryBulbTemp
     USE Psychrometrics !RS: Debugging: Solving for TWiE
     USE DataZoneEnergyDemands   !RS: Debugging: Determining if the zone requires heating or cooling
@@ -165,15 +165,18 @@
         !CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" only when needed
         !EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" only when needed
     END IF
-    
-    !TaiE=  !MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
+
     CALL GetTempsOut(OutDryBulbTemp, OutWetBulbTemp, OutBaroPress, RHiC)    !RS: Debugging: RHiC = outdoor relative humidity
     TWiC=OutWetBulbTemp !RS: Debugging: Updating outdoor entering wet bulb temperature
     TaiC=OutDryBulbTemp !RS: Debugging: Updating outdoor entering dry bulb temperature
-    TaiE=TaiC   !RS: Debugging: Well, it's true!
-    TWiE=TWiC   !RS: Debugging: Since it's 100% Outside Air here, this is true.
+    IF (DOASFlag .EQ. 1) THEN   !RS: Checking to see if the system has return air or not
+        TaiE=TaiC   !RS: DOAS system
+        TWiE=TWiC   !RS: Debugging: Since it's 100% Outside Air here, this is true.
+    ELSE    !RS: System with return air
+        CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
+        TaiE=MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
+    END IF
     DummyHR=ZoneAirHumRat(1)    !RS: Debugging
-    !CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
     CALL PsyRhFnTdbWPb2(TaiE,DummyHR,OutBaroPress,RHiE)  !RS: Debugging: Converting from humidity ratio to relative humidity
     RHiE=RHiE*100   !RS: Debugging: Conversion from decimal to fraction form
     

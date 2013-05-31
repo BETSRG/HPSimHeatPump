@@ -118,7 +118,7 @@
     8, !12,                       !- Begin Month	!RS: Changing to single day instead of whole year
     1, !1, !21,                       !- Begin Day of Month
     8, !12,                      !- End Month
-    7, !10, !21,                      !- End Day of Month
+    2, !10, !21,                      !- End Day of Month
     Tuesday,                 !- Day of Week for Start Day
     Yes,                     !- Use Weather File Holidays and Special Days
     Yes,                     !- Use Weather File Daylight Saving Period
@@ -1083,7 +1083,8 @@ MainDesignData,
     TRUE, !field Is in Cooling Mode
     !FALSE, !field Is in Cooling Mode (NOT with -18C outside!)
     R410A, !field Refrigerant Name
-    9.53; !field Design Refrigerant Charge Mass [lbm]
+    9.53, !field Design Refrigerant Charge Mass [lbm]
+    TRUE; !field Dedicated Outside Air System?
 
 CompressorData,
     H89B283ABC:60:230:1, !field Compressor Model

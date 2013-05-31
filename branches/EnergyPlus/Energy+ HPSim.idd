@@ -76366,10 +76366,17 @@ MainDesignData,
 	\key 407c
 	\key R134a
 	\required-field
-    N2; \field Design Refrigerant Charge Mass
-	 \type real
-	 \units lb
-	 \required-field
+    N2, \field Design Refrigerant Charge Mass
+	\type real
+	\units lb
+	\required-field
+    A5; \field Dedicated Outside Air System
+	\note If False, then return air is allowed
+	\note If True, then it is a DOAS
+	\type choice
+	\key False
+	\key True
+	\default False
 
 CompressorData,
 	\unique-object
