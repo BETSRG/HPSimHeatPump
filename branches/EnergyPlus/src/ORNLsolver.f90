@@ -625,12 +625,11 @@
     CALL GetQOut(QUnitOut,LatOutputProvided)    !RS: Testing: Trying to read variables from PrintEvaporator File
     
     QRemain=ZoneSysEnergyDemand(1)%RemainingOutputRequired-QUnitOut !-LatOutputProvided    !RS: Debugging: Qouts are load into zone
-    IF(LogFile .EQ. 9 .OR. LogFile .EQ. 10) THEN
-        WRITE(*,*) 'Error with OutputFileDebug'    !RS: Debugging: Searching for a mis-set file number
-    END IF
+
+    WRITE(LogFile,*) 'Cooling Mode: ',IsCoolingMode !RS: Debugging: Is it cooling or heating?
     WRITE(LogFile,*) 'QSensOut: ',QUnitOut  !RS: Debugging: Printing out some data
-    WRITE(LogFile,*) 'QLatOut: ',LatOutputProvided
-    WRITE(LogFile,*) 'QZone: ',ZoneSysEnergyDemand(1)%TotalOutputRequired
+    WRITE(LogFile,*) 'LatentOutput: ',LatOutputProvided
+    WRITE(LogFile,*) 'QZoneRequired: ',ZoneSysEnergyDemand(1)%TotalOutputRequired
     WRITE(LogFile,*) 'Q left to meet required Q: ',QRemain
     
     IF (MODE .NE. CONDENSERUNITSIM) THEN

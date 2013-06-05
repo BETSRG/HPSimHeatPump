@@ -1833,12 +1833,13 @@ INTEGER CoilType !1=Condenser; 2=Evaporator;
 REAL :: MassCoil    !Total refrigerant inventory in coil, kg
 REAL :: MassLiqCoil !Total liquid refrigerant inventory in coil, kg
 REAL :: MassVapCoil !Total vapor refrigerant inventory in coil, kg
+REAL WAi,HAi,TWBAi,TDPAi,RhoDAi,RhoMAi,BaroPressureAi,ErrStatAi !RS: Debugging: Finding WAi
 
 INTEGER NumSection,I,J,K,II,III,IV !Loop Counter
 CHARACTER(LEN=13),PARAMETER :: FMT_100 = "(32(A12,','))"
 CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),29(F10.3,','))"
 
-  !OPEN (157,FILE='Evaporator.csv')
+  OPEN (157,FILE='Evaporator.csv')
   !OPEN (17,FILE='Evaporator_longtubes.csv')
   !RS: Debugging: Setting each QModTot to 0 at the beginning, so previous values don't carry over
   QModLatTot=0
@@ -1856,12 +1857,12 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),29(F10.3,','))"
 
   IF (CoilType .NE. MCEVAPORATOR) THEN
 
-	  !WRITE(157,FMT_100)'Nckt','Ntube','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
-			!	   'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
-			!	   'rhAi','rhAo','hci(kW/m2K)','hco(kW/m2K)', &
-			!	   'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
-			!	   'QmodTot(W)','QmodSens(W)','MassLiq(g)','MassVap(g)','Mass(g)','DryWet', &
-			!	   'mdotR(kg/hr)','mdotA(kg/s)'
+	  WRITE(157,FMT_100)'Nckt','Ntube','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
+				   'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
+				   'rhAi','rhAo','hci(kW/m2K)','hco(kW/m2K)', &
+				   'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
+				   'QmodTot(W)','QmodSens(W)','MassLiq(g)','MassVap(g)','Mass(g)','DryWet', &
+				   'mdotR(kg/hr)','mdotA(kg/s)'
       !WRITE(17,FMT_100)'Nckt','Ntube','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
 	!			   'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
 !				   'rhAi','rhAo','hci(kW/m2K)','hco(kW/m2K)', &
@@ -2037,16 +2038,22 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),29(F10.3,','))"
 
 				      MassMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Mass
 
-				      !Qmod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Qmod  !RS: Commenting out because it should already have been defined
+				      Qmod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Qmod  !RS: Commenting out because it should already have been defined
 
 				      QmodSens=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%QmodSens
-                      QmodLat=Qmod-QmodSens !RS: Trying to determine the latent heat
+                      QmodSensTot=QmodSens+QmodSensTot !RS: Debugging: Not sure how to actually count this up!
                       
-                      QmodLat=Qmod-QmodSens !RS: Determining the latent Q
+                      IF (I .EQ. 1 .AND. J .EQ. 1 .AND. K .EQ. 1 .AND. NumSection .EQ. 1) THEN !RS: Debugging: Only setting it the very first time
+                        CALL TDB_RH (tAiMod,WAi,rhAiMod,HAi,TWBAi,TDPAi,RhoDAi,RhoMAi,BaroPressureAi,ErrStatAi) !RS: Debugging: Finding entering W
+                      END IF
                       
-                      QmodSensTot=QmodSens + QmodSensTot    !RS: Summing the total sensible Q
+                      !QmodLat=Qmod-QmodSens !RS: Trying to determine the latent heat   !RS: Debugging: This is unnecessary
+                      
+                      !QmodLat=Qmod-QmodSens !RS: Determining the latent Q
+                      
+                      !QmodSensTot=QmodSens + QmodSensTot    !RS: Summing the total sensible Q
                     
-                      QmodLatTot=QmodLat + QmodLatTot   !RS: Summing the total latent Q
+                      !QmodLatTot=QmodLat + QmodLatTot   !RS: Summing the total latent Q
 
 				      mRefCkt=CoilSection(NumSection)%Ckt(I)%mRef
 
@@ -2069,11 +2076,11 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),29(F10.3,','))"
 							       hciMod,hcoMod,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
 							       Qmod*1000,QmodSens*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
 							       FLOAT(DryWet),mRefCkt*3600,mAiMod
-                !     WRITE(17,FMT_104)I,J,K,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
-				!			       xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
-				!			       hciMod,hcoMod,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
-				!			       Qmod*1000,QmodSens*1000,QmodLat*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
-				!			       FLOAT(DryWet),mRefCkt*3600, mAiMod !, cpAIR, hAiMod, hAoMod, AirProp(4), TestH   !RS: Trying to find the latent heat !RS: Debugging: Adding in the air cp and h's
+              !       WRITE(17,FMT_104)I,J,K,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
+							       !xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
+							       !hciMod,hcoMod,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
+							       !Qmod*1000,QmodSens*1000,QmodLat*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
+							       !FLOAT(DryWet),mRefCkt*3600, mAiMod !, cpAIR, hAiMod, hAoMod, AirProp(4), TestH   !RS: Trying to find the latent heat !RS: Debugging: Adding in the air cp and h's
 
 			      END DO !end Nmod
 
@@ -2267,7 +2274,7 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),29(F10.3,','))"
 
   END IF
 
-  !CLOSE(157)
+  CLOSE(157)
 
   RETURN
 
@@ -7254,9 +7261,17 @@ SUBROUTINE GetQOut(Out1, Out2)
 
 REAL Out1
 REAL Out2
+!REAL WAi,HAi,TWBAi,TDPAi,RhoDAi,RhoMAi,BaroPressureAi,ErrStatAi
+REAL WAi
+REAL WAo,HAo,TWBAo,TDPAo,RhoDAo,RhoMAo,BaroPressureAo,ErrStatAo
 
     Out1=QModSensTot*1000 !Sensible Module heat transfer, W
-    Out2=QModLatTot*1000  !Latent Module heat transfer, W
+    !Out2=QModLatTot*1000  !Latent Module heat transfer, W
+    !CALL TDB_RH (tAiMod,WAi,rhAiMod,HAi,TWBAi,TDPAi,RhoDAi,RhoMAi,BaroPressureAi,ErrStatAi)
+    CALL TDB_RH (tAoMod,WAo,rhAoMod,HAo,TWBAo,TDPAo,RhoDAo,RhoMAo,BaroPressureAo,ErrStatAo)
+    Out2= mAiMod*(WAo-WAi) !Latent Output, kg/s
+    !RS: Debugging: Something that should probably be looked at is if that's really the total latent output
+    !RS: Debugging: Does some sort of average need to be taken?
     
 END SUBROUTINE
 
