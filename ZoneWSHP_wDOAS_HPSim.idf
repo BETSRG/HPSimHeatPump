@@ -116,7 +116,7 @@
   RunPeriod,
     ,                        !- Name
     8, !12,                       !- Begin Month	!RS: Changing to single day instead of whole year
-    1, !1, !21,                       !- Begin Day of Month
+    1, !21,                       !- Begin Day of Month
     8, !12,                      !- End Month
     2, !10, !21,                      !- End Day of Month
     Tuesday,                 !- Day of Week for Start Day
@@ -601,7 +601,7 @@
     Through: 12/31,          !- Field 1
     For: AllDays,            !- Field 2
     Until:  7:00,15.0,       !- Field 3
-    Until: 17:00,21.0,       !- Field 5
+    Until: 17:00,20, !21.0,       !- Field 5	!RS: changed from 21 to 20
     Until: 24:00,15.0;       !- Field 7
 
   Schedule:Compact,
@@ -610,7 +610,7 @@
     Through: 12/31,          !- Field 1
     For: AllDays,            !- Field 2
     Until:  7:00,30.0,       !- Field 3
-    Until: 17:00,23.0,       !- Field 5
+    Until: 17:00,23, !24.0,       !- Field 5	!RS: Changed from 23 to 24
     Until: 24:00,30.0;       !- Field 7
 
   Schedule:Compact,

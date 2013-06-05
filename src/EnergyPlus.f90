@@ -434,8 +434,6 @@ USE HeatPumpInput, ONLY: GetInputs  !RS: Testing: Phase 3
       CALL ReportOrphanRecordObjects
       CALL ReportOrphanFluids
       CALL ReportOrphanSchedules
-
-      !CALL GetInputs    !RS: Testing: Phase 3
       
       CALL EndEnergyPlus
 

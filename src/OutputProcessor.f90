@@ -5690,18 +5690,18 @@ SUBROUTINE FlushHPOutput()
                           'Cond Ckt Refrig. In. Temp','Cond Ckt Refrig. In. Enthalpy','Cond Ckt Refrig. Out. Press', &
                           'Cond Ckt Refrig. Out. Temp','Cond Ckt Refrig. Out. Enthalpy','Cond Air Out. Temp', &
                           'Cond Air Out. Rel. Hum.','Evap Air In Temp','Evap Air In Enthalpy','Evap Air Out Temp', &
-                          'Evap Air In Enthalpy'
+                          'Evap Air Out Enthalpy'
         OneTime=.FALSE.
     END IF
 
-    !IF (CurTime .NE. PrevTime) THEN    !RS: Debugging: Commenting out just to see what other results we get
+    IF (CurTime .NE. PrevTime) THEN    !RS: Debugging: Commenting out just to see what other results we get
         CALL GetQOut(QSens,QLat)
         CALL GetEvapProp(tAiCoil, hAiCoil, tAoCoil, hAoCoil)
         CALL GetCondProp(pRiCoil, tRiCoil, hRiCoil, pRoCoil, tRoCoil, hRoCoil,tAoCoil, rhAoCoil)
         WRITE(OutputFile, '(15(F12.5,","))') CurTime, QSens, QLat, pRiCoil, tRiCoil, hRiCoil, pRoCoil,  &
                                             tRoCoil, hRoCoil,tAoCoil, rhAoCoil, tAiCoil, hAiCoil, tAoCoil, hAoCoil
-    !    PrevTime=CurTime
-    !END IF
+        PrevTime=CurTime
+    END IF
 
 END SUBROUTINE
 
