@@ -1,5 +1,5 @@
         
-    SUBROUTINE SimulationCycle(QUnitOut,LatOutputProvided) !RS: Attempting to pass variables out
+    SUBROUTINE SimulationCycle(QUnitOut1,LatOutputProvided1) !RS: Attempting to pass variables out
 
     !
     !
@@ -84,8 +84,10 @@
     REAL, SAVE :: ODCFlowConst
     LOGICAL, SAVE :: ONETIME = .TRUE.    !RS: Debugging: Keeps the program from calling the unit conversion subroutine over again.
     
-    REAL, INTENT (OUT) :: QUnitOut            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
-    REAL, INTENT (OUT) :: LatOutputProvided   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: Testing: Trying to pass variables out
+    REAL(r64), INTENT (OUT) :: QUnitOut1            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
+    REAL(r64), INTENT (OUT) :: LatOutputProvided1   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: Testing: Trying to pass variables out
+    REAL :: QUnitOut            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
+    REAL :: LatOutputProvided   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: Testing: Trying to pass variables out
     
     REAL TWiC   !RS: Wetbulb Temperature, Outdoor Entering (C)
     REAL TWiE   !RS: Wetbulb Temperature, Indoor Entering (C)
@@ -640,6 +642,9 @@
     LastCoolingMode=ISCoolingMode   !RS: Debugging: Seeing if cooling mode changes between iterations
     
     CALL FlushHPOutput()
+
+    QUnitOut1=QUnitOut
+    LatOutputProvided1=LatOutputProvided
 
     CLOSE(666)
 

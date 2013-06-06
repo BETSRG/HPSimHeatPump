@@ -2347,9 +2347,9 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
            CASE (HPSim)
                WRITE(LogFile,*) 'EnergyPlus Timestep: ',CurrentTime !RS: Debugging: Printing out the current time
                CALL SimulationCycle(SysOutputProvided, LatOutputProvided)
-                IF(LogFile .EQ. 9 .OR. LogFile .EQ. 10 .OR. LogFile .EQ. 12 .OR. LogFile .EQ. 13) THEN
-                    WRITE(*,*) 'Error with DebugFile'    !RS: Debugging: Searching for a mis-set file number
-                END IF
+                !IF(LogFile .EQ. 9 .OR. LogFile .EQ. 10 .OR. LogFile .EQ. 12 .OR. LogFile .EQ. 13) THEN
+                !    WRITE(*,*) 'Error with DebugFile'    !RS: Debugging: Searching for a mis-set file number
+                !END IF
                !WRITE(LogFile,*) 'Zone Temperature ',MAT(1)  !RS: Debugging
                !WRITE(TimeTemp,FMT_104) CurrentTime,MAT(1)
                !IF (SysOutPutProvided .LE. 0) THEN   !RS: Debugging: Dealing with times when it's not doing anything
