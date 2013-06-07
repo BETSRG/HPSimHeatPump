@@ -5639,9 +5639,9 @@ END IF
         Psat=pRef
     !WRITE(DebugFile,*) 'Temperature is ',Temperature,'J is ',J,' and Psat (1) is ',Psat !RS: Debugging
     ELSE 
-    IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10 .OR. DebugFile .EQ. 12) THEN
-        WRITE(*,*) 'Error with DebugFile'    !RS: Debugging: Searching for a mis-set file number
-    END IF
+    !IF(DebugFile .EQ. 9 .OR. DebugFile .EQ. 10 .OR. DebugFile .EQ. 12) THEN
+    !    WRITE(*,*) 'Error with DebugFile'    !RS: Debugging: Searching for a mis-set file number
+    !END IF
         Psat=TQ(RefName, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr)  !RS Comment: Saturation Pressure
         IF (RefPropErr .GT. 0) THEN
         WRITE(DebugFile,*) 'Temp is ',Temperature,'Psat(2) is ',Psat,'RefPropErr is ',RefpropErr    !RS: Debugging
