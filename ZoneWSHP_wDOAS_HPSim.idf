@@ -207,162 +207,162 @@
 !************************************************************
 ! start of dedicated outdoor air system serving a single zone
 
-  BranchList,
-    Air Loop Branches,       !- Name
-    Air Loop Main Branch;    !- Branch 1 Name
+  !BranchList,
+  !  Air Loop Branches,       !- Name
+  !  Air Loop Main Branch;    !- Branch 1 Name
 
 !-   ===========  ALL OBJECTS IN CLASS: BRANCH ===========
 
-  Branch,
-    Air Loop Main Branch,    !- Name
-    0.0625,                  !- Maximum Flow Rate {m3/s}
-    ,                        !- Pressure Drop Curve Name
-    AirLoopHVAC:OutdoorAirSystem,  !- Component 1 Object Type
-    OA Sys 1,                !- Component 1 Name
-    Outdoor Air Mixer Inlet Node,  !- Component 1 Inlet Node Name
-    Mixed Air Node,          !- Component 1 Outlet Node Name
-    ACTIVE,                  !- Component 1 Branch Control Type
-    Fan:ConstantVolume,      !- Component 2 Object Type
-    Supply Fan 1,            !- Component 2 Name
-    Mixed Air Node,          !- Component 2 Inlet Node Name
-    Air Loop Outlet Node,    !- Component 2 Outlet Node Name
-    ACTIVE;                  !- Component 2 Branch Control Type
+  !Branch,
+  !  Air Loop Main Branch,    !- Name
+  !  0.0625,                  !- Maximum Flow Rate {m3/s}
+  !  ,                        !- Pressure Drop Curve Name
+  !  !AirLoopHVAC:OutdoorAirSystem,  !- Component 1 Object Type
+  !  !OA Sys 1,                !- Component 1 Name
+  !  !Outdoor Air Mixer Inlet Node,  !- Component 1 Inlet Node Name
+  !  !Mixed Air Node,          !- Component 1 Outlet Node Name
+  !  !ACTIVE,                  !- Component 1 Branch Control Type
+  !  Fan:ConstantVolume,      !- Component 2 Object Type
+  !  Supply Fan 1,            !- Component 2 Name
+  !  Mixed Air Node,          !- Component 2 Inlet Node Name
+  !  Air Loop Outlet Node,    !- Component 2 Outlet Node Name
+  !  ACTIVE;                  !- Component 2 Branch Control Type
 
 !-   ===========  ALL OBJECTS IN CLASS: AIR PRIMARY LOOP ===========
 
-  AirLoopHVAC,
-    Dedicated Outdoor Air System,  !- Name
-    ,                        !- Controller List Name
-    Outdoor Air 1 Avail List,!- Availability Manager List Name
-    0.0625,                  !- Design Supply Air Flow Rate {m3/s}
-    Air Loop Branches,       !- Branch List Name
-    ,                        !- Connector List Name
-    Outdoor Air Mixer Inlet Node,  !- Supply Side Inlet Node Name
-    Return Air Mixer Outlet, !- Demand Side Outlet Node Name
-    Zone Equipment Inlet Node,  !- Demand Side Inlet Node Names
-    Air Loop Outlet Node;    !- Supply Side Outlet Node Names
+  !AirLoopHVAC,
+  !  Dedicated Outdoor Air System,  !- Name
+  !  ,                        !- Controller List Name
+  !  Outdoor Air 1 Avail List,!- Availability Manager List Name
+  !  0.0625,                  !- Design Supply Air Flow Rate {m3/s}
+  !  Air Loop Branches,       !- Branch List Name
+  !  ,                        !- Connector List Name
+  !  Outdoor Air Mixer Inlet Node,  !- Supply Side Inlet Node Name
+  !  Return Air Mixer Outlet, !- Demand Side Outlet Node Name
+  !  Zone Equipment Inlet Node,  !- Demand Side Inlet Node Names
+  !  Air Loop Outlet Node;    !- Supply Side Outlet Node Names
 
 !-   ===========  ALL OBJECTS IN CLASS: ZONE SUPPLY AIR PATH ===========
 
-  AirLoopHVAC:SupplyPath,
-    OASysSupplyPath,         !- Name
-    Zone Equipment Inlet Node,  !- Supply Air Path Inlet Node Name
-    AirLoopHVAC:ZoneSplitter,!- Component 1 Object Type
-    Zone Supply Air Splitter;!- Component 1 Name
+  !AirLoopHVAC:SupplyPath,
+  !  OASysSupplyPath,         !- Name
+  !  Zone Equipment Inlet Node,  !- Supply Air Path Inlet Node Name
+  !  AirLoopHVAC:ZoneSplitter,!- Component 1 Object Type
+  !  Zone Supply Air Splitter;!- Component 1 Name
 
 !-   ===========  ALL OBJECTS IN CLASS: ZONE RETURN AIR PATH ===========
 
-  AirLoopHVAC:ReturnPath,
-    OASysReturnPath,         !- Name
-    Return Air Mixer Outlet, !- Return Air Path Outlet Node Name
-    AirLoopHVAC:ZoneMixer,   !- Component 1 Object Type
-    Zone Return Air Mixer;   !- Component 1 Name
+  !AirLoopHVAC:ReturnPath,
+  !  OASysReturnPath,         !- Name
+  !  Return Air Mixer Outlet, !- Return Air Path Outlet Node Name
+  !  AirLoopHVAC:ZoneMixer,   !- Component 1 Object Type
+  !  Zone Return Air Mixer;   !- Component 1 Name
 
 !-   ===========  ALL OBJECTS IN CLASS: ZONE SPLITTER ===========
 
-  AirLoopHVAC:ZoneSplitter,
-    Zone Supply Air Splitter,!- Name
-    Zone Equipment Inlet Node,  !- Inlet Node Name
-    Zone 1 OA Inlet Node;    !- Outlet 1 Node Name
+  !AirLoopHVAC:ZoneSplitter,
+  !  Zone Supply Air Splitter,!- Name
+  !  Zone Equipment Inlet Node,  !- Inlet Node Name
+  !  Zone 1 OA Inlet Node;    !- Outlet 1 Node Name
 
 !-   ===========  ALL OBJECTS IN CLASS: ZONE MIXER ===========
 
-  AirLoopHVAC:ZoneMixer,
-    Zone Return Air Mixer,   !- Name
-    Return Air Mixer Outlet, !- Outlet Node Name
-    Zone 1 Return Node;      !- Inlet 1 Node Name
+  !AirLoopHVAC:ZoneMixer,
+  !  Zone Return Air Mixer,   !- Name
+  !  Return Air Mixer Outlet, !- Outlet Node Name
+  !  Zone 1 Return Node;      !- Inlet 1 Node Name
 
 !-   ===========  ALL OBJECTS IN CLASS: CONTROLLER LIST ===========
 
-  AirLoopHVAC:ControllerList,
-    OA Sys 1 Controllers,    !- Name
-    Controller:OutdoorAir,   !- Controller 1 Object Type
-    OA Controller 1;         !- Controller 1 Name
+  !AirLoopHVAC:ControllerList,
+  !  OA Sys 1 Controllers,    !- Name
+  !  Controller:OutdoorAir,   !- Controller 1 Object Type
+  !  OA Controller 1;         !- Controller 1 Name
 
 !-   ===========  ALL OBJECTS IN CLASS: AIR LOOP EQUIPMENT LIST ===========
 
-  AirLoopHVAC:OutdoorAirSystem:EquipmentList,
-    OA Sys 1 Equipment,      !- Name
-    OutdoorAir:Mixer,        !- Component 1 Object Type
-    OA Mixing Box 1;         !- Component 1 Name
+  !AirLoopHVAC:OutdoorAirSystem:EquipmentList,
+  !  OA Sys 1 Equipment,      !- Name
+  !  OutdoorAir:Mixer,        !- Component 1 Object Type
+  !  OA Mixing Box 1;         !- Component 1 Name
 
 !-   ===========  ALL OBJECTS IN CLASS: OUTSIDE AIR SYSTEM ===========
 
-  AirLoopHVAC:OutdoorAirSystem,
-    OA Sys 1,                !- Name
-    OA Sys 1 Controllers,    !- Controller List Name
-    OA Sys 1 Equipment,      !- Outdoor Air Equipment List Name
-    Outdoor Air 1 Avail List;!- Availability Manager List Name
+  !AirLoopHVAC:OutdoorAirSystem,
+  !  OA Sys 1,                !- Name
+  !  OA Sys 1 Controllers,    !- Controller List Name
+  !  OA Sys 1 Equipment,      !- Outdoor Air Equipment List Name
+  !  Outdoor Air 1 Avail List;!- Availability Manager List Name
 
 !-   ===========  ALL OBJECTS IN CLASS: OUTSIDE AIR INLET NODE LIST ===========
 
-  OutdoorAir:NodeList,
-    OutsideAirInletNodes;    !- Node or NodeList Name 1
+  !OutdoorAir:NodeList,
+  !  OutsideAirInletNodes;    !- Node or NodeList Name 1
 
 !-   ===========  ALL OBJECTS IN CLASS: OUTSIDE AIR MIXER ===========
 
-  OutdoorAir:Mixer,
-    OA Mixing Box 1,         !- Name
-    Mixed Air Node,          !- Mixed Air Node Name
-    Outside Air Inlet Node,  !- Outdoor Air Stream Node Name
-    Relief Air Outlet Node,  !- Relief Air Stream Node Name
-    Outdoor Air Mixer Inlet Node;  !- Return Air Stream Node Name
+  !OutdoorAir:Mixer,
+  !  OA Mixing Box 1,         !- Name
+  !  Mixed Air Node,          !- Mixed Air Node Name
+  !  Outside Air Inlet Node,  !- Outdoor Air Stream Node Name
+  !  Relief Air Outlet Node,  !- Relief Air Stream Node Name
+  !  Outdoor Air Mixer Inlet Node;  !- Return Air Stream Node Name
 
 !-   ===========  ALL OBJECTS IN CLASS: SYSTEM AVAILABILITY MANAGER LIST ===========
 
-  AvailabilityManagerAssignmentList,
-    Outdoor Air 1 Avail List,!- Name
-    AvailabilityManager:Scheduled,  !- Availability Manager 1 Object Type
-    Outdoor Air 1 Avail;     !- Availability Manager 1 Name
+  !AvailabilityManagerAssignmentList,
+  !  Outdoor Air 1 Avail List,!- Name
+  !  AvailabilityManager:Scheduled,  !- Availability Manager 1 Object Type
+  !  Outdoor Air 1 Avail;     !- Availability Manager 1 Name
 
 !-   ===========  ALL OBJECTS IN CLASS: SYSTEM AVAILABILITY MANAGER:SCHEDULED ===========
 
-  AvailabilityManager:Scheduled,
-    Outdoor Air 1 Avail,     !- Name
-    FanAndCoilAvailSched;    !- Schedule Name
+  !AvailabilityManager:Scheduled,
+  !  Outdoor Air 1 Avail,     !- Name
+  !  FanAndCoilAvailSched;    !- Schedule Name
 
 !-   ===========  ALL OBJECTS IN CLASS: CONTROLLER:OUTSIDE AIR ===========
 
-  Controller:OutdoorAir,
-    OA Controller 1,         !- Name
-    Relief Air Outlet Node,  !- Relief Air Outlet Node Name
-    Outdoor Air Mixer Inlet Node,  !- Return Air Node Name
-    Mixed Air Node,          !- Mixed Air Node Name
-    Outside Air Inlet Node,  !- Actuator Node Name
-    0.0625,                  !- Minimum Outdoor Air Flow Rate {m3/s}
-    0.0625,                  !- Maximum Outdoor Air Flow Rate {m3/s}
-    NoEconomizer,            !- Economizer Control Type
-    ,                        !- Economizer Control Action Type
-    23.,                     !- Economizer Maximum Limit Dry-Bulb Temperature {C}
-    ,                        !- Economizer Maximum Limit Enthalpy {J/kg}
-    13.5,                    !- Economizer Maximum Limit Dewpoint Temperature {C}
-    ,                        !- Electronic Enthalpy Limit Curve Name
-    14.,                     !- Economizer Minimum Limit Dry-Bulb Temperature {C}
-    NoLockout,               !- Lockout Type
-    FixedMinimum,            !- Minimum Limit Type
-    OAFractionSched,         !- Minimum Outdoor Air Schedule Name
-    ,                        !- Minimum Fraction of Outdoor Air Schedule Name
-    ,                        !- Maximum Fraction of Outdoor Air Schedule Name
-    ;                        !- Mechanical Ventilation Controller Name
+  !Controller:OutdoorAir,
+  !  OA Controller 1,         !- Name
+  !  Relief Air Outlet Node,  !- Relief Air Outlet Node Name
+  !  Outdoor Air Mixer Inlet Node,  !- Return Air Node Name
+  !  Mixed Air Node,          !- Mixed Air Node Name
+  !  Outside Air Inlet Node,  !- Actuator Node Name
+  !  0.0625,                  !- Minimum Outdoor Air Flow Rate {m3/s}
+  !  0.0625,                  !- Maximum Outdoor Air Flow Rate {m3/s}
+  !  NoEconomizer,            !- Economizer Control Type
+  !  ,                        !- Economizer Control Action Type
+  !  23.,                     !- Economizer Maximum Limit Dry-Bulb Temperature {C}
+  !  ,                        !- Economizer Maximum Limit Enthalpy {J/kg}
+  !  13.5,                    !- Economizer Maximum Limit Dewpoint Temperature {C}
+  !  ,                        !- Electronic Enthalpy Limit Curve Name
+  !  14.,                     !- Economizer Minimum Limit Dry-Bulb Temperature {C}
+  !  NoLockout,               !- Lockout Type
+  !  FixedMinimum,            !- Minimum Limit Type
+  !  OAFractionSched,         !- Minimum Outdoor Air Schedule Name
+  !  ,                        !- Minimum Fraction of Outdoor Air Schedule Name
+  !  ,                        !- Maximum Fraction of Outdoor Air Schedule Name
+  !  ;                        !- Mechanical Ventilation Controller Name
 
 !-   ===========  ALL OBJECTS IN CLASS: FAN:SIMPLE:ONOFF ===========
 
-  Fan:ConstantVolume,
-    Supply Fan 1,            !- Name
-    FanAndCoilAvailSched,    !- Availability Schedule Name
-    0.7,                     !- Fan Efficiency
-    600.0,                   !- Pressure Rise {Pa}
-    0.0625,                  !- Maximum Flow Rate {m3/s}
-    0.9,                     !- Motor Efficiency
-    1.0,                     !- Motor In Airstream Fraction
-    Mixed Air Node,          !- Air Inlet Node Name
-    Air Loop Outlet Node;    !- Air Outlet Node Name
+  !Fan:ConstantVolume,
+  !  Supply Fan 1,            !- Name
+  !  FanAndCoilAvailSched,    !- Availability Schedule Name
+  !  0.7,                     !- Fan Efficiency
+  !  600.0,                   !- Pressure Rise {Pa}
+  !  0.0625,                  !- Maximum Flow Rate {m3/s}
+  !  0.9,                     !- Motor Efficiency
+  !  1.0,                     !- Motor In Airstream Fraction
+  !  Mixed Air Node,          !- Air Inlet Node Name
+  !  Air Loop Outlet Node;    !- Air Outlet Node Name
 
-  AirTerminal:SingleDuct:Uncontrolled,
-    Zone1DirectAir,          !- Name
-    FanAndCoilAvailSched,    !- Availability Schedule Name
-    Zone 1 OA Inlet Node,    !- Zone Supply Air Node Name
-    0.0625;                  !- Maximum Air Flow Rate {m3/s}
+  !AirTerminal:SingleDuct:Uncontrolled,
+  !  Zone1DirectAir,          !- Name
+  !  FanAndCoilAvailSched,    !- Availability Schedule Name
+  !  Zone 1 OA Inlet Node,    !- Zone Supply Air Node Name
+  !  0.0625;                  !- Maximum Air Flow Rate {m3/s}
 
   Schedule:Compact,
     OAFractionSched,         !- Name
@@ -630,20 +630,20 @@
 
   ZoneHVAC:EquipmentList,
     Zone1Equipment,          !- Name
-    AirTerminal:SingleDuct:Uncontrolled,  !- Zone Equipment 1 Object Type
-    Zone1DirectAir,          !- Zone Equipment 1 Name
-    1,                       !- Zone Equipment 1 Cooling Sequence
-    1,                       !- Zone Equipment 1 Heating or No-Load Sequence
+    !AirTerminal:SingleDuct:Uncontrolled,  !- Zone Equipment 1 Object Type
+    !Zone1DirectAir,          !- Zone Equipment 1 Name
+    !1,                       !- Zone Equipment 1 Cooling Sequence
+    !1,                       !- Zone Equipment 1 Heating or No-Load Sequence
     ZoneHVAC:HPSim,  !- Zone Equipment 2 Object Type
     Zone1WTAHP,              !- Zone Equipment 2 Name
-    2,                       !- Zone Equipment 2 Cooling Sequence
-    2;                       !- Zone Equipment 2 Heating or No-Load Sequence
+    1, !2,                       !- Zone Equipment 2 Cooling Sequence
+    1; !2;                       !- Zone Equipment 2 Heating or No-Load Sequence
 
   ZoneHVAC:HPSim,
     Zone1WTAHP,              !- Name
     FanAndCoilAvailSched,    !- Availability Schedule Name
-    Zone 1 Outlet Node,      !- Air Inlet Node Name
-    Zone 1 Inlet Node,       !- Air Outlet Node Name
+    Zone 1 Outlet Node,      !- Air Inlet Node Name !Zone 1 Outlet Node
+    Zone 1 Inlet Node,       !- Air Outlet Node Name !Zone 1 Inlet Node
     OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
     Zone 1 Mixer,            !- Outdoor Air Mixer Name
     Autosize,                !- Supply Air Flow Rate During Cooling Operation {m3/s}

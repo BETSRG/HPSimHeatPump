@@ -421,11 +421,15 @@ SUBROUTINE CheckNodeConnections(ErrorsFound)
       IsValid=.true.
     ENDDO
     IF (.not. IsValid) THEN
-      CALL ShowSevereError('Node Connection Error, Node="'//TRIM(NodeConnections(Loop1)%NodeName)//  &
-            '", ZoneExhaust node did not find a matching inlet node.')
-      CALL ShowContinueError('Reference Object='//TRIM(NodeConnections(Loop1)%ObjectType)//  &
-             ', Name='//TRIM(NodeConnections(Loop1)%ObjectName))
-      ErrorCounter=ErrorCounter+1
+      !CALL ShowSevereError('Node Connection Error, Node="'//TRIM(NodeConnections(Loop1)%NodeName)//  &
+      !      '", ZoneExhaust node did not find a matching inlet node.')
+      !CALL ShowContinueError('Reference Object='//TRIM(NodeConnections(Loop1)%ObjectType)//  &
+      !       ', Name='//TRIM(NodeConnections(Loop1)%ObjectName))
+      !ErrorCounter=ErrorCounter+1   !RS: Debugging: Secret Search String
+      WRITE(DebugFile,*) 'Node Connection Error, Node="'//TRIM(NodeConnections(Loop1)%NodeName)//  &
+            '", ZoneExhaust node did not find a matching inlet node.'
+      WRITE(DebugFile,*) 'Reference Object='//TRIM(NodeConnections(Loop1)%ObjectType)//  &
+             ', Name='//TRIM(NodeConnections(Loop1)%ObjectName)
 !      ErrorsFound=.true.
     ENDIF
   ENDDO
