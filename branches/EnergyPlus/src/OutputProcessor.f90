@@ -5686,7 +5686,7 @@ SUBROUTINE FlushHPOutput()
         CLOSE(unit=OutputFile, Status='DELETE') !RS: Debugging: Getting rid of any old versions
         
         OPEN(unit=OutputFile,file='Output.csv',Access='APPEND')
-        WRITE(OutputFile, '(15(A28,","))') 'Time','Sensible Heat','Latent Heat','Cond Ckt Refrig. In. Press', &
+        WRITE(OutputFile, '(15(A28,","))') 'Time','Sensible Heat','Latent Output (kg/s)','Cond Ckt Refrig. In. Press', &
                           'Cond Ckt Refrig. In. Temp','Cond Ckt Refrig. In. Enthalpy','Cond Ckt Refrig. Out. Press', &
                           'Cond Ckt Refrig. Out. Temp','Cond Ckt Refrig. Out. Enthalpy','Cond Air Out. Temp', &
                           'Cond Air Out. Rel. Hum.','Evap Air In Temp','Evap Air In Enthalpy','Evap Air Out Temp', &

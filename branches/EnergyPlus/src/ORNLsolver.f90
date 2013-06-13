@@ -147,11 +147,13 @@
     ErrorFlag=0   !RS: Debugging: Resetting this at the beginning of each run so that errors don't carry over
     
     !RS: Debugging: Commenting out this section since we're only running cooling-only right now
-    IF (ZoneSysEnergyDemand(1)%TotalOutputRequired .EQ. 0) THEN
+    IF (ZoneSysEnergyDemand(1)%TotalOutputRequired .EQ. 0) THEN ! .AND. ZoneSysEnergyDemand(1)%RemainingOutputRequired .EQ. 0) THEN !RS: Debugging: Checking Remaining
+    !IF (ZoneSysEnergyDemand(1)%RemainingOutputRequired .EQ. 0) THEN !RS: Debugging: Checking the remaining
         QUnitOut=0
         LatOutputProvided=0
         RETURN
-    ELSEIF (ZoneSysEnergyDemand(1)%TotalOutputRequired .GT. 0.0) THEN !RS: Debugging: Is it needing a positive heat gain from HPSim?
+    !ELSEIF (ZoneSysEnergyDemand(1)%RemainingOutputRequired .GT. 0.0) THEN   !RS: Debugging: Checking the remaining
+    ELSEIF (ZoneSysEnergyDemand(1)%TotalOutputRequired .GT. 0.0) THEN ! .OR. ZoneSysEnergyDemand(1)%RemainingOutputRequired .GT. 0.0) THEN !RS: Debugging: Is it needing a positive heat gain from HPSim?
         IsCoolingMode=0 !RS: Debugging: Heat pump operating in heating mode
         CondPAR(27)=IsCoolingMode
         EvapPar(20)=IsCoolingMode
@@ -513,7 +515,7 @@
                 END IF
 
                 !1st run is for coarse convergence criteria
-                DTVALU = ZEROCH(DTVAL,CHARGM,CHRGECONV,CHRGECONV,STEP,CHGDIF,IERROR)
+                DTVALU = ZEROCH(DTVAL,CHARGM,CHRGECONV,CHRGECONV,STEP,CHGDIF,IERROR)    !RS: Debugging: Temporarily setting in an Epsilon-NTU method
                 !CALL SolveRegulaFalsi(CHRGECONV, MaxIter, Flag, DTVALU, CHARGM, DTVAL, STEP, IError)
                 !      SolveRegulaFalsi(Eps, MaxIte, Flag, XRes, f, X_0, X_1, Par)
             
@@ -551,7 +553,7 @@
         
                 DTROC=SUBCOOL !Specified subcooling
                 !1st run is for coarse convergence criteria
-                CALL HPDM(DTVALU)  !RS: Debugging: Testing 123
+                CALL HPDM(DTVALU)  !RS: Debugging: Testing 123 !RS: Debugging: Temporarily setting in an Epsilon-NTU method
 
                 FLAG_GOTO_30 = .TRUE.
                 IF (FLAG_GOTO_30 .EQ. .FALSE.) THEN
@@ -624,7 +626,7 @@
     CALL PrintCondenserResult
     !CALL EndCondenserCoil  !RS: Debugging: Removing for the moment
     
-    CALL GetQOut(QUnitOut,LatOutputProvided)    !RS: Testing: Trying to read variables from PrintEvaporator File
+    !CALL GetQOut(QUnitOut,LatOutputProvided)    !RS: Testing: Trying to read variables from PrintEvaporator File   !RS: Debugging: Temporarily setting in an Epsilon-NTU method
     
     QRemain=ZoneSysEnergyDemand(1)%RemainingOutputRequired-QUnitOut !-LatOutputProvided    !RS: Debugging: Qouts are load into zone
 
@@ -643,8 +645,8 @@
     
     CALL FlushHPOutput()
 
-    QUnitOut1=QUnitOut
-    LatOutputProvided1=LatOutputProvided
+    QUnitOut1=QUnitOut    !RS: Debugging: Temporarily setting in an Epsilon-NTU method
+    LatOutputProvided1=LatOutputProvided    !RS: Debugging: Temporarily setting in an Epsilon-NTU method
 
     CLOSE(666)
 
