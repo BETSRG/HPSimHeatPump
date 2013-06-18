@@ -104,7 +104,6 @@
     REAL, PARAMETER :: CapTubeDimStep=1E-3
 
     LOGICAL IsSizeDiameter
-!    REAL SimpleEvapOUT(17),DetailedEvapOUT(17)  !RS: Debugging: Formerly (20)  !RS: Debugging: Not used anymore
     REAL DetailedQevp,DetailedDPevp
     REAL SimpleQevp,SimpleDPevp
     LOGICAL,SAVE :: IsFirstTimeEvaporator = .TRUE. !First time to call evaporator flag
@@ -375,7 +374,7 @@
             CALL IssueOutputMessage('')
             CALL IssueOutputMessage('## ERROR ## Highside: Failed to find a solution.')
             CALL IssueOutputMessage('Try another condenser, compressor, or change boundary conditions.')
-            STOP
+            !STOP  !RS: Debugging: Temporarily setting in an Epsilon-NTU method
         END IF
         FirstTimeFlowRateLoop=.FALSE.
         !ISI 05-25-05
@@ -405,7 +404,6 @@
         END IF
         
         EvapIN%EInmRef=MdotR           !Refrigerant side mass flow rate, kg/s    !RS: Debugging: Formerly EvapIN(1)
-        !EvapIN(2)=CompIN(1)       !Compressor inlet pressure
         EvapIN%EInhRi=CondOUT%COuthRiE     !Exp. device inlet enthalpy, kJ/kg    !RS: Debugging: Formerly EvapIN(3), CondOUT(11)
         EvapIN%EInmAi=XMaE            !Air side mass flow rate, kg/s    !RS: Debugging: Formerly EvapIN(4)
         EvapIN%EIntAi=(TAIIEI-32)/1.8 !Air side inlet temp. C   !RS: Debugging: Formerly EvapIN(5)
@@ -447,16 +445,13 @@
                     IF (ABS((SimpleQevp-DetailedQevp)/DetailedQevp) .LT. 0.1 .AND. &
                     ABS((SimpleDPevp-DetailedDPevp)/DetailedDPevp) .LT. 0.1) THEN
                         EvapPAR%EvapSimpCoil=1 !Simple version   !RS: Debugging: Formerly EvapPAR(37)
-                        !EvapOUT=SimpleEvapOUT  !RS: Debugging: No SimpleEvapOUT anymore
                     ELSE
                         EvapPAR%EvapSimpCoil=0 !Detailed version !RS: Debugging: Formerly EvapPAR(37)
-                        !EvapOUT=DetailedEvapOUT !RS: Debugging: No DetailedEvapOUT anymore
                     END IF
                     IsFirstTimeEvaporator=.FALSE. 
 
                     !Always detailed
                     EvapPAR%EvapSimpCoil=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53)
-                    !EvapOUT=DetailedEvapOUT    !RS: Debugging: No DetailedEvapOUT anymore
 
                 ELSE
                     CALL Evaporator(Ref$) !,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
@@ -638,7 +633,7 @@
             ShTbIN%ShTbINPoEv=EvapOUT%EOutpRoC  !Evaporator outlet pressure, kPa  !RS: Debugging: Formerly EvapOUT(1), ShTbIN(5)
 
             IF (ShTbPAR%ShTbTLen .LE. 0) THEN !RS: Debugging: Formerly ShTbPAR(1)
-                ShTbPAR%ShTbTLen=0.0127   !RS: Debugging: Formerly ShTbPAR(1)
+                ShTbPAR%ShTbTLen=0.0127   !RS: Debugging: Formerly ShTbPAR(1) ...and a Magic Number
                 !Short Tube: Parameters not defined.
             ELSE
 

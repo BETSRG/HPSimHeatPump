@@ -122,10 +122,10 @@ REAL FUNCTION CHARGM(DTVALU,IERR)
             IF (MODE .EQ. 1) THEN
                 IF (Unit .EQ. 1) THEN
                     DTunit=' (K)'
-                    WRITE(sPrint,FMT_1000)'Compressor suction supreheat: ',DTVAL/1.8,DTunit
+                    WRITE(sPrint,FMT_1000)'Compressor suction superheat: ',DTVAL/1.8,DTunit
                 ELSE
                     DTunit=' (R)'
-                    WRITE(sPrint,FMT_1000)'Compressor suction supreheat: ',DTVAL,DTunit
+                    WRITE(sPrint,FMT_1000)'Compressor suction superheat: ',DTVAL,DTunit
                 END IF
             ELSE
                 IF (Unit .EQ. 1) THEN
