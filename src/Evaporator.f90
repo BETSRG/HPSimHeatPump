@@ -477,6 +477,8 @@ PRIVATE CalcWetSurfaceMcQuiston
 PRIVATE UpdateTubeDataFromCircuitData
 PUBLIC GetQout  !RS: TestingIntegration: Trying to bring in the new sub
 PRIVATE InitEvaporatorStructures    !RS: Debugging: Trying to allocate all at once
+PRIVATE RachelCoilModel !RS: Debugging: Simple coil model
+PRIVATE RachelCalcSegmentOutletConditions   !RS: Debugging: Simple coil model
 
 CONTAINS
 
@@ -679,7 +681,7 @@ CONTAINS
     DTsucLn   = EvapPAR%EvapSucLnTempChg  !RS: Debugging: Formerly PAR(6)
     AddDPSucLn = EvapPAR%EvapSucLnAddPD !RS: Debugging: Formerly PAR(7)
 
-    IsSimpleCoil=EvapPAR%EvapSimpCoil !(38) !PAR(53) !ISI - 12/21/06    !RS: Debugging: Formerly PAR(37)
+    IsSimpleCoil=EvapPAR%EvapSimpCoil !(38) !PAR(53) !ISI - 12/21/06    !RS: Debugging: Formerly PAR(37) !RS: Debugging: IsSimple
     FirstTime=EvapPAR%EvapFirstTime !(39) !PAR(54)    !ISI - 12/21/06   !RS: Debugging: Formerly PAR(38)
 
     IF (FirstTime .EQ. 1) THEN
@@ -783,30 +785,30 @@ CONTAINS
     !****** Start coil calculation ******
     Qcoil=0.0; QcoilSens=0 !ISI - 09/10/07
     DO NumSection=1, NumOfSections !ISI - 09/10/07
-
+    
         !ISI - 09/10/07
         Converged=.TRUE. 
         pRoCoilPrev=pRiCoil
         MaxResidual=0
-
+    
         DO Iter=1, MdotMaxIter
-
+    
             !Initialize
             mRefJoin=0; PrevQcoil=BIG; 
-
+    
             DO AirBCiter=1, AirBCmaxIter
-
+    
                 !ISI - 09/10/07
                 CoilSection(NumSection)%Qsection=0.0
                 CoilSection(NumSection)%QsectionSens=0.0
                 tSiSUM=0.0; tSoSUM=0.0
-
+    
                 DO I=1,CoilSection(NumSection)%NumOfCkts
-
+    
                     Qckt=0.0; QcktSens=0
-
+    
                     CALL CalcCircuitRefInletConditions(NumSection,I,I,CoilType) !ISI - 09/10/07
-
+    
                     !Find first and last simulation tubes
                     IF (IsSimpleCoil .EQ. 1) THEN
                         FirstTube=1
@@ -821,7 +823,7 @@ CONTAINS
                             LastTube=CoilSection(NumSection)%Ckt(I)%Ntube-1 !Ignore last tube
                         END IF
                     END IF
-
+    
                     !****************** Hard code refrigerant distribution ****************** 
                     !              CoilSection(NumSection)%Ckt(1)%mRef=mRefTot*1.5/8
                     !              CoilSection(NumSection)%Ckt(2)%mRef=mRefTot*1/8
@@ -830,19 +832,19 @@ CONTAINS
                     !              CoilSection(NumSection)%Ckt(5)%mRef=mRefTot*1/8
                     !              CoilSection(NumSection)%Ckt(6)%mRef=mRefTot*1.5/8
                     !************************************************************************
-
+    
                     mRefMod=CoilSection(NumSection)%Ckt(I)%mRef !ISI - 09/10/07
-
+    
                     DO J=FirstTube,LastTube
-
+    
                         IF (IsSimpleCoil .EQ. 1) THEN
                             TubeNum=1
                         ELSE
                             TubeNum=CoilSection(NumSection)%Ckt(I)%TubeSequence(J)
                         END IF
-
+    
                         DO K=1,NumOfMods
-
+    
                             IF (IsSimpleCoil .EQ. 1) THEN
                                 SELECT CASE(K)
                                 CASE (1)
@@ -851,34 +853,36 @@ CONTAINS
                                     LmodTube=Lcoil/CoilSection(NumSection)%NumOfCkts-CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(1)%Len
                                 END SELECT
                             END IF
-                            CALL CalcCoilSegment(NumSection,I,I,J,K,CoilType)
+                            !CALL CalcCoilSegment(NumSection,I,I,J,K,CoilType)  !RS: Debugging: Temporarily setting in an Epsilon-NTU method
+                            CALL RachelCoilModel(NumSection,I,J,K,CoilType)
+                        
                             IF (ErrorFlag .GT. CONVERGEERROR) THEN
                                 EvapOUT%EOutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(17)
                                 CALL Evaporator_Helper_1
                                 RETURN
                             END IF
-
+    
                             !Calc. circuit heat transfer
                             Qckt=Qckt+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Qmod
                             QcktSens=QcktSens+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%QmodSens
-
+    
                             !Calc. sum of outlet air surface temperature
                             IF (CoilSection(NumSection)%Ckt(I)%Tube(J)%Back .EQ. 0) THEN 
                                 tSoSUM=tSoSUM+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%tSo
                             END IF
-
+    
                             IF (CoilSection(NumSection)%Ckt(I)%Tube(J)%Fup .EQ. 0 .AND. &
                             CoilSection(NumSection)%Ckt(I)%Tube(J)%Fdown .EQ. 0) THEN
                                 tSiSUM=tSiSUM+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%tSi
                             END IF
-
+    
                         END DO !End mod
-
+    
                     END DO !End tube
-
+    
                     pRoCkt=CoilSection(NumSection)%Ckt(I)%Tube(LastTube)%Seg(NumOfMods)%pRo !Circuit outlet pressure
                     hRoCkt=CoilSection(NumSection)%Ckt(I)%Tube(LastTube)%Seg(NumOfMods)%hRo !Circuit outlet enthalpy
-
+    
                     Pressure=pRoCkt*1000    !RS Comment: Unit Conversion
                     Enthalpy=hRoCkt*1000    !RS Comment: Unit Conversion
                     tRoCkt=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)   !RS Comment: Circuit Outlet Refrigerant Temperature
@@ -897,7 +901,7 @@ CONTAINS
                         CALL Evaporator_Helper_1
                         RETURN
                     END IF
-
+    
                     Pressure=pRoCkt*1000    !RS Comment: Unit Conversion
                     Quality=1
                     tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)  !RS Comment: Saturation Temperature
@@ -908,13 +912,13 @@ CONTAINS
                         CALL Evaporator_Helper_1
                         RETURN
                     END IF
-
+    
                     IF (xRoCkt .GE. 1) THEN 
                         CoilSection(NumSection)%Ckt(I)%tSH=tRoCkt-tSat !Superheat
                     ELSE
                         CoilSection(NumSection)%Ckt(I)%tSH=0.0
                     END IF
-
+    
                     CoilSection(NumSection)%Ckt(I)%tRo=tRoCkt
                     CoilSection(NumSection)%Ckt(I)%pRo=pRoCkt
                     CoilSection(NumSection)%Ckt(I)%hRo=hRoCkt
@@ -922,7 +926,7 @@ CONTAINS
                     CoilSection(NumSection)%Ckt(I)%QcktSens=QcktSens  !Sensible Circuit capacity
                     CoilSection(NumSection)%Qsection=CoilSection(NumSection)%Qsection+CoilSection(NumSection)%Ckt(I)%Qckt !Total coil capacity
                     CoilSection(NumSection)%QsectionSens=CoilSection(NumSection)%QsectionSens+CoilSection(NumSection)%Ckt(I)%QcktSens !Total sensible coil capacity
-
+    
                     IF (EqCircuits .EQ. 1 .AND. IsUniformVelProfile .OR. IsSimpleCoil .EQ. 1) THEN  !Equivalent circuit and Uniform velocity profile
                         Qcoil=CoilSection(NumSection)%Qsection*CoilSection(NumSection)%NumOfCkts
                         QcoilSens=CoilSection(NumSection)%QsectionSens*CoilSection(NumSection)%NumOfCkts
@@ -932,48 +936,48 @@ CONTAINS
                         CoilSection(NumOfSections)%hRo=hRoCkt
                         EXIT
                     END IF
-
+    
                     IF (CoilSection(NumSection)%Ckt(I)%OutSplit .LE. 1 .AND. CoilSection(NumSection)%Ckt(I)%OutJoin .LE. 1) THEN
                         mRefJoin=mRefJoin+CoilSection(NumSection)%Ckt(I)%mRef 
                     END IF
-
+    
                 END DO !End circuit
-
+    
                 IF (IsSimpleCoil .EQ. 1) THEN
                     EXIT
                 END IF
-
+    
                 CALL CalcMeanProp(tAiCoil,tAoCoil,tAmod)    !RS Comment: Mean Air Coil Temperature
                 CPair=CPA(REAL(tAmod))  !RS Comment: Finding the specific heat of air
                 Cair=mAiCoil*CPAir  !RS Comment: Finding the capacity rate of air
-
+    
                 tAoCoil=tAiCoil+CoilSection(NumSection)%QsectionSens/Cair   !RS Comment: Air Coil Outlet Temperature
-
+    
                 DiffQcoil=ABS((CoilSection(NumSection)%Qsection-PrevQcoil)/PrevQcoil) 
                 IF (DiffQcoil .GT. SMALL) THEN
                     PrevQcoil=CoilSection(NumSection)%Qsection
                 ELSE 
                     EXIT
                 END IF
-
+    
             END DO !end AirBCiter
-
+    
             IF (IsSimpleCoil .EQ. 1) THEN
                 EXIT
             END IF
-
+    
             IF (AirBCiter .GT. AirBCmaxIter) THEN
                 !AirBCiter not converged.
                 ErrorFlag=CONVERGEERROR
             END IF
-
+    
             IF (EqCircuits .EQ. 1 .AND. IsUniformVelProfile) THEN
                 EXIT !for equivalent circuit, no need to update mdot ref.
             END IF
-
+    
             !Synchronize from circuits to tubes
             DO I=1, CoilSection(NumSection)%NumOfCkts
-
+    
                 FirstTube=1
                 LastTube=CoilSection(NumSection)%Ckt(I)%Ntube
                 IF (CoilSection(NumSection)%Ckt(I)%InSplit .GT. 1) THEN
@@ -985,21 +989,21 @@ CONTAINS
                 IF (FirstTube .GT. LastTube) THEN
                     LastTube=FirstTube !Dummy tube
                 END IF
-
+    
                 DO J=FirstTube, LastTube
                     TubeNum=CoilSection(NumSection)%Ckt(I)%TubeSequence(J)
                     Tube(TubeNum)=CoilSection(NumSection)%Ckt(I)%Tube(J)
                 END DO
-
+    
                 IF (CoilSection(NumSection)%Ckt(I)%InSplit .GT. 1) THEN
                     CoilSection(NumSection)%Ckt(I)%Tube(1)=Tube(CoilSection(NumSection)%Ckt(I)%TubeSequence(1))
                 END IF 
                 IF (CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1) THEN
                     CoilSection(NumSection)%Ckt(I)%Tube(CoilSection(NumSection)%Ckt(I)%Ntube)=Tube(CoilSection(NumSection)%Ckt(I)%TubeSequence(Ckt(I)%Ntube))
                 END IF
-
+    
             END DO !End circuit
-
+    
             pRoCkt=0
             SumpRoCkt=0
             DO I=1, CoilSection(NumSection)%NumOfCkts
@@ -1011,20 +1015,20 @@ CONTAINS
             IF (SumpRoCkt .EQ. 0) THEN
                 SumpRoCkt=CoilSection(NumSection)%Ckt(1)%pRo !At least 1 circuit, ISI - 07/28/06
             END IF
-
+    
             IF (ABS(CoilSection(NumSection)%pRo-pRoCoilPrev) .GT. Ptol) THEN
                 MaxResidual=ABS(pRoCoilPrev-CoilSection(NumSection)%pRo)
                 pRoCoilPrev=CoilSection(NumSection)%pRo
                 Converged=.FALSE.   !No convergence
             END IF
-
+    
             IF (IsSameNumOfTubes .AND. IsUniformVelProfile) THEN
                 EXIT
             END IF
-
+    
             IF (NOT(Converged) .OR. Iter .LE. 2) THEN 
                 Converged=.TRUE. ! Reinitialize
-
+    
                 !Moved this subroutine to CoilCalc and share with condenser ISI - 06/05/07
                 CALL UpdateRefMassFlowRate(Iter,CoilSection(NumSection)%Ckt, &
                 CoilSection(NumSection)%NumOfCkts, &
@@ -1033,27 +1037,27 @@ CONTAINS
             ELSE
                 EXIT
             END IF
-
+    
         END DO !End iter
-
+    
         IF (Iter .GT. MdotMaxIter) THEN
             IF (MaxResidual .GT. Ptol) THEN
                 WRITE(*,FMT_107)'-- WARNING -- Evaporator: Solution not converged. Max. Residual = ',MaxResidual
                 ErrorFlag=CONVERGEERROR
             END IF
         END IF
-
+    
         IF (IsSimpleCoil .EQ. 1) THEN
             EXIT
         END IF
-
+    
         !ISI - 09/10/07
         CoilSection(NumSection)%hRo=CoilSection(NumSection)%hRi- &
         CoilSection(NumSection)%Qsection/CoilSection(NumSection)%mRef
-
+    
         Qcoil=Qcoil+CoilSection(NumSection)%Qsection                !RS Comment: Determining the total coil heat transfer
         Qcoilsens=QcoilSens+CoilSection(NumSection)%QsectionSens    !RS Comment: Determing the total sensible coil heat transfer
-
+    
     END DO !Number of sections, !ISI - 09/10/07
 
     pRoCoil=CoilSection(NumOfSections)%pRo
@@ -1087,16 +1091,16 @@ CONTAINS
     END IF
 
     !Determining inlet and outlet air properties
-    AirPropOpt=1
+    !AirPropOpt=1
     AirProp%APTDB=tAiCoil  !RS: Debugging: Formerly AirProp(1)
     AirProp%APEnth=hAiCoil  !RS: Debugging: Formerly AirProp(4)
-    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+    !CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
     DensityIn=AirProp%APDryDens    !RS: Debugging: Formerly AirProp(7)
 
-    AirPropOpt=1
+    !AirPropOpt=1
     AirProp%APTDB=tAoCoil  !RS: Debugging: Formerly AirProp(1)
     AirProp%APEnth=hAoCoil  !RS: Debugging: Formerly AirProp(4)
-    CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+    !CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
     rhAoCoil=AirProp%APRelHum !RS: Debugging: Formerly AirProp(3)
     DensityOut=AirProp%APDryDens   !RS: Debugging: Formerly AirProp(7)
 
@@ -2251,7 +2255,7 @@ END SUBROUTINE PrintEvaporatorResult
     INTEGER,PARAMETER :: IP=2
     
     !***** Get circuit info *****
-    IF (ErrorFlag .NE. NOERROR) THEN 
+    IF (ErrorFlag .GT. CONVERGEERROR) THEN !NE. NOERROR) THEN   !RS: Debugging: Pushing through convergence errors
         ErrorFlag=CKTFILEERROR
         CALL InitEvaporatorCoil_Helper_1
         RETURN
@@ -2396,7 +2400,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 Pl = Pt
             END IF
 
-            IF (ErrorFlag .NE. NOERROR) THEN 
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN !NE. NOERROR) THEN    !RS: Debugging: Pushing through convergence errors
                 ErrorFlag=CKTFILEERROR
                 CALL InitEvaporatorCoil_Helper_1
                 RETURN
@@ -2424,6 +2428,23 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 ErrorFlag=COILTUBEERROR
                 CALL InitEvaporatorCoil_Helper_1
                 RETURN
+            END IF
+            
+            IF (IsSimpleCoil .EQ. 1) THEN
+                IF (.NOT. ALLOCATED(Ckt)) THEN
+                NumOfMods=2
+                ALLOCATE(CoilSection(NumOfSections)) 
+                ALLOCATE(Ckt(NumOfCkts))
+                ALLOCATE(CoilSection(1)%Ckt(NumOfCkts)) 
+                ALLOCATE(SucLnSeg(NumOfMods))		  
+                CoilSection(1)%NumOfCkts=NumOfCkts
+                DO I=1, NumOfCkts
+                    Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
+                    ALLOCATE(Ckt(I)%Tube(1))
+                    ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
+                    CoilSection(1)%Ckt(I)=Ckt(I)
+                END DO
+                END IF
             END IF
             
             IF (.NOT. ALLOCATED(Ckt)) THEN
@@ -7319,5 +7340,479 @@ REAL, INTENT(OUT) :: Out2
     Out2=QModLat  !Latent Module heat transfer, kW
     
 END SUBROUTINE
+
+SUBROUTINE RachelCoilModel(NumSection,II,III,IV,CoilType)
+
+!------------------------------------------------------------------------
+!Purpose:
+!To perform heat exchanger calculation for a segment
+!
+!Author
+!Ipseng Iu
+!Oklahoma State University, Stillwater
+!
+!Date
+!March 2005
+!
+!Reference:
+!none
+!
+!------------------------------------------------------------------------
+
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+USE CoilCalcMod
+USE AirPropMod
+
+IMPLICIT NONE
+
+INTEGER,INTENT(IN) :: NumSection !Section number
+!INTEGER,INTENT(IN) :: I   !Slab number
+INTEGER,INTENT(IN) :: II  !Circuit,pass number
+INTEGER,INTENT(IN) :: III !Tube number
+INTEGER,INTENT(IN) :: IV  !Segment number
+
+INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator; 
+                                 !3=High side interconnecting pipes; 
+								 !4=Low side interconnecting pipes
+								 !5=Microchannel condenser
+								 !6=Microchannel Evaporator
+
+!FLOW:
+
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%Len=LmodTube
+
+		CALL CalcSegmentRefInletConditions(NumSection,II,II,III,IV,CoilType)
+
+		IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
+
+		mAiMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%mAi
+		tAiMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tAi
+		rhAiMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%rhAi
+		VelDevMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%VelDev
+
+		WetFlag=0
+		RowNum=CoilSection(NumSection)%Ckt(II)%Tube(III)%RowNum
+        CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,tAiMod,mAiCoil,DensityIn,DensityIn,Pt,Pl,Ltube,HtCoil, &
+                        IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
+        !Module surface areas
+	    AoMod=AoCoil*LmodTube/Lcoil
+		AfMod=AfCoil*LmodTube/Lcoil
+		AiMod=AiCoil*LmodTube/Lcoil
+		AmMod=AmCoil*LmodTube/Lcoil
+
+		hco=hco*hcoMultiplier
+		DPair=DPair*DPairMultiplier
+
+		hcoMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%VelDev*hco !*LmodTube/Lcoil
+
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%hco=hcoMod
+
+		AirProp%APTDB=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tAi
+		AirProp%APRelHum=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%rhAi
+		hAiMod=AirProp%APEnth
+		TwbAiMod=AirProp%APTWB
+		TdpAiMod=AirProp%APTDP 
+		wAiMod=AirProp%APHumRat
+
+		mRefMod=CoilSection(NumSection)%Ckt(II)%mRef
+		pRiMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%pRi
+		hRiMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%hRi
+
+		CALL CalcRefProperty(pRiMod,hRiMod,hfRiMod,hgRiMod,hfgRiMod,Psat,Tsat,tRiMod,xRiMod, &
+							 vRiMod,vfRiMod,vgRiMod,cpRiMod,cpfRiMod,cpgRiMod, &
+							 muRiMod,mufRiMod,mugRiMod,kRiMod,kfRiMod,kgRiMod,SigmaMod)
+		IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
+
+		tAoMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tAo
+		wAoMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%wAo 
+		CALL CalcMeanProp(tAiMod,tAoMod,tAmod)  !Module Mean Air Temperature
+		CALL CalcMeanProp(wAiMod,wAoMod,wAmod)  !Module Mean Air Wet Bulb Temperature
+
+		CALL RachelCalcSegmentOutletConditions(NumSection,II,II,III,IV,CoilType)
+        
+		IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
+
+		QmodPrev=Qmod
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%mAi=mAiMod !ISI - 12/05/06
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%Len=LmodTube
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%Qmod=Qmod
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%QmodSens=QmodSens
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%pRo=pRoMod
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%hRo=hRoMod
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tAo=tAoMod
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%wAo=wAoMod
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%rhAo=rhAoMod
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%wbAo=wbAoMod
+
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%hci=hciMod
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%EFref=EFref
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%hco=hcoMod
+
+		IF (xRmod .GE. 1) THEN
+			CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%ReVap=ReVap
+			CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%ReLiq=0
+		ELSE IF (xRmod .LE. 0) THEN
+			CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%ReVap=0
+			CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%ReLiq=ReLiq
+		ELSE
+			CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%ReVap=ReVap
+			CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%ReLiq=ReLiq
+		END IF
+
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%cAir=cAir
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%Rair=Rair
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%Rtube=Rtube
+		
+		!Surface temperature
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tSi=tAiMod-ABS(Qmod)*(Rair+CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%Rfrost)
+		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tSo=tAoMod-ABS(Qmod)*(Rair+CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%Rfrost)
+
+        CALL UpdateTubeDataFromCircuitData(NumSection,II,III)
+
+RETURN
+
+END SUBROUTINE RachelCoilModel
+
+SUBROUTINE RachelCalcSegmentOutletConditions(NumSection,I,II,III,IV,CoilType)
+
+!------------------------------------------------------------------------
+!Purpose:
+!To calculate segment outlet conditions
+!
+!Author
+!Ipseng Iu
+!Oklahoma State University, Stillwater
+!
+!Date
+!March 2005
+!
+!Reference:
+!none
+!
+!------------------------------------------------------------------------
+
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+USE CoilCalcMod
+USE AirPropMod
+USE OilMixtureMod
+
+IMPLICIT NONE
+
+INTEGER,INTENT(IN) :: NumSection !Section number
+INTEGER,INTENT(IN) :: I   !Slab number
+INTEGER,INTENT(IN) :: II  !Circuit,pass number
+INTEGER,INTENT(IN) :: III !Tube number
+INTEGER,INTENT(IN) :: IV  !Segment number
+
+INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator; 
+                                 !3=High side interconnecting pipes; 
+								 !4=Low side interconnecting pipes
+								 !5=Microchannel condenser
+								 !6=Microchannel evaporator
+
+REAL DPreturnbend !Pressure drop at return bend, kPa
+REAL DiffpRoMod   !Difference in pRoMod
+REAL DiffhRoMod   !Difference in hRoMod
+REAL PrevpRoMod   !Previous value of pRoMod
+REAL PrevhRoMod   !Previous value of hRoMod
+INTEGER RefBCiter   !Iteration loop counter
+LOGICAL IsTransitSegmentCalled !Flag to indicate if 'CalcTransitSegment' is called
+LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
+
+!FLOW:
+
+	!Initialize for property iteration, to find the mean property
+	hfgRoMod=0;  xRoMod=0;  vgRoMod=0;  vfRoMod=0
+	muRoMod=0;  mugRoMod=0;  mufRoMod=0
+	kRoMod=0;	  kfRoMod=0;  kgRoMod=0
+	cpRoMod=0;  cpfRoMod=0;  cpgRoMod=0
+	DPmod=0;
+
+	IsTransitSegmentCalled=.FALSE.
+	IsTransitionSegment=.FALSE.
+	
+	PrevpRoMod=BIG 
+	PrevhRoMod=BIG 
+
+	tRoMod=tRiMod
+	
+	xRoMod=xRiMod
+
+	hRoMod=hRiMod
+
+	DO RefBCiter=1, RefBCmaxIter
+		    	    
+		!Correct quality
+		IF (xRoMod .GT. 1) THEN
+			xRoMod=1
+		ELSEIF (xRoMod .LT. 0) THEN
+		    xRoMod=0 
+		ENDIF
+		IF (xRiMod .GT. 1) THEN
+		    xRiMod=1
+		ELSEIF (xRiMod .LT. 0) THEN
+		    xRiMod=0 
+		ENDIF
+
+		!Calculate mean properties
+		CALL CalcMeanProp(hfgRiMod,hfgRoMod,hfgRmod)
+		CALL CalcMeanProp(xRiMod,xRoMod,xRmod)
+		CALL CalcMeanProp(vgRiMod,vgRoMod,vgRmod)
+		CALL CalcMeanProp(vfRiMod,vfRoMod,vfRmod)
+		CALL CalcMeanProp(muRiMod,muRoMod,muRmod)
+		CALL CalcMeanProp(mugRiMod,mugRoMod,mugRmod)
+		CALL CalcMeanProp(mufRiMod,mufRoMod,mufRmod)
+		CALL CalcMeanProp(kRiMod,kRoMod,kRmod)
+		CALL CalcMeanProp(kfRiMod,kfRoMod,kfRmod)
+		CALL CalcMeanProp(kgRiMod,kgRoMod,kgRmod)
+		CALL CalcMeanProp(cpRiMod,cpRoMod,cpRmod)
+		CALL CalcMeanProp(cpfRiMod,cpfRoMod,cpfRmod)
+		CALL CalcMeanProp(cpgRiMod,cpgRoMod,cpgRmod)
+
+		!Correct specific heat
+		IF (cpRmod .LE. 0) THEN !ISI - 08/03/06 
+		    IF (xRmod .LE. 0) THEN
+                cpRmod = cpfRmod
+            END IF
+		    IF (xRmod .GE. 1) THEN
+                cpRmod = cpgRmod
+            END IF
+		END IF
+
+		!Correct thermal conductivity
+		IF (kRmod .LE. 0) THEN !ISI - 08/03/06
+		    IF (xRmod .LE. 0) THEN
+                kRmod = kfRmod
+            END IF
+			IF (xRmod .GE. 1) THEN
+                kRmod = kgRmod
+            END IF
+        END IF
+
+        !Correct dynamic viscosity
+		IF (muRmod .LE. 0) THEN !ISI - 08/03/06
+		    IF (xRmod .LE. 0) THEN
+                muRmod = mufRmod
+            END IF
+			IF (xRmod .GE. 1) THEN
+                muRmod = mugRmod
+            END IF
+		END IF
+
+		!For tube cover both two phase and single phase region
+		LmodTPratio=0 !Initialize
+		QmodTP=0 !Initialize
+		IF (RefBCiter .GT. 1 .AND. hRiMod .LT. hgRoMod .AND. hRoMod .GE. hgRoMod) THEN 
+		
+			CALL CalcTransitionSegment(CoilType)
+			IsTransitSegmentCalled=.TRUE.
+			IF (ErrorFlag .GT. CONVERGEERROR) THEN
+                RETURN
+            END IF
+
+			!Update properties ISI - 08/03/06 
+			IF (cpRmod .LE. 0) THEN 
+				IF (xRmod .LE. 0) THEN
+                    cpRmod = cpfRmod
+                END IF
+				IF (xRmod .GE. 1) THEN
+                    cpRmod = cpgRmod
+                END IF
+			END IF
+
+			IF (kRmod .LE. 0) THEN !ISI - 08/03/06
+				IF (xRmod .LE. 0) THEN
+                    kRmod = kfRmod
+                END IF
+				IF (xRmod .GE. 1) THEN
+                    kRmod = kgRmod
+                END IF
+			END IF
+
+			IF (muRmod .LE. 0) THEN !ISI - 08/03/06
+				IF (xRmod .LE. 0) THEN
+                    muRmod = mufRmod
+                END IF
+				IF (xRmod .GE. 1) THEN
+                    muRmod = mugRmod
+                END IF
+			END IF
+
+		END IF 
+
+			IF (DTmod .EQ. 0) THEN
+                DTmod=(tAiMod+tRiMod)/2 !First estimate
+            END IF
+            CALL hcRefside(CoilType,TubeType,IDtube,mRefMod,-Qmod, &               !Calculating the refrigerant side heat transfer coefficient
+        xRmod,xRmod,vgRmod,vfRmod,muRmod,mugRmod,mufRmod,kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
+        Psat,Pcr,Wabsolute,EFref,hciMod)
+            
+			hciMod=hciMod*hciMultiplier
+
+			CALL Reynolds(IDtube,mRefMod,xRmod,muRmod,mugRmod,mufRmod,ReVap,ReLiq)
+			  
+			!***Dry surface calc.
+			Tsurf=0
+
+			!Calc. UA
+			CALL CalcUA(CoilType,Kfin,FinThk,FinHeight,Ktube,Pt,Pl,ODtube,TubeThk,TubeDepth, &
+						hcoMod,hciMod,AfMod,AoMod,AiMod,AmMod, &
+						UA,Rair,Rrefrig,Rtube,FinEff,SurfEff)
+
+			IF (xRiMod .LT. 1 .AND. xRoMod .GE. 1 .AND. LmodTPratio .LT. 1) THEN !Evaporator outlet
+				UA=UA*(1-LmodTPratio)
+			END IF
+			 
+			!Calc. Cref
+				cRef=mRefMod*cpRmod
+			IF (xRmod .LT. 1. .AND. xRmod .GT. 0.) THEN
+                cRef=BIG !Phase change
+            END IF
+
+			!Calc. Cair
+			CPair=CPA(REAL(tAmod))
+			cAir=mAiMod*cpAir
+
+			!Calc. Cmin
+			Cmin=MIN(cAir,cRef)
+
+			!Calc. Epsilon
+			CALL EPScalc(cAir,cRef,UA,Cratio,NTU,EPS)
+            
+			!Calc. DT
+			IF (LmodTPratio .GT. 0) THEN !ISI - 07/21/06
+				DT=(tRmod-tAiMod)
+			ELSE
+				DT=(tRiMod-tAiMod)
+			END IF
+
+			!Calc. dry module heat transfer
+			QmodDry=EPS*Cmin*DT
+
+			IF (xRiMod .LT. 1 .AND. xRoMod .GE. 1) THEN
+					IF (LmodTP .EQ. LmodTube) THEN
+						IF (QmodDry .GT. QmodTP) THEN
+                            QmodDry = QmodTP
+                        END IF
+					ELSE
+						QmodDry=QmodDry+QmodTP
+					END IF
+			END IF
+
+			!Calc. Outside air enthalpy
+			hAoDry=QmodDry/mAiMod+hAiMod
+
+			!Outside air temp
+			TdbAoDry=QmodDry/cAir+tAiMod
+
+			AirProp%APTDB=TdbAoDry
+			AirProp%APEnth=hAoDry  
+			rhAoMod=AirProp%APRelHum
+			TwbAoMod=AirProp%APTWB
+			TdpAoMod=AirProp%APTDP
+			DensityOut=AirProp%APDryDens 
+
+			!Calc dry surface temperature
+			NTUsDry=1/(cAir*Rair) 
+			EPSsDry=1-EXP(-NTUsDry)
+
+			TsDry=QmodDry/(EPSsDry*cAir)+tAiMod
+
+			DryWet=3
+			Qmod=QmodDry
+			QmodSens=QmodDry
+			QmodWet=0
+			hAoMod=hAoDry
+			tAoMod=TdbAoDry
+			SHR=1
+
+		IF (xRmod .LT. 1 .AND. xRmod .GT. 0 .AND. NOT(IsTransitSegmentCalled)) THEN 
+							  						
+			!********************* Ding starts ******************************
+			!Calc. temperature where moisture remove occurs
+
+			IF (TdpAiMod .GT. tRiMod) THEN !Wet surface
+				  CALL CalcWetSurfaceBraun(NumSection,I,II,III,IV,CoilType)
+			END IF
+
+		END IF
+
+			CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%DryWet = DryWet
+            
+		    AirProp%APTDB=tAoMod
+		    AirProp%APEnth=hAoMod
+		    rhAoMod=AirProp%APRelHum
+        
+			hRoMod=-Qmod/mRefMod+hRiMod 
+            
+		CALL CalcSegmentRefOutletPressure(CoilType,TubeType,pRiMod,hgRiMod,hfRiMod, & !CoilType,TubeType,tRiMod,pRiMod,hgRiMod,hfRiMod, &
+				  	                      hRiMod,hRoMod,xRiMod,vRiMod,vgRiMod,vfRiMod,mRefMod, &
+										  muRiMod,mugRiMod,mufRiMod,LmodTube,LmodTPratio, & !muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodSuc,LmodTPratio, &
+										  IDtube,HtCoil,Lcoil,pRoMod)
+
+		IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
+
+		CALL CalcRefProperty(pRoMod,hRoMod,hfRoMod,hgRoMod,hfgRoMod,Psat,Tsat,tRoMod,xRoMod, &
+							 vRoMod,vfRoMod,vgRoMod,cpRoMod,cpfRoMod,cpgRoMod, &
+							 muRoMod,mufRoMod,mugRoMod,kRoMod,kfRoMod,kgRoMod,SigmaMod)
+        
+		IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
+
+			!Return bend pressure drop
+			IF (IV .EQ. NumOfMods) THEN
+                CALL returnbend(CoilType,TubeType,IDtube,Pt,mRefmod,xRoMod,vRoMod,vgRoMod,vfRoMod,mugRoMod,mufRoMod,DPreturnbend)
+                    pRoMod=pRoMod-DPreturnbend
+				CALL CalcRefProperty(pRoMod,hRoMod,hfRoMod,hgRoMod,hfgRoMod,Psat,Tsat,tRoMod,xRoMod, &
+									 vRoMod,vfRoMod,vgRoMod,cpRoMod,cpfRoMod,cpgRoMod, &
+									 muRoMod,mufRoMod,mugRoMod,kRoMod,kfRoMod,kgRoMod,SigmaMod)
+				IF (ErrorFlag .GT. CONVERGEERROR) THEN
+                    RETURN
+                END IF
+            END IF
+
+		IF (xRmod .GT. 0.9 .AND. RefBCiter .GE. 2) THEN
+		  EXIT !doesn't converge for xRmod > 0.9.  May be due to the sharp change of the hci
+		ELSE
+			DTmod=-Qmod*(1/(hciMod*AiMod)+LOG(ODtube/IDtube)/(2*PI*Ktube*LmodTube))
+			DiffpRoMod=ABS((pRoMod-PrevpRoMod)/PrevpRoMod)
+			DiffhRoMod=ABS((hRoMod-PrevhRoMod)/PrevhRoMod)
+			IF (DiffpRoMod .GT. SMALL .OR. DiffhRoMod .GT. SMALL) THEN 
+				PrevpRoMod=pRoMod
+				PrevhRoMod=hRoMod
+			ELSE 
+				EXIT
+			END IF
+		END IF
+			
+	END DO !end of RefBCiter
+
+	IF (RefBCiter .GT. RefBCmaxIter) THEN
+		!RefBCiter not converged.
+		ErrorFlag=CONVERGEERROR
+	END IF
+
+	!Outside air temp
+	tAoMod=QmodSens/cAir+tAiMod
+
+	!Calc. Outside air enthalpy
+	hAoMod=Qmod/mAiMod+hAiMod
+
+	AirProp%APTDB=tAoMod
+	AirProp%APEnth=hAoMod
+	 
+RETURN
+
+END SUBROUTINE RachelCalcSegmentOutletConditions
+    
 
 END MODULE EvaporatorMod

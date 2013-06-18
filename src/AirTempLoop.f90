@@ -244,7 +244,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
             WRITE(PrintString,FMT_804)'        Calculated superheat = ',SUPCAL,DTunit
         END IF
     END IF
-    CALL IssueOutputMessage( PrintString)
+    CALL IssueOutputMessage(PrintString)
 
     RETURN
 

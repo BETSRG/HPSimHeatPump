@@ -673,8 +673,7 @@ END SUBROUTINE hcRefside
 
 SUBROUTINE AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,tAiCoil,mAiCoil,rhoIn,rhoOut,Pt,Pl, &
                        Ltube,HtCoil,ID,OD,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg, &
-					   Lcoil,AfCoil, &
-					   AoCoil,AiCoil,FaceVel,hco,DP)
+					   Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DP)
 
 !AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,rhoIn,rhoOut,Pt,Pl, &
 !                       Ltube,HtCoil,ID,OD,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg, &
@@ -851,8 +850,7 @@ REAL Ke       !Expansion coefficient, [-]
 
 	!J-factors
 	CALL CalcJfactor(FinType,WetFlag,FinSpg,FinThk,HXdep,Nl, &
-	                 Dc,Pt,Pl,Amin,AoCoil,ReDc, &
-					 Jfactor)
+	                 Dc,Pt,Pl,Amin,AoCoil,ReDc,Jfactor)
 !(CoilType,FinType,WetFlag,FinSpg,FinThk,Ltube,HXdep,Nl,Nt,RowNum, &
 !                       OD,ID,Dc,Pt,Pl,TubeDepth,Aface,Amin,AoCoil,AbrCoil,ReDc,RePl,muAir, &
 !					   cpAir,kAir,mAiCoil,FaceVel,Gmax,PrAir,jfactor)
@@ -3616,6 +3614,9 @@ REAL Gref     !Refrigerant mass flux, [kg/s-m^2]
   !Pout=Gref**2*(xRo**2*vgo/alphao+(1-xRo)**2*vfo/(1-alphao))
 
   !dPdZmom=ABS(Pout-Pin)/Lmod
+  IF(alphai .EQ. 1 .AND. alphao .EQ. 1) THEN    !RS: Debugging: Trying to keep dPdZmom from being NaN
+    dPdZmom=0.0
+  END IF
 
   RETURN
 
@@ -3717,6 +3718,10 @@ REAL dZdL    !Pressure gradient, [kPa/m]
   dZdL=HtCoil/Lcoil
 
   dPdZgrav=(1./vRef1)*9.8*dZdL
+  
+  IF (dZdL .eq. 0) THEN !RS: Debugging: Trying to keep dPdZgrav from being NaN
+      dPdZgrav=0
+  END IF
 
   RETURN
 
@@ -4677,8 +4682,7 @@ END SUBROUTINE RouhanniVoidFrac
 !************************************************************************
 
 SUBROUTINE CalcJfactor(FinType,WetFlag,FinSpg,FinThk,HXdep,Nl, &
-                       Dc,Pt,Pl,Amin,AoCoil,ReDc, &
-					   jfactor)
+                       Dc,Pt,Pl,Amin,AoCoil,ReDc,jfactor)
 !(CoilType,FinType,WetFlag,FinSpg,FinThk,Ltube,HXdep,Nl,Nt,RowNum, &
 !                       OD,ID,Dc,Pt,Pl,TubeDepth,Aface,Amin,AoCoil,AbrCoil,ReDc,RePl,muAir, &
 !					   cpAir,kAir,mAiCoil,FaceVel,Gmax,PrAir,jfactor)

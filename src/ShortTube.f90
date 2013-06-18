@@ -10,12 +10,12 @@
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
 ! -------------------------------------- !
-! THis does not represent a physical component of the HEat Pump system
+! This does not represent a physical component of the Heat Pump system
 
 ! ************************************** !
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
-! THis module takes the expansion device inlet conditions and the outlet conditions from the compressor and the inlet conditions to the evaporator.
+! This module takes the expansion device inlet conditions and the outlet conditions from the compressor and the inlet conditions to the evaporator.
 ! These inputs are used to calculate the outlet conditions of the expansion device.
 !
 ! ************************************** !

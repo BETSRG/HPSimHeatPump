@@ -100,7 +100,6 @@
     REAL XMR,TSATCI,TSATEI
     REAL XMRFLD,TSAVG,TRIE,CDTRIE,DTRE,CDTRE,DTRIE,SXIE
     REAL FilterDP
-    !REAL SimpleCondOUT(20),DetailedCondOUT(20)  !RS: Debugging: Formerly (29), (24)    !RS: Debugging: Not used anymore
     REAL DetailedQcnd,DetailedDPcnd
     REAL SimpleQcnd,SimpleDPcnd
     LOGICAL,SAVE :: IsFirstTimeCondenser = .TRUE. !First time to call condenser flag
@@ -276,16 +275,13 @@
                 IF (ABS((SimpleQcnd-DetailedQcnd)/DetailedQcnd) .LT. 0.1 .AND. &
                 ABS((SimpleDPcnd-DetailedDPcnd)/DetailedDPcnd) .LT. 0.1) THEN
                     CondPAR%CondSimpCoil=1   !RS: Debugging: Formerly CONDPAR(44)
-                    !CondOUT=SimpleCondOUT  !RS: Debugging: No SimpleCondOUT now
                 ELSE
                     CondPAR%CondSimpCoil=0   !RS: Debugging: Formerly CONDPAR(44)
-                    !CondOUT=DetailedCondOUT   !RS: Debugging: No DetailedCondOUT now
                 END IF 
                 IsFirstTimeCondenser=.FALSE.
 
                 !Always detailed
                 CondPAR%CondSimpCoil=0   !RS: Debugging: Formerly CONDPAR(44)
-                !CondOUT=DetailedCondOUT    !RS: Debugging: No DetailedCondOUT now
 
             ELSE
                 CALL Condenser(Ref$) !,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef

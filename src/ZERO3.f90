@@ -31,7 +31,7 @@
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
 ! This module contains 1 method:
-!    PUBLIC ZERO3 -- What does this do (in one line)?
+!    PUBLIC ZERO3 -- Calls GUESS3 and iterates until convergence.
 !      Called by HPdesignMod.f90
 
 ! ************************************** !
