@@ -732,7 +732,7 @@ CONTAINS
 
     IsCoolingMode   = PAR(20)
 
-    IsSimpleCoil=PAR(53) !ISI - 12/21/06
+    IsSimpleCoil=PAR(53) !ISI - 12/21/06 !RS: Debugging: Trying Simple Coil Model
     FirstTime=PAR(54)    !ISI - 12/21/06
 
     IF (FirstTime .EQ. 1) THEN
@@ -914,8 +914,8 @@ CONTAINS
                                     LmodTube=Lcoil/CoilSection(NumSection)%NumOfCkts-CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(1)%Len
                                 END SELECT
                             END IF
-                            !CALL CalcCoilSegment(NumSection,I,I,J,K,CoilType)   !RS: Debugging: Temporarily setting in an Epsilon-NTU method
-                            CALL RachelCoilModel(NumSection,I,J,K,CoilType)
+                            CALL CalcCoilSegment(NumSection,I,I,J,K,CoilType)   !RS: Debugging: Temporarily setting in an Epsilon-NTU method
+                            !CALL RachelCoilModel(NumSection,I,J,K,CoilType)
                             IF (ErrorFlag .GT. CONVERGEERROR) THEN
                                 OUT(20)=ErrorFlag
                                 CALL Evaporator_Helper_1
@@ -2454,6 +2454,23 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 RETURN
             END IF
             
+            IF (IsSimpleCoil .EQ. 1) THEN
+                IF (.NOT. ALLOCATED(Ckt)) THEN
+                NumOfMods=2
+                ALLOCATE(CoilSection(NumOfSections)) 
+                ALLOCATE(Ckt(NumOfCkts))
+                ALLOCATE(CoilSection(1)%Ckt(NumOfCkts)) 
+                ALLOCATE(SucLnSeg(NumOfMods))		  
+                CoilSection(1)%NumOfCkts=NumOfCkts
+                DO I=1, NumOfCkts
+                    Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
+                    ALLOCATE(Ckt(I)%Tube(1))
+                    ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
+                    CoilSection(1)%Ckt(I)=Ckt(I)
+                END DO
+                END IF
+            END IF
+            
             IF (.NOT. ALLOCATED(Ckt)) THEN
                 CALL InitEvaporatorStructures()
             END IF
@@ -3626,7 +3643,7 @@ INTEGER I,II,III !,IV,J,K !Loop counters    !RS: Debugging: Extraneous
 
   IF (IsSimpleCoil .EQ. 1) THEN
 	  DO I=1, NumOfCkts
-		DEALLOCATE(Ckt(I)%Tube(1)%Seg)
+!		DEALLOCATE(Ckt(I)%Tube(1)%Seg)  !RS: Debugging: Doesn't quite work with simple version needed currently
 		DEALLOCATE(Ckt(I)%Tube)
 	  END DO
 	  DEALLOCATE(Ckt)
