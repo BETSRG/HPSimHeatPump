@@ -462,7 +462,7 @@
                     IsFirstTimeEvaporator=.FALSE. 
 
                     !Always detailed
-                    EvapPAR(53)=0 !Detailed version
+                    !EvapPAR(53)=0 !Detailed version    !RS: Debugging: Simple version needed currently
                     EvapOUT=DetailedEvapOUT
 
                 ELSE

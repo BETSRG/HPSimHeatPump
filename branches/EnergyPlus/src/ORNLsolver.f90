@@ -626,7 +626,7 @@
     CALL PrintCondenserResult
     !CALL EndCondenserCoil  !RS: Debugging: Removing for the moment
     
-    !CALL GetQOut(QUnitOut,LatOutputProvided)    !RS: Testing: Trying to read variables from PrintEvaporator File   !RS: Debugging: Temporarily setting in an Epsilon-NTU method
+    CALL GetQOut(QUnitOut,LatOutputProvided)    !RS: Testing: Trying to read variables from PrintEvaporator File   !RS: Debugging: Temporarily setting in an Epsilon-NTU method
     
     QRemain=ZoneSysEnergyDemand(1)%RemainingOutputRequired-QUnitOut !-LatOutputProvided    !RS: Debugging: Qouts are load into zone
 

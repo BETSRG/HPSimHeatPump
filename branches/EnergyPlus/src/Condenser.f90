@@ -705,7 +705,7 @@
 
     IsCoolingMode   = PAR(27)
 
-    IsSimpleCoil=PAR(61) !ISI - 12/22/06
+    IsSimpleCoil=1 !PAR(61) !ISI - 12/22/06  !RS: Debugging: Trying Simple Coil Model
     FirstTime=PAR(62)    !ISI - 12/22/06
 
     !Initialize circuiting and refrigerant parameters
@@ -882,8 +882,8 @@
                                 LmodTube=Lcoil/NumOfCkts-(Ckt(I)%Tube(J)%Seg(1)%Len+Ckt(I)%Tube(J)%Seg(2)%Len)
                             END SELECT
                         END IF
-                        !CALL CalcCoilSegment(I,I,J,K,CoilType)  !RS: Debugging: Temporarily setting in an Epsilon-NTU method
-                        CALL RachelCoilModel(I,J,K,CoilType)
+                        CALL CalcCoilSegment(I,I,J,K,CoilType)  !RS: Debugging: Temporarily setting in an Epsilon-NTU method
+                        !CALL RachelCoilModel(I,J,K,CoilType)
                         IF (ErrorFlag .GT. CONVERGEERROR) THEN
                             OUT(24)=ErrorFlag
                             CALL Condenser_Helper_1
@@ -2344,6 +2344,20 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 RETURN
             END IF
 
+            IF (IsSimpleCoil .EQ. 1) THEN   !This is an open block currently; it will need fixing. !RS Comment: No longer an open block!
+                NumOfMods=3
+                IF (.NOT. ALLOCATED(Ckt)) THEN
+                ALLOCATE(Ckt(NumOfCkts))
+                ALLOCATE(DisLnSeg(NumOfMods))
+                ALLOCATE(LiqLnSeg(NumOfMods))	  
+                DO I=1, NumOfCkts
+                    Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
+                    ALLOCATE(Ckt(I)%Tube(1))
+                    ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
+                END DO
+                END IF
+            END IF
+            
             IF (.NOT. ALLOCATED(Ckt)) THEN
                 CALL InitCondenserStructures
             END IF
@@ -3418,14 +3432,14 @@ END IF
 
     IF (IsSimpleCoil .EQ. 1) THEN
         DO I=1, NumOfCkts
-            !IF (ALLOCATED(DisLnSeg)) THEN   !RS: Debugging: These still aren't always allocated
+            IF (ALLOCATED(DisLnSeg)) THEN   !RS: Debugging: These still aren't always allocated
                 DEALLOCATE(Ckt(I)%Tube(1)%Seg)
                 DEALLOCATE(Ckt(I)%Tube)
-            !END IF
+            END IF
         END DO
-        !IF (ALLOCATED(DisLnSeg)) THEN   !RS: Debugging: This isn't always allocated
+        IF (ALLOCATED(DisLnSeg)) THEN   !RS: Debugging: This isn't always allocated
             DEALLOCATE(Ckt)
-        !END IF
+        END IF
         IF (ALLOCATED(DisLnSeg)) THEN
             DEALLOCATE(DisLnSeg) !Discharge line
         END IF
@@ -3433,7 +3447,7 @@ END IF
             DEALLOCATE(LiqLnSeg) !Line line
         END IF
 
-        RETURN
+        !RETURN !RS: Debugging: Checking for other allocations
     END IF
 
     IF (NumOfChannels .GT. 1) THEN
@@ -3449,12 +3463,12 @@ END IF
                     END DO !end pass
                     DEALLOCATE(Slab(I)%Pass) 
                     DEALLOCATE(Slab(I)%InletPass) 
-                END IF
-            END DO !end slab
+                 END IF
+             END DO !end slab
             DEALLOCATE(Slab)
         END IF
 
-    ELSE
+     ELSE
 
         IF (ErrorFlag .EQ. CKTFILEERROR) THEN
             DO I=1, NumOfTubes
