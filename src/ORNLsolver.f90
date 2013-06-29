@@ -644,7 +644,7 @@
     LastCoolingMode=ISCoolingMode   !RS: Debugging: Seeing if cooling mode changes between iterations
     
     CALL FlushHPOutput()
-
+    !RS: Debugging: Testing: Seeing if the outputs should really be negative.
     QUnitOut1=QUnitOut    !RS: Debugging: Temporarily setting in an Epsilon-NTU method
     LatOutputProvided1=LatOutputProvided    !RS: Debugging: Temporarily setting in an Epsilon-NTU method
 
