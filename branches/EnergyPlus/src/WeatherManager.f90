@@ -1864,9 +1864,9 @@ SUBROUTINE InitializeWeather(PrintEnvrnStamp)
   INTEGER :: JDay5Start
   INTEGER :: JDay5End
   INTEGER :: TWeekDay
-    INTEGER :: DebugFile       =150 !RS: Debugging file denotion
-    
-  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  !  INTEGER :: DebugFile       =150 !RS: Debugging file denotion
+  !  
+  !OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
           ! FLOW:
 
@@ -2093,9 +2093,9 @@ SUBROUTINE InitializeWeather(PrintEnvrnStamp)
   ENDIF
 
   IF (EndEnvrnFlag .and. (Environment(Envrn)%KindOfEnvrn /= ksDesignDay) ) THEN
-    WRITE(DebugFile,*) 'Before Rewinding: ', WeatherFileUnitNumber
+   ! WRITE(DebugFile,*) 'Before Rewinding: ', WeatherFileUnitNumber
     REWIND(WeatherFileUnitNumber)
-    WRITE(DebugFile,*) 'After Rewinding: ', WeatherFileUnitNumber
+   ! WRITE(DebugFile,*) 'After Rewinding: ', WeatherFileUnitNumber
     CALL SkipEPlusWFHeader
     CALL ReportMissing_RangeData
   ENDIF
@@ -4738,15 +4738,15 @@ SUBROUTINE OpenEPlusWeatherFile(ErrorsFound,ProcessHeader)
   integer, external :: FindNonSpace
   LOGICAL EPWOpen
   integer :: unitnumber
-  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
-    
-  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  !INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
+  !  
+  !OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   INQUIRE(FILE='in.epw',NUMBER=unitnumber,OPENED=EPWOpen)
   IF (EPWOpen) CLOSE(unitnumber)
 
   WeatherFileUnitNumber=GetNewUnitNumber()
-  WRITE(DebugFile,*) 'WeatherFileUnitNumber=',WeatherFileUnitNumber !RS: Debugging: Finding out what all the Weather file numbers are
+  !WRITE(DebugFile,*) 'WeatherFileUnitNumber=',WeatherFileUnitNumber !RS: Debugging: Finding out what all the Weather file numbers are
   OPEN(WeatherFileUnitNumber,File='in.epw',ERR=9999,action='read')
 
   IF (ProcessHeader) THEN

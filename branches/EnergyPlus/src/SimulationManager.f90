@@ -152,9 +152,9 @@ SUBROUTINE ManageSimulation     ! Main driver routine for this module
 
   INTEGER :: EnvCount
   
-  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
+  INTEGER :: LogFile       =153 !RS: Debugging file denotion, hopefully this works.
     
-  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
 
           ! FLOW:
   CALL PostIPProcessing
@@ -313,9 +313,10 @@ SUBROUTINE ManageSimulation     ! Main driver routine for this module
         NumOfWarmupDays=NumOfWarmupDays+1
         cWarmupDay=TrimSigDigits(NumOfWarmupDays)
         CALL DisplayString('Warming up {'//TRIM(cWarmUpDay)//'}')
-        WRITE(DebugFile,*) 'Warming up {'//TRIM(cWarmUpDay)//'}'    !RS: Debugging: Wanting to keep track of what day we're on
+        WRITE(LogFile,*) 'Warming up {'//TRIM(cWarmUpDay)//'}'    !RS: Debugging: Wanting to keep track of what day we're on
       ELSEIF (DayOfSim == 1)   THEN
         CALL DisplayString('Starting Simulation at '//TRIM(CurMnDy)//' for '//TRIM(EnvironmentName))
+        WRITE(LogFile,*) 'Starting Simulation at '//TRIM(CurMnDy)//' for '//TRIM(EnvironmentName)    !RS: Debugging: Wanting to keep track of what day we're on
         WRITE(OutputFileInits,700)   NumOfWarmupDays
  700    FORMAT('Environment:WarmupDays,',I3)
       ELSEIF (DisplayPerfSimulationFlag) THEN
