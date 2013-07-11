@@ -169,7 +169,7 @@ SUBROUTINE SimAirMixer(CompName,CompIndex)
   Call UpdateAirMixer(MixerNum)
 
   ! Report the current Mixer
-  Call ReportMixer(MixerNum)
+  Call ReportMixer(MixerNum)    !RS: Debugging: This is an useless call
 
   RETURN
 

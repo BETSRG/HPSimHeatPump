@@ -195,6 +195,7 @@ REAL tAiMod,tAoMod,tAmod
 REAL rhAiMod,rhAoMod
 REAL wbAoMod !wbAiMod,  !RS: Debugging: Extraneous
 REAL hAiMod,hAoMod
+REAL hrAiMod,hrAoMod    !RS: Debugging: Humidity Ratios
 
 REAL DPmod !Pressure drop in module, kPa
 REAL SigmaMod !Surface tension, N/m
@@ -520,6 +521,7 @@ PUBLIC GetEvapProp   !RS: Integration: Trying to carry over the properties to ou
 PRIVATE InitEvaporatorStructures    !RS: Debugging
 PRIVATE RachelCoilModel !RS: Debugging: Simple coil model
 PRIVATE RachelCalcSegmentOutletConditions   !RS: Debugging: Simple coil model
+PUBLIC GetNodeProp  !RS: Debugging: Trying to update nodal properties
 
 CONTAINS
 
@@ -2035,9 +2037,13 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),29(F10.3,','))"
 				      mAiMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%mAi
 				      tAiMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%tAi
 				      rhAiMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%rhAi
+                      !hAiMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%hAi  !RS: Debugging: Finding the enthalpy
+                      !hrAiMod=HUMTH(tAiMod,hAiMod)  !RS: Debugging: Finding the relative humidity
 
 				      tAoMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%tAo
 				      rhAoMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%rhAo
+                      !hAoMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%hAo  !RS: Debugging: Finding the enthalpy
+                      !hrAoMod=HUMTH(tAoMod,hAoMod)  !RS: Debugging: Finding the relative humidity
 
 				      MassMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Mass
 
@@ -7286,12 +7292,45 @@ REAL WAi
 REAL WAo,HAo,TWBAo,TDPAo,RhoDAo,RhoMAo,BaroPressureAo,ErrStatAo
 
     Out1=QModSensTot*1000 !Sensible Module heat transfer, W
-    !Out2=QModLatTot*1000  !Latent Module heat transfer, W
-    !CALL TDB_RH (tAiMod,WAi,rhAiMod,HAi,TWBAi,TDPAi,RhoDAi,RhoMAi,BaroPressureAi,ErrStatAi)
     CALL TDB_RH (tAoMod,WAo,rhAoMod,HAo,TWBAo,TDPAo,RhoDAo,RhoMAo,BaroPressureAo,ErrStatAo)
     Out2= mAiMod*(WAo-WAi) !Latent Output, kg/s
     !RS: Debugging: Something that should probably be looked at is if that's really the total latent output
     !RS: Debugging: Does some sort of average need to be taken?
+    
+END SUBROUTINE
+
+SUBROUTINE GetNodeProp()    !RS: Debugging: Updating the air node data for E+
+
+USE DataLoopNode
+
+  INTEGER :: AirOutletNode ! air outlet node number
+  INTEGER :: AirInletNode ! air inlet node number
+  REAL tWBi,tDPi,RhoDi,RhoMi,ErrStati
+  REAL tWBo,tDPo,RhoDo,RhoMo,ErrStato
+    
+    AirInletNode=NodeConnectionType_Inlet
+    AirOutletNode=NodeConnectionType_Outlet
+    
+    CALL TDB_RH(tAiMod,hrAiMod,rhAiMod,hAiMod,tWBi,tDPi,RhoDi,RhoMi,BaroPressure,ErrStati)
+    CALL TDB_RH(tAoMod,hrAoMod,rhAoMod,hAoMod,tWBo,tDPo,RhoDo,RhoMo,BaroPressure,ErrStato)
+    
+Node(AirInletNode)%Enthalpy     = hAiMod
+Node(AirInletNode)%Temp         = tAiMod
+Node(AirInletNode)%HumRat       = hrAiMod
+Node(AirInletNode)%MassFlowRate = mAiMod
+Node(AirInletNode)%Press =BaroPressure
+! changed outputs
+Node(AirOutletNode)%Enthalpy     = hAoMod
+Node(AirOutletNode)%Temp         = tAoMod
+Node(AirOutletNode)%HumRat       = hrAoMod
+Node(AirOutletNode)%MassFlowRate = mAiMod
+! pass through outputs
+Node(AirOutletNode)%Quality              = Node(AirInletNode)%Quality
+Node(AirOutletNode)%Press                = Node(AirInletNode)%Press
+Node(AirOutletNode)%MassFlowRateMin      = Node(AirInletNode)%MassFlowRateMin
+Node(AirOutletNode)%MassFlowRateMax      = Node(AirInletNode)%MassFlowRateMax
+Node(AirOutletNode)%MassFlowRateMinAvail = Node(AirInletNode)%MassFlowRateMinAvail
+Node(AirOutletNode)%MassFlowRateMaxAvail = Node(AirInletNode)%MassFlowRateMaxAvail
     
 END SUBROUTINE
 
