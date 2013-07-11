@@ -147,8 +147,7 @@
     ErrorFlag=0   !RS: Debugging: Resetting this at the beginning of each run so that errors don't carry over
     
     !RS: Debugging: Commenting out this section since we're only running cooling-only right now
-    IF (ZoneSysEnergyDemand(1)%TotalOutputRequired .EQ. 0) THEN ! .AND. ZoneSysEnergyDemand(1)%RemainingOutputRequired .EQ. 0) THEN !RS: Debugging: Checking Remaining
-    !IF (ZoneSysEnergyDemand(1)%RemainingOutputRequired .EQ. 0) THEN !RS: Debugging: Checking the remaining
+    IF (ZoneSysEnergyDemand(1)%TotalOutputRequired .EQ. 0) THEN
         QUnitOut=0
         LatOutputProvided=0
         RETURN
@@ -627,6 +626,7 @@
     !CALL EndCondenserCoil  !RS: Debugging: Removing for the moment
     
     CALL GetQOut(QUnitOut,LatOutputProvided)    !RS: Testing: Trying to read variables from PrintEvaporator File   !RS: Debugging: Temporarily setting in an Epsilon-NTU method
+    CALL GetNodeProp    !RS: Debugging: Trying to update the nodal properties
     
     QRemain=ZoneSysEnergyDemand(1)%RemainingOutputRequired-QUnitOut !-LatOutputProvided    !RS: Debugging: Qouts are load into zone
 
