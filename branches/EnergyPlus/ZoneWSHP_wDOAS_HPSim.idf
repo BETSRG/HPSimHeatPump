@@ -644,8 +644,8 @@
   ZoneHVAC:HPSim,
     Zone1WTAHP,              !- Name
     FanAndCoilAvailSched,    !- Availability Schedule Name
-    Zone 1 Outlet Node,      !- Air Inlet Node Name !Zone 1 Outlet Node
-    Zone 1 Inlet Node,       !- Air Outlet Node Name !Zone 1 Inlet Node
+    Outside Air Inlet Node, !Zone 1 Inlet Node, !Outlet Node,      !- Air Inlet Node Name
+    Zone 1 Inlet Node,       !- Air Outlet Node Name
     OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
     Zone 1 Mixer,            !- Outdoor Air Mixer Name
     Autosize,                !- Supply Air Flow Rate During Cooling Operation {m3/s}
