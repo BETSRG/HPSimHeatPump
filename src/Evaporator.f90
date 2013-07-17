@@ -7309,8 +7309,8 @@ USE DataLoopNode
   REAL tWBo,tDPo,RhoDo,RhoMo,ErrStato
     
     AirInletNode=NodeConnectionType_OutsideAir  !RS: Debugging: Coming directly from outside
-    AirOutletNode=NodeConnectionType_Inlet !Sensor !RS: Debugging: The sensor node is what ZoneTempPredictorCorrector is looking at
-    
+    AirOutletNode=NodeConnectionType_Inlet !RS: Debugging: The sensor node is what ZoneTempPredictorCorrector is looking at
+
     CALL TDB_RH(tAiMod,hrAiMod,rhAiMod,hAiMod,tWBi,tDPi,RhoDi,RhoMi,BaroPressure,ErrStati)
     CALL TDB_RH(tAoMod,hrAoMod,rhAoMod,hAoMod,tWBo,tDPo,RhoDo,RhoMo,BaroPressure,ErrStato)
     

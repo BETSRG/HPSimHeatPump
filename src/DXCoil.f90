@@ -464,6 +464,7 @@ PRIVATE CalcBasinHeaterPowerForMultiModeDXCoil
           ! Update routines to check convergence and update nodes
 PUBLIC  CalcHPWHDXCoil
 PUBLIC  CalcDoe2DXCoil
+PUBLIC  CalcHPSimDXCoil !RS: Implementation: Trying to create a new subroutine to call HPSim
 PUBLIC  CalcVRFCoolingCoil
 PUBLIC  CalcDXHeatingCoil
 PUBLIC  CalcMultiSpeedDXCoil
@@ -7916,6 +7917,906 @@ DXCoil(DXCoilNum)%CondInletTemp     = CondInletTemp
 
 RETURN
 END SUBROUTINE CalcDoe2DXCoil
+
+SUBROUTINE CalcHPSimCoil(DXCoilNum,CompOp,FirstHVACIteration,PartLoadRatio,FanOpMode,PerfMode,OnOffAirFlowRatio, &
+                          CoolingHeatingPLR)    !RS: Implementation: Trying to create a new subroutine to call HPSim
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Fred Buhl
+          !       DATE WRITTEN   May 2000
+          !       MODIFIED       Shirey, Feb/October 2001, Feb/Mar 2004
+          !                      Feb 2005 M. J. Witte, GARD Analytics, Inc.
+          !                        Add new coil type COIL:DX:MultiMode:CoolingEmpirical:
+          !                      April 2010 Chandan Sharma, FSEC, Added basin heater
+          !       RE-ENGINEERED  Don Shirey, Aug/Sept 2000
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! Calculates the air-side performance and electrical energy use of a direct-
+          ! expansion, air-cooled cooling unit.
+
+          ! METHODOLOGY EMPLOYED:
+          ! This routine simulates the performance of air-cooled DX cooling equipment.
+          ! The routine requires the user to enter the total cooling capacity, sensible heat ratio,
+          ! and COP for the unit at ARI 210/240 rating conditions (26.67C [80F] dry-bulb, 19.44C [67F]
+          ! wet-bulb air entering the cooling coil, 35C [95F] dry-bulb air entering the outdoor
+          ! condenser. Since different manufacturer's rate their equipment at different air flow rates,
+          ! the supply air flow rate corresponding to the rated capacities and rated COP must also be
+          ! entered (should be between 300 cfm/ton and 450 cfm/ton). The rated information entered by
+          ! the user should NOT include the thermal or electrical impacts of the supply air fan, as
+          ! this is addressed by another module.
+
+          ! With the rated performance data entered by the user, the model employs some of the
+          ! DOE-2.1E curve fits to adjust the capacity and efficiency of the unit as a function
+          ! of entering air temperatures and supply air flow rate (actual vs rated flow). The model
+          ! does NOT employ the exact same methodology to calculate performance as DOE-2, although
+          ! some of the DOE-2 curve fits are employed by this model.
+
+          ! The model checks for coil dryout conditions, and adjusts the calculated performance
+          ! appropriately.
+
+          ! REFERENCES:
+          ! ASHRAE HVAC 2 Toolkit page 4-81.
+          !
+          ! Henderson, H.I. Jr., K. Rengarajan and D.B. Shirey, III. 1992.The impact of comfort
+          ! control on air conditioner energy use in humid climates. ASHRAE Transactions 98(2):
+          ! 104-113.
+          !
+          ! Henderson, H.I. Jr., Danny Parker and Y.J. Huang. 2000.Improving DOE-2's RESYS routine:
+          ! User Defined Functions to Provide More Accurate Part Load Energy Use and Humidity
+          ! Predictions. Proceedings of ACEEE Conference.
+
+
+          ! USE STATEMENTS:
+  USE CurveManager,    ONLY: CurveValue
+  USE DataGlobals,     ONLY: CurrentTime
+  USE DataHVACGlobals, ONLY: HPWHCrankcaseDBTemp, TimeStepSys, SysTimeElapsed
+  USE General,         ONLY: TrimSigDigits, RoundSigDigits, CreateSysTimeIntervalString
+  USE DataWater,       ONLY: WaterStorage
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  INTEGER,   INTENT(IN)           :: DXCoilNum           ! the number of the DX coil to be simulated
+  INTEGER,   INTENT(IN)           :: CompOp              ! compressor operation; 1=on, 0=off
+  LOGICAL,   INTENT(IN)           :: FirstHVACIteration  ! true if this is the first iteration of HVAC
+  REAL(r64), INTENT(IN)           :: PartLoadRatio       ! sensible cooling load / full load sensible cooling capacity
+  INTEGER,   INTENT(IN)           :: FanOpMode           ! Allows parent object to control fan operation
+  INTEGER,   INTENT(IN), OPTIONAL :: PerfMode            ! Performance mode for MultiMode DX coil; Always 1 for other coil types
+  REAL(r64), INTENT(IN), OPTIONAL :: OnOffAirFlowRatio   ! ratio of compressor on airflow to compressor off airflow
+  REAL(r64), INTENT(IN), OPTIONAL :: CoolingHeatingPLR   ! used for cycling fan RH control
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+CHARACTER(len=*), PARAMETER :: RoutineName='CalcDoe2DXCoil'
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+REAL(r64) :: AirMassFlow           ! dry air mass flow rate through coil [kg/s] (adjusted for bypass if any)
+REAL(r64) :: AirMassFlowRatio      ! Ratio of actual air mass flow to rated air mass flow (adjusted for bypass if any)
+REAL(r64) :: AirVolumeFlowRate     ! Air volume flow rate across the cooling coil [m3/s] (adjusted for bypass if any)
+                                   ! (average flow if cycling fan, full flow if constant fan)
+REAL(r64) :: VolFlowperRatedTotCap ! Air volume flow rate divided by rated total cooling capacity [m3/s-W] (adjusted for bypass)
+REAL(r64) :: BypassFlowFraction    ! Fraction of total flow which is bypassed around the cooling coil
+REAL(r64) :: TotCap                ! gross total cooling capacity at off-rated conditions [W]
+REAL(r64) :: TotCapTempModFac      ! Total capacity modifier (function of entering wetbulb, outside drybulb)
+REAL(r64) :: TotCapFlowModFac      ! Total capacity modifier (function of actual supply air flow vs rated flow)
+REAL(r64) :: InletAirWetBulbC      ! wetbulb temperature of inlet air [C]
+REAL(r64) :: InletAirDryBulbTemp   ! inlet air dry bulb temperature [C]
+REAL(r64) :: InletAirEnthalpy      ! inlet air enthalpy [J/kg]
+REAL(r64) :: InletAirHumRat        ! inlet air humidity ratio [kg/kg]
+REAL(r64) :: InletAirHumRatTemp    ! inlet air humidity ratio used in ADP/BF loop [kg/kg]
+!  Eventually inlet air conditions will be used in DX Coil, these lines are commented out and marked with this comment line
+!REAL(r64) :: InletAirPressure      ! inlet air pressure [Pa]
+REAL(r64) :: RatedCBF              ! coil bypass factor at rated conditions
+REAL(r64) :: SHR                   ! Sensible Heat Ratio (sensible/total) of the cooling coil
+REAL(r64) :: CBF                   ! coil bypass factor at off rated conditions
+REAL(r64) :: A0                    ! NTU * air mass flow rate, used in CBF calculation
+REAL(r64) :: hDelta                ! Change in air enthalpy across the cooling coil [J/kg]
+REAL(r64) :: hADP                  ! Apparatus dew point enthalpy [J/kg]
+REAL(r64) :: hTinwADP              ! Enthalpy at inlet dry-bulb and wADP [J/kg]
+REAL(r64) :: hTinwout              ! Enthalpy at inlet dry-bulb and outlet humidity ratio [J/kg]
+REAL(r64) :: tADP                  ! Apparatus dew point temperature [C]
+REAL(r64) :: wADP                  ! Apparatus dew point humidity ratio [kg/kg]
+REAL(r64) :: FullLoadOutAirEnth    ! outlet full load enthalpy [J/kg]
+REAL(r64) :: FullLoadOutAirHumRat  ! outlet humidity ratio at full load
+REAL(r64) :: FullLoadOutAirTemp    ! outlet air temperature at full load [C]
+REAL(r64) :: EIRTempModFac         ! EIR modifier (function of entering wetbulb, outside drybulb)
+REAL(r64) :: EIRFlowModFac         ! EIR modifier (function of actual supply air flow vs rated flow)
+REAL(r64) :: EIR                   ! EIR at part load and off rated conditions
+REAL(r64) :: PLF                   ! Part load factor, accounts for thermal lag at compressor startup, used in power calculation
+REAL(r64) :: QLatActual            ! operating latent capacity of DX coil
+REAL(r64) :: QLatRated             ! Rated latent capacity of DX coil
+REAL(r64) :: SHRUnadjusted         ! SHR prior to latent degradation effective SHR calculation
+INTEGER :: Counter                 ! Counter for dry evaporator iterations
+INTEGER :: MaxIter                 ! Maximum number of iterations for dry evaporator calculations
+REAL(r64) :: RF                    ! Relaxation factor for dry evaporator iterations
+REAL(r64) :: Tolerance             ! Error tolerance for dry evaporator iterations
+REAL(r64) :: werror                ! Deviation of humidity ratio in dry evaporator iteration loop
+REAL(r64) :: CondInletTemp         ! Condenser inlet temperature (C). Outdoor dry-bulb temp for air-cooled condenser.
+                                 ! Outdoor Wetbulb +(1 - effectiveness)*(outdoor drybulb - outdoor wetbulb) for evap condenser.
+REAL(r64) :: CondInletHumrat       ! Condenser inlet humidity ratio (kg/kg). Zero for air-cooled condenser.
+                                 ! For evap condenser, its the humidity ratio of the air leaving the evap cooling pads.
+REAL(r64) :: CondAirMassFlow       ! Condenser air mass flow rate [kg/s]
+REAL(r64) :: RhoAir                ! Density of air [kg/m3]
+REAL(r64) :: RhoWater              ! Density of water [kg/m3]
+REAL(r64) :: CrankcaseHeatingPower ! power due to crankcase heater
+REAL(r64) :: CompAmbTemp = 0.0     ! Ambient temperature at compressor
+REAL(r64) :: AirFlowRatio          ! ratio of compressor on airflow to average timestep airflow
+                                 ! used when constant fan mode yields different air flow rates when compressor is ON and OFF
+                                 ! (e.g. Packaged Terminal Heat Pump)
+REAL(r64) :: OutdoorDryBulb        ! Outdoor dry-bulb temperature at condenser (C)
+REAL(r64) :: OutdoorWetBulb        ! Outdoor wet-bulb temperature at condenser (C)
+REAL(r64) :: OutdoorHumRat         ! Outdoor humidity ratio at condenser (kg/kg)
+REAL(r64) :: OutdoorPressure       ! Outdoor barometric pressure at condenser (Pa)
+
+REAL(r64) :: CurrentEndTime = 0.0  ! end time of time step for current simulation time step
+REAL(r64) :: MinAirHumRat = 0.0    ! minimum of the inlet air humidity ratio and the outlet air humidity ratio
+!CHARACTER(len=6) :: OutputChar = ' '     ! character string for warning messages
+!INTEGER,SAVE     :: ErrCount3=0    ! Counter used to minimize the occurrence of output warnings
+!INTEGER,SAVE     :: ErrCount4=0    ! Counter used to minimize the occurrence of output warnings
+!CHARACTER(len=6) :: CharPLR        ! used in warning messages
+!CHARACTER(len=6) :: CharPLF        ! used in warning messages
+INTEGER          :: Mode           ! Performance mode for Multimode DX coil; Always 1 for other coil types
+!CHARACTER(len=MaxNameLength) :: MinVol      ! character string used for error messages
+!CHARACTER(len=MaxNameLength) :: MaxVol      ! character string used for error messages
+!CHARACTER(len=MaxNameLength) :: VolFlowChar ! character string used for error messages
+REAL(r64) :: OutletAirTemp           ! Supply air temperature (average value if constant fan, full output if cycling fan)
+REAL(r64) :: OutletAirHumRat         ! Supply air humidity ratio (average value if constant fan, full output if cycling fan)
+REAL(r64) :: OutletAirEnthalpy       ! Supply air enthalpy (average value if constant fan, full output if cycling fan)
+REAL(r64) :: Adiff                   ! Used for exponential
+REAL(r64) :: DXcoolToHeatPLRRatio    ! ratio of cooling PLR to heating PLR, used for cycling fan RH control
+REAL(r64) :: HeatRTF                 ! heating coil part-load ratio, used for cycling fan RH control
+REAL(r64) :: HeatingCoilPLF          ! heating coil PLF (function of PLR), used for cycling fan RH control
+
+! If Performance mode not present, then set to 1.  Used only by Multimode/Multispeed DX coil (otherwise mode = 1)
+IF (PRESENT(PerfMode)) THEN
+  Mode = PerfMode
+ELSE
+  Mode = 1
+END IF
+
+! If AirFlowRatio not present, then set to 1. Used only by DX coils with different air flow
+! during cooling and when no cooling is required (constant fan, fan speed changes)
+IF (PRESENT(OnOffAirFlowRatio)) THEN
+  AirFlowRatio = OnOffAirFlowRatio
+ELSE
+  AirFlowRatio = 1.0d0
+END IF
+
+! If CoolingHeatingPLR not present, then set to 1. Used for cycling fan systems where
+! heating PLR is greater than cooling PLR, otherwise CoolingHeatingPLR = 1.
+IF(PRESENT(CoolingHeatingPLR))THEN
+  DXcoolToHeatPLRRatio = CoolingHeatingPLR
+ELSE
+  DXcoolToHeatPLRRatio = 1.0d0
+END IF
+
+MaxIter         = 30
+RF              = 0.4d0
+Counter         = 0
+Tolerance       = 0.01d0
+CondInletTemp   = 0.0d0
+CondInletHumrat = 0.0d0
+BypassFlowFraction  = DXCoil(DXCoilNum)%BypassedFlowFrac(Mode)
+AirMassFlow         = DXCoil(DXCoilNum)%InletAirMassFlowRate * (1.d0-BypassFlowFraction)
+InletAirDryBulbTemp = DXCoil(DXCoilNum)%InletAirTemp
+InletAirEnthalpy    = DXCoil(DXCoilNum)%InletAirEnthalpy
+InletAirHumRat      = DXCoil(DXCoilNum)%InletAirHumRat
+!  Eventually inlet air conditions will be used in DX Coil, these lines are commented out and marked with this comment line
+!InletAirPressure    = DXCoil(DXCoilNum)%InletAirPressure
+HeatReclaimDXCoil(DXCoilNum)%AvailCapacity   = 0.0d0
+DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction = 0.0d0
+DXCoil(DXCoilNum)%PartLoadRatio              = 0.0d0
+DXCoil(DXCoilNum)%BasinHeaterPower           = 0.0d0
+
+IF (DXCoil(DXCoilNum)%CondenserType(Mode) /= WaterHeater) THEN
+  IF (DXCoil(DXCoilNum)%CondenserInletNodeNum(Mode) /= 0) THEN
+    OutdoorDryBulb  = Node(DXCoil(DXCoilNum)%CondenserInletNodeNum(Mode))%Temp
+    OutdoorHumRat   = Node(DXCoil(DXCoilNum)%CondenserInletNodeNum(Mode))%HumRat
+    OutdoorPressure = Node(DXCoil(DXCoilNum)%CondenserInletNodeNum(Mode))%Press
+    OutdoorWetBulb  = Node(DXCoil(DXCoilNum)%CondenserInletNodeNum(Mode))%OutAirWetBulb
+  ELSE
+    OutdoorDryBulb  = OutDryBulbTemp
+    OutdoorHumRat   = OutHumRat
+    OutdoorPressure = OutBaroPress
+    OutdoorWetBulb  = OutWetBulbTemp
+  ENDIF
+ELSE
+  IF (DXCoil(DXCoilNum)%CondenserInletNodeNum(Mode) /= 0) THEN
+    OutdoorPressure = Node(DXCoil(DXCoilNum)%CondenserInletNodeNum(Mode))%Press
+  ELSE
+    OutdoorPressure = OutBaroPress
+  ENDIF
+END IF
+
+IF (DXCoil(DXCoilNum)%CondenserType(Mode) == AirCooled) THEN
+  CondInletTemp   = OutdoorDryBulb ! Outdoor dry-bulb temp
+  CompAmbTemp     = OutdoorDryBulb
+ELSEIF (DXCoil(DXCoilNum)%CondenserType(Mode) == EvapCooled) THEN
+  RhoAir          = PsyRhoAirFnPbTdbW(OutdoorPressure,OutdoorDryBulb,OutdoorHumRat)
+  CondAirMassFlow =  RhoAir * DXCoil(DXCoilNum)%EvapCondAirFlow(Mode)
+ ! (Outdoor wet-bulb temp from DataEnvironment) + (1.0-EvapCondEffectiveness) * (drybulb - wetbulb)
+  CondInletTemp   = OutdoorWetBulb + (OutdoorDryBulb-OutdoorWetBulb)*(1.0d0 - DXCoil(DXCoilNum)%EvapCondEffect(Mode))
+  CondInletHumrat = PsyWFnTdbTwbPb(CondInletTemp,OutdoorWetBulb,OutdoorPressure)
+  CompAmbTemp     = CondInletTemp
+ELSEIF (DXCoil(DXCoilNum)%CondenserType(Mode) == WaterHeater) THEN
+  CompAmbTemp     = HPWHCrankcaseDBTemp ! Temperature at HP water heater compressor
+END IF
+
+! Initialize crankcase heater, operates below OAT defined in input deck for HP DX cooling coil
+! If used in a heat pump, the value of MaxOAT in the heating coil overrides that in the cooling coil (in GetInput)
+IF (CompAmbTemp .LT. DXCoil(DXCoilNum)%MaxOATCrankcaseHeater)THEN
+  CrankcaseHeatingPower = DXCoil(DXCoilNum)%CrankcaseHeaterCapacity
+ELSE
+  CrankcaseHeatingPower = 0.0
+END IF
+
+! calculate end time of current time step to determine if error messages should be printed
+CurrentEndTime = CurrentTime + SysTimeElapsed
+
+!   Print warning messages only when valid and only for the first ocurrance. Let summary provide statistics.
+!   Wait for next time step to print warnings. If simulation iterates, print out
+!   the warning for the last iteration only. Must wait for next time step to accomplish this.
+!   If a warning occurs and the simulation down shifts, the warning is not valid.
+IF(DXCoil(DXCoilNum)%PrintLowAmbMessage)THEN ! .AND. &
+  IF(CurrentEndTime .GT. DXCoil(DXCoilNum)%CurrentEndTimeLast .AND. &
+     TimeStepSys .GE. DXCoil(DXCoilNum)%TimeStepSysLast)THEN
+    IF (DXCoil(DXCoilNum)%LowAmbErrIndex == 0) THEN
+      CALL ShowWarningMessage(TRIM(DXCoil(DXCoilNum)%LowAmbBuffer1))
+      CALL ShowContinueError(TRIM(DXCoil(DXCoilNum)%LowAmbBuffer2))
+      CALL ShowContinueError('... Operation at low ambient temperatures may require special performance curves.')
+    ENDIF
+    IF (DXCoil(DXCoilNum)%CondenserType(Mode) .EQ. AirCooled) THEN
+        CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'&
+          //TRIM(DXCoil(DXCoilNum)%Name)//'" - Low condenser dry-bulb temperature error continues...' &
+          ,DXCoil(DXCoilNum)%LowAmbErrIndex,DXCoil(DXCoilNum)%LowTempLast,DXCoil(DXCoilNum)%LowTempLast,  &
+            ReportMinUnits='[C]',ReportMaxUnits='[C]')
+    ELSE
+        CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'&
+          //TRIM(DXCoil(DXCoilNum)%Name)//'" - Low condenser wet-bulb temperature error continues...' &
+          ,DXCoil(DXCoilNum)%LowAmbErrIndex,DXCoil(DXCoilNum)%LowTempLast,DXCoil(DXCoilNum)%LowTempLast,  &
+            ReportMinUnits='[C]',ReportMaxUnits='[C]')
+    END IF
+  END IF
+END IF
+
+IF(DXCoil(DXCoilNum)%PrintLowOutTempMessage)THEN
+  IF(CurrentEndTime .GT. DXCoil(DXCoilNum)%CurrentEndTimeLast .AND. &
+       TimeStepSys .GE. DXCoil(DXCoilNum)%TimeStepSysLast)THEN
+    IF(DXCoil(DXCoilNum)%LowOutletTempIndex == 0)THEN
+      CALL ShowWarningMessage(TRIM(DXCoil(DXCoilNum)%LowOutTempBuffer1))
+      CALL ShowContinueError(TRIM(DXCoil(DXCoilNum)%LowOutTempBuffer2))
+      CALL ShowContinueError('... Possible reasons for low outlet air dry-bulb temperatures are: This DX coil')
+      CALL ShowContinueError('   1) may have a low inlet air dry-bulb temperature. Inlet air temperature = '// &
+                                    TRIM(TrimSigDigits(DXCoil(DXCoilNum)%FullLoadInletAirTempLast,3))//' C.')
+      CALL ShowContinueError('   2) may have a low air flow rate per watt of cooling capacity. Check inputs.')
+      CALL ShowContinueError('   3) is used as part of a HX assisted cooling coil which uses a high sensible'// &
+                                   ' effectiveness. Check inputs.')
+    END IF
+    CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'&
+               //TRIM(DXCoil(DXCoilNum)%Name)//'" - Full load outlet temperature'// &
+          ' indicates a possibility of frost/freeze error continues. Outlet air temperature statistics follow:', &
+          DXCoil(DXCoilNum)%LowOutletTempIndex, DXCoil(DXCoilNum)%FullLoadOutAirTempLast, &
+             DXCoil(DXCoilNum)%FullLoadOutAirTempLast)
+  END IF
+END IF
+
+! save last system time step and last end time of current time step (used to determine if warning is valid)
+DXCoil(DXCoilNum)%TimeStepSysLast    = TimeStepSys
+DXCoil(DXCoilNum)%CurrentEndTimeLast = CurrentEndTime
+DXCoil(DXCoilNum)%PrintLowAmbMessage = .FALSE.
+DXCoil(DXCoilNum)%PrintLowOutTempMessage = .FALSE.
+
+IF((AirMassFlow .GT. 0.0) .AND. &
+   (GetCurrentScheduleValue(DXCoil(DXCoilNum)%SchedPtr) .GT. 0.0 .OR. &
+    DXCoil(DXCoilNum)%DXCoilType_Num .EQ. CoilDX_HeatPumpWaterHeater) .AND. &
+   (PartLoadRatio .GT. 0.0) .AND. (CompOp == On)) THEN      ! for cycling fan, reset mass flow to full on rate
+  IF (FanOpMode .EQ. CycFanCycCoil) THEN
+    AirMassFlow = AirMassFlow / (PartLoadRatio/DXcoolToHeatPLRRatio)
+  ELSE IF (FanOpMode .EQ. ContFanCycCoil .AND. &
+           DXCoil(DXCoilNum)%DXCoilType_Num .NE. CoilDX_CoolingTwoSpeed) THEN
+    AirMassFlow = AirMassFlow * AirFlowRatio
+  ELSE
+    AirMassFlow = DXCoil(DXCoilNum)%RatedAirMassFlowRate(Mode)
+  END IF
+
+! Check for valid air volume flow per rated total cooling capacity (200 - 500 cfm/ton)
+
+! for some reason there are diff's when using coil inlet air pressure
+! these lines (more to follow) are commented out for the time being
+
+  InletAirWetbulbC = PsyTwbFnTdbWPb(InletAirDryBulbTemp,InletAirHumRat,OutdoorPressure)
+  AirVolumeFlowRate = AirMassFlow/ PsyRhoAirFnPbTdbW(OutdoorPressure,InletAirDryBulbTemp, InletAirHumRat)
+!  Eventually inlet air conditions will be used in DX Coil, these lines are commented out and marked with this comment line
+!  InletAirWetbulbC = PsyTwbFnTdbWPb(InletAirDryBulbTemp,InletAirHumRat,InletAirPressure)
+!  AirVolumeFlowRate = AirMassFlow/ PsyRhoAirFnPbTdbW(InletAirPressure,InletAirDryBulbTemp, InletAirHumRat)
+  IF (DXCoil(DXCoilNum)%RatedTotCap(Mode) .LE. 0.0) THEN
+      CALL ShowFatalError(TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)//&
+        '" - Rated total cooling capacity is zero or less.')
+  END IF
+  IF(DXCoil(DXCoilNum)%DXCoilType_Num .EQ. CoilDX_HeatPumpWaterHeater)THEN
+    VolFlowperRatedTotCap = AirVolumeFlowRate/DXCoil(DXCoilNum)%RatedTotCap2
+  ELSE
+    VolFlowperRatedTotCap = AirVolumeFlowRate/DXCoil(DXCoilNum)%RatedTotCap(Mode)
+  END IF
+  IF (.NOT. FirstHVACIteration .AND. &
+      .NOT. WarmupFlag .AND. DXCoil(DXCoilNum)%DXCoilType_Num .NE. CoilDX_HeatPumpWaterHeater .AND. &
+      ((VolFlowperRatedTotCap .LT. MinOperVolFlowPerRatedTotCap) .OR. &
+       (VolFlowperRatedTotCap .GT. MaxCoolVolFlowPerRatedTotCap))) THEN
+    IF (DXCoil(DXCoilNum)%ErrIndex1 == 0) THEN
+      CALL ShowWarningMessage(TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)//&
+        '" - Air volume flow rate per watt of rated total cooling capacity is out of range at '//  &
+          TRIM(RoundSigDigits(VolFlowperRatedTotCap,3))//' m3/s/W.')
+      CALL ShowContinueErrorTimeStamp(' ')
+      CALL ShowContinueError('Expected range for VolumeFlowPerRatedTotalCapacity=['//  &
+          TRIM(RoundSigDigits(MinOperVolFlowPerRatedTotCap,3))//'--'//  &
+          TRIM(RoundSigDigits(MaxCoolVolFlowPerRatedTotCap,3))//']')
+      CALL ShowContinueError('Possible causes include inconsistent air flow rates in system components,')
+      CALL ShowContinueError('or variable air volume [VAV] system using incorrect coil type.')
+    ENDIF
+    CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)//&
+          '" - Air volume flow rate per watt of rated total cooling capacity is out ' //&
+          'of range error continues...',DXCoil(DXCoilNum)%ErrIndex1,VolFlowperRatedTotCap,VolFlowperRatedTotCap)
+  ELSEIF (.NOT. WarmupFlag .AND. DXCoil(DXCoilNum)%DXCoilType_Num .EQ. CoilDX_HeatPumpWaterHeater .AND. &
+      ((VolFlowperRatedTotCap .LT. MinOperVolFlowPerRatedTotCap) .OR. &
+       (VolFlowperRatedTotCap .GT. MaxHeatVolFlowPerRatedTotCap))) THEN
+    IF (DXCoil(DXCoilNum)%ErrIndex1 == 0) THEN
+      CALL ShowWarningMessage(TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)//&
+             '" - Air volume flow rate per watt of rated total water heating capacity is out of range at '// &
+          TRIM(RoundSigDigits(VolFlowperRatedTotCap,2))//' m3/s/W.')
+      CALL ShowContinueErrorTimeStamp(' ')
+      CALL ShowContinueError('Expected range for VolumeFlowPerRatedTotalCapacity=['//  &
+          TRIM(RoundSigDigits(MinOperVolFlowPerRatedTotCap,3))//'--'//  &
+          TRIM(RoundSigDigits(MaxHeatVolFlowPerRatedTotCap,3))//']')
+      CALL ShowContinueError('Possible causes may be that the parent object is calling for an actual supply air flow'//&
+                               ' rate that is much higher or lower than the DX coil rated supply air flow rate.')
+    ENDIF
+    CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)//&
+          '" - Air volume flow rate per watt of rated total water heating capacity is out ' //&
+          'of range error continues...',DXCoil(DXCoilNum)%ErrIndex1,VolFlowperRatedTotCap,VolFlowperRatedTotCap)
+  END IF
+!
+!    Adjust coil bypass factor for actual air flow rate. Use relation CBF = exp(-NTU) where
+!    NTU = A0/(m*cp). Relationship models the cooling coil as a heat exchanger with Cmin/Cmax = 0.
+
+  RatedCBF = DXCoil(DXCoilNum)%RatedCBF(Mode)
+  IF (RatedCBF .gt. 0.0) THEN
+     A0 = -log(RatedCBF)*DXCoil(DXCoilNum)%RatedAirMassFlowRate(Mode)
+  ELSE
+     A0 = 0.
+  END IF
+  ADiff=-A0/AirMassFlow
+  IF (ADiff >= EXP_LowerLimit) THEN
+     CBF = exp(ADiff)
+  ELSE
+     CBF = 0.0
+  END IF
+
+!   check boundary for low ambient temperature and post warnings to individual DX coil buffers to print at end of time step
+    IF (DXCoil(DXCoilNum)%CondenserType(Mode) .EQ. AirCooled) THEN
+      IF(OutdoorDryBulb .LT. 0.0 .AND. .NOT. WarmupFlag) THEN !Same threshold as for air-cooled electric chiller
+        DXCoil(DXCoilNum)%PrintLowAmbMessage = .TRUE.
+        DXCoil(DXCoilNum)%LowTempLast = OutdoorDryBulb
+        IF(DXCoil(DXCoilNum)%LowAmbErrIndex == 0)THEN
+          DXCoil(DXCoilNum)%LowAmbBuffer1 = TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)// &
+           '" - Air-cooled condenser inlet dry-bulb temperature below 0 C. Outdoor dry-bulb temperature = '//  &
+              TRIM(RoundSigDigits(OutdoorDryBulb,2))
+          DXCoil(DXCoilNum)%LowAmbBuffer2 = ' '//'... Occurrence info = '//TRIM(EnvironmentName)//', '//Trim(CurMnDy)//' '&
+                     //TRIM(CreateSysTimeIntervalString())
+        END IF
+      END IF
+    ELSEIF (DXCoil(DXCoilNum)%CondenserType(Mode) == EvapCooled) THEN
+      IF(OutdoorWetBulb .LT. 10.0d0 .AND. .NOT. WarmUpFlag) THEN !Same threshold as for evap-cooled electric chiller
+        DXCoil(DXCoilNum)%PrintLowAmbMessage = .TRUE.
+        DXCoil(DXCoilNum)%LowTempLast = OutdoorWetBulb
+        IF(DXCoil(DXCoilNum)%LowAmbErrIndex == 0)THEN
+          DXCoil(DXCoilNum)%LowAmbBuffer1 = TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)// &
+           '" - Evap-cooled condenser inlet wet-bulb temperature below 10 C. Outdoor wet-bulb temperature = '//  &
+            TRIM(RoundSigDigits(OutdoorWetBulb,2))
+          DXCoil(DXCoilNum)%LowAmbBuffer2 = ' '//'... Occurrence info = '//TRIM(EnvironmentName)//', '//Trim(CurMnDy)//' '&
+                     //TRIM(CreateSysTimeIntervalString())
+        END IF
+      END IF
+    END IF
+
+!  Get total capacity modifying factor (function of temperature) for off-rated conditions
+!  InletAirHumRat may be modified in this ADP/BF loop, use temporary varible for calculations
+   InletAirHumRatTemp = InletAirHumRat
+50 IF(DXCoil(DXCoilNum)%DXCoilType_Num .EQ. CoilDX_HeatPumpWaterHeater) THEN
+!    Coil:DX:HeatPumpWaterHeater does not have total cooling capacity as a function of temp or flow curve
+     TotCapTempModFac = 1.0d0
+     TotCapFlowModFac = 1.0d0
+   ELSE
+     IF(DXCoil(DXCoilNum)%TotCapTempModFacCurveType(Mode) .EQ. Biquadratic) THEN
+       TotCapTempModFac = CurveValue(DXCoil(DXCoilNum)%CCapFTemp(Mode),InletAirWetbulbC,CondInletTemp)
+     ELSE
+       TotCapTempModFac = CurveValue(DXCoil(DXCoilNum)%CCapFTemp(Mode),CondInletTemp)
+     END IF
+
+!    Warn user if curve output goes negative
+     IF(TotCapTempModFac .LT. 0.0)THEN
+       IF(DXCoil(DXCoilNum)%CCapFTempErrorIndex == 0)THEN
+         CALL ShowWarningMessage(TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)//'":')
+         CALL ShowContinueError(' Total Cooling Capacity Modifier curve (function of temperature) output is negative (' &
+                           //TRIM(TrimSigDigits(TotCapTempModFac,3))//').')
+         IF(DXCoil(DXCoilNum)%TotCapTempModFacCurveType(Mode) .EQ. Biquadratic) THEN
+           CALL ShowContinueError(' Negative value occurs using a condenser inlet air temperature of ' &
+                            //TRIM(TrimSigDigits(CondInletTemp,1))// &
+                               ' and an inlet air wet-bulb temperature of '//TRIM(TrimSigDigits(InletAirWetbulbC,1))//'.')
+         ELSE
+           CALL ShowContinueError(' Negative value occurs using a condenser inlet air temperature of ' &
+                            //TRIM(TrimSigDigits(CondInletTemp,1))//'.')
+         END IF
+         IF(Mode .GT. 1)THEN
+           Call ShowContinueError(' Negative output results from stage '//TRIM(TrimSigDigits(Mode))// &
+                                  ' compressor operation.')
+         END IF
+         CALL ShowContinueErrorTimeStamp(' Resetting curve output to zero and continuing simulation.')
+       END IF
+       CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)//'":'//&
+           ' Total Cooling Capacity Modifier curve (function of temperature) output is negative warning continues...' &
+           , DXCoil(DXCoilNum)%CCapFTempErrorIndex, TotCapTempModFac, TotCapTempModFac)
+       TotCapTempModFac = 0.0
+     END IF
+
+!    Get total capacity modifying factor (function of mass flow) for off-rated conditions
+     AirMassFlowRatio = AirMassFlow/DXCoil(DXCoilNum)%RatedAirMassFlowRate(Mode)
+     TotCapFlowModFac = CurveValue(DXCoil(DXCoilNum)%CCapFFlow(Mode),AirMassFlowRatio)
+
+!    Warn user if curve output goes negative
+     IF(TotCapFlowModFac .LT. 0.0)THEN
+       IF(DXCoil(DXCoilNum)%CCapFFlowErrorIndex == 0)THEN
+         CALL ShowWarningMessage(TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)//'":')
+         CALL ShowContinueError(' Total Cooling Capacity Modifier curve (function of flow fraction) output is negative (' &
+                           //TRIM(TrimSigDigits(TotCapFlowModFac,3))//').')
+         CALL ShowContinueError(' Negative value occurs using an air flow fraction of ' &
+                            //TRIM(TrimSigDigits(AirMassFlowRatio,3))//'.')
+         CALL ShowContinueErrorTimeStamp(' Resetting curve output to zero and continuing simulation.')
+         IF(Mode .GT. 1)THEN
+           Call ShowContinueError(' Negative output results from stage '//TRIM(TrimSigDigits(Mode))// &
+                                  ' compressor operation.')
+         END IF
+       END IF
+       CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)//'":'//&
+          ' Total Cooling Capacity Modifier curve (function of flow fraction) output is negative warning continues...' &
+          , DXCoil(DXCoilNum)%CCapFFlowErrorIndex, TotCapFlowModFac, TotCapFlowModFac)
+       TotCapFlowModFac = 0.0
+     END IF
+    END IF
+
+  TotCap = DXCoil(DXCoilNum)%RatedTotCap(Mode) * TotCapFlowModFac * TotCapTempModFac
+
+! Calculate apparatus dew point conditions using TotCap and CBF
+  hDelta = TotCap/AirMassFlow
+  hADP = InletAirEnthalpy - hDelta/(1.d0-CBF)
+  tADP = PsyTsatFnHPb(hADP,OutdoorPressure,'CalcDoe2DXCoil')
+!  Eventually inlet air conditions will be used in DX Coil, these lines are commented out and marked with this comment line
+!  tADP = PsyTsatFnHPb(hADP,InletAirPressure)
+  wADP = PsyWFnTdbH(tADP,hADP,'CalcDoe2DXCoil')
+  hTinwADP = PsyHFnTdbW(InletAirDryBulbTemp,wADP,'CalcDoe2DXCoil')
+  IF((InletAirEnthalpy-hADP) .NE. 0)THEN
+    SHR = MIN((hTinwADP-hADP)/(InletAirEnthalpy-hADP),1.d0)
+  ELSE
+    SHR = 1.0d0
+  END IF
+!
+! Check for dry evaporator conditions (win < wadp)
+!
+  IF (wADP .gt. InletAirHumRatTemp .or. (Counter .ge. 1 .and. Counter .lt. MaxIter)) THEN
+     If(InletAirHumRatTemp == 0.0)InletAirHumRatTemp=0.00001d0
+     werror = (InletAirHumRatTemp - wADP)/InletAirHumRatTemp
+!
+! Increase InletAirHumRatTemp at constant InletAirTemp to find coil dry-out point. Then use the
+! capacity at the dry-out point to determine exiting conditions from coil. This is required
+! since the TotCapTempModFac doesn't work properly with dry-coil conditions.
+!
+      InletAirHumRatTemp = RF*wADP + (1.d0-RF)*InletAirHumRatTemp
+      InletAirWetbulbC = PsyTwbFnTdbWPb(InletAirDryBulbTemp,InletAirHumRatTemp,OutdoorPressure)
+!  Eventually inlet air conditions will be used in DX Coil, these lines are commented out and marked with this comment line
+!      InletAirWetbulbC = PsyTwbFnTdbWPb(InletAirDryBulbTemp,InletAirHumRatTemp,InletAirPressure)
+      Counter = Counter + 1
+      IF (ABS(werror) .gt. Tolerance) go to 50   ! Recalculate with modified inlet conditions
+
+  END IF
+
+  IF(DXCoil(DXCoilNum)%PLFFPLR(mode) .GT. 0)THEN
+    PLF = CurveValue(DXCoil(DXCoilNum)%PLFFPLR(mode),PartLoadRatio) ! Calculate part-load factor
+  ELSE
+    PLF = 1.0d0
+  END IF
+
+  IF (PLF < 0.7d0) THEN
+    IF (DXCoil(DXCoilNum)%ErrIndex2 == 0) THEN
+      IF(DXCoil(DXCoilNum)%DXCoilType_Num .EQ. CoilDX_HeatPumpWaterHeater)THEN
+        CALL ShowWarningMessage('The PLF curve value for the Heat Pump Water Heater DX coil '//TRIM(DXCoil(DXCoilNum)%Name)//&
+                         ' ='//TRIM(RoundSigDigits(PLF,3))//  &
+                         ' for part-load ratio ='//TRIM(RoundSigDigits(PartLoadRatio,3)))
+        CALL ShowContinueErrorTimeStamp('PLF curve values must be >= 0.7. PLF has been reset to 0.7 and simulation is continuing.')
+        CALL ShowContinueError('Check the IO reference manual for PLF curve guidance [Coil:WaterHeating:AirToWaterHeatPump].')
+      ELSE
+        CALL ShowWarningMessage('The PLF curve value for the DX cooling coil '//TRIM(DXCoil(DXCoilNum)%Name)//&
+                         ' ='//TRIM(RoundSigDigits(PLF,3))//  &
+                         ' for part-load ratio ='//TRIM(RoundSigDigits(PartLoadRatio,3)))
+        CALL ShowContinueErrorTimeStamp('PLF curve values must be >= 0.7. PLF has been reset to 0.7 and simulation is continuing.')
+        CALL ShowContinueError('Check the IO reference manual for PLF curve guidance [Coil:Cooling:DX:SingleSpeed].')
+      END IF
+    END IF
+    IF(DXCoil(DXCoilNum)%DXCoilType_Num .EQ. CoilDX_HeatPumpWaterHeater)THEN
+      CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilNum)%Name)// &
+                                            ', Heat Pump Water Heater DX coil PLF curve < 0.7 warning continues...', &
+        DXCoil(DXCoilNum)%ErrIndex2,PLF,PLF)
+    ELSE
+      CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilNum)%Name)// &
+                                            ', DX cooling coil PLF curve < 0.7 warning continues...', &
+        DXCoil(DXCoilNum)%ErrIndex2,PLF,PLF)
+    END IF
+    PLF = 0.7d0
+  END IF
+
+
+  DXCoil(DXCoilNum)%PartLoadRatio = PartLoadRatio
+  DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction = PartLoadRatio / PLF
+  IF (DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction > 1.0d0 .and.   &
+      ABS(DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction-1.0d0) > .001d0 ) THEN
+    IF (DXCoil(DXCoilNum)%ErrIndex3 == 0) THEN
+      IF(DXCoil(DXCoilNum)%DXCoilType_Num .EQ. CoilDX_HeatPumpWaterHeater)THEN
+        CALL ShowWarningMessage('The runtime fraction for Heat Pump Water Heater DX coil '//TRIM(DXCoil(DXCoilNum)%Name)//&
+                           ' exceeded 1.0. ['//TRIM(RoundSigDigits(DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction,4))//'].')
+        CALL ShowContinueError('Runtime fraction reset to 1 and the simulation will continue.')
+        CALL ShowContinueError('Check the IO reference manual for PLF curve guidance [Coil:WaterHeating:AirToWaterHeatPump].')
+        CALL ShowContinueErrorTimeStamp(' ')
+      ELSE
+        CALL ShowWarningMessage('The runtime fraction for DX cooling coil '//TRIM(DXCoil(DXCoilNum)%Name)//&
+                           ' exceeded 1.0. ['//TRIM(RoundSigDigits(DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction,4))//'].')
+        CALL ShowContinueError('Runtime fraction reset to 1 and the simulation will continue.')
+        CALL ShowContinueError('Check the IO reference manual for PLF curve guidance [Coil:Cooling:DX:SingleSpeed].')
+        CALL ShowContinueErrorTimeStamp(' ')
+      END IF
+    END IF
+    IF(DXCoil(DXCoilNum)%DXCoilType_Num .EQ. CoilDX_HeatPumpWaterHeater)THEN
+      CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilNum)%Name)//              &
+                   ', Heat Pump Water Heater DX coil runtime fraction > 1.0 warning continues...', &
+        DXCoil(DXCoilNum)%ErrIndex3,DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction,DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction)
+    ELSE
+      CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilNum)%Name)//              &
+                     ', DX cooling coil runtime fraction > 1.0 warning continues...', &
+        DXCoil(DXCoilNum)%ErrIndex3,DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction,DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction)
+    END IF
+    DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction = 1.0d0 ! Reset coil runtime fraction to 1.0
+  ELSEIF (DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction > 1.0d0) THEN
+    DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction = 1.0d0 ! Reset coil runtime fraction to 1.0
+  END IF
+
+  ! If cycling fan, send coil part-load fraction to on/off fan via HVACDataGlobals
+  IF (FanOpMode .EQ. CycFanCycCoil) OnOffFanPartLoadFraction = PLF
+
+  !  Calculate full load output conditions
+  IF (SHR .gt. 1. .OR. Counter .gt. 0) SHR = 1.d0
+  FullLoadOutAirEnth = InletAirEnthalpy - TotCap/AirMassFlow
+  hTinwout = InletAirEnthalpy - (1.0d0-SHR)*hDelta
+  IF (SHR < 1.0d0) THEN
+    FullLoadOutAirHumRat = PsyWFnTdbH(InletAirDryBulbTemp,hTinwout)
+  ELSE
+    FullLoadOutAirHumRat = InletAirHumRat
+  END IF
+  FullLoadOutAirTemp = PsyTdbFnHW(FullLoadOutAirEnth,FullLoadOutAirHumRat)
+
+! Check for saturation error and modify temperature at constant enthalpy
+   IF(FullLoadOutAirTemp .LT. PsyTsatFnHPb(FullLoadOutAirEnth,OutdoorPressure)) THEN
+    FullLoadOutAirTemp = PsyTsatFnHPb(FullLoadOutAirEnth,OutdoorPressure)
+!  Eventually inlet air conditions will be used in DX Coil, these lines are commented out and marked with this comment line
+!   IF(FullLoadOutAirTemp .LT. PsyTsatFnHPb(FullLoadOutAirEnth,InletAirPressure)) THEN
+!    FullLoadOutAirTemp = PsyTsatFnHPb(FullLoadOutAirEnth,InletAirPressure)
+    FullLoadOutAirHumRat  = PsyWFnTdbH(FullLoadOutAirTemp,FullLoadOutAirEnth)
+   END IF
+
+  ! Store actual outlet conditions when DX coil is ON for use in heat recovery module
+  DXCoilFullLoadOutAirTemp(DXCoilNum) = FullLoadOutAirTemp
+  DXCoilFullLoadOutAirHumRat(DXCoilNum) = FullLoadOutAirHumRat
+
+! Add warning message for cold cooling coil (FullLoadOutAirTemp < 2 C)
+  IF(FullLoadOutAirTemp .LT. 2.0d0 .AND. .NOT. FirstHVACIteration .AND. .NOT. WarmupFlag)THEN
+    DXCoil(DXCoilNum)%PrintLowOutTempMessage = .TRUE.
+    DXCoil(DXCoilNum)%FullLoadOutAirTempLast = FullLoadOutAirTemp
+    IF(DXCoil(DXCoilNum)%LowOutletTempIndex == 0)THEN
+      DXCoil(DXCoilNum)%FullLoadInletAirTempLast = InletAirDryBulbTemp
+      DXCoil(DXCoilNum)%LowOutTempBuffer1= TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)// &
+       '" - Full load outlet air dry-bulb temperature < 2C. This indicates the possibility of coil frost/freeze.'// &
+       ' Outlet temperature = '//TRIM(RoundSigDigits(FullLoadOutAirTemp,2))//' C.'
+      DXCoil(DXCoilNum)%LowOutTempBuffer2 = ' '//'...Occurrence info = '//TRIM(EnvironmentName)//', '//Trim(CurMnDy)//' '&
+                   //TRIM(CreateSysTimeIntervalString())
+    END IF
+  END IF
+
+  !  If constant fan with cycling compressor, call function to determine "effective SHR"
+  !  which includes the part-load degradation on latent capacity
+  IF (FanOpMode .EQ. ContFanCycCoil) THEN
+     QLatRated = DXCoil(DXCoilNum)%RatedTotCap(Mode) * (1.d0 - DXCoil(DXCoilNum)%RatedSHR(Mode))
+     QLatActual = TotCap * (1.d0 - SHR)
+     SHRUnadjusted = SHR
+     SHR = CalcEffectiveSHR(DXCoilNum, SHR, DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction, &
+                          QLatRated, QLatActual, InletAirDryBulbTemp, InletAirWetbulbC, Mode)
+    ! For multimode coil, if stage-2 operation (modes 2 or 4), adjust Stage1&2 SHR to account for
+    ! Stage 1 operating at full load, so there is no degradation for that portion
+    ! Use the stage 1 bypass fraction to allocate
+    IF (Mode .EQ. 2 .OR. Mode .EQ. 4) THEN
+      SHR = SHRUnadjusted*(1.d0-DXCoil(DXCoilNum)%BypassedFlowFrac(Mode-1))+ &
+            SHR*DXCoil(DXCoilNum)%BypassedFlowFrac(Mode-1)
+    END IF
+
+  !  Calculate full load output conditions
+    IF (SHR .gt. 1.d0 .OR. Counter .gt. 0) SHR = 1.d0
+    FullLoadOutAirEnth = InletAirEnthalpy - TotCap/AirMassFlow
+    hTinwout = InletAirEnthalpy - (1.0d0-SHR)*hDelta
+    IF (SHR < 1.0d0) THEN
+      FullLoadOutAirHumRat = PsyWFnTdbH(InletAirDryBulbTemp,hTinwout)
+    ELSE
+      FullLoadOutAirHumRat = InletAirHumRat
+    END IF
+    FullLoadOutAirTemp = PsyTdbFnHW(FullLoadOutAirEnth,FullLoadOutAirHumRat)
+
+! apply latent degradation model to cycling fan when RH control is desired and heating coil operates
+! longer than the cooling coil. DXcoolToHeatPLRRatio = Cooling coil PLR / Heating coil PLR.
+  ELSE IF(FanOpMode .EQ. CycFanCycCoil) THEN
+    IF(DXcoolToHeatPLRRatio .LT. 1.0d0)THEN
+      QLatRated = DXCoil(DXCoilNum)%RatedTotCap(Mode) * (1.d0 - DXCoil(DXCoilNum)%RatedSHR(Mode))
+      QLatActual = TotCap * (1.d0 - SHR)
+      HeatRTF = PartLoadRatio/DXcoolToHeatPLRRatio
+      IF(DXCoil(DXCoilNum)%HeatingCoilPLFCurvePTR .GT. 0)THEN
+        HeatingCoilPLF = CurveValue(DXCoil(DXCoilNum)%HeatingCoilPLFCurvePTR,HeatRTF)
+        IF(HeatingCoilPLF .GT. 0) HeatRTF = HeatRTF/HeatingCoilPLF
+      END IF
+      SHRUnadjusted = SHR
+      SHR = CalcEffectiveSHR(DXCoilNum, SHR, DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction, &
+                     QLatRated, QLatActual, InletAirDryBulbTemp, InletAirWetbulbC, Mode, HeatRTF)
+  !   Calculate full load output conditions
+      IF (SHR .gt. 1.d0 .OR. Counter .gt. 0) SHR = 1.d0
+      FullLoadOutAirEnth = InletAirEnthalpy - TotCap/AirMassFlow
+      hTinwout = InletAirEnthalpy - (1.0d0-SHR)*hDelta
+      IF (SHR < 1.0d0) THEN
+        FullLoadOutAirHumRat = PsyWFnTdbH(InletAirDryBulbTemp,hTinwout)
+      ELSE
+        FullLoadOutAirHumRat = InletAirHumRat
+      END IF
+      FullLoadOutAirTemp = PsyTdbFnHW(FullLoadOutAirEnth,FullLoadOutAirHumRat)
+    END IF
+
+  END IF
+
+!  Calculate actual outlet conditions for the input part load ratio
+!  Actual outlet conditions are "average" for time step
+
+! For multimode coil, if stage-2 operation (modes 2 or 4), return "full load" outlet conditions
+  IF ((FanOpMode .EQ. ContFanCycCoil) .AND. &
+      (Mode .EQ. 1) .OR. (Mode .EQ. 3)) THEN
+    ! Continuous fan, cycling compressor
+    OutletAirEnthalpy = ((PartLoadRatio * AirFlowRatio)*FullLoadOutAirEnth + &
+                                            (1.d0-(PartLoadRatio * AirFlowRatio))*InletAirEnthalpy)
+    OutletAirHumRat = ((PartLoadRatio * AirFlowRatio)*FullLoadOutAirHumRat + &
+                                            (1.d0-(PartLoadRatio * AirFlowRatio))*InletAirHumRat)
+    OutletAirTemp = PsyTdbFnHW(OutletAirEnthalpy,OutletAirHumRat)
+  ELSE
+    ! Default to cycling fan, cycling compressor
+    ! Also return this result for stage 2 operation of multimode coil
+    ! Cycling fan typically provides full outlet conditions. When RH control is used, account for additional
+    ! heating run time by using cooing/heating ratio the same as constant fan (otherwise PLRRatio = 1).
+    OutletAirEnthalpy = FullLoadOutAirEnth * DXcoolToHeatPLRRatio + InletAirEnthalpy * (1.0d0 - DXcoolToHeatPLRRatio)
+    OutletAirHumRat = FullLoadOutAirHumRat * DXcoolToHeatPLRRatio + InletAirHumRat * (1.0d0 - DXcoolToHeatPLRRatio)
+    OutletAirTemp = FullLoadOutAirTemp * DXcoolToHeatPLRRatio + InletAirDryBulbTemp * (1.0d0 - DXcoolToHeatPLRRatio)
+  END IF
+
+! Check for saturation error and modify temperature at constant enthalpy
+   IF(OutletAirTemp .LT. PsyTsatFnHPb(OutletAirEnthalpy,OutdoorPressure,'CalcDOE2DXCoil')) THEN
+    OutletAirTemp = PsyTsatFnHPb(OutletAirEnthalpy,OutdoorPressure)
+!  Eventually inlet air conditions will be used in DX Coil, these lines are commented out and marked with this comment line
+!   IF(OutletAirTemp .LT. PsyTsatFnHPb(OutletAirEnthalpy,InletAirPressure)) THEN
+!    OutletAirTemp = PsyTsatFnHPb(OutletAirEnthalpy,InletAirPressure)
+    OutletAirHumRat  = PsyWFnTdbH(OutletAirTemp,OutletAirEnthalpy)
+   END IF
+
+! Mix with air that was bypassed around coil, if any
+   IF(BypassFlowFraction .GT. 0.0) THEN
+     OutletAirEnthalpy = (1.d0-BypassFlowFraction)*OutletAirEnthalpy + BypassFlowFraction*InletAirEnthalpy
+     OutletAirHumRat = (1.d0-BypassFlowFraction)*OutletAirHumRat + BypassFlowFraction*InletAirHumRat
+     OutletAirTemp = PsyTdbFnHW(OutletAirEnthalpy,OutletAirHumRat)
+     ! Check for saturation error and modify temperature at constant enthalpy
+     IF(OutletAirTemp .LT. PsyTsatFnHPb(OutletAirEnthalpy,OutdoorPressure)) THEN
+       OutletAirTemp = PsyTsatFnHPb(OutletAirEnthalpy,OutdoorPressure)
+!  Eventually inlet air conditions will be used in DX Coil, these lines are commented out and marked with this comment line
+!     IF(OutletAirTemp .LT. PsyTsatFnHPb(OutletAirEnthalpy,InletAirPressure)) THEN
+!       OutletAirTemp = PsyTsatFnHPb(OutletAirEnthalpy,InletAirPressure)
+       OutletAirHumRat  = PsyWFnTdbH(OutletAirTemp,OutletAirEnthalpy)
+     END IF
+    END IF
+
+! Calculate electricity consumed. First, get EIR modifying factors for off-rated conditions
+  IF(DXCoil(DXCoilNum)%DXCoilType_Num .EQ. CoilDX_HeatPumpWaterHeater) THEN
+!   Coil:DX:HeatPumpWaterHeater does not have EIR temp or flow curves
+    EIRTempModFac = 1.0d0
+    EIRFlowModFac = 1.0d0
+  ELSE
+    EIRTempModFac = CurveValue(DXCoil(DXCoilNum)%EIRFTemp(Mode),InletAirWetbulbC,CondInletTemp)
+
+!   Warn user if curve output goes negative
+    IF(EIRTempModFac .LT. 0.0)THEN
+      IF(DXCoil(DXCoilNum)%EIRFTempErrorIndex == 0)THEN
+        CALL ShowWarningMessage(TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)//'":')
+        CALL ShowContinueError(' Energy Input Ratio Modifier curve (function of temperature) output is negative (' &
+                          //TRIM(TrimSigDigits(EIRTempModFac,3))//').')
+        IF(DXCoil(DXCoilNum)%EIRTempModFacCurveType(Mode) .EQ. Biquadratic)THEN
+          CALL ShowContinueError(' Negative value occurs using a condenser inlet air temperature of ' &
+                         //TRIM(TrimSigDigits(CondInletTemp,1))// &
+                               ' and an inlet air wet-bulb temperature of '//TRIM(TrimSigDigits(InletAirWetbulbC,1))//'.')
+        ELSE
+          CALL ShowContinueError(' Negative value occurs using a condenser inlet air temperature of ' &
+                         //TRIM(TrimSigDigits(CondInletTemp,1))//'.')
+        END IF
+        IF(Mode .GT. 1)THEN
+          Call ShowContinueError(' Negative output results from stage '//TRIM(TrimSigDigits(Mode))// &
+                                 ' compressor operation.')
+        END IF
+        CALL ShowContinueErrorTimeStamp(' Resetting curve output to zero and continuing simulation.')
+      END IF
+      CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)//'":'//&
+          ' Energy Input Ratio Modifier curve (function of temperature) output is negative warning continues...' &
+          , DXCoil(DXCoilNum)%EIRFTempErrorIndex, EIRTempModFac, EIRTempModFac)
+      EIRTempModFac = 0.0
+    END IF
+
+    EIRFlowModFac = CurveValue(DXCoil(DXCoilNum)%EIRFFlow(Mode),AirMassFlowRatio)
+
+!   Warn user if curve output goes negative
+    IF(EIRFlowModFac .LT. 0.0)THEN
+      IF(DXCoil(DXCoilNum)%EIRFFlowErrorIndex == 0)THEN
+        CALL ShowWarningMessage(TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)//'":')
+        CALL ShowContinueError(' Energy Input Ratio Modifier curve (function of flow fraction) output is negative (' &
+                          //TRIM(TrimSigDigits(EIRFlowModFac,3))//').')
+        CALL ShowContinueError(' Negative value occurs using an air flow fraction of ' &
+                           //TRIM(TrimSigDigits(AirMassFlowRatio,3))//'.')
+        CALL ShowContinueErrorTimeStamp(' Resetting curve output to zero and continuing simulation.')
+        IF(Mode .GT. 1)THEN
+          Call ShowContinueError(' Negative output results from stage '//TRIM(TrimSigDigits(Mode))// &
+                                 ' compressor operation.')
+        END IF
+      END IF
+      CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)//'":'//&
+         ' Energy Input Ratio Modifier curve (function of flow fraction) output is negative warning continues...' &
+         , DXCoil(DXCoilNum)%EIRFFlowErrorIndex, EIRFlowModFac, EIRFlowModFac)
+      EIRFlowModFac = 0.0
+    END IF
+  END IF
+
+  EIR = DXCoil(DXCoilNum)%RatedEIR(Mode) * EIRFlowModFac * EIRTempModFac
+
+! For multimode coil, if stage-2 operation (Modes 2 or 4), return "full load" power adjusted for PLF
+  IF (Mode .EQ. 1 .OR. Mode .EQ. 3) THEN
+    DXCoil(DXCoilNum)%ElecCoolingPower = TotCap * EIR * DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction
+  ELSE
+    DXCoil(DXCoilNum)%ElecCoolingPower = TotCap * EIR * DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction / PartLoadRatio
+  END IF
+
+! Reset AirMassFlow to inlet node air mass flow for final total, sensible and latent calculations
+! since AirMassFlow might have been modified above (in this subroutine):
+!     IF (FanOpMode .EQ. CycFanCycCoil) AirMassFlow = AirMassFlow / PartLoadRatio
+!
+! For multimode coil, this should be full flow including bypassed fraction
+  AirMassFlow = DXCoil(DXCoilNum)%InletAirMassFlowRate
+  DXCoil(DXCoilNum)%TotalCoolingEnergyRate = AirMassFlow * (InletAirEnthalpy - OutletAirEnthalpy)
+
+! Set DataHeatGlobal heat reclaim variable for use by heat reclaim coil (part load ratio is accounted for)
+! Calculation for heat reclaim needs to be corrected to use compressor power (not including condenser fan power)
+  HeatReclaimDXCoil(DXCoilNum)%AvailCapacity = DXCoil(DXCoilNum)%TotalCoolingEnergyRate + DXCoil(DXCoilNum)%ElecCoolingPower
+
+  MinAirHumRat = MIN(InletAirHumRat,OutletAirHumRat)
+  DXCoil(DXCoilNum)%SensCoolingEnergyRate = AirMassFlow * &
+                                         (PsyHFnTdbW(InletAirDryBulbTemp,MinAirHumRat) - &
+                                          PsyHFnTdbW(OutletAirTemp,MinAirHumRat))
+!  Don't let sensible capacity be greater than total capacity
+  IF (DXCoil(DXCoilNum)%SensCoolingEnergyRate .GT. DXCoil(DXCoilNum)%TotalCoolingEnergyRate) THEN
+     DXCoil(DXCoilNum)%SensCoolingEnergyRate = DXCoil(DXCoilNum)%TotalCoolingEnergyRate
+  END IF
+!
+  DXCoil(DXCoilNum)%LatCoolingEnergyRate = DXCoil(DXCoilNum)%TotalCoolingEnergyRate - DXCoil(DXCoilNum)%SensCoolingEnergyRate
+
+! Calculate crankcase heater power using the runtime fraction for this DX cooling coil only if there is no companion DX coil.
+! Else use the largest runtime fraction of this DX cooling coil and the companion DX heating coil.
+  IF(DXCoil(DXCoilNum)%CompanionUpstreamDXCoil .EQ. 0) THEN
+    DXCoil(DXCoilNum)%CrankcaseHeaterPower = CrankcaseHeatingPower * &
+                                           (1.0d0 - DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction)
+  ELSE
+    DXCoil(DXCoilNum)%CrankcaseHeaterPower = CrankcaseHeatingPower * &
+                                           (1.0d0 - MAX(DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction, &
+                                           DXCoil(DXCoil(DXCoilNum)%CompanionUpstreamDXCoil)%HeatingCoilRuntimeFraction))
+  END IF
+
+  IF (DXCoil(DXCoilNum)%CondenserType(Mode) == EvapCooled) THEN
+  !******************
+  !             WATER CONSUMPTION IN m3 OF WATER FOR DIRECT
+  !             H2O [m3/sec] = Delta W[KgH2O/Kg air]*Mass Flow Air[Kg air]
+  !                                /RhoWater [kg H2O/m3 H2O]
+  !******************
+     RhoWater = RhoH2O(OutdoorDryBulb)
+     DXCoil(DXCoilNum)%EvapWaterConsumpRate =  &
+             (CondInletHumrat - OutdoorHumRat) *  &
+              CondAirMassFlow/RhoWater * DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction
+     DXCoil(DXCoilNum)%EvapCondPumpElecPower = DXCoil(DXCoilNum)%EvapCondPumpElecNomPower(Mode) * &
+                                               DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction
+  ! Calculate basin heater power
+    CALL CalcBasinHeaterPower(DXCoil(DXCoilNum)%BasinHeaterPowerFTempDiff,&
+                              DXCoil(DXCoilNum)%BasinHeaterSchedulePtr,&
+                              DXCoil(DXCoilNum)%BasinHeaterSetPointTemp,DXCoil(DXCoilNum)%BasinHeaterPower)
+    IF (DXCoil(DXCoilNum)%DXCoilType_Num == CoilDX_CoolingSingleSpeed) THEN
+      DXCoil(DXCoilNum)%BasinHeaterPower = DXCoil(DXCoilNum)%BasinHeaterPower * &
+                                         (1.d0 - DXCoil(DXCoilNum)%CoolingCoilRuntimeFraction)
+    ENDIF
+  END IF
+
+  DXCoil(DXCoilNum)%OutletAirTemp     = OutletAirTemp
+  DXCoil(DXCoilNum)%OutletAirHumRat   = OutletAirHumRat
+  DXCoil(DXCoilNum)%OutletAirEnthalpy = OutletAirEnthalpy
+
+ELSE
+
+  ! DX coil is off; just pass through conditions
+  DXCoil(DXCoilNum)%OutletAirEnthalpy = DXCoil(DXCoilNum)%InletAirEnthalpy
+  DXCoil(DXCoilNum)%OutletAirHumRat   = DXCoil(DXCoilNum)%InletAirHumRat
+  DXCoil(DXCoilNum)%OutletAirTemp     = DXCoil(DXCoilNum)%InletAirTemp
+
+  DXCoil(DXCoilNum)%ElecCoolingPower = 0.0
+  DXCoil(DXCoilNum)%TotalCoolingEnergyRate = 0.0
+  DXCoil(DXCoilNum)%SensCoolingEnergyRate = 0.0
+  DXCoil(DXCoilNum)%LatCoolingEnergyRate = 0.0
+  DXCoil(DXCoilNum)%EvapCondPumpElecPower = 0.0
+  DXCoil(DXCoilNum)%EvapWaterConsumpRate = 0.0
+
+! Reset globals when DX coil is OFF for use in heat recovery module
+  DXCoilFullLoadOutAirTemp(DXCoilNum) = 0.0
+  DXCoilFullLoadOutAirHumRat(DXCoilNum) = 0.0
+
+! Calculate crankcase heater power using the runtime fraction for this DX cooling coil (here DXCoolingCoilRTF=0) if
+! there is no companion DX coil, or the runtime fraction of the companion DX heating coil (here DXHeatingCoilRTF>=0).
+  IF(DXCoil(DXCoilNum)%CompanionUpstreamDXCoil .EQ. 0) THEN
+    DXCoil(DXCoilNum)%CrankcaseHeaterPower = CrankcaseHeatingPower
+  ELSE
+    DXCoil(DXCoilNum)%CrankcaseHeaterPower = CrankcaseHeatingPower * &
+                                            (1.d0-DXCoil(DXCoil(DXCoilNum)%CompanionUpstreamDXCoil)%HeatingCoilRuntimeFraction)
+  END IF
+
+! Calculate basin heater power
+  IF (DXCoil(DXCoilNum)%DXCoilType_Num == CoilDX_CoolingTwoStageWHumControl) THEN
+    IF (ANY(DXCoil(DXCoilNum)%CondenserType == EvapCooled)) THEN
+      CALL CalcBasinHeaterPower(DXCoil(DXCoilNum)%BasinHeaterPowerFTempDiff,&
+                               DXCoil(DXCoilNum)%BasinHeaterSchedulePtr,&
+                               DXCoil(DXCoilNum)%BasinHeaterSetPointTemp,DXCoil(DXCoilNum)%BasinHeaterPower)
+    ENDIF
+  ELSE
+    IF (DXCoil(DXCoilNum)%CondenserType(Mode) == EvapCooled) THEN
+      CALL CalcBasinHeaterPower(DXCoil(DXCoilNum)%BasinHeaterPowerFTempDiff,&
+                              DXCoil(DXCoilNum)%BasinHeaterSchedulePtr,&
+                              DXCoil(DXCoilNum)%BasinHeaterSetPointTemp,DXCoil(DXCoilNum)%BasinHeaterPower)
+    ENDIF
+  ENDIF
+
+END IF ! end of on/off if - else
+
+!set water system demand request (if needed)
+IF ( DXCoil(DxCoilNum)%EvapWaterSupplyMode == WaterSupplyFromTank) THEN
+   WaterStorage(DXCoil(DXCoilNum)%EvapWaterSupTankID)%VdotRequestDemand(DXCoil(DXCoilNum)%EvapWaterTankDemandARRID) &
+       = DXCoil(DXCoilNum)%EvapWaterConsumpRate
+ENDIF
+
+DXCoilOutletTemp(DXCoilNum)         = DXCoil(DXCoilNum)%OutletAirTemp
+DXCoilOutletHumRat(DXCoilNum)       = DXCoil(DXCoilNum)%OutletAirHumRat
+DXCoilPartLoadRatio(DXCoilNum)      = DXCoil(DXCoilNum)%PartLoadRatio
+DXCoilFanOpMode(DXCoilNum)          = FanOpMode
+DXCoil(DXCoilNum)%CondInletTemp     = CondInletTemp
+
+RETURN
+END SUBROUTINE CalcHPSim2DXCoil
 
 SUBROUTINE CalcVRFCoolingCoil(DXCoilNum,CompOp,FirstHVACIteration,PartLoadRatio,FanOpMode,CompCycRatio, &
                               PerfMode,OnOffAirFlowRatio, MaxCoolCap)
