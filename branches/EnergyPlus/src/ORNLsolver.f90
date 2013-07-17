@@ -147,6 +147,7 @@
     ErrorFlag=0   !RS: Debugging: Resetting this at the beginning of each run so that errors don't carry over
     
     !RS: Debugging: Commenting out this section since we're only running cooling-only right now
+    !IF (ZoneSysEnergyDemand(1)%RemainingOutputRequired .EQ. 0.0) THEN   !RS: Debugging: Checking the remaining
     IF (ZoneSysEnergyDemand(1)%TotalOutputRequired .EQ. 0) THEN
         QUnitOut=0
         LatOutputProvided=0
