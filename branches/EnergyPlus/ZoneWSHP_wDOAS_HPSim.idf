@@ -439,6 +439,23 @@
     Zone 1 Node,             !- Zone Air Node Name
     Zone 1 Return Node;      !- Zone Return Air Node Name
 
+!-   ===========  ALL OBJECTS IN CLASS: AIR LOOP EQUIPMENT LIST ===========
+
+  AirLoopHVAC:OutdoorAirSystem:EquipmentList,
+    OA Sys 1 Equipment,      !- Name
+    OutdoorAir:Mixer,        !- Component 1 Object Type
+    OA Mixing Box 1;         !- Component 1 Name
+	
+!-   ===========  ALL OBJECTS IN CLASS: OUTSIDE AIR MIXER ===========
+
+  OutdoorAir:Mixer,
+    OA Mixing Box 1,         !- Name
+    Mixed Air Node,          !- Mixed Air Node Name
+    Outside Air Inlet Node,  !- Outdoor Air Stream Node Name
+    Relief Air Outlet Node,  !- Relief Air Stream Node Name
+    Outdoor Air Mixer Inlet Node;  !- Return Air Stream Node Name
+!-   ================================================================
+	
   ZoneHVAC:EquipmentList,
     Zone1Equipment,          !- Name
     ZoneHVAC:HPSim,  !- Zone Equipment 2 Object Type
@@ -474,12 +491,12 @@
     Zone 1 Inlet Node,       !- Node 1 Name
     Zone 1 OA Inlet Node;    !- Node 2 Name
 
-  OutdoorAirMixer,
-    Zone 1 Mixer,
-    Sys 1 Mixer Air Node,
-    Sys 1 Outside Air Inlet Node,
-    Sys 1 Relief Air Outlet Node,
-    Zone 1 Outlet Node;
+    OutdoorAir:Mixer,
+    Zone 1 Mixer,            !- Name
+    Sys 1 Mixed Air Node,    !- Mixed Air Node Name
+    Sys 1 Outside Air Inlet Node,  !- Outdoor Air Stream Node Name
+    Sys 1 Relief Air Outlet Node,  !- Relief Air Stream Node Name
+    Zone 1 Outlet Node;      !- Return Air Stream Node Name
 
   OutdoorAir:NodeList,
     Sys 1 OutsideAirInletNodes;  !- Node or NodeList Name 1
@@ -495,7 +512,6 @@
     Through: 12/31,          !- Field 1
     For: AllDays,            !- Field 2
     Until: 24:00,0.0;        !- Field 3
-
 
 
   Output:Variable,*,outdoor dry bulb,timestep;
@@ -1463,16 +1479,16 @@ ODCcktVelocityProfileRawData,
 !Group Fluid Properties
 
 FluidNames,
-    R22, REFRIGERANT;     !- name and type for fluid 1
+    !R22, REFRIGERANT,     !- name and type for fluid 1
     !R134a, REFRIGERANT,   !- name and type for fluid 2
     !R407c, REFRIGERANT,   !- name and type for fluid 3
-    !R410a, REFRIGERANT,   !- name and type for fluid 4
+    R410a, REFRIGERANT;   !- name and type for fluid 4
     !R417a, REFRIGERANT,   !- name and type for fluid 5
     !PROPANE, REFRIGERANT; !- name and type for fluid 6
     
-##include fluidDataFiles\R22.idf
+!##include fluidDataFiles\R22.idf
 !##include fluidDataFiles\R134a.idf
 !##include fluidDataFiles\R407c.idf
-!##include fluidDataFiles\R410a.idf
+##include fluidDataFiles\R410a.idf
 !##include fluidDataFiles\R417a.idf
 !##include fluidDataFiles\Propane.idf
