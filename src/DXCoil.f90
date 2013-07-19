@@ -8011,7 +8011,7 @@ REAL(r64) :: AirVolumeFlowRate     ! Air volume flow rate across the cooling coi
                                    ! (average flow if cycling fan, full flow if constant fan)
 REAL(r64) :: VolFlowperRatedTotCap ! Air volume flow rate divided by rated total cooling capacity [m3/s-W] (adjusted for bypass)
 REAL(r64) :: BypassFlowFraction    ! Fraction of total flow which is bypassed around the cooling coil
-REAL :: TotCap                ! gross total cooling capacity at off-rated conditions [W]
+REAL(r64) :: TotCap                ! gross total cooling capacity at off-rated conditions [W]
 !REAL(r64) :: TotCapTempModFac      ! Total capacity modifier (function of entering wetbulb, outside drybulb)
 !REAL(r64) :: TotCapFlowModFac      ! Total capacity modifier (function of actual supply air flow vs rated flow)
 REAL(r64) :: InletAirWetBulbC      ! wetbulb temperature of inlet air [C]
@@ -8020,16 +8020,16 @@ REAL(r64) :: InletAirEnthalpy      ! inlet air enthalpy [J/kg]
 REAL(r64) :: InletAirHumRat        ! inlet air humidity ratio [kg/kg]
 REAL(r64) :: InletAirHumRatTemp    ! inlet air humidity ratio used in ADP/BF loop [kg/kg]
 !  Eventually inlet air conditions will be used in DX Coil, these lines are commented out and marked with this comment line
-REAL(r64) :: RatedCBF              ! coil bypass factor at rated conditions
+!REAL(r64) :: RatedCBF              ! coil bypass factor at rated conditions
 REAL(r64) :: SHR                   ! Sensible Heat Ratio (sensible/total) of the cooling coil
-REAL(r64) :: CBF                   ! coil bypass factor at off rated conditions
-REAL(r64) :: A0                    ! NTU * air mass flow rate, used in CBF calculation
+!REAL(r64) :: CBF                   ! coil bypass factor at off rated conditions
+!REAL(r64) :: A0                    ! NTU * air mass flow rate, used in CBF calculation
 REAL(r64) :: hDelta                ! Change in air enthalpy across the cooling coil [J/kg]
-REAL(r64) :: hADP                  ! Apparatus dew point enthalpy [J/kg]
-REAL(r64) :: hTinwADP              ! Enthalpy at inlet dry-bulb and wADP [J/kg]
+!REAL(r64) :: hADP                  ! Apparatus dew point enthalpy [J/kg]
+!REAL(r64) :: hTinwADP              ! Enthalpy at inlet dry-bulb and wADP [J/kg]
 REAL(r64) :: hTinwout              ! Enthalpy at inlet dry-bulb and outlet humidity ratio [J/kg]
-REAL(r64) :: tADP                  ! Apparatus dew point temperature [C]
-REAL(r64) :: wADP                  ! Apparatus dew point humidity ratio [kg/kg]
+!REAL(r64) :: tADP                  ! Apparatus dew point temperature [C]
+!REAL(r64) :: wADP                  ! Apparatus dew point humidity ratio [kg/kg]
 REAL(r64) :: FullLoadOutAirEnth    ! outlet full load enthalpy [J/kg]
 REAL(r64) :: FullLoadOutAirHumRat  ! outlet humidity ratio at full load
 REAL(r64) :: FullLoadOutAirTemp    ! outlet air temperature at full load [C]
@@ -8037,8 +8037,8 @@ REAL(r64) :: EIRTempModFac         ! EIR modifier (function of entering wetbulb,
 REAL(r64) :: EIRFlowModFac         ! EIR modifier (function of actual supply air flow vs rated flow)
 REAL(r64) :: EIR                   ! EIR at part load and off rated conditions
 REAL(r64) :: PLF                   ! Part load factor, accounts for thermal lag at compressor startup, used in power calculation
-REAL      :: QSens                 ! actual sensible capacity
-REAL      :: SysLat                ! latent add/removal from system (kg/s)
+REAL(r64) :: QSens                 ! actual sensible capacity
+REAL(r64) :: SysLat                ! latent add/removal from system (kg/s)
 REAL(r64) :: QLatActual            ! operating latent capacity of DX coil
 REAL(r64) :: QLatRated             ! Rated latent capacity of DX coil
 REAL(r64) :: SHRUnadjusted         ! SHR prior to latent degradation effective SHR calculation
@@ -8059,18 +8059,18 @@ REAL(r64) :: CrankcaseHeatingPower ! power due to crankcase heater
 REAL(r64) :: AirFlowRatio          ! ratio of compressor on airflow to average timestep airflow
                                  ! used when constant fan mode yields different air flow rates when compressor is ON and OFF
                                  ! (e.g. Packaged Terminal Heat Pump)
-REAL(r64) :: OutdoorDryBulb        ! Outdoor dry-bulb temperature at condenser (C)
-REAL(r64) :: OutdoorWetBulb        ! Outdoor wet-bulb temperature at condenser (C)
+!REAL(r64) :: OutdoorDryBulb        ! Outdoor dry-bulb temperature at condenser (C)
+!REAL(r64) :: OutdoorWetBulb        ! Outdoor wet-bulb temperature at condenser (C)
 !REAL(r64) :: OutdoorHumRat         ! Outdoor humidity ratio at condenser (kg/kg)
 REAL(r64) :: OutdoorPressure       ! Outdoor barometric pressure at condenser (Pa)
 
 REAL(r64) :: CurrentEndTime = 0.0  ! end time of time step for current simulation time step
-REAL(r64) :: MinAirHumRat = 0.0    ! minimum of the inlet air humidity ratio and the outlet air humidity ratio
+!REAL(r64) :: MinAirHumRat = 0.0    ! minimum of the inlet air humidity ratio and the outlet air humidity ratio
 INTEGER          :: Mode           ! Performance mode for Multimode DX coil; Always 1 for other coil types
 REAL(r64) :: OutletAirTemp           ! Supply air temperature (average value if constant fan, full output if cycling fan)
 REAL(r64) :: OutletAirHumRat         ! Supply air humidity ratio (average value if constant fan, full output if cycling fan)
 REAL(r64) :: OutletAirEnthalpy       ! Supply air enthalpy (average value if constant fan, full output if cycling fan)
-REAL(r64) :: Adiff                   ! Used for exponential
+!REAL(r64) :: Adiff                   ! Used for exponential
 REAL(r64) :: DXcoolToHeatPLRRatio    ! ratio of cooling PLR to heating PLR, used for cycling fan RH control
 REAL(r64) :: HeatRTF                 ! heating coil part-load ratio, used for cycling fan RH control
 REAL(r64) :: HeatingCoilPLF          ! heating coil PLF (function of PLR), used for cycling fan RH control
@@ -8387,8 +8387,6 @@ IF((AirMassFlow .GT. 0.0) .AND. &
 !    END IF
 
   CALL SimulationCycle(QSens,SysLat,TotCap,CondInletTemp)
-  
-  TotCap = TotCap*1000  !RS: Implementation: TotCap is in W, but above outputs in kW
 
 ! Calculate apparatus dew point conditions using TotCap and CBF
   !hDelta = TotCap/AirMassFlow

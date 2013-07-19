@@ -7306,16 +7306,16 @@ END SUBROUTINE
 
 SUBROUTINE GetNodeProp()    !RS: Debugging: Updating the air node data for E+
 
-USE DataLoopNode
-USE DXCoils
+!USE DataLoopNode
+USE DXCoils !, ONLY: DXCoil, DXCoilHPSimNum
 
   INTEGER :: AirOutletNode ! air outlet node number
   INTEGER :: AirInletNode ! air inlet node number
   REAL tWBi,tDPi,RhoDi,RhoMi,ErrStati
   REAL tWBo,tDPo,RhoDo,RhoMo,ErrStato
     
-    AirInletNode=NodeConnectionType_OutsideAir  !RS: Debugging: Coming directly from outside
-    AirOutletNode=NodeConnectionType_Inlet !RS: Debugging: The sensor node is what ZoneTempPredictorCorrector is looking at
+    !AirInletNode=NodeConnectionType_OutsideAir  !RS: Debugging: Coming directly from outside
+    !AirOutletNode=NodeConnectionType_Inlet !RS: Debugging: The sensor node is what ZoneTempPredictorCorrector is looking at
 
     CALL TDB_RH(tAiMod,hrAiMod,rhAiMod,hAiMod,tWBi,tDPi,RhoDi,RhoMi,BaroPressure,ErrStati)
     CALL TDB_RH(tAoMod,hrAoMod,rhAoMod,hAoMod,tWBo,tDPo,RhoDo,RhoMo,BaroPressure,ErrStato)
