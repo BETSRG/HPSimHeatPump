@@ -121,7 +121,9 @@ INTEGER, PARAMETER :: CoilPerfDX_CoolByPassEmpirical  = 23
 INTEGER, PARAMETER :: Coil_CoolingWaterToAirHPVSEquationFit  = 24
 INTEGER, PARAMETER :: Coil_HeatingWaterToAirHPVSEquationFit  = 25
 
+INTEGER, PARAMETER :: CoilDX_HPSim = 26 !RS: Implementation: Setting up a case variable for HPSim in DXCoils
 
+INTEGER :: HPSimFlag = 0    !RS: Implementation: Debugging: Flag to say HPSim is being used
 
 ! Water to air HP coil types
 INTEGER, PARAMETER :: WatertoAir_Simple               = 1

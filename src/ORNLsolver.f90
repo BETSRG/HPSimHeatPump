@@ -1,5 +1,5 @@
         
-    SUBROUTINE SimulationCycle(QUnitOut1,LatOutputProvided1) !RS: Attempting to pass variables out
+    SUBROUTINE SimulationCycle(QSensUnitOut1,LatOutputProvided1,QUnitOut1,TempOut1) !RS: Attempting to pass variables out
 
     !
     !
@@ -86,7 +86,10 @@
     
     REAL(r64), INTENT (OUT) :: QUnitOut1            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
     REAL(r64), INTENT (OUT) :: LatOutputProvided1   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: Testing: Trying to pass variables out
-    REAL :: QUnitOut            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
+    REAL(r64), INTENT (OUT) :: QSensUnitOut1            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
+    REAL(r64), INTENT (OUT) :: TempOut1            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
+    REAL :: QSensUnitOut            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
+    REAL :: QUnitOut    !Total capacity delivered to zone !RS: Testing: Passing variables out
     REAL :: LatOutputProvided   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: Testing: Trying to pass variables out
     
     REAL TWiC   !RS: Wetbulb Temperature, Outdoor Entering (C)
@@ -626,13 +629,13 @@
     CALL PrintCondenserResult
     !CALL EndCondenserCoil  !RS: Debugging: Removing for the moment
     
-    CALL GetQOut(QUnitOut,LatOutputProvided)    !RS: Testing: Trying to read variables from PrintEvaporator File   !RS: Debugging: Temporarily setting in an Epsilon-NTU method
+    CALL GetQOut(QSensUnitOut,LatOutputProvided,QUnitOut)    !RS: Testing: Trying to read variables from PrintEvaporator File   !RS: Debugging: Temporarily setting in an Epsilon-NTU method
     CALL GetNodeProp    !RS: Debugging: Trying to update the nodal properties
     
     QRemain=ZoneSysEnergyDemand(1)%RemainingOutputRequired-QUnitOut !-LatOutputProvided    !RS: Debugging: Qouts are load into zone
 
     WRITE(LogFile,*) 'Cooling Mode: ',IsCoolingMode !RS: Debugging: Is it cooling or heating?
-    WRITE(LogFile,*) 'QSensOut: ',QUnitOut  !RS: Debugging: Printing out some data
+    WRITE(LogFile,*) 'QSensOut: ',QSensUnitOut  !RS: Debugging: Printing out some data
     WRITE(LogFile,*) 'LatentOutput: ',LatOutputProvided
     WRITE(LogFile,*) 'QZoneRequired: ',ZoneSysEnergyDemand(1)%TotalOutputRequired
     WRITE(LogFile,*) 'Q left to meet required Q: ',QRemain
@@ -646,7 +649,9 @@
     
     CALL FlushHPOutput()
     !RS: Debugging: Testing: Seeing if the outputs should really be negative.
-    QUnitOut1=QUnitOut    !RS: Debugging: Temporarily setting in an Epsilon-NTU method
+    QUnitOut1=QUnitOut
+    TempOut1=TaiC
+    QSensUnitOut1=QSensUnitOut    !RS: Debugging: Temporarily setting in an Epsilon-NTU method
     LatOutputProvided1=LatOutputProvided    !RS: Debugging: Temporarily setting in an Epsilon-NTU method
 
     CLOSE(666)

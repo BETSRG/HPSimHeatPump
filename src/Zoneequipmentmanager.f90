@@ -2345,8 +2345,12 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
                                  ZoneEquipList(CurZoneEqNum)%EquipIndex(EquipPtr))
              
            CASE (HPSim)
-               WRITE(LogFile,*) 'EnergyPlus Timestep: ',CurrentTime !RS: Debugging: Printing out the current time
-               CALL SimulationCycle(SysOutputProvided, LatOutputProvided)
+               !WRITE(LogFile,*) 'EnergyPlus Timestep: ',CurrentTime !RS: Debugging: Printing out the current time
+               !CALL SimulationCycle(SysOutputProvided, LatOutputProvided)
+               !RS: Implementation: Trying call HPSim from PackagedTerminalHeatPump
+               CALL SimPackagedTerminalUnit(PrioritySimOrder(EquipTypeNum)%EquipName, ActualZoneNum, &
+                                 FirstHVACIteration, SysOutputProvided, LatOutputProvided, &
+                                 ZoneEquipList(CurZoneEqNum)%EquipIndex(EquipPtr))
                 !IF(LogFile .EQ. 9 .OR. LogFile .EQ. 10 .OR. LogFile .EQ. 12 .OR. LogFile .EQ. 13) THEN
                 !    WRITE(*,*) 'Error with DebugFile'    !RS: Debugging: Searching for a mis-set file number
                 !END IF

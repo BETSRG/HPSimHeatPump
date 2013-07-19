@@ -276,6 +276,7 @@ REAL QmodSens !Sensible Module heat transfer, kW
 REAL QmodLat  !Latent Module heat transfer, kW
 REAL QmodSensTot    !Total sensible heat transfer, kW
 REAL QmodLatTot !Total latent heat transfer, kW
+REAL QModTot    !Total heat transfer, kW
 REAL hciMultiplier  !Multiplier for hci
 REAL hcoMultiplier  !Multiplier for hco
 REAL DPrefMultiplier !Multiplier for DPref
@@ -1849,6 +1850,7 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),29(F10.3,','))"
   !RS: Debugging: Setting each QModTot to 0 at the beginning, so previous values don't carry over
   QModLatTot=0
   QModSensTot=0
+  QModTot=0
 
   MassCoil=0
   MassLiqCoil=0
@@ -2048,6 +2050,7 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),29(F10.3,','))"
 				      MassMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Mass
 
 				      Qmod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Qmod  !RS: Commenting out because it should already have been defined
+                      QmodTot=Qmod+QmodTot  !RS: Debugging: Counting up the total QMod
 
 				      QmodSens=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%QmodSens
                       QmodSensTot=QmodSens+QmodSensTot !RS: Debugging: Not sure how to actually count this up!
@@ -7283,10 +7286,11 @@ END SUBROUTINE UpdateTubeDataFromCircuitData
 
 !************************************************************************
 
-SUBROUTINE GetQOut(Out1, Out2)
+SUBROUTINE GetQOut(Out1, Out2, Out3)
 
 REAL Out1
 REAL Out2
+REAL Out3
 !REAL WAi,HAi,TWBAi,TDPAi,RhoDAi,RhoMAi,BaroPressureAi,ErrStatAi
 REAL WAi
 REAL WAo,HAo,TWBAo,TDPAo,RhoDAo,RhoMAo,BaroPressureAo,ErrStatAo
@@ -7294,6 +7298,7 @@ REAL WAo,HAo,TWBAo,TDPAo,RhoDAo,RhoMAo,BaroPressureAo,ErrStatAo
     Out1=QModSensTot*1000 !Sensible Module heat transfer, W
     CALL TDB_RH (tAoMod,WAo,rhAoMod,HAo,TWBAo,TDPAo,RhoDAo,RhoMAo,BaroPressureAo,ErrStatAo)
     Out2= mAiMod*(WAo-WAi) !Latent Output, kg/s
+    Out3=QModTot*1000
     !RS: Debugging: Something that should probably be looked at is if that's really the total latent output
     !RS: Debugging: Does some sort of average need to be taken?
     
@@ -7302,6 +7307,7 @@ END SUBROUTINE
 SUBROUTINE GetNodeProp()    !RS: Debugging: Updating the air node data for E+
 
 USE DataLoopNode
+USE DXCoils
 
   INTEGER :: AirOutletNode ! air outlet node number
   INTEGER :: AirInletNode ! air inlet node number
@@ -7314,23 +7320,29 @@ USE DataLoopNode
     CALL TDB_RH(tAiMod,hrAiMod,rhAiMod,hAiMod,tWBi,tDPi,RhoDi,RhoMi,BaroPressure,ErrStati)
     CALL TDB_RH(tAoMod,hrAoMod,rhAoMod,hAoMod,tWBo,tDPo,RhoDo,RhoMo,BaroPressure,ErrStato)
     
-Node(AirInletNode)%Enthalpy     = hAiMod
-Node(AirInletNode)%Temp         = tAiMod
-Node(AirInletNode)%HumRat       = hrAiMod
-Node(AirInletNode)%MassFlowRate = mAiMod
-Node(AirInletNode)%Press =BaroPressure
+!Node(AirInletNode)%Enthalpy     = hAiMod
+!Node(AirInletNode)%Temp         = tAiMod
+!Node(AirInletNode)%HumRat       = hrAiMod
+!Node(AirInletNode)%MassFlowRate = mAiMod
+!Node(AirInletNode)%Press =BaroPressure
 ! changed outputs
-Node(AirOutletNode)%Enthalpy     = hAoMod
-Node(AirOutletNode)%Temp         = tAoMod
-Node(AirOutletNode)%HumRat       = hrAoMod
-Node(AirOutletNode)%MassFlowRate = mAiMod
+!Node(AirOutletNode)%Enthalpy     = hAoMod
+!Node(AirOutletNode)%Temp         = tAoMod
+!Node(AirOutletNode)%HumRat       = hrAoMod
+!Node(AirOutletNode)%MassFlowRate = mAiMod
 ! pass through outputs
-Node(AirOutletNode)%Quality              = Node(AirInletNode)%Quality
-Node(AirOutletNode)%Press                = Node(AirInletNode)%Press
-Node(AirOutletNode)%MassFlowRateMin      = Node(AirInletNode)%MassFlowRateMin
-Node(AirOutletNode)%MassFlowRateMax      = Node(AirInletNode)%MassFlowRateMax
-Node(AirOutletNode)%MassFlowRateMinAvail = Node(AirInletNode)%MassFlowRateMinAvail
-Node(AirOutletNode)%MassFlowRateMaxAvail = Node(AirInletNode)%MassFlowRateMaxAvail
+!Node(AirOutletNode)%Quality              = Node(AirInletNode)%Quality
+!Node(AirOutletNode)%Press                = Node(AirInletNode)%Press
+!Node(AirOutletNode)%MassFlowRateMin      = Node(AirInletNode)%MassFlowRateMin
+!Node(AirOutletNode)%MassFlowRateMax      = Node(AirInletNode)%MassFlowRateMax
+!Node(AirOutletNode)%MassFlowRateMinAvail = Node(AirInletNode)%MassFlowRateMinAvail
+!Node(AirOutletNode)%MassFlowRateMaxAvail = Node(AirInletNode)%MassFlowRateMaxAvail
+
+  DXCoil(DXCoilHPSimNum)%InletAirMassFlowRate = mAiMod
+
+  DXCoil(DXCoilHPSimNum)%OutletAirTemp     = tAoMod
+  DXCoil(DXCoilHPSimNum)%OutletAirHumRat   = hrAoMod
+  DXCoil(DXCoilHPSimNum)%OutletAirEnthalpy = hAoMod
     
 END SUBROUTINE
 
