@@ -5234,6 +5234,8 @@ SUBROUTINE CalcPTUnit(PTUnitNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,O
                          PTUnit(PTUnitNum)%HPTimeConstant, PTUnit(PTUnitNum)%FanDelayTime, 0, 0.0d0)
       CASE(PTHPSimUnit) !RS: Implementation: Trying call HPSim from DXCoils
           HPSimFlag = 1 !RS: Implementation: Saying that HPSim IS being used
+          PTUnit(PTUnitNum)%CoolCoilCompIndex = 1   !RS: Implementation: Keeping SimDXCoil from crashing
+            !RS: Implementation: The above is because if it's 0 then DXCoils thinks it has no business being there
           CALL SimDXCoil(PTUnit(PTUnitNum)%DXCoolCoilName,Off,FirstHVACIteration,0.0d0,  &
                          PTUnit(PTUnitNum)%CoolCoilCompIndex,PTUnit(PTUnitNum)%OpMode,OnOffAirFlowRatio)
       CASE DEFAULT

@@ -446,14 +446,20 @@
     OutdoorAir:Mixer,        !- Component 1 Object Type
     OA Mixing Box 1;         !- Component 1 Name
 	
+!-   ===========  ALL OBJECTS IN CLASS: OUTSIDE AIR INLET NODE LIST ===========
+
+!  OutdoorAir:NodeList,
+!    OutsideAirInletNodes;    !- Node or NodeList Name 1
+
 !-   ===========  ALL OBJECTS IN CLASS: OUTSIDE AIR MIXER ===========
 
-  OutdoorAir:Mixer,
-    OA Mixing Box 1,         !- Name
-    Mixed Air Node,          !- Mixed Air Node Name
-    Outside Air Inlet Node,  !- Outdoor Air Stream Node Name
-    Relief Air Outlet Node,  !- Relief Air Stream Node Name
-    Outdoor Air Mixer Inlet Node;  !- Return Air Stream Node Name
+!  OutdoorAir:Mixer,
+!    OA Mixing Box 1,         !- Name
+!    Mixed Air Node,          !- Mixed Air Node Name
+!    Outside Air Inlet Node,  !- Outdoor Air Stream Node Name
+!    Relief Air Outlet Node,  !- Relief Air Stream Node Name
+!    Outdoor Air Mixer Inlet Node;  !- Return Air Stream Node Name
+
 !-   ================================================================
 	
   ZoneHVAC:EquipmentList,
@@ -466,7 +472,7 @@
   ZoneHVAC:HPSim,
     Zone1WTAHP,              !- Name
     FanAndCoilAvailSched,    !- Availability Schedule Name
-    Outside Air Inlet Node, !Zone 1 Inlet Node,      !- Air Inlet Node Name
+    Outside Air Inlet Node,      !- Air Inlet Node Name
     Zone 1 Inlet Node,       !- Air Outlet Node Name
     OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
     Zone 1 Mixer,            !- Outdoor Air Mixer Name
