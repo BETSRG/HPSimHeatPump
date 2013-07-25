@@ -630,7 +630,7 @@
     !CALL EndCondenserCoil  !RS: Debugging: Removing for the moment
     
     CALL GetQOut(QSensUnitOut,LatOutputProvided,QUnitOut)    !RS: Testing: Trying to read variables from PrintEvaporator File   !RS: Debugging: Temporarily setting in an Epsilon-NTU method
-    CALL GetNodeProp    !RS: Debugging: Trying to update the nodal properties
+    !CALL GetNodeProp    !RS: Debugging: Trying to update the nodal properties
     
     QRemain=ZoneSysEnergyDemand(1)%RemainingOutputRequired-QUnitOut !-LatOutputProvided    !RS: Debugging: Qouts are load into zone
 
