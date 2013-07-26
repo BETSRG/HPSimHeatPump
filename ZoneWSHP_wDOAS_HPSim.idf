@@ -150,7 +150,7 @@
     3,                       !- Month
     21,                      !- Day of Month
     SummerDesignDay,         !- Day Type
-    32,                      !- Maximum Dry-Bulb Temperature {C}
+    36,                      !- Maximum Dry-Bulb Temperature {C}
     15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Schedule Name

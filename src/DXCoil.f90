@@ -8151,9 +8151,9 @@ CondInletTemp   = 0.0d0
 CondInletHumrat = 0.0d0
 BypassFlowFraction  = DXCoil(DXCoilHPSimNum)%BypassedFlowFrac(Mode)
 AirMassFlow         = DXCoil(DXCoilHPSimNum)%InletAirMassFlowRate * (1.d0-BypassFlowFraction)
-!InletAirDryBulbTemp = DXCoil(DXCoilNum)%InletAirTemp   !RS: Debugging: Will be set in HPSim
-!InletAirEnthalpy    = DXCoil(DXCoilNum)%InletAirEnthalpy
-!InletAirHumRat      = DXCoil(DXCoilNum)%InletAirHumRat
+InletAirDryBulbTemp = DXCoil(DXCoilHPSimNum)%InletAirTemp   !RS: Debugging: Will be set in HPSim
+!InletAirEnthalpy    = DXCoil(DXCoilHPSimNum)%InletAirEnthalpy
+InletAirHumRat      = DXCoil(DXCoilHPSimNum)%InletAirHumRat
 HeatReclaimDXCoil(DXCoilHPSimNum)%AvailCapacity   = 0.0d0
 DXCoil(DXCoilHPSimNum)%CoolingCoilRuntimeFraction = 0.0d0
 DXCoil(DXCoilHPSimNum)%PartLoadRatio              = 0.0d0
@@ -8168,7 +8168,7 @@ DXCoil(DXCoilHPSimNum)%BasinHeaterPower           = 0.0d0
 !  ELSE
 !    OutdoorDryBulb  = OutDryBulbTemp
 !    OutdoorHumRat   = OutHumRat
-!    OutdoorPressure = OutBaroPress
+    OutdoorPressure = OutBaroPress
 !    OutdoorWetBulb  = OutWetBulbTemp
 !  ENDIF
 !ELSE
@@ -8665,63 +8665,63 @@ DXCoil(DXCoilHPSimNum)%PrintLowOutTempMessage = .FALSE.
     END IF
 
 ! Calculate electricity consumed. First, get EIR modifying factors for off-rated conditions
-  IF(DXCoil(DXCoilHPSimNum)%DXCoilType_Num .EQ. CoilDX_HeatPumpWaterHeater) THEN
-!   Coil:DX:HeatPumpWaterHeater does not have EIR temp or flow curves
-    EIRTempModFac = 1.0d0
-    EIRFlowModFac = 1.0d0
-  ELSE
-    EIRTempModFac = CurveValue(DXCoil(DXCoilHPSimNum)%EIRFTemp(Mode),InletAirWetbulbC,CondInletTemp)
-
-!   Warn user if curve output goes negative
-    IF(EIRTempModFac .LT. 0.0)THEN
-      IF(DXCoil(DXCoilHPSimNum)%EIRFTempErrorIndex == 0)THEN
-        CALL ShowWarningMessage(TRIM(DXCoil(DXCoilHPSimNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilHPSimNum)%Name)//'":')
-        CALL ShowContinueError(' Energy Input Ratio Modifier curve (function of temperature) output is negative (' &
-                          //TRIM(TrimSigDigits(EIRTempModFac,3))//').')
-        IF(DXCoil(DXCoilHPSimNum)%EIRTempModFacCurveType(Mode) .EQ. Biquadratic)THEN
-          CALL ShowContinueError(' Negative value occurs using a condenser inlet air temperature of ' &
-                         //TRIM(TrimSigDigits(CondInletTemp,1))// &
-                               ' and an inlet air wet-bulb temperature of '//TRIM(TrimSigDigits(InletAirWetbulbC,1))//'.')
-        ELSE
-          CALL ShowContinueError(' Negative value occurs using a condenser inlet air temperature of ' &
-                         //TRIM(TrimSigDigits(CondInletTemp,1))//'.')
-        END IF
-        IF(Mode .GT. 1)THEN
-          Call ShowContinueError(' Negative output results from stage '//TRIM(TrimSigDigits(Mode))// &
-                                 ' compressor operation.')
-        END IF
-        CALL ShowContinueErrorTimeStamp(' Resetting curve output to zero and continuing simulation.')
-      END IF
-      CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilHPSimNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilHPSimNum)%Name)//'":'//&
-          ' Energy Input Ratio Modifier curve (function of temperature) output is negative warning continues...' &
-          , DXCoil(DXCoilHPSimNum)%EIRFTempErrorIndex, EIRTempModFac, EIRTempModFac)
-      EIRTempModFac = 0.0
-    END IF
-
-    EIRFlowModFac = CurveValue(DXCoil(DXCoilHPSimNum)%EIRFFlow(Mode),AirMassFlowRatio)
-
-!   Warn user if curve output goes negative
-    IF(EIRFlowModFac .LT. 0.0)THEN
-      IF(DXCoil(DXCoilHPSimNum)%EIRFFlowErrorIndex == 0)THEN
-        CALL ShowWarningMessage(TRIM(DXCoil(DXCoilHPSimNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilHPSimNum)%Name)//'":')
-        CALL ShowContinueError(' Energy Input Ratio Modifier curve (function of flow fraction) output is negative (' &
-                          //TRIM(TrimSigDigits(EIRFlowModFac,3))//').')
-        CALL ShowContinueError(' Negative value occurs using an air flow fraction of ' &
-                           //TRIM(TrimSigDigits(AirMassFlowRatio,3))//'.')
-        CALL ShowContinueErrorTimeStamp(' Resetting curve output to zero and continuing simulation.')
-        IF(Mode .GT. 1)THEN
-          Call ShowContinueError(' Negative output results from stage '//TRIM(TrimSigDigits(Mode))// &
-                                 ' compressor operation.')
-        END IF
-      END IF
-      CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilHPSimNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilHPSimNum)%Name)//'":'//&
-         ' Energy Input Ratio Modifier curve (function of flow fraction) output is negative warning continues...' &
-         , DXCoil(DXCoilHPSimNum)%EIRFFlowErrorIndex, EIRFlowModFac, EIRFlowModFac)
-      EIRFlowModFac = 0.0
-    END IF
-  END IF
-
-  EIR = DXCoil(DXCoilHPSimNum)%RatedEIR(Mode) * EIRFlowModFac * EIRTempModFac
+!  IF(DXCoil(DXCoilHPSimNum)%DXCoilType_Num .EQ. CoilDX_HeatPumpWaterHeater) THEN   !RS: Debugging: Pulling out the electricity for now
+!!   Coil:DX:HeatPumpWaterHeater does not have EIR temp or flow curves
+!    EIRTempModFac = 1.0d0
+!    EIRFlowModFac = 1.0d0
+!  ELSE
+!    EIRTempModFac = CurveValue(DXCoil(DXCoilHPSimNum)%EIRFTemp(Mode),InletAirWetbulbC,CondInletTemp)
+!
+!!   Warn user if curve output goes negative
+!    IF(EIRTempModFac .LT. 0.0)THEN
+!      IF(DXCoil(DXCoilHPSimNum)%EIRFTempErrorIndex == 0)THEN
+!        CALL ShowWarningMessage(TRIM(DXCoil(DXCoilHPSimNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilHPSimNum)%Name)//'":')
+!        CALL ShowContinueError(' Energy Input Ratio Modifier curve (function of temperature) output is negative (' &
+!                          //TRIM(TrimSigDigits(EIRTempModFac,3))//').')
+!        IF(DXCoil(DXCoilHPSimNum)%EIRTempModFacCurveType(Mode) .EQ. Biquadratic)THEN
+!          CALL ShowContinueError(' Negative value occurs using a condenser inlet air temperature of ' &
+!                         //TRIM(TrimSigDigits(CondInletTemp,1))// &
+!                               ' and an inlet air wet-bulb temperature of '//TRIM(TrimSigDigits(InletAirWetbulbC,1))//'.')
+!        ELSE
+!          CALL ShowContinueError(' Negative value occurs using a condenser inlet air temperature of ' &
+!                         //TRIM(TrimSigDigits(CondInletTemp,1))//'.')
+!        END IF
+!        IF(Mode .GT. 1)THEN
+!          Call ShowContinueError(' Negative output results from stage '//TRIM(TrimSigDigits(Mode))// &
+!                                 ' compressor operation.')
+!        END IF
+!        CALL ShowContinueErrorTimeStamp(' Resetting curve output to zero and continuing simulation.')
+!      END IF
+!      CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilHPSimNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilHPSimNum)%Name)//'":'//&
+!          ' Energy Input Ratio Modifier curve (function of temperature) output is negative warning continues...' &
+!          , DXCoil(DXCoilHPSimNum)%EIRFTempErrorIndex, EIRTempModFac, EIRTempModFac)
+!      EIRTempModFac = 0.0
+!    END IF
+!
+!    EIRFlowModFac = CurveValue(DXCoil(DXCoilHPSimNum)%EIRFFlow(Mode),AirMassFlowRatio)
+!
+!!   Warn user if curve output goes negative
+!    IF(EIRFlowModFac .LT. 0.0)THEN
+!      IF(DXCoil(DXCoilHPSimNum)%EIRFFlowErrorIndex == 0)THEN
+!        CALL ShowWarningMessage(TRIM(DXCoil(DXCoilHPSimNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilHPSimNum)%Name)//'":')
+!        CALL ShowContinueError(' Energy Input Ratio Modifier curve (function of flow fraction) output is negative (' &
+!                          //TRIM(TrimSigDigits(EIRFlowModFac,3))//').')
+!        CALL ShowContinueError(' Negative value occurs using an air flow fraction of ' &
+!                           //TRIM(TrimSigDigits(AirMassFlowRatio,3))//'.')
+!        CALL ShowContinueErrorTimeStamp(' Resetting curve output to zero and continuing simulation.')
+!        IF(Mode .GT. 1)THEN
+!          Call ShowContinueError(' Negative output results from stage '//TRIM(TrimSigDigits(Mode))// &
+!                                 ' compressor operation.')
+!        END IF
+!      END IF
+!      CALL ShowRecurringWarningErrorAtEnd(TRIM(DXCoil(DXCoilHPSimNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilHPSimNum)%Name)//'":'//&
+!         ' Energy Input Ratio Modifier curve (function of flow fraction) output is negative warning continues...' &
+!         , DXCoil(DXCoilHPSimNum)%EIRFFlowErrorIndex, EIRFlowModFac, EIRFlowModFac)
+!      EIRFlowModFac = 0.0
+!    END IF
+!  END IF
+!
+!  EIR = DXCoil(DXCoilHPSimNum)%RatedEIR(Mode) * EIRFlowModFac * EIRTempModFac
 
 ! For multimode coil, if stage-2 operation (Modes 2 or 4), return "full load" power adjusted for PLF
   IF (Mode .EQ. 1 .OR. Mode .EQ. 3) THEN
@@ -8793,20 +8793,20 @@ DXCoil(DXCoilHPSimNum)%PrintLowOutTempMessage = .FALSE.
 !ELSE
 
   ! DX coil is off; just pass through conditions
-  DXCoil(DXCoilHPSimNum)%OutletAirEnthalpy = DXCoil(DXCoilHPSimNum)%InletAirEnthalpy
-  DXCoil(DXCoilHPSimNum)%OutletAirHumRat   = DXCoil(DXCoilHPSimNum)%InletAirHumRat
-  DXCoil(DXCoilHPSimNum)%OutletAirTemp     = DXCoil(DXCoilHPSimNum)%InletAirTemp
-
-  DXCoil(DXCoilHPSimNum)%ElecCoolingPower = 0.0
-  DXCoil(DXCoilHPSimNum)%TotalCoolingEnergyRate = 0.0
-  DXCoil(DXCoilHPSimNum)%SensCoolingEnergyRate = 0.0
-  DXCoil(DXCoilHPSimNum)%LatCoolingEnergyRate = 0.0
-  DXCoil(DXCoilHPSimNum)%EvapCondPumpElecPower = 0.0
-  DXCoil(DXCoilHPSimNum)%EvapWaterConsumpRate = 0.0
-
-! Reset globals when DX coil is OFF for use in heat recovery module
-  DXCoilFullLoadOutAirTemp(DXCoilHPSimNum) = 0.0
-  DXCoilFullLoadOutAirHumRat(DXCoilHPSimNum) = 0.0
+!  DXCoil(DXCoilHPSimNum)%OutletAirEnthalpy = DXCoil(DXCoilHPSimNum)%InletAirEnthalpy
+!  DXCoil(DXCoilHPSimNum)%OutletAirHumRat   = DXCoil(DXCoilHPSimNum)%InletAirHumRat
+!  DXCoil(DXCoilHPSimNum)%OutletAirTemp     = DXCoil(DXCoilHPSimNum)%InletAirTemp
+!
+!  DXCoil(DXCoilHPSimNum)%ElecCoolingPower = 0.0
+!  DXCoil(DXCoilHPSimNum)%TotalCoolingEnergyRate = 0.0
+!  DXCoil(DXCoilHPSimNum)%SensCoolingEnergyRate = 0.0
+!  DXCoil(DXCoilHPSimNum)%LatCoolingEnergyRate = 0.0
+!  DXCoil(DXCoilHPSimNum)%EvapCondPumpElecPower = 0.0
+!  DXCoil(DXCoilHPSimNum)%EvapWaterConsumpRate = 0.0
+!
+!! Reset globals when DX coil is OFF for use in heat recovery module
+!  DXCoilFullLoadOutAirTemp(DXCoilHPSimNum) = 0.0
+!  DXCoilFullLoadOutAirHumRat(DXCoilHPSimNum) = 0.0
 
 ! Calculate crankcase heater power using the runtime fraction for this DX cooling coil (here DXCoolingCoilRTF=0) if
 ! there is no companion DX coil, or the runtime fraction of the companion DX heating coil (here DXHeatingCoilRTF>=0).
