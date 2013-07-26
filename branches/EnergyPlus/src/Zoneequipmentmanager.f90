@@ -2345,7 +2345,7 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
                                  ZoneEquipList(CurZoneEqNum)%EquipIndex(EquipPtr))
              
            CASE (HPSim)
-               !WRITE(LogFile,*) 'EnergyPlus Timestep: ',CurrentTime !RS: Debugging: Printing out the current time
+               WRITE(LogFile,*) 'EnergyPlus Timestep: ',CurrentTime !RS: Debugging: Printing out the current time
                !CALL SimulationCycle(SysOutputProvided, LatOutputProvided)
                !RS: Implementation: Trying call HPSim from PackagedTerminalHeatPump
                CALL SimPackagedTerminalUnit(PrioritySimOrder(EquipTypeNum)%EquipName, ActualZoneNum, &

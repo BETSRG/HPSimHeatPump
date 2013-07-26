@@ -176,14 +176,14 @@
     CALL GetTempsOut(OutDryBulbTemp, OutWetBulbTemp, OutBaroPress, RHiC)    !RS: Debugging: RHiC = outdoor relative humidity
     TWiC=OutWetBulbTemp !RS: Debugging: Updating outdoor entering wet bulb temperature
     TaiC=OutDryBulbTemp !RS: Debugging: Updating outdoor entering dry bulb temperature
+    DummyHR=ZoneAirHumRat(1)    !RS: Debugging
     IF (DOASFlag .EQ. 1) THEN   !RS: Checking to see if the system has return air or not
         TaiE=TaiC   !RS: DOAS system
         TWiE=TWiC   !RS: Debugging: Since it's 100% Outside Air here, this is true.
     ELSE    !RS: System with return air
-        CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
         TaiE=MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
+        CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
     END IF
-    DummyHR=ZoneAirHumRat(1)    !RS: Debugging
     CALL PsyRhFnTdbWPb2(TaiE,DummyHR,OutBaroPress,RHiE)  !RS: Debugging: Converting from humidity ratio to relative humidity
     RHiE=RHiE*100   !RS: Debugging: Conversion from decimal to fraction form
     
@@ -630,7 +630,7 @@
     !CALL EndCondenserCoil  !RS: Debugging: Removing for the moment
     
     CALL GetQOut(QSensUnitOut,LatOutputProvided,QUnitOut)    !RS: Testing: Trying to read variables from PrintEvaporator File   !RS: Debugging: Temporarily setting in an Epsilon-NTU method
-    !CALL GetNodeProp    !RS: Debugging: Trying to update the nodal properties
+    CALL GetNodeProp    !RS: Debugging: Trying to update the nodal properties
     
     QRemain=ZoneSysEnergyDemand(1)%RemainingOutputRequired-QUnitOut !-LatOutputProvided    !RS: Debugging: Qouts are load into zone
 
