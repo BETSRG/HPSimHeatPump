@@ -632,7 +632,7 @@
     CALL GetQOut(QSensUnitOut,LatOutputProvided,QUnitOut)    !RS: Testing: Trying to read variables from PrintEvaporator File   !RS: Debugging: Temporarily setting in an Epsilon-NTU method
     CALL GetNodeProp    !RS: Debugging: Trying to update the nodal properties
     
-    QRemain=ZoneSysEnergyDemand(1)%RemainingOutputRequired-QUnitOut !-LatOutputProvided    !RS: Debugging: Qouts are load into zone
+    QRemain=ZoneSysEnergyDemand(1)%TotalOutputRequired+QSensUnitOut !-LatOutputProvided    !RS: Debugging: Qouts are load into zone
 
     WRITE(LogFile,*) 'Cooling Mode: ',IsCoolingMode !RS: Debugging: Is it cooling or heating?
     WRITE(LogFile,*) 'QSensOut: ',QSensUnitOut  !RS: Debugging: Printing out some data
