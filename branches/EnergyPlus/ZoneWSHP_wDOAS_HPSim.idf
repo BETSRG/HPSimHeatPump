@@ -116,9 +116,9 @@
   RunPeriod,
     ,                        !- Name
     3, !12,                       !- Begin Month	!RS: Changing to single day instead of whole year
-    21, !21,                       !- Begin Day of Month
+    23, !21,                       !- Begin Day of Month
     3, !12,                      !- End Month
-    21, !10, !21,                      !- End Day of Month
+    23, !10, !21,                      !- End Day of Month
     Tuesday,                 !- Day of Week for Start Day
     Yes,                     !- Use Weather File Holidays and Special Days
     Yes,                     !- Use Weather File Daylight Saving Period
@@ -208,7 +208,7 @@
     0.0,                     !- Zone Heating Sizing Factor
     0.0,                     !- Zone Cooling Sizing Factor
     DesignDay,               !- Cooling Design Air Flow Method
-    0,                       !- Cooling Design Air Flow Rate {m3/s}
+    1.5,                       !- Cooling Design Air Flow Rate {m3/s}
     ,                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Cooling Minimum Air Flow {m3/s}
     ,                        !- Cooling Minimum Air Flow Fraction
@@ -434,7 +434,7 @@
   ZoneHVAC:EquipmentConnections,
     SPACE1-1,                !- Zone Name
     Zone1Equipment,          !- Zone Conditioning Equipment List Name
-    Zone1Inlets,             !- Zone Air Inlet Node or NodeList Name
+    Zone 1 Inlet Node, !1Inlets,             !- Zone Air Inlet Node or NodeList Name
     Zone 1 Outlet Node,      !- Zone Air Exhaust Node or NodeList Name
     Zone 1 Node,             !- Zone Air Node Name
     Zone 1 Return Node;      !- Zone Return Air Node Name
@@ -492,25 +492,33 @@
     DrawThrough,             !- Fan Placement
     CyclingFanSch;           !- Supply Air Fan Operating Mode Schedule Name
 
-  NodeList,
-    Zone1Inlets,             !- Name
-    Zone 1 Inlet Node,       !- Node 1 Name
-    Zone 1 OA Inlet Node;    !- Node 2 Name
+  !NodeList,
+  !  Zone1Inlets,             !- Name
+  !  Zone 1 Inlet Node,       !- Node 1 Name
+  !  Zone 1 OA Inlet Node;    !- Node 2 Name
 
-    OutdoorAir:Mixer,
+   OutdoorAir:Mixer,
     Zone 1 Mixer,            !- Name
     Sys 1 Mixed Air Node,    !- Mixed Air Node Name
-    Sys 1 Outside Air Inlet Node,  !- Outdoor Air Stream Node Name
+    OUTSIDE AIR INLET NODE, !Sys 1 Outside Air Inlet Node,  !- Outdoor Air Stream Node Name
     Sys 1 Relief Air Outlet Node,  !- Relief Air Stream Node Name
     Zone 1 Outlet Node;      !- Return Air Stream Node Name
 
-  OutdoorAir:NodeList,
-    Sys 1 OutsideAirInletNodes;  !- Node or NodeList Name 1
+   !OutdoorAir:Mixer,
+   ! Zone 1 Mixer,            !- Name
+   ! Zone 1 Inlet Air Node,    !- Mixed Air Node Name
+   ! Outside Air Inlet Node,  !- Outdoor Air Stream Node Name
+   ! Zone 1 Relief Air Node,  !- Relief Air Stream Node Name
+   ! Zone 1 Outlet Node;      !- Return Air Stream Node Name
 
-  NodeList,
-    Sys 1 OutsideAirInletNodes,  !- Name
-    Sys 1 Outside Air Inlet Node,  !- Node 1 Name
-    OUTSIDE AIR INLET NODE;  !- Node 2 Name
+
+  OutdoorAir:NodeList,
+    OUTSIDE AIR INLET NODE; !Sys 1 OutsideAirInletNodes;  !- Node or NodeList Name 1
+
+  !NodeList,
+  !  Sys 1 OutsideAirInletNodes,  !- Name
+  !  Sys 1 Outside Air Inlet Node,  !- Node 1 Name
+  !  OUTSIDE AIR INLET NODE;  !- Node 2 Name
 
   Schedule:Compact,
     CyclingFanSch,           !- Name

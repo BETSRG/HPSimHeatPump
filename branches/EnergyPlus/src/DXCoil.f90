@@ -8067,14 +8067,14 @@ REAL(r64) :: InletAirHumRatTemp    ! inlet air humidity ratio used in ADP/BF loo
 !  Eventually inlet air conditions will be used in DX Coil, these lines are commented out and marked with this comment line
 !REAL(r64) :: RatedCBF              ! coil bypass factor at rated conditions
 REAL(r64) :: SHR                   ! Sensible Heat Ratio (sensible/total) of the cooling coil
-!REAL(r64) :: CBF                   ! coil bypass factor at off rated conditions
+REAL(r64) :: CBF                   ! coil bypass factor at off rated conditions
 !REAL(r64) :: A0                    ! NTU * air mass flow rate, used in CBF calculation
 REAL(r64) :: hDelta                ! Change in air enthalpy across the cooling coil [J/kg]
-!REAL(r64) :: hADP                  ! Apparatus dew point enthalpy [J/kg]
-!REAL(r64) :: hTinwADP              ! Enthalpy at inlet dry-bulb and wADP [J/kg]
+REAL(r64) :: hADP                  ! Apparatus dew point enthalpy [J/kg]
+REAL(r64) :: hTinwADP              ! Enthalpy at inlet dry-bulb and wADP [J/kg]
 REAL(r64) :: hTinwout              ! Enthalpy at inlet dry-bulb and outlet humidity ratio [J/kg]
-!REAL(r64) :: tADP                  ! Apparatus dew point temperature [C]
-!REAL(r64) :: wADP                  ! Apparatus dew point humidity ratio [kg/kg]
+REAL(r64) :: tADP                  ! Apparatus dew point temperature [C]
+REAL(r64) :: wADP                  ! Apparatus dew point humidity ratio [kg/kg]
 REAL(r64) :: FullLoadOutAirEnth    ! outlet full load enthalpy [J/kg]
 REAL(r64) :: FullLoadOutAirHumRat  ! outlet humidity ratio at full load
 REAL(r64) :: FullLoadOutAirTemp    ! outlet air temperature at full load [C]
@@ -8091,7 +8091,7 @@ INTEGER :: Counter                 ! Counter for dry evaporator iterations
 INTEGER :: MaxIter                 ! Maximum number of iterations for dry evaporator calculations
 REAL(r64) :: RF                    ! Relaxation factor for dry evaporator iterations
 REAL(r64) :: Tolerance             ! Error tolerance for dry evaporator iterations
-!REAL(r64) :: werror                ! Deviation of humidity ratio in dry evaporator iteration loop
+REAL(r64) :: werror                ! Deviation of humidity ratio in dry evaporator iteration loop
 REAL(r64) :: CondInletTemp         ! Condenser inlet temperature (C). Outdoor dry-bulb temp for air-cooled condenser.
                                  ! Outdoor Wetbulb +(1 - effectiveness)*(outdoor drybulb - outdoor wetbulb) for evap condenser.
 REAL(r64) :: CondInletHumrat       ! Condenser inlet humidity ratio (kg/kg). Zero for air-cooled condenser.
@@ -8104,9 +8104,9 @@ REAL(r64) :: CrankcaseHeatingPower ! power due to crankcase heater
 REAL(r64) :: AirFlowRatio          ! ratio of compressor on airflow to average timestep airflow
                                  ! used when constant fan mode yields different air flow rates when compressor is ON and OFF
                                  ! (e.g. Packaged Terminal Heat Pump)
-!REAL(r64) :: OutdoorDryBulb        ! Outdoor dry-bulb temperature at condenser (C)
-!REAL(r64) :: OutdoorWetBulb        ! Outdoor wet-bulb temperature at condenser (C)
-!REAL(r64) :: OutdoorHumRat         ! Outdoor humidity ratio at condenser (kg/kg)
+REAL(r64) :: OutdoorDryBulb        ! Outdoor dry-bulb temperature at condenser (C)
+REAL(r64) :: OutdoorWetBulb        ! Outdoor wet-bulb temperature at condenser (C)
+REAL(r64) :: OutdoorHumRat         ! Outdoor humidity ratio at condenser (kg/kg)
 REAL(r64) :: OutdoorPressure       ! Outdoor barometric pressure at condenser (Pa)
 
 REAL(r64) :: CurrentEndTime = 0.0  ! end time of time step for current simulation time step
@@ -8152,7 +8152,7 @@ CondInletHumrat = 0.0d0
 BypassFlowFraction  = DXCoil(DXCoilHPSimNum)%BypassedFlowFrac(Mode)
 AirMassFlow         = DXCoil(DXCoilHPSimNum)%InletAirMassFlowRate * (1.d0-BypassFlowFraction)
 InletAirDryBulbTemp = DXCoil(DXCoilHPSimNum)%InletAirTemp   !RS: Debugging: Will be set in HPSim
-!InletAirEnthalpy    = DXCoil(DXCoilHPSimNum)%InletAirEnthalpy
+InletAirEnthalpy    = DXCoil(DXCoilHPSimNum)%InletAirEnthalpy
 InletAirHumRat      = DXCoil(DXCoilHPSimNum)%InletAirHumRat
 HeatReclaimDXCoil(DXCoilHPSimNum)%AvailCapacity   = 0.0d0
 DXCoil(DXCoilHPSimNum)%CoolingCoilRuntimeFraction = 0.0d0
@@ -8166,10 +8166,10 @@ DXCoil(DXCoilHPSimNum)%BasinHeaterPower           = 0.0d0
 !    OutdoorPressure = Node(DXCoil(DXCoilNum)%CondenserInletNodeNum(Mode))%Press
 !    OutdoorWetBulb  = Node(DXCoil(DXCoilNum)%CondenserInletNodeNum(Mode))%OutAirWetBulb
 !  ELSE
-!    OutdoorDryBulb  = OutDryBulbTemp
-!    OutdoorHumRat   = OutHumRat
+    OutdoorDryBulb  = OutDryBulbTemp
+    OutdoorHumRat   = OutHumRat
     OutdoorPressure = OutBaroPress
-!    OutdoorWetBulb  = OutWetBulbTemp
+    OutdoorWetBulb  = OutWetBulbTemp
 !  ENDIF
 !ELSE
   !IF (DXCoil(DXCoilNum)%CondenserInletNodeNum(Mode) /= 0) THEN
@@ -8336,22 +8336,22 @@ DXCoil(DXCoilHPSimNum)%PrintLowOutTempMessage = .FALSE.
   !IF (ADiff >= EXP_LowerLimit) THEN
   !   CBF = exp(ADiff)
   !ELSE
-  !   CBF = 0.0
+     CBF = 0.0
   !END IF
 
 !   check boundary for low ambient temperature and post warnings to individual DX coil buffers to print at end of time step
     !IF (DXCoil(DXCoilNum)%CondenserType(Mode) .EQ. AirCooled) THEN
-    !  IF(OutdoorDryBulb .LT. 0.0 .AND. .NOT. WarmupFlag) THEN !Same threshold as for air-cooled electric chiller
-    !    DXCoil(DXCoilNum)%PrintLowAmbMessage = .TRUE.
-    !    DXCoil(DXCoilNum)%LowTempLast = OutdoorDryBulb
-    !    IF(DXCoil(DXCoilNum)%LowAmbErrIndex == 0)THEN
-    !      DXCoil(DXCoilNum)%LowAmbBuffer1 = TRIM(DXCoil(DXCoilNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilNum)%Name)// &
-    !       '" - Air-cooled condenser inlet dry-bulb temperature below 0 C. Outdoor dry-bulb temperature = '//  &
-    !          TRIM(RoundSigDigits(OutdoorDryBulb,2))
-    !      DXCoil(DXCoilNum)%LowAmbBuffer2 = ' '//'... Occurrence info = '//TRIM(EnvironmentName)//', '//Trim(CurMnDy)//' '&
-    !                 //TRIM(CreateSysTimeIntervalString())
-    !    END IF
-    !  END IF
+      IF(OutdoorDryBulb .LT. 0.0 .AND. .NOT. WarmupFlag) THEN !Same threshold as for air-cooled electric chiller
+        DXCoil(DXCoilHPSimNum)%PrintLowAmbMessage = .TRUE.
+        DXCoil(DXCoilHPSimNum)%LowTempLast = OutdoorDryBulb
+        IF(DXCoil(DXCoilHPSimNum)%LowAmbErrIndex == 0)THEN
+          DXCoil(DXCoilHPSimNum)%LowAmbBuffer1 = TRIM(DXCoil(DXCoilHPSimNum)%DXCoilType)//' "'//TRIM(DXCoil(DXCoilHPSimNum)%Name)// &
+           '" - Air-cooled condenser inlet dry-bulb temperature below 0 C. Outdoor dry-bulb temperature = '//  &
+              TRIM(RoundSigDigits(OutdoorDryBulb,2))
+          DXCoil(DXCoilHPSimNum)%LowAmbBuffer2 = ' '//'... Occurrence info = '//TRIM(EnvironmentName)//', '//Trim(CurMnDy)//' '&
+                     //TRIM(CreateSysTimeIntervalString())
+        END IF
+      END IF
     !ELSEIF (DXCoil(DXCoilNum)%CondenserType(Mode) == EvapCooled) THEN
     !  IF(OutdoorWetBulb .LT. 10.0d0 .AND. .NOT. WarmUpFlag) THEN !Same threshold as for evap-cooled electric chiller
     !    DXCoil(DXCoilNum)%PrintLowAmbMessage = .TRUE.
@@ -8434,11 +8434,11 @@ DXCoil(DXCoilHPSimNum)%PrintLowOutTempMessage = .FALSE.
   CALL SimulationCycle(QSens,SysLat,TotCap,CondInletTemp)
 
 ! Calculate apparatus dew point conditions using TotCap and CBF
-  !hDelta = TotCap/AirMassFlow
-  !hADP = InletAirEnthalpy - hDelta/(1.d0-CBF)
-  !tADP = PsyTsatFnHPb(hADP,OutdoorPressure,'CalcDoe2DXCoil')
-  !wADP = PsyWFnTdbH(tADP,hADP,'CalcDoe2DXCoil')
-  !hTinwADP = PsyHFnTdbW(InletAirDryBulbTemp,wADP,'CalcDoe2DXCoil')
+  hDelta = TotCap/AirMassFlow
+  hADP = InletAirEnthalpy - hDelta/(1.d0-CBF)
+  !tADP = PsyTsatFnHPb(hADP,OutdoorPressure,'CalcHPSimDXCoil')
+  !wADP = PsyWFnTdbH(tADP,hADP,'CalcHPSim2DXCoil')
+  !hTinwADP = PsyHFnTdbW(InletAirDryBulbTemp,wADP,'CalcHPSimDXCoil')
   !IF((InletAirEnthalpy-hADP) .NE. 0)THEN
   !  SHR = MIN((hTinwADP-hADP)/(InletAirEnthalpy-hADP),1.d0)
   !ELSE
@@ -8448,20 +8448,20 @@ DXCoil(DXCoilHPSimNum)%PrintLowOutTempMessage = .FALSE.
 !
 ! Check for dry evaporator conditions (win < wadp)
 !
-!  IF (wADP .gt. InletAirHumRatTemp .or. (Counter .ge. 1 .and. Counter .lt. MaxIter)) THEN
-!     If(InletAirHumRatTemp == 0.0)InletAirHumRatTemp=0.00001d0
-!     werror = (InletAirHumRatTemp - wADP)/InletAirHumRatTemp
+  !IF (wADP .gt. InletAirHumRatTemp .or. (Counter .ge. 1 .and. Counter .lt. MaxIter)) THEN
+  !   If(InletAirHumRatTemp == 0.0)InletAirHumRatTemp=0.00001d0
+  !   werror = (InletAirHumRatTemp - wADP)/InletAirHumRatTemp
 !!
 !! Increase InletAirHumRatTemp at constant InletAirTemp to find coil dry-out point. Then use the
 !! capacity at the dry-out point to determine exiting conditions from coil. This is required
 !! since the TotCapTempModFac doesn't work properly with dry-coil conditions.
 !!
-!      InletAirHumRatTemp = RF*wADP + (1.d0-RF)*InletAirHumRatTemp
-!      InletAirWetbulbC = PsyTwbFnTdbWPb(InletAirDryBulbTemp,InletAirHumRatTemp,OutdoorPressure)
-!      Counter = Counter + 1
+      !InletAirHumRatTemp = RF*wADP + (1.d0-RF)*InletAirHumRatTemp
+      !InletAirWetbulbC = PsyTwbFnTdbWPb(InletAirDryBulbTemp,InletAirHumRatTemp,OutdoorPressure)
+      !Counter = Counter + 1
 !      IF (ABS(werror) .gt. Tolerance) go to 50   ! Recalculate with modified inlet conditions
 !
-!  END IF
+  !END IF
 
   IF(DXCoil(DXCoilHPSimNum)%PLFFPLR(mode) .GT. 0)THEN
     PLF = CurveValue(DXCoil(DXCoilHPSimNum)%PLFFPLR(mode),PartLoadRatio) ! Calculate part-load factor
