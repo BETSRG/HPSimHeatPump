@@ -8432,13 +8432,19 @@ DXCoil(DXCoilHPSimNum)%PrintLowOutTempMessage = .FALSE.
 !    END IF
 
   CALL SimulationCycle(QSens,SysLat,TotCap,CondInletTemp)
+  
+  AirMassFlow = DXCoil(DXCoilHPSimNum)%InletAirMassFlowRate !RS: Debugging: Setting this equal immediately after
+  !RS: Debugging: I think that the apparatus properties are calculated with entering conditions
+  !RS: Debugging: con. The above can only be set here if the flow is constant throughout the HP
 
 ! Calculate apparatus dew point conditions using TotCap and CBF
   hDelta = TotCap/AirMassFlow
   hADP = InletAirEnthalpy - hDelta/(1.d0-CBF)
-  !tADP = PsyTsatFnHPb(hADP,OutdoorPressure,'CalcHPSimDXCoil')
-  !wADP = PsyWFnTdbH(tADP,hADP,'CalcHPSim2DXCoil')
-  !hTinwADP = PsyHFnTdbW(InletAirDryBulbTemp,wADP,'CalcHPSimDXCoil')
+  IF (AirMassFlow .GT. 0) THEN  !RS: Debugging: Does the air flow ever get above 0 for this node?
+    tADP = PsyTsatFnHPb(hADP,OutdoorPressure,'CalcHPSimDXCoil')
+    wADP = PsyWFnTdbH(tADP,hADP,'CalcHPSim2DXCoil')
+    hTinwADP = PsyHFnTdbW(InletAirDryBulbTemp,wADP,'CalcHPSimDXCoil')
+  END IF
   !IF((InletAirEnthalpy-hADP) .NE. 0)THEN
   !  SHR = MIN((hTinwADP-hADP)/(InletAirEnthalpy-hADP),1.d0)
   !ELSE
@@ -8448,20 +8454,22 @@ DXCoil(DXCoilHPSimNum)%PrintLowOutTempMessage = .FALSE.
 !
 ! Check for dry evaporator conditions (win < wadp)
 !
-  !IF (wADP .gt. InletAirHumRatTemp .or. (Counter .ge. 1 .and. Counter .lt. MaxIter)) THEN
-  !   If(InletAirHumRatTemp == 0.0)InletAirHumRatTemp=0.00001d0
-  !   werror = (InletAirHumRatTemp - wADP)/InletAirHumRatTemp
+  IF (AirMassFlow .GT. 0) THEN  !RS: Debugging: Does the air flow ever get above 0 for this node?
+  IF (wADP .gt. InletAirHumRatTemp .or. (Counter .ge. 1 .and. Counter .lt. MaxIter)) THEN
+     If(InletAirHumRatTemp == 0.0)InletAirHumRatTemp=0.00001d0
+     werror = (InletAirHumRatTemp - wADP)/InletAirHumRatTemp
 !!
 !! Increase InletAirHumRatTemp at constant InletAirTemp to find coil dry-out point. Then use the
 !! capacity at the dry-out point to determine exiting conditions from coil. This is required
 !! since the TotCapTempModFac doesn't work properly with dry-coil conditions.
 !!
-      !InletAirHumRatTemp = RF*wADP + (1.d0-RF)*InletAirHumRatTemp
-      !InletAirWetbulbC = PsyTwbFnTdbWPb(InletAirDryBulbTemp,InletAirHumRatTemp,OutdoorPressure)
-      !Counter = Counter + 1
+      InletAirHumRatTemp = RF*wADP + (1.d0-RF)*InletAirHumRatTemp
+      InletAirWetbulbC = PsyTwbFnTdbWPb(InletAirDryBulbTemp,InletAirHumRatTemp,OutdoorPressure)
+      Counter = Counter + 1
 !      IF (ABS(werror) .gt. Tolerance) go to 50   ! Recalculate with modified inlet conditions
 !
-  !END IF
+  END IF
+  END IF
 
   IF(DXCoil(DXCoilHPSimNum)%PLFFPLR(mode) .GT. 0)THEN
     PLF = CurveValue(DXCoil(DXCoilHPSimNum)%PLFFPLR(mode),PartLoadRatio) ! Calculate part-load factor
@@ -8536,24 +8544,26 @@ DXCoil(DXCoilHPSimNum)%PrintLowOutTempMessage = .FALSE.
 
   !  Calculate full load output conditions
   IF (SHR .gt. 1. .OR. Counter .gt. 0) SHR = 1.d0
-  !FullLoadOutAirEnth = InletAirEnthalpy - TotCap/AirMassFlow
-  !hTinwout = InletAirEnthalpy - (1.0d0-SHR)*hDelta
-  !IF (SHR < 1.0d0) THEN
-  !  FullLoadOutAirHumRat = PsyWFnTdbH(InletAirDryBulbTemp,hTinwout)
-  !ELSE
-  !  FullLoadOutAirHumRat = InletAirHumRat
-  !END IF
-  !FullLoadOutAirTemp = PsyTdbFnHW(FullLoadOutAirEnth,FullLoadOutAirHumRat)
+IF (AirMassFlow .GT. 0) THEN    !RS: Debugging: Keeping it from crashing if HPSim isn't called and there's no incoming flow
+  FullLoadOutAirEnth = InletAirEnthalpy - TotCap/AirMassFlow
+  hTinwout = InletAirEnthalpy - (1.0d0-SHR)*hDelta
+  IF (SHR < 1.0d0) THEN
+    FullLoadOutAirHumRat = PsyWFnTdbH(InletAirDryBulbTemp,hTinwout)
+  ELSE
+    FullLoadOutAirHumRat = InletAirHumRat
+  END IF
+  FullLoadOutAirTemp = PsyTdbFnHW(FullLoadOutAirEnth,FullLoadOutAirHumRat)
 
 ! Check for saturation error and modify temperature at constant enthalpy
-!   IF(FullLoadOutAirTemp .LT. PsyTsatFnHPb(FullLoadOutAirEnth,OutdoorPressure)) THEN
-!    FullLoadOutAirTemp = PsyTsatFnHPb(FullLoadOutAirEnth,OutdoorPressure)
-!    FullLoadOutAirHumRat  = PsyWFnTdbH(FullLoadOutAirTemp,FullLoadOutAirEnth)
-!   END IF
+   IF(FullLoadOutAirTemp .LT. PsyTsatFnHPb(FullLoadOutAirEnth,OutdoorPressure)) THEN
+    FullLoadOutAirTemp = PsyTsatFnHPb(FullLoadOutAirEnth,OutdoorPressure)
+    FullLoadOutAirHumRat  = PsyWFnTdbH(FullLoadOutAirTemp,FullLoadOutAirEnth)
+   END IF
 
   ! Store actual outlet conditions when DX coil is ON for use in heat recovery module
-  !DXCoilFullLoadOutAirTemp(DXCoilNum) = FullLoadOutAirTemp
-  !DXCoilFullLoadOutAirHumRat(DXCoilNum) = FullLoadOutAirHumRat
+  DXCoilFullLoadOutAirTemp(DXCoilHPSimNum) = FullLoadOutAirTemp
+  DXCoilFullLoadOutAirHumRat(DXCoilHPSimNum) = FullLoadOutAirHumRat
+END IF
 
 ! Add warning message for cold cooling coil (FullLoadOutAirTemp < 2 C)
   IF(FullLoadOutAirTemp .LT. 2.0d0 .AND. .NOT. FirstHVACIteration .AND. .NOT. WarmupFlag)THEN
@@ -8640,7 +8650,7 @@ DXCoil(DXCoilHPSimNum)%PrintLowOutTempMessage = .FALSE.
   !  ! Default to cycling fan, cycling compressor
   !  ! Also return this result for stage 2 operation of multimode coil
   !  ! Cycling fan typically provides full outlet conditions. When RH control is used, account for additional
-  !  ! heating run time by using cooing/heating ratio the same as constant fan (otherwise PLRRatio = 1).
+  !  ! heating run time by using cooling/heating ratio the same as constant fan (otherwise PLRRatio = 1).
   !  OutletAirEnthalpy = FullLoadOutAirEnth * DXcoolToHeatPLRRatio + InletAirEnthalpy * (1.0d0 - DXcoolToHeatPLRRatio)
   !  OutletAirHumRat = FullLoadOutAirHumRat * DXcoolToHeatPLRRatio + InletAirHumRat * (1.0d0 - DXcoolToHeatPLRRatio)
   !  OutletAirTemp = FullLoadOutAirTemp * DXcoolToHeatPLRRatio + InletAirDryBulbTemp * (1.0d0 - DXcoolToHeatPLRRatio)
@@ -8665,11 +8675,11 @@ DXCoil(DXCoilHPSimNum)%PrintLowOutTempMessage = .FALSE.
     END IF
 
 ! Calculate electricity consumed. First, get EIR modifying factors for off-rated conditions
-!  IF(DXCoil(DXCoilHPSimNum)%DXCoilType_Num .EQ. CoilDX_HeatPumpWaterHeater) THEN   !RS: Debugging: Pulling out the electricity for now
+  IF(DXCoil(DXCoilHPSimNum)%DXCoilType_Num .EQ. CoilDX_HeatPumpWaterHeater) THEN   !RS: Debugging: Pulling out the electricity for now
 !!   Coil:DX:HeatPumpWaterHeater does not have EIR temp or flow curves
-!    EIRTempModFac = 1.0d0
-!    EIRFlowModFac = 1.0d0
-!  ELSE
+    EIRTempModFac = 1.0d0
+    EIRFlowModFac = 1.0d0
+  ELSE
 !    EIRTempModFac = CurveValue(DXCoil(DXCoilHPSimNum)%EIRFTemp(Mode),InletAirWetbulbC,CondInletTemp)
 !
 !!   Warn user if curve output goes negative
@@ -8719,9 +8729,9 @@ DXCoil(DXCoilHPSimNum)%PrintLowOutTempMessage = .FALSE.
 !         , DXCoil(DXCoilHPSimNum)%EIRFFlowErrorIndex, EIRFlowModFac, EIRFlowModFac)
 !      EIRFlowModFac = 0.0
 !    END IF
-!  END IF
+  END IF
 !
-!  EIR = DXCoil(DXCoilHPSimNum)%RatedEIR(Mode) * EIRFlowModFac * EIRTempModFac
+  EIR = DXCoil(DXCoilHPSimNum)%RatedEIR(Mode) * EIRFlowModFac * EIRTempModFac
 
 ! For multimode coil, if stage-2 operation (Modes 2 or 4), return "full load" power adjusted for PLF
   IF (Mode .EQ. 1 .OR. Mode .EQ. 3) THEN
@@ -8786,9 +8796,9 @@ DXCoil(DXCoilHPSimNum)%PrintLowOutTempMessage = .FALSE.
   !  ENDIF
   !END IF
 
-  !DXCoil(DXCoilNum)%OutletAirTemp     = OutletAirTemp
-  !DXCoil(DXCoilNum)%OutletAirHumRat   = OutletAirHumRat
-  !DXCoil(DXCoilNum)%OutletAirEnthalpy = OutletAirEnthalpy
+  DXCoil(DXCoilHPSimNum)%OutletAirTemp     = OutletAirTemp
+  DXCoil(DXCoilHPSimNum)%OutletAirHumRat   = OutletAirHumRat
+  DXCoil(DXCoilHPSimNum)%OutletAirEnthalpy = OutletAirEnthalpy
 
 !ELSE
 
@@ -8811,7 +8821,7 @@ DXCoil(DXCoilHPSimNum)%PrintLowOutTempMessage = .FALSE.
 ! Calculate crankcase heater power using the runtime fraction for this DX cooling coil (here DXCoolingCoilRTF=0) if
 ! there is no companion DX coil, or the runtime fraction of the companion DX heating coil (here DXHeatingCoilRTF>=0).
   !IF(DXCoil(DXCoilNum)%CompanionUpstreamDXCoil .EQ. 0) THEN
-    DXCoil(DXCoilHPSimNum)%CrankcaseHeaterPower = CrankcaseHeatingPower
+   ! DXCoil(DXCoilHPSimNum)%CrankcaseHeaterPower = CrankcaseHeatingPower
   !ELSE
   !  DXCoil(DXCoilNum)%CrankcaseHeaterPower = CrankcaseHeatingPower * &
   !                                          (1.d0-DXCoil(DXCoil(DXCoilNum)%CompanionUpstreamDXCoil)%HeatingCoilRuntimeFraction)

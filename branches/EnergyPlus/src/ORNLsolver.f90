@@ -45,6 +45,7 @@
     USE Psychrometrics !RS: Debugging: Solving for TWiE
     USE DataZoneEnergyDemands   !RS: Debugging: Determining if the zone requires heating or cooling
     USE DataHVACGlobals !RS: Debugging: Small Load and SingleHeatingSetPoint, SingleCoolingSetPoint
+    USE DataLoopNode    !RS: Debugging: Bringing in Node array
 
     IMPLICIT NONE
 
@@ -181,8 +182,10 @@
         TaiE=TaiC   !RS: DOAS system
         TWiE=TWiC   !RS: Debugging: Since it's 100% Outside Air here, this is true.
     ELSE    !RS: System with return air
-        TaiE=MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
-        CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
+        !TaiE=MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
+        !CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
+        TaiE=Node(6)%Temp   !RS: Debugging: Hard coding in for test case of RA-only
+        CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE) 
     END IF
     CALL PsyRhFnTdbWPb2(TaiE,DummyHR,OutBaroPress,RHiE)  !RS: Debugging: Converting from humidity ratio to relative humidity
     RHiE=RHiE*100   !RS: Debugging: Conversion from decimal to fraction form

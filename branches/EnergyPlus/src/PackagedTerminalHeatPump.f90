@@ -5211,6 +5211,7 @@ SUBROUTINE CalcPTUnit(PTUnitNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,O
         SaveCompressorPLR = PartLoadFrac
       CASE(PTHPSimUnit) !RS: Implementation: Trying call HPSim from DXCoils
           HPSimFlag = 1 !RS: Implementation: Saying HPSim IS being used
+          PTUnit(PTUnitNum)%CoolCoilCompIndex = 1   !RS: Implementation: Keeping SimDXCoil from crashing
           CALL SimDXCoil(PTUnit(PTUnitNum)%DXCoolCoilName,On,FirstHVACIteration,PartLoadFrac,PTUnit(PTUnitNum)%CoolCoilCompIndex,  &
              PTUnit(PTUnitNum)%OpMode,OnOffAirFlowRatio)
       CASE DEFAULT
