@@ -208,7 +208,7 @@
     0.0,                     !- Zone Heating Sizing Factor
     0.0,                     !- Zone Cooling Sizing Factor
     DesignDay,               !- Cooling Design Air Flow Method
-    1.5,                       !- Cooling Design Air Flow Rate {m3/s}
+    0,                       !- Cooling Design Air Flow Rate {m3/s}
     ,                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Cooling Minimum Air Flow {m3/s}
     ,                        !- Cooling Minimum Air Flow Fraction
@@ -434,7 +434,7 @@
   ZoneHVAC:EquipmentConnections,
     SPACE1-1,                !- Zone Name
     Zone1Equipment,          !- Zone Conditioning Equipment List Name
-    Zone 1 Inlet Node, !1Inlets,             !- Zone Air Inlet Node or NodeList Name
+    Zone 1 Inlet Node,       !- Zone Air Inlet Node or NodeList Name
     Zone 1 Outlet Node,      !- Zone Air Exhaust Node or NodeList Name
     Zone 1 Node,             !- Zone Air Node Name
     Zone 1 Return Node;      !- Zone Return Air Node Name
@@ -465,12 +465,12 @@
   ZoneHVAC:EquipmentList,
     Zone1Equipment,          !- Name
     ZoneHVAC:HPSim,  !- Zone Equipment 2 Object Type
-    Zone1WTAHP,              !- Zone Equipment 2 Name
+    Zone1ATAHP,              !- Zone Equipment 2 Name
     1, !2,                       !- Zone Equipment 2 Cooling Sequence
     1; !2;                       !- Zone Equipment 2 Heating or No-Load Sequence
 
   ZoneHVAC:HPSim,
-    Zone1WTAHP,              !- Name
+    Zone1ATAHP,              !- Name
     FanAndCoilAvailSched,    !- Availability Schedule Name
     Outside Air Inlet Node,      !- Air Inlet Node Name
     Zone 1 Inlet Node,       !- Air Outlet Node Name
@@ -479,7 +479,7 @@
     Autosize,                !- Supply Air Flow Rate During Cooling Operation {m3/s}
     Autosize,                !- Supply Air Flow Rate During Heating Operation {m3/s}
     ,                        !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
-    0.0,                     !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
+    Autosize, !0.0,                     !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
     0.0,                     !- Outdoor Air Flow Rate During Heating Operation {m3/s}
     ,                        !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
      ,               !- Supply Air Fan Object Type
@@ -499,7 +499,7 @@
 
    OutdoorAir:Mixer,
     Zone 1 Mixer,            !- Name
-    Sys 1 Mixed Air Node,    !- Mixed Air Node Name
+    Zone 1 Inlet Air Node, !Sys 1 Mixed Air Node,    !- Mixed Air Node Name
     OUTSIDE AIR INLET NODE, !Sys 1 Outside Air Inlet Node,  !- Outdoor Air Stream Node Name
     Sys 1 Relief Air Outlet Node,  !- Relief Air Stream Node Name
     Zone 1 Outlet Node;      !- Return Air Stream Node Name
