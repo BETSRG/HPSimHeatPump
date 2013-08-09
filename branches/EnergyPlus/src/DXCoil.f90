@@ -8563,6 +8563,9 @@ IF (AirMassFlow .GT. 0) THEN    !RS: Debugging: Keeping it from crashing if HPSi
   ! Store actual outlet conditions when DX coil is ON for use in heat recovery module
   DXCoilFullLoadOutAirTemp(DXCoilHPSimNum) = FullLoadOutAirTemp
   DXCoilFullLoadOutAirHumRat(DXCoilHPSimNum) = FullLoadOutAirHumRat
+ELSE    !RS: Debugging: Giving another case so it is set
+    FullLoadOutAirTemp=DXCoil(DXCoilHPSimNum)%OutletAirTemp
+    !OutletAirEnthalpy=DXCoil(DXCoilHPSimNum)%OutletAirEnthalpy
 END IF
 
 ! Add warning message for cold cooling coil (FullLoadOutAirTemp < 2 C)
@@ -8654,7 +8657,11 @@ END IF
   !  OutletAirEnthalpy = FullLoadOutAirEnth * DXcoolToHeatPLRRatio + InletAirEnthalpy * (1.0d0 - DXcoolToHeatPLRRatio)
   !  OutletAirHumRat = FullLoadOutAirHumRat * DXcoolToHeatPLRRatio + InletAirHumRat * (1.0d0 - DXcoolToHeatPLRRatio)
   !  OutletAirTemp = FullLoadOutAirTemp * DXcoolToHeatPLRRatio + InletAirDryBulbTemp * (1.0d0 - DXcoolToHeatPLRRatio)
-  !END IF
+  !END IF  
+  
+  !RS: Implementation: Setting these here because otherwise they're not getting updated
+  OutletAirTemp=DXCoil(DXCoilHPSimNum)%OutletAirTemp
+  OutletAirEnthalpy=DXCoil(DXCoilHPSimNum)%OutletAirEnthalpy
 
 ! Check for saturation error and modify temperature at constant enthalpy
    IF(OutletAirTemp .LT. PsyTsatFnHPb(OutletAirEnthalpy,OutdoorPressure,'CalcDOE2DXCoil')) THEN
