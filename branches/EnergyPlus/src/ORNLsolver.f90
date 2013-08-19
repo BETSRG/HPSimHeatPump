@@ -175,16 +175,18 @@
     END IF
 
     CALL GetTempsOut(OutDryBulbTemp, OutWetBulbTemp, OutBaroPress, RHiC)    !RS: Debugging: RHiC = outdoor relative humidity
-    TWiC=OutWetBulbTemp !RS: Debugging: Updating outdoor entering wet bulb temperature
-    TaiC=OutDryBulbTemp !RS: Debugging: Updating outdoor entering dry bulb temperature
-    DummyHR=ZoneAirHumRat(1)    !RS: Debugging
+    !TWiC=OutWetBulbTemp !RS: Debugging: Updating outdoor entering wet bulb temperature
+    TaiC=Node(1)%Temp !OutDryBulbTemp !RS: Debugging: Updating outdoor entering dry bulb temperature !RS: Debugging: Outside Air Node
+    DummyHR=Node(1)%HumRat !ZoneAirHumRat(1)    !RS: Debugging
+    CALL PsyTwbFnTdbWPb2(TaiC,DummyHR,OutBaroPress,TWiC) 
     IF (DOASFlag .EQ. 1) THEN   !RS: Checking to see if the system has return air or not
         TaiE=TaiC   !RS: DOAS system
         TWiE=TWiC   !RS: Debugging: Since it's 100% Outside Air here, this is true.
     ELSE    !RS: System with return air
         !TaiE=MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
         !CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
-        TaiE=Node(6)%Temp   !RS: Debugging: Hard coding in for test case of RA-only
+        TaiE=Node(3)%Temp   !RS: Debugging: Hard coding in for test case of RA-only
+        DummyHR=Node(3)%HumRat 
         CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE) 
     END IF
     CALL PsyRhFnTdbWPb2(TaiE,DummyHR,OutBaroPress,RHiE)  !RS: Debugging: Converting from humidity ratio to relative humidity
