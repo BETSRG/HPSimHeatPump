@@ -112,7 +112,9 @@ LOGICAL, EXTERNAL :: IssueRefPropError
   Pressure=PoEvp*1000   !RS Comment: Unit Conversion
   Quality=1
   TsoEvp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr) !Evaporator Outlet Saturation Temperature
-  IF (IssueRefPropError(RefPropErr, 'Distributor', 2, ErrorFlag)) THEN
+  
+  !Karthik - Adding reduntant Variable ErrorFlag Again to Match the Method call signature
+  IF (IssueRefPropError(RefPropErr, 'Distributor', 2, ErrorFlag, ErrorFlag)) THEN 
       RETURN
   END IF
 
@@ -121,7 +123,9 @@ LOGICAL, EXTERNAL :: IssueRefPropError
   Temperature=ToEvpRtd
   Pressure=PoEvp*1000   !RS Comment: Unit Conversion
   HoEvpRtd=TP(Ref$, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)  !Rated Evaporator Outlet Enthalpy
-  IF (IssueRefPropError(RefPropErr, 'Distributor', 2, ErrorFlag)) THEN
+  
+  !Karthik - Adding reduntant Variable ErrorFlag Again to Match the Method call signature
+  IF (IssueRefPropError(RefPropErr, 'Distributor', 2, ErrorFlag, ErrorFlag)) THEN
       RETURN
   END IF
   HoEvpRtd=HoEvpRtd/1000    !RS Comment: Unit Conversion
@@ -309,6 +313,9 @@ REAL CFnoz !Correction factor for liquid temp. other then 100 F
 
   IF (TITXV .GT. 40) THEN
       CFnoz=0.0001*TITXV**2 - 0.0394*TITXV + 3.7791
+      !Karthik - Add Else part to initlize the Value for CFnoz
+  ELSE
+      CFnoz=1.0
   END IF
 
   QNOZRTD = CFnoz*QNOZRTD
@@ -363,6 +370,9 @@ REAL CFnoz !Correction factor for liquid temp. other then 100 F
 
   IF (TITXV .GT. 40) THEN
       CFnoz=0.0001*TITXV**2 - 0.0394*TITXV + 3.7791
+      !Karthik - Add Else part to initlize the Value for CFnoz
+  ELSE
+      CFnoz=1.0
   END IF
 
   CFtube=(30/LTUBE)**0.333

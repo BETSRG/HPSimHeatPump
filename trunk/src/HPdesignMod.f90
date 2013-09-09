@@ -116,6 +116,7 @@
     LOGICAL, EXTERNAL :: IssueRefPropError
     
     INTEGER :: TimeStep1 !RS: Testing
+
     
     INTEGER, PARAMETER :: MaxNameLength = 200
 
@@ -129,6 +130,11 @@
     REAL SimulatedCharge2       !Simulated charge at 2nd reference point, kg or lbm
     REAL LiquidLength2          !Liquid length at 2nd reference point, m or ft
   
+    
+        
+    TimeStep1=0 !Karthik - Initialize to 0
+    TAISV=1.0 !Karthik - Initialize to 1
+    TSATSV=1.0 !Karthik - Initialize to 1
     
     IF (EvapPAR%EvapFirstTime .EQ. 1) THEN    !RS: Debugging: Formerly EvapPAR(38)
           !*************** Charge Tuning Curve ***************  !RS: Debugging: Moving: If needed, try HPDM
