@@ -77,6 +77,8 @@ REAL FUNCTION CHARGM(DTVALU,IERR)
 
     IERR = 0
     ICHRGE=1
+    
+    DTVAL=0.00 !Karthik - Initilized Previous Guess to 0
 
     IF (MODE .EQ. TXVSIMULATION .AND. DTVALU .GT. 80) THEN
         DTVALU=(DTVALU+DTVAL)/2 !If it is higher then 80 F subcooling, take the average of the current and previous guesses ISI - 01/02/09
@@ -93,6 +95,7 @@ REAL FUNCTION CHARGM(DTVALU,IERR)
     ELSE
         CHARGM = ( REFCHG - CALCHG ) !Less superheat, more charge
     END IF
+    
     IF(ICHRGE.EQ.2) THEN
         CHARGM = -CHARGM
     END IF
