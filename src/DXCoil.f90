@@ -8119,6 +8119,10 @@ REAL(r64) :: OutletAirEnthalpy       ! Supply air enthalpy (average value if con
 REAL(r64) :: DXcoolToHeatPLRRatio    ! ratio of cooling PLR to heating PLR, used for cycling fan RH control
 REAL(r64) :: HeatRTF                 ! heating coil part-load ratio, used for cycling fan RH control
 REAL(r64) :: HeatingCoilPLF          ! heating coil PLF (function of PLR), used for cycling fan RH control
+INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
+    
+    OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+
 
 ! If Performance mode not present, then set to 1.  Used only by Multimode/Multispeed DX coil (otherwise mode = 1)
 IF (PRESENT(PerfMode)) THEN
@@ -8442,7 +8446,7 @@ DXCoil(DXCoilHPSimNum)%PrintLowOutTempMessage = .FALSE.
   hADP = InletAirEnthalpy - hDelta/(1.d0-CBF)
   IF (AirMassFlow .GT. 0) THEN  !RS: Debugging: Does the air flow ever get above 0 for this node?
     tADP = PsyTsatFnHPb(hADP,OutdoorPressure,'CalcHPSimDXCoil')
-    wADP = PsyWFnTdbH(tADP,hADP,'CalcHPSim2DXCoil')
+    wADP = PsyWFnTdbH(tADP,hADP,'CalcHPSimDXCoil')
     hTinwADP = PsyHFnTdbW(InletAirDryBulbTemp,wADP,'CalcHPSimDXCoil')
   END IF
   !IF((InletAirEnthalpy-hADP) .NE. 0)THEN
@@ -8518,11 +8522,15 @@ DXCoil(DXCoilHPSimNum)%PrintLowOutTempMessage = .FALSE.
         CALL ShowContinueError('Check the IO reference manual for PLF curve guidance [Coil:WaterHeating:AirToWaterHeatPump].')
         CALL ShowContinueErrorTimeStamp(' ')
       ELSE
-        CALL ShowWarningMessage('The runtime fraction for DX cooling coil '//TRIM(DXCoil(DXCoilHPSimNum)%Name)//&
-                           ' exceeded 1.0. ['//TRIM(RoundSigDigits(DXCoil(DXCoilHPSimNum)%CoolingCoilRuntimeFraction,4))//'].')
-        CALL ShowContinueError('Runtime fraction reset to 1 and the simulation will continue.')
-        CALL ShowContinueError('Check the IO reference manual for PLF curve guidance [Coil:Cooling:DX:SingleSpeed].')
-        CALL ShowContinueErrorTimeStamp(' ')
+        !CALL ShowWarningMessage('The runtime fraction for DX cooling coil '//TRIM(DXCoil(DXCoilHPSimNum)%Name)//&
+        !                   ' exceeded 1.0. ['//TRIM(RoundSigDigits(DXCoil(DXCoilHPSimNum)%CoolingCoilRuntimeFraction,4))//'].')
+        !CALL ShowContinueError('Runtime fraction reset to 1 and the simulation will continue.')
+        !CALL ShowContinueError('Check the IO reference manual for PLF curve guidance [Coil:Cooling:DX:SingleSpeed].')
+        !CALL ShowContinueErrorTimeStamp(' ')   !RS: Secret Search String
+        WRITE(DebugFile,*) 'The runtime fraction for DX cooling coil ',TRIM(DXCoil(DXCoilHPSimNum)%Name),&
+                           ' exceeded 1.0. [',TRIM(RoundSigDigits(DXCoil(DXCoilHPSimNum)%CoolingCoilRuntimeFraction,4)),'].'
+        WRITE(DebugFile,*) 'Runtime fraction reset to 1 and the simulation will continue.'
+        WRITE(DebugFile,*) 'Check the IO reference manual for PLF curve guidance [Coil:Cooling:DX:SingleSpeed]'
       END IF
     END IF
     IF(DXCoil(DXCoilHPSimNum)%DXCoilType_Num .EQ. CoilDX_HeatPumpWaterHeater)THEN
@@ -8664,7 +8672,7 @@ END IF
   OutletAirEnthalpy=DXCoil(DXCoilHPSimNum)%OutletAirEnthalpy
 
 ! Check for saturation error and modify temperature at constant enthalpy
-   IF(OutletAirTemp .LT. PsyTsatFnHPb(OutletAirEnthalpy,OutdoorPressure,'CalcDOE2DXCoil')) THEN
+   IF(OutletAirTemp .LT. PsyTsatFnHPb(OutletAirEnthalpy,OutdoorPressure,'CalcHPSimDXCoil')) THEN
     OutletAirTemp = PsyTsatFnHPb(OutletAirEnthalpy,OutdoorPressure)
     OutletAirHumRat  = PsyWFnTdbH(OutletAirTemp,OutletAirEnthalpy)
    END IF
@@ -8804,7 +8812,7 @@ END IF
   !END IF
 
   DXCoil(DXCoilHPSimNum)%OutletAirTemp     = OutletAirTemp
-  DXCoil(DXCoilHPSimNum)%OutletAirHumRat   = OutletAirHumRat
+  !DXCoil(DXCoilHPSimNum)%OutletAirHumRat   = OutletAirHumRat   !RS: Debugging: Unnecessary and if OutletAirHumRat not updated, a bad idea
   DXCoil(DXCoilHPSimNum)%OutletAirEnthalpy = OutletAirEnthalpy
 
 !ELSE
@@ -8828,7 +8836,7 @@ END IF
 ! Calculate crankcase heater power using the runtime fraction for this DX cooling coil (here DXCoolingCoilRTF=0) if
 ! there is no companion DX coil, or the runtime fraction of the companion DX heating coil (here DXHeatingCoilRTF>=0).
   !IF(DXCoil(DXCoilNum)%CompanionUpstreamDXCoil .EQ. 0) THEN
-   ! DXCoil(DXCoilHPSimNum)%CrankcaseHeaterPower = CrankcaseHeatingPower
+  !  DXCoil(DXCoilHPSimNum)%CrankcaseHeaterPower = CrankcaseHeatingPower
   !ELSE
   !  DXCoil(DXCoilNum)%CrankcaseHeaterPower = CrankcaseHeatingPower * &
   !                                          (1.d0-DXCoil(DXCoil(DXCoilNum)%CompanionUpstreamDXCoil)%HeatingCoilRuntimeFraction)

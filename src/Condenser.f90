@@ -1255,7 +1255,7 @@
     IF(LogFile .EQ. 9 .OR. LogFile .EQ. 10 .OR. LogFile .EQ. 12) THEN
         WRITE(*,*) 'Error with LogFile'    !RS: Debugging: Searching for a mis-set file number
     END IF
-    WRITE(LogFile,*) 'QCondenser: ', QCoil
+    !WRITE(LogFile,*) 'QCondenser: ', QCoil
 
     CALL Condenser_Helper_1
     

@@ -578,8 +578,10 @@ SUBROUTINE ProcessInput
    ENDIF
 
    IF (OverallErrorFlag) THEN
-     CALL ShowSevereError('IP: Possible incorrect IDD File')
-     CALL ShowContinueError('IDD Version:"'//TRIM(IDDVerString)//'"')
+     !CALL ShowSevereError('IP: Possible incorrect IDD File')
+     !CALL ShowContinueError('IDD Version:"'//TRIM(IDDVerString)//'"')
+     WRITE(DebugFile,*) 'IP: Possible incorrect IDD File'   !RS: Secret Search String
+     WRITE(DebugFile,*) 'IDD Version: "'//TRIM(IDDVerString)//'"'
      DO Loop=1,NumIDFRecords
        IF (SameString(IDFRecords(Loop)%Name,'Version')) THEN
          Num1=LEN_TRIM(MatchVersion)

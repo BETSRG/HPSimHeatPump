@@ -46,10 +46,14 @@ LOGICAL FUNCTION IssueRefPropError(RefPropErrValue, CallingRoutine, ValueIfError
     INTEGER, INTENT(IN) :: ValueIfErrorFound ! if RefProp was erroneous, this is the signaling value to be used
     INTEGER, INTENT(INOUT), OPTIONAL :: VariableToSet1 ! if RefProp was erroneous, this will be set to the signal value
     REAL, INTENT(INOUT), OPTIONAL :: VariableToSet2 ! another variable to set...optionally
-
+    INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
+    
+    OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  
     ErrorFound = .FALSE.
     IF (RefPropErrValue .GT. 0) THEN
-        CALL ShowWarningError(CallingRoutine//': RefProp lookup error')
+        !CALL ShowWarningError(CallingRoutine//': RefProp lookup error')    !RS: Secret Search String
+        WRITE(DebugFile,*) CallingRoutine,' : RefProp lookup error'
         IF ( PRESENT ( VariableToSet1 ) ) THEN
             VariableToSet1 = ValueIfErrorFound
         END IF

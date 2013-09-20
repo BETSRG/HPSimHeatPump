@@ -161,6 +161,7 @@
         IsCoolingMode=0 !RS: Debugging: Heat pump operating in heating mode
         CondPAR(27)=IsCoolingMode
         EvapPar(20)=IsCoolingMode
+        RETURN  !RS: Debugging: We can't currently handle heating mode, and trying to run it in cooling mode is a bad idea
     ELSE
         IsCoolingMode=1 !RS: Debugging: The heat pump is operating in cooling mode
         CondPAR(27)=IsCoolingMode
@@ -178,7 +179,7 @@
     !TWiC=OutWetBulbTemp !RS: Debugging: Updating outdoor entering wet bulb temperature
     TaiC=Node(1)%Temp !OutDryBulbTemp !RS: Debugging: Updating outdoor entering dry bulb temperature !RS: Debugging: Outside Air Node
     DummyHR=Node(1)%HumRat !ZoneAirHumRat(1)    !RS: Debugging
-    CALL PsyTwbFnTdbWPb2(TaiC,DummyHR,OutBaroPress,TWiC) 
+    CALL PsyTwbFnTdbWPb2(TaiC,DummyHR,OutBaroPress,TWiC)
     IF (DOASFlag .EQ. 1) THEN   !RS: Checking to see if the system has return air or not
         TaiE=TaiC   !RS: DOAS system
         TWiE=TWiC   !RS: Debugging: Since it's 100% Outside Air here, this is true.
@@ -187,7 +188,7 @@
         !CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
         TaiE=Node(3)%Temp   !RS: Debugging: Hard coding in for test case of RA-only
         DummyHR=Node(3)%HumRat 
-        CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE) 
+        CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)
     END IF
     CALL PsyRhFnTdbWPb2(TaiE,DummyHR,OutBaroPress,RHiE)  !RS: Debugging: Converting from humidity ratio to relative humidity
     RHiE=RHiE*100   !RS: Debugging: Conversion from decimal to fraction form
@@ -639,11 +640,11 @@
     
     QRemain=ZoneSysEnergyDemand(1)%TotalOutputRequired+QSensUnitOut !-LatOutputProvided    !RS: Debugging: Qouts are load into zone
 
-    WRITE(LogFile,*) 'Cooling Mode: ',IsCoolingMode !RS: Debugging: Is it cooling or heating?
-    WRITE(LogFile,*) 'QSensOut: ',QSensUnitOut  !RS: Debugging: Printing out some data
-    WRITE(LogFile,*) 'LatentOutput: ',LatOutputProvided
+    !WRITE(LogFile,*) 'Cooling Mode: ',IsCoolingMode !RS: Debugging: Is it cooling or heating?
+    !WRITE(LogFile,*) 'QSensOut: ',QSensUnitOut  !RS: Debugging: Printing out some data
+    !WRITE(LogFile,*) 'LatentOutput: ',LatOutputProvided
     WRITE(LogFile,*) 'QZoneRequired: ',ZoneSysEnergyDemand(1)%TotalOutputRequired
-    WRITE(LogFile,*) 'Q left to meet required Q: ',QRemain
+    !WRITE(LogFile,*) 'Q left to meet required Q: ',QRemain
     
     IF (MODE .NE. CONDENSERUNITSIM) THEN
         CALL PrintEvaporatorResult 

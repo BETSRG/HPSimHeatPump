@@ -119,11 +119,11 @@
     !REAL RefProp(28)   !RS: Debugging: Extraneous
     LOGICAL, EXTERNAL :: IssueRefPropError
     
-    INTEGER :: LogFile       =153 !RS: Debugging file denotion, hopefully this works.
+    !INTEGER :: LogFile       =153 !RS: Debugging file denotion, hopefully this works.
     !INTEGER, EXTERNAL :: GetNewUnitNumber  ! External  function to "get" a unit number    !RS: Debugging
     !LogFile=GetNewUnitNumber()  !RS: Debugging: Trying to prevent errors with E+ by not hardcoding
     
-    OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
+    !OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
 
     !Flow:
 
@@ -274,10 +274,10 @@
     OUT(6)=MassCmp
     OUT(7)=ErrorFlag
     
-    IF(LogFile .EQ. 9 .OR. LogFile .EQ. 10 .OR. LogFile .EQ. 12) THEN
-        WRITE(*,*) 'Error with LogFile'    !RS: Debugging: Searching for a mis-set file number
-    END IF
-    WRITE(LogFile,*) 'Wcomp: ',Power    !RS: Debugging: Printing out the power
+    !IF(LogFile .EQ. 9 .OR. LogFile .EQ. 10 .OR. LogFile .EQ. 12) THEN
+    !    WRITE(*,*) 'Error with LogFile'    !RS: Debugging: Searching for a mis-set file number
+    !END IF
+    !WRITE(LogFile,*) 'Wcomp: ',Power    !RS: Debugging: Printing out the power
     RETURN
 
     END SUBROUTINE Compressor

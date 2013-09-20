@@ -708,8 +708,10 @@ CONTAINS
     CHARACTER(LEN=39),PARAMETER :: FMT_107 = "(A67,F5.6)" !VL Comment: previously !10
     
     INTEGER :: LogFile       =153 !RS: Debugging file denotion, hopefully this works.
+    REAL AEnthIn, AEnthOut  !RS: Debugging: Checking the air entering and exiting enthalpy
+    REAL Wtest,TWBtest,TDPtest,RhoDtest,RhoMtest,ErrStattest    !RS: Debugging: Checking the air entering and exiting enthalpy
     
-    !OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
+    OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
 
     mRefTot =XIN(1)
     pRiCoil =XIN(2)
@@ -720,7 +722,7 @@ CONTAINS
     !QdisTube=XIN(7)    !RS: Not being used
     SolarFlux=XIN(8)
     tRdis=XIN(9)
-
+ 
     !IF (QdisTube .EQ. 0) THEN
     !    QdisTube=SMALL
     !END IF
@@ -803,6 +805,10 @@ CONTAINS
     Wabsolute        = PAR(51)
     CompManufacturer = PAR(52)  	
 
+    CALL TDB_RH(tAiCoil,Wtest,rhAiCoil,AEnthIn,TWBtest,TDPtest,RhoDtest,RhoMtest,BaroPressure,ErrStattest)  !RS: Debugging: Checking the entering air enthalpy
+    !WRITE(LogFile,*) 'mAiCoil: ',mAiCoil,', AEnthIn: ',AEnthIn
+    !WRITE(LogFile,*) 'mRef: ',mRefTot,', hRiCoil: ',hRiCoil
+   
     IF (CoilType .EQ. MCEVAPORATOR) THEN
         CALL LoadMicrochannelInputs(XIN,PAR,MCXIN,MCPAR)
         CALL MicrochannelEvaporator(Ref$,MCXIN,MCPAR,MCOUT)
@@ -1280,6 +1286,10 @@ CONTAINS
     ELSE
         tSHiCmp=0
     END IF
+    
+    CALL TDB_RH(tAoCoil,Wtest,rhAoCoil,AEnthOut,TWBtest,TDPtest,RhoDtest,RhoMtest,BaroPressure,ErrStattest)  !RS: Debugging: Checking the exiting air enthalpy
+    !WRITE(LogFile,*) 'AEnthOut: ',AEnthOut
+    !WRITE(LogFile,*) 'hRoCoil: ',hRoCoil
         
     !Populating the OUT array
     OUT(1)=pRoCoil
@@ -1309,8 +1319,6 @@ CONTAINS
     OUT(25)=WeightCopper
 
     OUT(20)=ErrorFlag
-    
-    !WRITE(LogFile,*) 'Qevaporator: ',QCoil  !RS: Debugging: Printing out the heat transfer
 
     CALL Evaporator_Helper_1
 
@@ -2059,14 +2067,6 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),29(F10.3,','))"
                         CALL TDB_RH (tAiMod,WAi,rhAiMod,HAi,TWBAi,TDPAi,RhoDAi,RhoMAi,BaroPressureAi,ErrStatAi) !RS: Debugging: Finding entering W
                       END IF
                       
-                      !QmodLat=Qmod-QmodSens !RS: Trying to determine the latent heat   !RS: Debugging: This is unnecessary
-                      
-                      !QmodLat=Qmod-QmodSens !RS: Determining the latent Q
-                      
-                      !QmodSensTot=QmodSens + QmodSensTot    !RS: Summing the total sensible Q
-                    
-                      !QmodLatTot=QmodLat + QmodLatTot   !RS: Summing the total latent Q
-
 				      mRefCkt=CoilSection(NumSection)%Ckt(I)%mRef
 
                       !Keeping the module quality in the form of a decimal
@@ -7306,19 +7306,27 @@ END SUBROUTINE
 
 SUBROUTINE GetNodeProp()    !RS: Debugging: Updating the air node data for E+
 
-!USE DataLoopNode
+USE DataLoopNode
 USE DXCoils !, ONLY: DXCoil, DXCoilHPSimNum
 
   INTEGER :: AirOutletNode ! air outlet node number
   INTEGER :: AirInletNode ! air inlet node number
   REAL tWBi,tDPi,RhoDi,RhoMi,ErrStati
   REAL tWBo,tDPo,RhoDo,RhoMo,ErrStato
+  REAL hrAiCoil,hrAoCoil
+  REAL Qair
+  INTEGER :: LogFile       =153 !RS: Debugging file denotion, hopefully this works.
+  
+    OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
     
     !AirInletNode=NodeConnectionType_OutsideAir  !RS: Debugging: Coming directly from outside
-    !AirOutletNode=NodeConnectionType_Inlet !RS: Debugging: The sensor node is what ZoneTempPredictorCorrector is looking at
+    !AirOutletNode=2 !NodeConnectionType_Internal !RS: Debugging: This is what it needs to be to connect the mass flow rate for RA-only case
 
-    CALL TDB_RH(tAiMod,hrAiMod,rhAiMod,hAiMod,tWBi,tDPi,RhoDi,RhoMi,BaroPressure,ErrStati)
-    CALL TDB_RH(tAoMod,hrAoMod,rhAoMod,hAoMod,tWBo,tDPo,RhoDo,RhoMo,BaroPressure,ErrStato)
+    !CALL TDB_RH(tAiMod,hrAiMod,rhAiMod,hAiMod,tWBi,tDPi,RhoDi,RhoMi,BaroPressure,ErrStati)
+    !CALL TDB_RH(tAoMod,hrAoMod,rhAoMod,hAoMod,tWBo,tDPo,RhoDo,RhoMo,BaroPressure,ErrStato)
+    !RS: Debugging: Changed all the Mods to Coils because I think Coil might actually be correct
+    CALL TDB_RH(tAiCoil,hrAiCoil,rhAiCoil,hAiCoil,tWBi,tDPi,RhoDi,RhoMi,BaroPressure,ErrStati)
+    CALL TDB_RH(tAoCoil,hrAoCoil,rhAoCoil,hAoCoil,tWBo,tDPo,RhoDo,RhoMo,BaroPressure,ErrStato)
     
 !Node(AirInletNode)%Enthalpy     = hAiMod
 !Node(AirInletNode)%Temp         = tAiMod
@@ -7331,18 +7339,17 @@ USE DXCoils !, ONLY: DXCoil, DXCoilHPSimNum
 !Node(AirOutletNode)%HumRat       = hrAoMod
 !Node(AirOutletNode)%MassFlowRate = mAiMod
 ! pass through outputs
-!Node(AirOutletNode)%Quality              = Node(AirInletNode)%Quality
-!Node(AirOutletNode)%Press                = Node(AirInletNode)%Press
-!Node(AirOutletNode)%MassFlowRateMin      = Node(AirInletNode)%MassFlowRateMin
-!Node(AirOutletNode)%MassFlowRateMax      = Node(AirInletNode)%MassFlowRateMax
-!Node(AirOutletNode)%MassFlowRateMinAvail = Node(AirInletNode)%MassFlowRateMinAvail
-!Node(AirOutletNode)%MassFlowRateMaxAvail = Node(AirInletNode)%MassFlowRateMaxAvail
 
-  DXCoil(DXCoilHPSimNum)%InletAirMassFlowRate = mAiMod
+  DXCoil(DXCoilHPSimNum)%InletAirMassFlowRate = mAiCoil !mAiMod !RS: Debugging: Testing to see the correct mdot air to pass back
 
-  DXCoil(DXCoilHPSimNum)%OutletAirTemp     = tAoMod
-  DXCoil(DXCoilHPSimNum)%OutletAirHumRat   = hrAoMod
-  DXCoil(DXCoilHPSimNum)%OutletAirEnthalpy = hAoMod
+  DXCoil(DXCoilHPSimNum)%OutletAirTemp     = tAoCoil !Mod
+  DXCoil(DXCoilHPSimNum)%OutletAirHumRat   = hrAoCoil !Mod
+  DXCoil(DXCoilHPSimNum)%OutletAirEnthalpy = hAoCoil !Mod
+  Qair=mAiCoil*(hAoCoil-hAiCoil)
+  
+  WRITE(LogFile,*) 'Supply Air Temp: ',tAoCoil !Mod
+  WRITE(LogFile,*) 'Return Air Temp: ',Node(3)%Temp
+  WRITE(LogFile,*) 'Qout: ',Qair
     
 END SUBROUTINE
 
