@@ -2290,7 +2290,7 @@ FUNCTION PsyPsatFnTemp(T,calledfrom) RESULT(Pascal)
       ELSE
          ! bad temperature.  Use 0.0 C
 #ifdef EP_psych_errors
-         CALL ShowSevereError('PsyPsatFnTemp -- Bad input temperature='//TRIM(TrimSigDigits(T,2)))
+         !CALL ShowSevereError('PsyPsatFnTemp -- Bad input temperature='//TRIM(TrimSigDigits(T,2))) !RS: Debugging: Commenting out for ONE test
          if (present(calledfrom)) then
            CALL ShowContinueErrorTimeStamp(' Routine='//trim(calledfrom)//',')
          else
@@ -2358,7 +2358,10 @@ FUNCTION PsyTsatFnHPb(H,PB,calledfrom) RESULT(T)
       LOGICAL FlagError  ! Set when errors should be flagged
       REAL(r64)      :: Hloc ! local value of H
 
-
+      INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
+    
+    OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  
 !                                      CHECK H IN RANGE.
       HH = H + 1.78637d4
 
@@ -2450,7 +2453,8 @@ FUNCTION PsyTsatFnHPb(H,PB,calledfrom) RESULT(T)
   120 CONTINUE
 #ifdef EP_psych_errors
       IF (FlagError) THEN
-        CALL ShowContinueError(' Initial Resultant Temperature= '//TRIM(TrimSigDigits(T,2)))
+        !CALL ShowContinueError(' Initial Resultant Temperature= '//TRIM(TrimSigDigits(T,2)))   !RS: Secret Search String
+        WRITE(DebugFile,*) ' Initial Resultant Temperature= '//TRIM(TrimSigDigits(T,2))
       ENDIF
 #endif
       IF (ABS(PB-1.0133d5)/1.0133d5 <= 0.01d0) GO TO 170

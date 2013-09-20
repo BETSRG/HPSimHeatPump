@@ -267,7 +267,7 @@
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: AllDays,            !- Field 2
-    Until: 24:00,131.8;      !- Field 3
+    Until: 24:00,85; !RS: Testing: !131.8;      !- Field 3
 
   Schedule:Compact,
     Work Eff Sch,            !- Name
@@ -307,21 +307,21 @@
     Fraction,                !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: AllDays, 
-    Until: 24:00,1.0;
+    Until: 24:00,0.2; !RS: Testing: !1.0;
 
   Schedule:Compact,
     OFFICE EQUIP,            !- Name
     Fraction,                !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: AllDays, 
-    Until: 24:00,1.0;
+    Until: 24:00,0.3; !RS: Testing: !1.0;
 
   Schedule:Compact,
     OFFICE LIGHTING,         !- Name
     Fraction,                !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: AllDays, 
-    Until: 24:00,1.0;
+    Until: 24:00,0.3; !RS: Testing: !1.0;
 
   Schedule:Compact,
     INFIL-SCH,               !- Name
@@ -688,7 +688,7 @@
     WEST ZONE,               !- Zone or ZoneList Name
     OFFICE OCCUPANCY,        !- Number of People Schedule Name
     people,                  !- Number of People Calculation Method
-    3.000000,                !- Number of People
+    0.0, !RS: Testing !3.000000,                !- Number of People
     ,                        !- People per Zone Floor Area {person/m2}
     ,                        !- Zone Floor Area per Person {m2/person}
     0.3000000,               !- Fraction Radiant
@@ -710,7 +710,7 @@
     WEST ZONE,               !- Zone or ZoneList Name
     OFFICE LIGHTING,         !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
-    800,               !- Lighting Level {W}
+    0, !RS: Testing !800,               !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
@@ -726,7 +726,7 @@
     WEST ZONE,               !- Zone or ZoneList Name
     OFFICE EQUIP,            !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
-    400,                !- Design Level {W}
+    0, !RS: Testing !400,                !- Design Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
@@ -1121,7 +1121,7 @@ CompressorData,
     Bristol, !field Compressor Manufacturer
     0, !field Compressor Heat Loss Fraction [-]
     0, !field Compressor Heat Loss [Btu/h]
-    150, !field Compressor Volume [in³]	!RS: Debugging: Setting it to 150 instead of 0 for testing
+    150, !field Compressor Volume [in³]	!RS: Testing: 150 instead of 0
     226.492462, !field Compressor Mass Coefficient 1[-]
     4.121732, !field Compressor Mass Coefficient 2[-]
     0.209093, !field Compressor Mass Coefficient 3[-]

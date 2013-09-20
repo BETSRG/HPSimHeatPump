@@ -4856,6 +4856,9 @@ SUBROUTINE ControlPTUnitOutput(PTUnitNum,FirstHVACIteration,OpMode,QZnReq,ZoneNu
   REAL(r64)          :: TempMinPLR
   REAL(r64)          :: TempMaxPLR
   LOGICAL            :: ContinueIter
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   SupHeaterLoad = 0.0
   PartLoadFrac  = 0.0
@@ -4977,23 +4980,31 @@ SUBROUTINE ControlPTUnitOutput(PTUnitNum,FirstHVACIteration,OpMode,QZnReq,ZoneNu
         END IF
       ELSE IF (SolFla == -2) THEN
         IF (.NOT. FirstHVACIteration) THEN
-          Call ShowWarningError(TRIM(PTUnit(PTUnitNum)%UnitType)//' "'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-          CALL ShowContinueError('Packaged terminal unit part-load ratio calculation failed: ' &
-                           //'PLR limits of 0 to 1 exceeded')
-          CALL ShowContinueError('Please fill out a bug report and forward to the EnergyPlus support group.')
-          CALL ShowContinueErrorTimeStamp(' ')
-          IF (WarmupFlag) CALL ShowContinueError ('Error occurred during warmup days.')
+          !Call ShowWarningError(TRIM(PTUnit(PTUnitNum)%UnitType)//' "'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+          !CALL ShowContinueError('Packaged terminal unit part-load ratio calculation failed: ' &
+          !                 //'PLR limits of 0 to 1 exceeded')
+          !CALL ShowContinueError('Please fill out a bug report and forward to the EnergyPlus support group.')
+          !CALL ShowContinueErrorTimeStamp(' ')
+          !IF (WarmupFlag) CALL ShowContinueError ('Error occurred during warmup days.')  !RS: Secret Search String
+        WRITE(DebugFile,*) TRIM(PTUnit(PTUnitNum)%UnitType),' "',TRIM(PTUnit(PTUnitNum)%Name)
+        WRITE(DebugFile,*) 'Packaged terminal unit part-load ratio calculation failed: PLR limits of 0 to 1 exceeded'
+        WRITE(DebugFile,*) 'Please fill out a bug report and forward to the EnergyPlus support group.'
+        IF (WarmupFlag) WRITE(DebugFile,*) 'Error occured during warmup days.'
         END IF
         PartLoadFrac = MAX(MinPLF, ABS(QZnReq - NoCompOutput) / ABS(FullOutput - NoCompOutput))
       END IF
     ELSE IF (SolFla == -2) THEN
       IF (.NOT. FirstHVACIteration) THEN
-        Call ShowWarningError(TRIM(PTUnit(PTUnitNum)%UnitType)//' "'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-        CALL ShowContinueError('Packaged terminal unit part-load ratio calculation failed: ' &
-                           //'PLR limits of 0 to 1 exceeded')
-        CALL ShowContinueError('Please fill out a bug report and forward to the EnergyPlus support group.')
-        CALL ShowContinueErrorTimeStamp(' ')
-        IF (WarmupFlag) CALL ShowContinueError ('Error occurred during warmup days.')
+        !Call ShowWarningError(TRIM(PTUnit(PTUnitNum)%UnitType)//' "'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+        !CALL ShowContinueError('Packaged terminal unit part-load ratio calculation failed: ' &
+        !                   //'PLR limits of 0 to 1 exceeded')
+        !CALL ShowContinueError('Please fill out a bug report and forward to the EnergyPlus support group.')
+        !CALL ShowContinueErrorTimeStamp(' ')
+        !IF (WarmupFlag) CALL ShowContinueError ('Error occurred during warmup days.')  !RS: Secret Search String
+        WRITE(DebugFile,*) TRIM(PTUnit(PTUnitNum)%UnitType),' "',TRIM(PTUnit(PTUnitNum)%Name)
+        WRITE(DebugFile,*) 'Packaged terminal unit part-load ratio calculation failed: PLR limits of 0 to 1 exceeded'
+        WRITE(DebugFile,*) 'Please fill out a bug report and forward to the EnergyPlus support group.'
+        IF (WarmupFlag) WRITE(DebugFile,*) 'Error occured during warmup days.'
       END IF
       PartLoadFrac = MAX(MinPLF, ABS(QZnReq - NoCompOutput) / ABS(FullOutput - NoCompOutput))
     END IF
@@ -5214,6 +5225,8 @@ SUBROUTINE CalcPTUnit(PTUnitNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,O
           PTUnit(PTUnitNum)%CoolCoilCompIndex = 1   !RS: Implementation: Keeping SimDXCoil from crashing
           CALL SimDXCoil(PTUnit(PTUnitNum)%DXCoolCoilName,On,FirstHVACIteration,PartLoadFrac,PTUnit(PTUnitNum)%CoolCoilCompIndex,  &
              PTUnit(PTUnitNum)%OpMode,OnOffAirFlowRatio)
+          AirMassFlow = Node(OutletNode)%MassFlowRate !RS: Debugging: Setting it again because it's reading as 0 for RA-only case
+          !InletNode=6 !RS: Debugging: Hardcoding for RA-only case ONLY!!!
       CASE DEFAULT
     END SELECT
   ELSE ! cooling coil is off
@@ -5239,6 +5252,8 @@ SUBROUTINE CalcPTUnit(PTUnitNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,O
             !RS: Implementation: The above is because if it's 0 then DXCoils thinks it has no business being there
           CALL SimDXCoil(PTUnit(PTUnitNum)%DXCoolCoilName,Off,FirstHVACIteration,0.0d0,  &
                          PTUnit(PTUnitNum)%CoolCoilCompIndex,PTUnit(PTUnitNum)%OpMode,OnOffAirFlowRatio)
+          AirMassFlow = Node(OutletNode)%MassFlowRate !RS: Debugging: Setting it again because it's reading as 0 for RA-only case
+          !InletNode=6 !RS: Debugging: Hardcoding for RA-only case ONLY!!!
       CASE DEFAULT
     END SELECT
   END IF

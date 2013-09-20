@@ -73,12 +73,13 @@
         CNDNSR = 1.0E+10
         IERR = 0
         
-        IF (ErrorCount .EQ. 1) THEN !RS: Debugging: Getting the next iteration to actually try a different value
+        !IF (ErrorCount .EQ. 1) THEN !RS: Debugging: Getting the next iteration to actually try a different value
+        IF (ErrorCount .NE. 0) THEN
             LoopCount = LoopCount + 1
             IF (TSOCMP .GE. (2*LoopCount)) THEN
                 TSOCMP=TSOCMP-(2*LoopCount) !RS: Debugging: Just trying to actually get the temp to change value
             !ELSE    !RS: Debugging: Dealing with the case where the temperature needs to be raised to iterate properly                TSOCMP=TSOCMP+(2*LoopCount)
-
+        
             ELSEIF (TSOCMP .LE. 0 .AND. ABS(TSOCMP) .GE. 50) THEN   !RS: Debugging
                 !IF (TSOCMP .GE. -50) THEN   !RS: Debugging, trying to deal with case where TSOCMP is a large negative number
                 IF ((TSOCMP+(50*LoopCount)) .GE. 0) THEN    !RS: Debugging
@@ -93,8 +94,9 @@
                 TSOCMP=TSOCMP + (2*LoopCount)
             END IF
             
-        ELSEIF (ErrorCount .EQ. 2) THEN
-            IF (TSICMP .GE. (2*LoopCount)) THEN !RS: Debugging: In case of TSICMP being the problem
+        !ELSEIF (ErrorCount .EQ. 2) THEN
+            !LoopCount = LoopCount + 1
+            IF (TSICMP .GE. (2*LoopCount)) THEN !RS: Debugging: In case of TSICMP being the problem !changed 2 to 8 here
                 TSICMP=TSICMP-(2*LoopCount) !RS: Debugging: Just trying to actually get the temp to change value
             ELSEIF (TSICMP .LE. 0 .AND. ABS(TSICMP) .GE. 50) THEN   !RS: Debugging
                 !IF (TSOCMP .GE. -50) THEN   !RS: Debugging, trying to deal with case where TSOCMP is a large negative number
@@ -103,6 +105,8 @@
                     TSICMP=2*LoopCountSmall
                 ELSEIF ((TSICMP+(1000*(LoopCount-1))) .LE. 0 .AND. ABS(TSICMP+(1000*(LoopCount-1))) .GE. 1000) THEN
                     TSICMP=TSICMP +(1000*LoopCount)
+                ELSEIF ((TSICMP+(50*LoopCount)) .LE. -50) THEN
+                    TSICMP=TSICMP+(500*LoopCount)   !RS: Debugging: Trying to account for large negative numbers
                 ELSE
                     TSICMP=TSICMP+(50*LoopCount)
                 END IF
@@ -171,7 +175,7 @@
             IF (RefPropErr .GT. 0) THEN
                 WRITE(*,*)'Trying another iterating value....'
                 IERR=1
-                !ErrorCount = 2  !RS: Debugging: Flag set to force it to iterate
+                ErrorCount = 2  !RS: Debugging: Flag set to force it to iterate
                 CYCLE
             END IF
             HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
@@ -182,7 +186,7 @@
             IF (RefPropErr .GT. 0) THEN
                 WRITE(*,*)'Trying another iterating value....'
                 IERR=1
-                !ErrorCount = 1  !RS: Debugging: Flag set to force it to iterate
+                ErrorCount = 1  !RS: Debugging: Flag set to force it to iterate
                 CYCLE
             END IF
             HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
@@ -191,7 +195,7 @@
         IF (TSOCMP .LT. 0) THEN !RS: Debugging: Trying to account for it not working when the temp is too low
             WRITE(*,*)'Trying another iterating value....'
             IERR=1
-            !ErrorCount = 1  !RS: Debugging: Flag set to force it to iterate
+            ErrorCount = 1  !RS: Debugging: Flag set to force it to iterate
             CYCLE
         END IF
     
@@ -204,7 +208,7 @@
             CASE (1,2)
                 WRITE(*,*)'Trying another iterating value....'
                 IERR=1
-                !ErrorCount=1    !RS: Trying to actually use a different value for iteration
+                ErrorCount=2 !1    !RS: Trying to actually use a different value for iteration
                 CYCLE
             END SELECT
         END IF
