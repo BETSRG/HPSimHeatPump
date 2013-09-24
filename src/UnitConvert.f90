@@ -1,66 +1,30 @@
-! ************************************** !
-! ** HEAT PUMP SIMULATION CODE HEADER ** !
-! ************************************** !
-
-! ************************************** !
-! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
-! -------------------------------------- !
-! This module converts the input units to standard SI units 
-!
-! ************************************** !
-! -- PHYSICAL DESCRIPTION -------------- !
-! -------------------------------------- !
-! THis does not represent a physical component of the heat pump
-
-! ************************************** !
-! -- SIMULATION DATA RESPONSIBILITIES -- !
-! -------------------------------------- !
-! THis module takes the parameters for each of the components and converts the inputs to SI units
-! 
-! ************************************** !
-! -- INPUT FILES/OUTPUT FILES (none) --- !
-! -------------------------------------- !
-! no associated files
-!
-! ************************************** !
-! -- MODULE LEVEL VARIABLES/STRUCTURES - !
-! -------------------------------------- !
-! Constants defined at the module level
-!   UnitPwr, UnitAirFlw, UnitRfFlw, UnitP, UnitM, UnitL, UnitK
-! Flags defined at module level
-!   SI, IP
-
-! ************************************** !
-! -- SUMMARY OF METHODS, CALL TREE ----- !
-! -------------------------------------- !
-! This module contains X methods:
-!    PUBLIC UnitConvert
-!       ORNLSolver
-!    PUBLIC MicroChannelUnitConvert
-!    PUBLIC FinTubeCoilUnitConvert
-!       Condenser
-!       Evaporator
-!    PUBLIC Temperature_F2C
-!       ORNLSolver
-!       AirTempLoop
-!    PUBLIC Temperature_C2F
-
-
-! ************************************** !
-! -- ISSUES/BUGS/TICKETS --------------- !
-! -------------------------------------- !
+!************************************************************************************
+!*  © 2013 Oklahoma State University, BETSRG Lab.
+!************************************************************************************
+!*
+!*   Name: UnitConvert.f90
+!*
+!*   Purpose:
+!*          This module converts the input units to standard SI units 
+!*
+!*   Revision History:
+!*
+!* 
+!*  Additional Notes:
+!*      
+!*      THis does not represent a physical component of the heat pump
+!*      THis module takes the parameters for each of the components and converts the inputs to SI units
+!*  
+!*  Constants defined at the module level
+!   
+!*      UnitPwr, UnitAirFlw, UnitRfFlw, UnitP, UnitM, UnitL, UnitK
+!       Flags defined at module level
+!       SI, IP
+!*
+!*   ISSUES/NOTES:
 ! This module is to be removed, according to Ticket #23
-
-! ************************************** !
-! -- CHANGELOG ------------------------- !
-! -------------------------------------- !
-! 2012-12-11 | ESL | Initial header
-! 2012-12-29 | JEH | Header completion
-
-! ************************************** !
-! -- TODO/NOTES/RECOMMENDATIONS -------- !
-! -------------------------------------- !
-! this module should be removed 
+!*
+!************************************************************************************/
 
 MODULE UnitConvertMod
 

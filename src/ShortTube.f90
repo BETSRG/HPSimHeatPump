@@ -1,39 +1,28 @@
-! ************************************** !
-! ** HEAT PUMP SIMULATION CODE HEADER ** !
-! ************************************** !
-
-! ************************************** !
-! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
-! -------------------------------------- !
-! THis module calculates the flow rate through a short tube orifice.  There are 3 different methods for this, empirical, Choi, and Payne. 
+!************************************************************************************
+!*  © 2013 Oklahoma State University, BETSRG Lab.
+!************************************************************************************
+!*
+!*   Name: ShortTube.f90
+!*
+!*   Purpose:
+!*      This module calculates the flow rate through a short tube orifice.  There are 3 different methods for this, empirical, Choi, and Payne.
+!*
+!*   Revision History:
+!*   
 !
-! ************************************** !
-! -- PHYSICAL DESCRIPTION -------------- !
-! -------------------------------------- !
-! This does not represent a physical component of the Heat Pump system
-
-! ************************************** !
-! -- SIMULATION DATA RESPONSIBILITIES -- !
-! -------------------------------------- !
-! This module takes the expansion device inlet conditions and the outlet conditions from the compressor and the inlet conditions to the evaporator.
-! These inputs are used to calculate the outlet conditions of the expansion device.
+!Additional Notes:
 !
-! ************************************** !
-! -- INPUT FILES/OUTPUT FILES (none) --- !
-! -------------------------------------- !
-! no input/output files
+!Simulatiuon Data Responsilbilites
+!       This module takes the expansion device inlet conditions and the outlet conditions from the compressor and the inlet conditions to the evaporator.
+!       These inputs are used to calculate the outlet conditions of the expansion device.
 
-! ************************************** !
-! -- MODULE LEVEL VARIABLES/STRUCTURES - !
-! -------------------------------------- !
+!Module Level Variables/Structures
 ! Parameters defined:
 !       PI, UnitL
 ! Variables Defined
 !       PiExpDev, HiExpDev, TiExpDev, PoExpDev, HoExpDev, ToExpDev
 
-! ************************************** !
-! -- SUMMARY OF METHODS, CALL TREE ----- !
-! -------------------------------------- !
+!Summary of methods/Call Tree
 ! This module contains X methods:
 !    PUBLIC ShortTube - Calculates the outlet conditions using a semi-empirical model.
 !       FlowRateLoop
@@ -42,22 +31,9 @@
 !    PUBLIC ShortTubePayne - Calculates the outlet conditions using Buckingham-Pi
 !       FlowRateLoop
 !       HPDesignMod
-
-! ************************************** !
-! -- ISSUES/BUGS/TICKETS --------------- !
-! -------------------------------------- !
-! NONE
-
-! ************************************** !
-! -- CHANGELOG ------------------------- !
-! -------------------------------------- !
-! 2012-12-11 | ESL | Initial header
-! 2012-12-29 | JEH | Header Completion 
-
-! ************************************** !
-! -- TODO/NOTES/RECOMMENDATIONS -------- !
-! -------------------------------------- !
-! Do we need to retain any subroutines not used in the program?
+!*                                     
+!*
+!************************************************************************************/
 
     MODULE ShortTubeMod
 

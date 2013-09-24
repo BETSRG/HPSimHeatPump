@@ -99,7 +99,7 @@
     REAL Subcooling, Superheat, DPtxv
     REAL ChargeCorrection !Correction charge for the charge tuning method, lbm
     REAL, EXTERNAL :: CNDNSR, EVPTR
-    REAL ZERO3
+    REAL ZeroCharacter
     REAL, PARAMETER :: Dstep=1
     REAL, PARAMETER :: CapTubeDimStep=1E-3
 
@@ -374,7 +374,7 @@
         XMaC=CFMcnd*RhoAiC
         XMaE=CFMevp*RhoAiE
 
-        TSOCMP = ZERO3(TSAT1,CNDNSR,1E-3,CNDCON,STEP,DIFFER,IERROR)
+        TSOCMP = ZeroCharacter(TSAT1,CNDNSR,1E-3,CNDCON,STEP,DIFFER,IERROR)
 
         IF (IERROR .GE. 3) THEN
             CALL IssueOutputMessage('')
@@ -495,7 +495,7 @@
         END IF
         CALL IssueOutputMessage( '>> Compressor suction saturation temperature: '//TRIM(tmpString)//Tunit)
 
-        TAIIE = ZERO3(TAIE1,EVPTR,AMBCON,EVPCON,STEP,DIFFER,IERROR)
+        TAIIE = ZeroCharacter(TAIE1,EVPTR,AMBCON,EVPCON,STEP,DIFFER,IERROR)
 
         IF (IERROR .GE. 3) THEN
             CALL IssueOutputMessage('')
