@@ -247,6 +247,7 @@ PUBLIC  GetPTUnitOutAirNode
 PUBLIC  GetPTUnitReturnAirNode
 PUBLIC  GetPTUnitMixedAirNode
 PUBLIC  GetPTUnitZoneInletAirNode
+PUBLIC  HPSimNodes  !RS: Debugging: Set up to return the node numbers to ORNLsolver
 
         ! modules for variable speed water-to-air heat pump
 PRIVATE SimMSWSHP
@@ -5226,7 +5227,6 @@ SUBROUTINE CalcPTUnit(PTUnitNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,O
           CALL SimDXCoil(PTUnit(PTUnitNum)%DXCoolCoilName,On,FirstHVACIteration,PartLoadFrac,PTUnit(PTUnitNum)%CoolCoilCompIndex,  &
              PTUnit(PTUnitNum)%OpMode,OnOffAirFlowRatio)
           AirMassFlow = Node(OutletNode)%MassFlowRate !RS: Debugging: Setting it again because it's reading as 0 for RA-only case
-          !InletNode=6 !RS: Debugging: Hardcoding for RA-only case ONLY!!!
       CASE DEFAULT
     END SELECT
   ELSE ! cooling coil is off
@@ -5253,7 +5253,6 @@ SUBROUTINE CalcPTUnit(PTUnitNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,O
           CALL SimDXCoil(PTUnit(PTUnitNum)%DXCoolCoilName,Off,FirstHVACIteration,0.0d0,  &
                          PTUnit(PTUnitNum)%CoolCoilCompIndex,PTUnit(PTUnitNum)%OpMode,OnOffAirFlowRatio)
           AirMassFlow = Node(OutletNode)%MassFlowRate !RS: Debugging: Setting it again because it's reading as 0 for RA-only case
-          !InletNode=6 !RS: Debugging: Hardcoding for RA-only case ONLY!!!
       CASE DEFAULT
     END SELECT
   END IF
@@ -7531,6 +7530,15 @@ SUBROUTINE SetOnOffMassFlowRateMulSpeed(PTUnitNum, ZoneNum, FirstHVACIteration, 
   CALL SetVSWSHPAirFlow(PTUnitNum, ZoneNum, PartLoadRatio,OnOffAirFlowRatio)
 
 END SUBROUTINE SetOnOffMassFlowRateMulSpeed
+
+SUBROUTINE HPSimNodes(PTUnitNum,ReturnNode,OutsideNode)   !RS: Debugging: Returns nodal numbers to HPSim
+INTEGER,INTENT(OUT):: ReturnNode,OutsideNode
+INTEGER,INTENT(IN):: PTUnitNum
+
+    ReturnNode=PTUnit(PTUnitNum)%AirInNode
+    OutsideNode=PTUnit(PTUnitNum)%OutsideAirNode
+
+END SUBROUTINE HPSimNodes
 !     NOTICE
 !
 !     Copyright © 1996-2012 The Board of Trustees of the University of Illinois

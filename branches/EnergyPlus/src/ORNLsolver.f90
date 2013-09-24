@@ -46,7 +46,9 @@
     USE DataZoneEnergyDemands   !RS: Debugging: Determining if the zone requires heating or cooling
     USE DataHVACGlobals !RS: Debugging: Small Load and SingleHeatingSetPoint, SingleCoolingSetPoint
     USE DataLoopNode    !RS: Debugging: Bringing in Node array
-
+    USE PackagedTerminalHeatPump, ONLY: HPSimNodes    !RS: Debugging: Bringing in the inlet nodes
+    USE DXCoils !RS: Debugging: Bringing in DXCoilHPSimNum
+    
     IMPLICIT NONE
 
     !Subroutine parameters
@@ -99,8 +101,8 @@
     REAL OutWetBulBTemp !RS: Wetbulb temperature, Outdoor (C)
     REAL OutBaroPress   !RS: Debugging
     REAL DummyHR !RS: Debugging
-    !REAL QZnReq !RS: Debugging: The heating or cooling required by the zone    !RS: Debugging: Extraneous
     REAL QRemain    !RS: Debugging: The difference between qtotalout and the qrequired.
+    INTEGER ReturnNode, OutsideNode    !RS: Debugging: These hold the numbers for the return and outside air nodes
     
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
     ! Change names of the flags to reflect the intention of the GOTO statements ...
@@ -175,10 +177,11 @@
         !EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" only when needed
     END IF
 
+    CALL HPSimNodes(DXCoilHPSimNum,ReturnNode,OutsideNode) !RS: Debugging: Bringing in the node numbers
     CALL GetTempsOut(OutDryBulbTemp, OutWetBulbTemp, OutBaroPress, RHiC)    !RS: Debugging: RHiC = outdoor relative humidity
     !TWiC=OutWetBulbTemp !RS: Debugging: Updating outdoor entering wet bulb temperature
-    TaiC=Node(1)%Temp !OutDryBulbTemp !RS: Debugging: Updating outdoor entering dry bulb temperature !RS: Debugging: Outside Air Node
-    DummyHR=Node(1)%HumRat !ZoneAirHumRat(1)    !RS: Debugging
+    TaiC=Node(OutsideNode)%Temp !OutDryBulbTemp !RS: Debugging: Updating outdoor entering dry bulb temperature !RS: Debugging: Outside Air Node
+    DummyHR=Node(OutsideNode)%HumRat !ZoneAirHumRat(1)    !RS: Debugging
     CALL PsyTwbFnTdbWPb2(TaiC,DummyHR,OutBaroPress,TWiC)
     IF (DOASFlag .EQ. 1) THEN   !RS: Checking to see if the system has return air or not
         TaiE=TaiC   !RS: DOAS system
@@ -186,8 +189,8 @@
     ELSE    !RS: System with return air
         !TaiE=MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
         !CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
-        TaiE=Node(3)%Temp   !RS: Debugging: Hard coding in for test case of RA-only
-        DummyHR=Node(3)%HumRat 
+        TaiE=Node(ReturnNode)%Temp   !RS: Debugging: Hard coding in for test case of RA-only
+        DummyHR=Node(ReturnNode)%HumRat 
         CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)
     END IF
     CALL PsyRhFnTdbWPb2(TaiE,DummyHR,OutBaroPress,RHiE)  !RS: Debugging: Converting from humidity ratio to relative humidity
