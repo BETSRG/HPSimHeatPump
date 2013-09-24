@@ -57,11 +57,9 @@
 		<File RelativePath=".\src\Refprops.f90"/>
 		<File RelativePath=".\src\ReversingValve.f90"/>
 		<File RelativePath=".\src\ShortTube.f90"/>
-		<File RelativePath=".\src\TXV.f90"/>
+		<File RelativePath=".\src\ThermalExpansionValve.f90"/>
 		<File RelativePath=".\src\UnitConvert.f90"/>
-		<File RelativePath=".\src\UtilityRoutines.f90"/>
-		<File RelativePath=".\src\WATPR.f90"/>
-		<File RelativePath=".\src\z_HeaderDefinition.f90"/>
-		<File RelativePath=".\src\ZERO3.f90"/>
-		<File RelativePath=".\src\ZEROCH.f90"/></Filter></Files>
+		<File RelativePath=".\src\errorHandler.f90"/>
+		<File RelativePath=".\src\WaterProperties.f90"/>
+		<File RelativePath=".\src\ZeroCharacter.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>
