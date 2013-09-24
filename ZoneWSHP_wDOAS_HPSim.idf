@@ -688,7 +688,7 @@
     WEST ZONE,               !- Zone or ZoneList Name
     OFFICE OCCUPANCY,        !- Number of People Schedule Name
     people,                  !- Number of People Calculation Method
-    0.0, !RS: Testing !3.000000,                !- Number of People
+    1.0, !RS: Testing !3.000000,                !- Number of People
     ,                        !- People per Zone Floor Area {person/m2}
     ,                        !- Zone Floor Area per Person {m2/person}
     0.3000000,               !- Fraction Radiant
@@ -710,7 +710,7 @@
     WEST ZONE,               !- Zone or ZoneList Name
     OFFICE LIGHTING,         !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
-    0, !RS: Testing !800,               !- Lighting Level {W}
+    40, !RS: Testing !800,               !- Lighting Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
@@ -726,7 +726,7 @@
     WEST ZONE,               !- Zone or ZoneList Name
     OFFICE EQUIP,            !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
-    0, !RS: Testing !400,                !- Design Level {W}
+    20, !RS: Testing !400,                !- Design Level {W}
     ,                        !- Watts per Zone Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
