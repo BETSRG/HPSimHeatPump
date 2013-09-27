@@ -133,12 +133,12 @@
     DO WHILE (.NOT. IsCondenserAllocated)
 
         PRINT=.TRUE.
-        !IF (MODE .EQ. 2 .OR. MODE .EQ. 4 .OR. MODE .EQ. 5) THEN    !RS: Debugging: Due to Mode Mismatch
-            !IREFC=0 !for specified subcooling, set to zero
+        IF (MODE .EQ. 2) THEN !.OR. MODE .EQ. 4 .OR. MODE .EQ. 5) THEN    !RS: Debugging: Due to Mode Mismatch
+            IREFC=0 !for specified subcooling, set to zero
             !for specifed flow control, set to 3 
-        !ELSE
+        ELSE
             IREFC=3
-        !END IF
+        END IF
 
         TSOCMP = TINPUT
         CNDNSR = 1.0E+10
@@ -400,7 +400,7 @@
 
             CNDNSR = CDTRE - DTRE
 
-            MdotR=XMR !*UnitM/3600    !RS Comment: Unit Conversion, kg/hr??
+            MdotR=XMR*UnitM/3600    !RS Comment: Unit Conversion, kg/hr??
 
             IF(DTRIE.LT.0.0) THEN
                 SXIE = -DTRIE

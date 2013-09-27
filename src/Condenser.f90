@@ -624,7 +624,7 @@
     DTliqLn   = CondPAR%CondLiqLnTempChg !RS: Debugging: Formerly PAR(13)
     AddDPLiqLn = CondPAR%CondLiqLnAddPD    !RS: Debugging: Formerly PAR(14)
 
-    IsSimpleCoil=1 !CondPAR%CondSimpCoil !ISI - 12/22/06    !RS: Debugging: Formerly PAR(44) !RS: Debugging: IsSimple
+    IsSimpleCoil=CondPAR%CondSimpCoil !ISI - 12/22/06    !RS: Debugging: Formerly PAR(44) !RS: Debugging: IsSimple
     FirstTime=CondPAR%CondFirstTime    !ISI - 12/22/06    !RS: Debugging: Formerly PAR(45)
 
     !Initialize circuiting and refrigerant parameters
@@ -658,13 +658,13 @@
         tAoCoil=tAiCoil !ISI - 05/27/2008   
         
         
-    !********************Refrigerant Cycle Data (Heating)***********************  !RS: Debugging: Moving: Stay here? Compressor? ORNLSolver?
+        !********************Refrigerant Cycle Data (Heating)***********************  !RS: Debugging: Moving: Stay here? Compressor? ORNLSolver?
 
-  CALL GetObjectItem('RefrigerantCycleData(Heating)',1,Alphas,NumAlphas, &
-                      TmpNumbers,NumNumbers,Status)
-  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+        CALL GetObjectItem('RefrigerantCycleData(Heating)',1,Alphas,NumAlphas, &
+                            TmpNumbers,NumNumbers,Status)
+        Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
-  IsCmpInAirStream = Numbers(2) !Is Compressor in Air Stream
+        IsCmpInAirStream = Numbers(2) !Is Compressor in Air Stream
         
     END IF
 
