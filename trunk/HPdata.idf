@@ -13,7 +13,7 @@ MainDesignData,
     95, !38,!50, !95, !field Outdoor Entering Drybulb Temperature [°F]
     75, !35, !45,  !75, !field Outdoor Entering Wetbulb Temperature [°F]
     90, !70, !80, !field Indoor Entering Drybulb Temperature [°F]
-    70, !65, !67, !field Indoor Entering Wetbulb Temperature [°F]
+    53, !65, !67, !field Indoor Entering Wetbulb Temperature [°F]
     9.53; !field Design Refrigerant Charge Mass [lbm]
 
 CompressorData,
@@ -21,7 +21,7 @@ CompressorData,
     Bristol, !field Compressor Manufacturer
     0, !field Compressor Heat Loss Fraction [-]
     0, !field Compressor Heat Loss [Btu/h]
-    150, !field Compressor Volume [in³]	!RS: Testing: Replaced 0 with 150
+    0, !field Compressor Volume [in³]	!RS: Testing: Replaced 0 with 150
     226.492462, !field Compressor Mass Coefficient 1[-]
     4.121732, !field Compressor Mass Coefficient 2[-]
     0.209093, !field Compressor Mass Coefficient 3[-]
@@ -44,7 +44,7 @@ CompressorData,
     -0.001464, !field Compressor Power Coefficient 10[-]
     1, !field Power Multiplier [-]
     1, !field Mass Flow Rate Multiplier [-]
-    30, !field User Specified Rating Evap. Temperature [°F]
+    52, !field User Specified Rating Evap. Temperature [°F]
     120, !field User Specified Rating Cond. Temperature [°F]
     10, !field User Specified Rating Subcooling [R]
     10; !field User Specified Rating Superheat [R]
@@ -100,7 +100,7 @@ IndoorCoilData,
 
 IndoorFanData,
     438, !field Fan Power [W]
-    1200, !field Fan Air Flow Rate [cfm]
+    900, !1026, !field Fan Air Flow Rate [cfm]
     1; !field Draw Through (1) or Blow Through (2) [-]
 
 ExpansionDeviceData,
@@ -229,7 +229,7 @@ IDCcktGeometry,
     3, !Number of Rows
     40, !Number of Tubes per Row
     17.5, !Single Tube Length
-    1, !Number of Segments
+    11, !Number of Segments
     6, !Number of Circuits
     True; !Tube Shift Flag
 
@@ -579,16 +579,16 @@ ODCcktVelocityProfileRawData,
 !Group Fluid Properties
 
 FluidNames,
-    R22, REFRIGERANT,     !- name and type for fluid 1
-    R134a, REFRIGERANT,   !- name and type for fluid 2
-    R407c, REFRIGERANT,   !- name and type for fluid 3
-    R410a, REFRIGERANT,   !- name and type for fluid 4
-    R417a, REFRIGERANT,   !- name and type for fluid 5
-    PROPANE, REFRIGERANT; !- name and type for fluid 6
+    !R22, REFRIGERANT,     !- name and type for fluid 1
+    !R134a, REFRIGERANT,   !- name and type for fluid 2
+    !R407c, REFRIGERANT,   !- name and type for fluid 3
+    R410a, REFRIGERANT;   !- name and type for fluid 4
+    !R417a, REFRIGERANT,   !- name and type for fluid 5
+    !PROPANE, REFRIGERANT; !- name and type for fluid 6
     
-##include fluidDataFiles\R22.idf
-##include fluidDataFiles\R134a.idf
-##include fluidDataFiles\R407c.idf
+!##include fluidDataFiles\R22.idf
+!##include fluidDataFiles\R134a.idf
+!##include fluidDataFiles\R407c.idf
 ##include fluidDataFiles\R410a.idf
-##include fluidDataFiles\R417a.idf
-##include fluidDataFiles\Propane.idf
+!##include fluidDataFiles\R417a.idf
+!##include fluidDataFiles\Propane.idf

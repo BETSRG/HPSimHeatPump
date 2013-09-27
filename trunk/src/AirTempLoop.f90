@@ -150,7 +150,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
             RETURN
         CASE (3,4,5)
             CALL IssueOutputMessage('Press return to terminate program.')
-            STOP
+            STOP   !RS: Debugging: Pushing through for now.
         END SELECT
     END IF
 

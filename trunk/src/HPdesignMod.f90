@@ -457,7 +457,7 @@
                     IsFirstTimeEvaporator=.FALSE. 
 
                     !Always detailed
-                    EvapPAR%EvapSimpCoil=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53)
+                    EvapPAR%EvapSimpCoil=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53) !RS: Debugging: Simple case 
 
                 ELSE
                     CALL Evaporator(Ref$) !,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef

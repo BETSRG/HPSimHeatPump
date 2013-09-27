@@ -16,13 +16,12 @@
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
 ! This provides an iteration scheme for other modules and components within the HP system.
-!
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
 ! -------------------------------------- !
 ! NONE
-!
+
 ! ************************************** !
 ! -- MODULE LEVEL VARIABLES/STRUCTURES - !
 ! -------------------------------------- !
@@ -49,8 +48,7 @@
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! NOthing needs to be done at this point
-!
+! Nothing needs to be done at this point
 
  SUBROUTINE GUESS3(X1,Y1,X2,Y2,SUBA,DX,TOL,IERROR)
       implicit none
@@ -105,7 +103,7 @@
           SLOPE = (Y2 - Y1)/(X2 - X1)
           IF (IERR .NE. 0) THEN 
               X2 = (X1 + X2)/2.
-              IF (ICOUNT .GT. 15) THEN
+              IF (ICOUNT .GT. 25) THEN  !15) THEN   !RS: Debugging: Trying to let it iterate more
                   IERROR = 4
                   RETURN
               END IF
