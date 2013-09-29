@@ -28,11 +28,11 @@
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<File RelativePath=".\src\Accumulator.f90"/>
-		<File RelativePath=".\src\AIRPR.f90"/>
+		<File RelativePath=".\src\AirProperties.f90"/>
 		<File RelativePath=".\src\AirTempLoop.f90"/>
 		<File RelativePath=".\src\CapillaryTube.f90"/>
 		<File RelativePath=".\src\ChargeLoop.f90"/>
-		<File RelativePath=".\src\CoilCalc.f90"/>
+		<File RelativePath=".\src\CoilCalculation.f90"/>
 		<File RelativePath=".\src\Compressor.f90"/>
 		<File RelativePath=".\src\Condenser.f90"/>
 		<File RelativePath=".\src\DataGlobals.f90"/>
@@ -40,26 +40,25 @@
 		<File RelativePath=".\src\DataStopCodes.f90"/>
 		<File RelativePath=".\src\Distributor.f90"/>
 		<File RelativePath=".\src\DumpHPsimOutputs.f90"/>
+		<File RelativePath=".\src\ErrorHandler.f90"/>
 		<File RelativePath=".\src\Evaporator.f90"/>
 		<File RelativePath=".\src\FlowRateLoop.f90"/>
 		<File RelativePath=".\src\FrostModel.f90"/>
 		<File RelativePath=".\src\GetHPsimInputs.f90"/>
+		<File RelativePath=".\src\GetRefrigerantProperties.f90"/>
 		<File RelativePath=".\src\GUESS3.f90"/>
 		<File RelativePath=".\src\HPdesignMod.f90"/>
 		<File RelativePath=".\src\InputProcessor.f90"/>
 		<File RelativePath=".\src\LiquidLineFilterDrier.f90"/>
-		<File RelativePath=".\src\MatrixCalc.f90"/>
-		<File RelativePath=".\src\OilMixtureCalc.f90"/>
+		<File RelativePath=".\src\MatrixCalculation.f90"/>
+		<File RelativePath=".\src\OilMixtureCalculation.f90"/>
 		<File RelativePath=".\src\ORNLsolver.f90"/>
 		<File RelativePath=".\src\PreprocessInput.f90"/>
-		<File RelativePath=".\src\PsyChart.f90"/>
-		<File RelativePath=".\src\Psychometric.f90"/>
-		<File RelativePath=".\src\Refprops.f90"/>
+		<File RelativePath=".\src\PsychometricChart.f90"/>
 		<File RelativePath=".\src\ReversingValve.f90"/>
 		<File RelativePath=".\src\ShortTube.f90"/>
 		<File RelativePath=".\src\ThermalExpansionValve.f90"/>
 		<File RelativePath=".\src\UnitConvert.f90"/>
-		<File RelativePath=".\src\errorHandler.f90"/>
 		<File RelativePath=".\src\WaterProperties.f90"/>
-		<File RelativePath=".\src\ZeroCharacter.f90"/></Filter></Files>
+		<File RelativePath=".\src\ZeroConvergence.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>
