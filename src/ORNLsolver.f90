@@ -83,7 +83,7 @@
     REAL DetailedQevp,SimpleQevp !Evaporator capacity from detailed and simple models
     REAL DetailedQcnd,SimpleQcnd !Condenser capacity from detailed and simple models
     REAL MassCoil,MassLiqCoil,MassVapCoil
-    REAL, EXTERNAL :: ZeroCharacter
+    REAL, EXTERNAL :: ZeroConvergence
     REAL, EXTERNAL :: CHARGM
     !INTEGER :: TimeStep !Added Sankar transient
     REAL :: SUPERAct
@@ -728,7 +728,7 @@
                 END IF
 
                 !1st run is for coarse convergence criteria
-                DTVALU = ZeroCharacter(DTVAL,CHARGM,CHRGECONV,CHRGECONV,STEP,CHGDIF,IERROR)
+                DTVALU = ZeroConvergence(DTVAL,CHARGM,CHRGECONV,CHRGECONV,STEP,CHGDIF,IERROR)
                 !CALL SolveRegulaFalsi(CHRGECONV, MaxIter, Flag, DTVALU, CHARGM, DTVAL, STEP, IError)
                 !      SolveRegulaFalsi(Eps, MaxIte, Flag, XRes, f, X_0, X_1, Par)
             
@@ -751,7 +751,7 @@
                     EVAPPAR%EvapPressTolConv =0.1 ! 7	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly EVAPPAR(34)
                     CONDPAR%CondPressTolConv=0.1 !7 !.05	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly CONDPAR(40)
 
-                    DTVALU = ZeroCharacter(DTVAL,CHARGM,CHRGECONV,CHRGECONV,STEP,CHGDIF,IERROR)
+                    DTVALU = ZeroConvergence(DTVAL,CHARGM,CHRGECONV,CHRGECONV,STEP,CHGDIF,IERROR)
                     !CALL SolveRegulaFalsi(CHRGECONV, MaxIter, Flag, DTVALU, CHARGM, DTVAL, STEP,IError)
 
                     FLAG_GOTO_30 = .TRUE.   ! VL : This will not get executed either !!
