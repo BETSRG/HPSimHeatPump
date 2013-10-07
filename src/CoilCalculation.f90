@@ -2543,7 +2543,7 @@ REAL PF        !Pressure enhancement factor
 	IF (CoilType .EQ. MCCONDENSER .OR. &
 	    CoilType .EQ. MCEVAPORATOR) THEN
 		
-		CALL TWOPhasedPSouza(xRi,xRo,vgi,vfi,vgo,vfo,Lmod, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
+		CALL TWOPhasedPSouza(xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
 							 dPfric,dPmom,dPgrav,mRef,ID,mug,muf,HtCoil,Lcoil) !dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
 		!CALL TWOPhasedPLM(tRi,tRo,pRi,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
         !                  dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
@@ -2553,7 +2553,7 @@ REAL PF        !Pressure enhancement factor
 		!CALL TWOPhasedPChoi(TubeType,tRi,tRo,hf,hg,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod, &
 		!					dPfric,dPmom,dPgrav,mRef,ID,OD,muRef,mug,muf, &
 		!					HtCoil,Lcoil)
-		CALL TWOPhasedPSouza(xRi,xRo,vgi,vfi,vgo,vfo,Lmod, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
+		CALL TWOPhasedPSouza(xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
 							 dPfric,dPmom,dPgrav,mRef,ID,mug,muf,HtCoil,Lcoil) !Modified by ISI 07/09/06 !dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
 
 		!CALL TWOPhasedPLM(tRi,tRo,pRi,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
@@ -2580,7 +2580,7 @@ REAL PF        !Pressure enhancement factor
 		IF (CoilType .EQ. MCCONDENSER .OR. &
 		    CoilType .EQ. MCEVAPORATOR) THEN
 
-			CALL TWOPhasedPSouza(xRi,0.9999,vgi,vfi,vgo,vfo,Lmod*FracTP, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
+			CALL TWOPhasedPSouza(xRi,0.9999,vRi,vgi,vfi,vgo,vfo,Lmod*FracTP, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
 								 dPfricTP,dPmomTP,dPgravTP,mRef,ID,mug,muf,HtCoil,Lcoil) !
 			!CALL TwoPhaseDPMoriyama(CoilType,tRi,tRo,pRi,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
 			!						dPmom,dPgrav,mRef,ID,muRef,mug,muf,sigma,HtCoil,Lcoil)
@@ -2593,7 +2593,7 @@ REAL PF        !Pressure enhancement factor
 			!CALL TWOPhasedPChoi(TubeType,tRi,tRo,hf,hg,xRi,0.9999,vRi,vgi,vfi,vgo,vfo,Lmod*FracTP, &
 			!					dPfricTP,dPmomTP,dPgravTP,mRef,ID,OD,muRef,mug,muf, &
 			!					HtCoil,Lcoil)
-			CALL TWOPhasedPSouza(xRi,0.9999,vgi,vfi,vgo,vfo,Lmod*FracTP, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
+			CALL TWOPhasedPSouza(xRi,0.9999,vRi,vgi,vfi,vgo,vfo,Lmod*FracTP, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
 								 dPfricTP,dPmomTP,dPgravTP,mRef,ID,mug,muf,HtCoil,Lcoil) !Modified by ISI 07/09/06 !dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
 		
 			!CALL TWOPhasedPLM(tRi,tRo,pRi,xRi,0.9999,vRi,vgi,vfi,vgo,vfo,Lmod*FracTP,dPfricTP, &
@@ -2634,7 +2634,7 @@ REAL PF        !Pressure enhancement factor
 		IF (CoilType .EQ. MCCONDENSER .OR. &
 		    CoilType .EQ. MCEVAPORATOR) THEN
 
-			CALL TWOPhasedPSouza(0.9999,xRo,vgi,vfi,vgo,vfo,Lmod*FracTP, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
+			CALL TWOPhasedPSouza(0.9999,xRo,vRi,vgi,vfi,vgo,vfo,Lmod*FracTP, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
 								 dPfricTP,dPmomTP,dPgravTP,mRef,ID,mug,muf,HtCoil,Lcoil) !dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
 			!CALL TwoPhaseDPMoriyama(CoilType,tRi,tRo,pRi,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
 			!						dPmom,dPgrav,mRef,ID,muRef,mug,muf,sigma,HtCoil,Lcoil)
@@ -2648,7 +2648,7 @@ REAL PF        !Pressure enhancement factor
 			!					dPfricTP,dPmomTP,dPgravTP,mRef,ID,OD,muRef,mug,muf, &
 			!					HtCoil,Lcoil)
 
-			CALL TWOPhasedPSouza(0.9999,xRo,vgi,vfi,vgo,vfo,Lmod*FracTP, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
+			CALL TWOPhasedPSouza(0.9999,xRo,vRi,vgi,vfi,vgo,vfo,Lmod*FracTP, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
 								 dPfricTP,dPmomTP,dPgravTP,mRef,ID,mug,muf,HtCoil,Lcoil) !Modified by ISI 07/09/06 !dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
 			!CALL TWOPhasedPLM(tRi,tRo,pRi,0.9999,xRo,vRi,vgi,vfi,vgo,vfo,Lmod*FracTP,dPfricTP, &
 		    !                  dPmomTP,dPgravTP,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
@@ -2686,7 +2686,7 @@ REAL PF        !Pressure enhancement factor
 		IF (CoilType .EQ. MCCONDENSER .OR. &
 		    CoilType .EQ. MCEVAPORATOR) THEN
 
-			CALL TWOPhasedPSouza(xRi,1.0E-6,vgi,vfi,vgo,vfo,Lmod*FracTP, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
+			CALL TWOPhasedPSouza(xRi,1.0E-6,vRi,vgi,vfi,vgo,vfo,Lmod*FracTP, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
 								 dPfricTP,dPmomTP,dPgravTP,mRef,ID,mug,muf,HtCoil,Lcoil) !dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
 			!CALL TwoPhaseDPMoriyama(CoilType,tRi,tRo,pRi,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
             !                        dPmom,dPgrav,mRef,ID,muRef,mug,muf,sigma,HtCoil,Lcoil)
@@ -2699,7 +2699,7 @@ REAL PF        !Pressure enhancement factor
 			!					dPfricTP,dPmomTP,dPgravTP,mRef,ID,OD,muRef,mug,muf, &
 			!					HtCoil,Lcoil)
 
-			CALL TWOPhasedPSouza(xRi,1.0E-6,vgi,vfi,vgo,vfo,Lmod*FracTP, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
+			CALL TWOPhasedPSouza(xRi,1.0E-6,vRi,vgi,vfi,vgo,vfo,Lmod*FracTP, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
 								 dPfricTP,dPmomTP,dPgravTP,mRef,ID,mug,muf,HtCoil,Lcoil) !Modified by ISI 07/09/06 !dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
 			!CALL TWOPhasedPLM(tRi,tRo,pRi,xRi,1.0E-6,vRi,vgi,vfi,vgo,vfo,Lmod*FracTP,dPfricTP, &
 		    !                  dPmomTP,dPgravTP,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
@@ -2812,7 +2812,7 @@ REAL dPdZfrict !Fritional pressure drop gradient, [kPa/m]
   dPdZmom=Gref*Gref*ABS(vRi-vRo)/Lmod
 
   !Elevation Pchange
-  CALL ElevdP(xRi,vgi,vfi,dPdZgrav,HtCoil,Lcoil)
+  CALL ElevdP(xRi,vRi,vgi,vfi,dPdZgrav,HtCoil,Lcoil)
 
   !Total Pchange
   dPfric=dPdZfrict*Lmod*1E-3
@@ -3083,7 +3083,7 @@ REAL Xtt        !Martinelli parameter
   CALL PmomTWOphase(vgi,vfi,vgo,vfo,xRi,xRo,alphai,alphao,Lmod,dPdZmom,mRef,ID)
 
   !Two-phase elevation Pchange
-  CALL ElevdP(xRi,vgi,vfi,dPdZgrav,HtCoil,Lcoil)
+  CALL ElevdP(xRi,vRi,vgi,vfi,dPdZgrav,HtCoil,Lcoil)
       
   !Total two-phase Pchange
   dPfric=dPdZfrict*Lmod*1E-3
@@ -3100,7 +3100,7 @@ END SUBROUTINE TWOPhasedPLM
 
 !************************************************************************
 
-SUBROUTINE TWOPhasedPSouza(xRi,xRo,vgi,vfi,vgo,vfo,Lmod,dPfric, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
+SUBROUTINE TWOPhasedPSouza(xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
                            dPmom,dPgrav,mRef,ID,mug,muf,HtCoil,Lcoil) !dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
 
 !------------------------------------------------------------------------
@@ -3128,6 +3128,7 @@ IMPLICIT NONE
 !Inputs:
 REAL xRi     !Refrigerant inlet quality, [-]
 REAL xRo     !Refrigerant outlet quality, [-]
+REAL vRi     !Refrigerant specific volume, [m^3/kg]
 REAL vgi     !Vapor refrigerant specific volume, [m^3/kg]
 REAL vfi     !Liquid refrigerant specific volume, [m^3/kg]
 REAL vgo     !Vapor refrigerant specific volume, [m^3/kg]
@@ -3228,7 +3229,7 @@ REAL xRef       !Refrigerant quality, [-]
   CALL PmomTWOphase(vgi,vfi,vgo,vfo,xRi,xRo,alphai,alphao,Lmod,dPdZmom,mRef,ID)
 	        
   !Two-phase elevation Pchange
-  CALL ElevdP(xRef,vgi,vfi,dPdZgrav,HtCoil,Lcoil)
+  CALL ElevdP(xRef,vRi,vgi,vfi,dPdZgrav,HtCoil,Lcoil)
       
   !Total two-phase Pchange
   dPfric=dPdZfric*Lmod*1E-3
@@ -3241,7 +3242,7 @@ END SUBROUTINE TWOPhasedPSouza
 
 !************************************************************************
 
-SUBROUTINE TWOPhasedPChang(xRi,xRo,vgi,vfi,vgo,vfo,Lmod,dPfric, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
+SUBROUTINE TWOPhasedPChang(xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
                            dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
 
 !------------------------------------------------------------------------
@@ -3269,6 +3270,7 @@ IMPLICIT NONE
 !Inputs:
 REAL xRi     !Refrigerant inlet quality, [-]
 REAL xRo     !Refrigerant outlet quality, [-]
+REAL vRi     !Refrigerant specific volume, [m^3/kg]
 REAL vgi     !Vapor refrigerant specific volume, [m^3/kg]
 REAL vfi     !Liquid refrigerant specific volume, [m^3/kg]
 REAL vgo     !Vapor refrigerant specific volume, [m^3/kg]
@@ -3352,7 +3354,7 @@ REAL ReLiqReference   !Liquid Reynolds number at 25 °C, 410A
   CALL PmomTWOphase(vgi,vfi,vgo,vfo,xRi,xRo,alphai,alphao,Lmod,dPdZmom,mRef,ID)
 	        
   !Two-phase elevation Pchange
-  CALL ElevdP(xRef,vgi,vfi,dPdZgrav,HtCoil,Lcoil)
+  CALL ElevdP(xRef,vRi,vgi,vfi,dPdZgrav,HtCoil,Lcoil)
       
   !Total two-phase Pchange
   dPfric=dPdZfric*Lmod*1E-3
@@ -3365,7 +3367,7 @@ END SUBROUTINE TWOPhasedPChang
 
 !************************************************************************
 
-SUBROUTINE TWOPhasedPChoi(hf,hg,xRi,xRo,vgi,vfi,vgo,vfo,Lmod, &
+SUBROUTINE TWOPhasedPChoi(hf,hg,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod, &
                           dPfric,dPmom,dPgrav,mRef,ID,mug,muf, &
 !TubeType,tRi,tRo,hf,hg,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod, &
 !                          dPfric,dPmom,dPgrav,mRef,ID,OD,muRef,mug,muf, &
@@ -3400,6 +3402,7 @@ REAL hg      !Vapor refrigerant enthalpy, [kJ/kg]
 REAL hf      !Liquid refrigerant enthalpy, [kJ/kg]
 REAL xRi     !Refrigerant inlet quality, [-]
 REAL xRo     !Refrigerant outlet quality, [-]
+REAL vRi     !Refrigerant specific volume, [m^3/kg]
 REAL vgi     !Vapor refrigerant specific volume, [m^3/kg]
 REAL vfi     !Liquid refrigerant specific volume, [m^3/kg]
 REAL vgo     !Vapor refrigerant specific volume, [m^3/kg]
@@ -3458,7 +3461,7 @@ REAL Dh !Hydraulic diameter, [m]
   !dPdZmom=0
      
   !Two-phase elevation Pchange
-  CALL ElevdP(xRef,vgi,vfi,dPdZgrav,HtCoil,Lcoil)
+  CALL ElevdP(xRef,vRi,vgi,vfi,dPdZgrav,HtCoil,Lcoil)
       
   !Total two-phase Pchange
   dPfric=dPfric*1E-3
@@ -3667,7 +3670,7 @@ END SUBROUTINE
 
 !************************************************************************
 
-SUBROUTINE ElevdP(xR,vg,vf,dPdZgrav,HtCoil,Lcoil) !(xR,tR,vRef,vg,vf,dPdZgrav,HtCoil,Lcoil)
+SUBROUTINE ElevdP(xR,vRef,vg,vf,dPdZgrav,HtCoil,Lcoil) !(xR,tR,vRef,vg,vf,dPdZgrav,HtCoil,Lcoil)
 
 !------------------------------------------------------------------------
 !Purpose:
@@ -5519,7 +5522,7 @@ END SUBROUTINE MinimumFreeFlowArea
 
 !************************************************************************
 
-SUBROUTINE TWOPhasedPNino(CoilType,mRef,xRi,xRo,vgi,vfi,vgo,vfo,Lmod, &
+SUBROUTINE TWOPhasedPNino(CoilType,mRef,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod, &
                           dPfric,dPmom,dPgrav,Dh,muRef,mug,muf,Sigma,HtCoil,Lcoil)
 
 !(CoilType,mRef,tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod, &
@@ -5559,6 +5562,7 @@ INTEGER          CoilType	!1-condenser;
 							!6-Microchannel evaporator
 REAL xRi     !Refrigerant inlet quality, [-]
 REAL xRo     !Refrigerant outlet quality, [-]
+REAL vRi     !Refrigerant specific volume, [m^3/kg]
 REAL vgi     !Vapor refrigerant specific volume, [m^3/kg]
 REAL vfi     !Liquid refrigerant specific volume, [m^3/kg]
 REAL vgo     !Vapor refrigerant specific volume, [m^3/kg]
@@ -5716,7 +5720,7 @@ REAL Xlow		!High Quality Value for smoothing
   CALL PmomTWOphase(vgi,vfi,vgo,vfo,xRi,xRo,alphai,alphao,Lmod,dPdZmom,mRef,Dh)
 
   !Two-phase elevation Pchange
-  CALL ElevdP(xRef,vgi,vfi,dPdZgrav,HtCoil,Lcoil)
+  CALL ElevdP(xRef,vRi,vgi,vfi,dPdZgrav,HtCoil,Lcoil)
       
   !Total two-phase Pchange
   dPfric=dPdZfric*Lmod*1E-3
@@ -5870,7 +5874,7 @@ REAL KK         !Intermediate parameter
   CALL PmomTWOphase(vgi,vfi,vgo,vfo,xRi,xRo,alphai,alphao,Lmod,dPdZmom,mRef,ID)
 
   !Two-phase elevation Pchange
-  CALL ElevdP(xRi,vgi,vfi,dPdZgrav,HtCoil,Lcoil)
+  CALL ElevdP(xRi,vRi,vgi,vfi,dPdZgrav,HtCoil,Lcoil)
       
   !Total two-phase Pchange
   dPfric=dPdZfrict*Lmod*1E-3

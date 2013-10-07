@@ -640,8 +640,8 @@
         Kfin        = CondPAR%CondFinThermCon   !RS: Debugging: Formerly PAR(23)
         Nt          = CondPAR%CondNt   !RS: Debugging: Formerly PAR(24)
         Nl          = CondPAR%CondNl   !RS: Debugging: Formerly PAR(25)
-        NumOfCkts   = CondPAR%CondNumCkt   !RS: Debugging: Formerly PAR(26)
-        NumOfMods   = CondPAR%CondNumMod   !RS: Debugging: Formerly PAR(28)
+        !NumOfCkts   = CondPAR%CondNumCkt   !RS: Debugging: Formerly PAR(26) !These are set in InitCondenserCoil
+        !NumOfMods   = CondPAR%CondNumMod   !RS: Debugging: Formerly PAR(28)
         FinType     = CondPAR%CondFinType   !RS: Debugging: Formerly PAR(29)
         TubeType    = CondPAR%CondTube   !RS: Debugging: Formerly PAR(37)
         CALL InitCondenserCoil(CoilType)
@@ -2127,6 +2127,7 @@
   CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
 
   REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  INTEGER :: TempNumofMods  !RS: Debugging: Temporary variable to hold real number of modules
   
   !RS: Debugging: Bringing over from GetHPSimInputs
     CHARACTER(len=MaxNameLength)ODC_FinName
@@ -2203,6 +2204,7 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             END IF
             
             NumOfMods = Numbers(14)
+            TempNumofMods=NumOfMods
             NumOfCkts = Numbers(15)
 
             SELECT CASE (Alphas(5)(1:1))    !Tube Shift Flag
@@ -2314,7 +2316,7 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             END IF
             
             IF (IsSimpleCoil .EQ. 1) THEN   !This is an open block currently; it will need fixing. !RS Comment: No longer an open block!
-                NumOfMods=3
+                !NumOfMods=3
                 IF (.NOT. ALLOCATED(Ckt)) THEN
                 ALLOCATE(Ckt(NumOfCkts))
                 ALLOCATE(DisLnSeg(NumOfMods))
@@ -2328,7 +2330,20 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             END IF
             
             IF (.NOT. ALLOCATED(Ckt)) THEN
-                CALL InitCondenserStructures
+                !RS: Debugging: The following comes from the evaporator module
+                CALL InitCondenserStructures(TempNumofMods)
+                 !IF (TempNumofMods .NE. 3) THEN
+                 !   NumOfMods=TempNumofMods
+                 !   DEALLOCATE(DisLnSeg)
+                 !   ALLOCATE(DisLnSeg(NumOfMods))
+                 !   DEALLOCATE(LiqLnSeg)
+                 !   ALLOCATE(LiqLnSeg(NumOfMods))
+                 !   DO I=1, NumOfCkts
+                 !       DO J=1,Ckt(I)%Ntube
+                 !           ALLOCATE(Ckt(I)%Tube(J)%Seg(NumOfMods))
+                 !       END DO
+                 !   END DO
+                 !END IF
             END IF
             
             IF (IsSimpleCoil .NE. 1) THEN
@@ -2812,7 +2827,7 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             END IF
             
             IF (.NOT. ALLOCATED(Ckt)) THEN
-                CALL InitCondenserStructures
+                CALL InitCondenserStructures(TempNumofMods)
             END IF
             
             IF (IsSimpleCoil .NE. 1) THEN
@@ -3312,7 +3327,7 @@ END IF
 
     END SUBROUTINE InitCondenserCoil
     
-    SUBROUTINE InitCondenserStructures
+    SUBROUTINE InitCondenserStructures(TempNumofMods)
     
     USE InputProcessor_HPSim
     
@@ -3324,7 +3339,10 @@ END IF
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
   REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  INTEGER :: TempNumofMods
     
+  !NumOfMods=TempNumofMods
+  
         ALLOCATE(Ckt(NumOfCkts))	  
         ALLOCATE(CoilSection(NumOfSections)) 
         ALLOCATE(Tube(NumOfTubes))
@@ -3334,7 +3352,8 @@ END IF
         ALLOCATE(DisLnSeg(NumOfMods))
         ALLOCATE(LiqLnSeg(NumOfMods))
 
-        NumOfMods=3
+        !NumOfMods=3
+        !NumOfMods=TempNumofMods
 
         DO I=1, NumOfTubes
             ALLOCATE(Tube(I)%Seg(NumOfMods))

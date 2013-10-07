@@ -64,7 +64,7 @@ OutdoorCoilData,
     1, !field Number of Rows
     36, !field Number of Tubes Per Row
     4, !field Number of Circuits
-    1, !field Number of Segments
+    10, !field Number of Segments
     96.45, !field Single Tube Length [in]
     1, !field Ref Side Heat Transfer Multiplier [-]
     1, !field Ref Side Pressure Drop Multiplier [-]
@@ -91,7 +91,7 @@ IndoorCoilData,
     3, !field Number of Rows
     40, !field Number of Tubes Per Row
     6, !field Number of Circuits
-    1, !field Number of Segments
+    11, !field Number of Segments
     17.5, !field Single Tube Length [in]
     1, !field Ref Side Heat Transfer Multiplier [-]
     1, !field Ref Side Pressure Drop Multiplier [-]
@@ -461,7 +461,7 @@ ODCcktGeometry,
     1, !Number of Rows
     36, !Number of Tubes per Row
     96.45, !Single Tube Length [in]
-    1, !Number of Segments
+    10, !Number of Segments
     4, !Number of Circuits
     False; !Tube Shift Flag
 
