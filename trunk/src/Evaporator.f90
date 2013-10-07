@@ -2433,7 +2433,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             
             IF (IsSimpleCoil .EQ. 1) THEN
                 IF (.NOT. ALLOCATED(Ckt)) THEN
-                NumOfMods=2
+                !NumOfMods=2
                 ALLOCATE(CoilSection(NumOfSections)) 
                 ALLOCATE(Ckt(NumOfCkts))
                 ALLOCATE(CoilSection(1)%Ckt(NumOfCkts)) 
@@ -2477,16 +2477,16 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             
             IF (.NOT. ALLOCATED(Ckt)) THEN
                 CALL InitEvaporatorStructures()
-                 IF (TempNumofMods .NE. 2) THEN
-                    NumOfMods=TempNumofMods
-                    DEALLOCATE(SucLnSeg)
-                    ALLOCATE(SucLnSeg(NumOfMods))
-                    DO I=1, NumOfCkts
-                        DO J=1,Ckt(I)%Ntube
-                            ALLOCATE(Ckt(I)%Tube(J)%Seg(NumOfMods))
-                        END DO
-                    END DO
-                END IF
+                ! IF (TempNumofMods .NE. 2) THEN
+                !    NumOfMods=TempNumofMods
+                !    DEALLOCATE(SucLnSeg)
+                !    ALLOCATE(SucLnSeg(NumOfMods))
+                !    DO I=1, NumOfCkts
+                !        DO J=1,Ckt(I)%Ntube
+                !            ALLOCATE(Ckt(I)%Tube(J)%Seg(NumOfMods))
+                !        END DO
+                !    END DO
+                !END IF
             END IF
 
             IF (IsSimpleCoil .NE. 1) THEN
