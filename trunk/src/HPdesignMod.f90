@@ -248,7 +248,7 @@
 
             Xmr=CompOUT%CmpOMdot  !RS: Debugging: Formerly CompOUT(2)
 
-            PoEvp=EvapOUT%EOuthRoC    !RS: Debugging: Formerly EvapOUT(1)
+            PoEvp=EvapOUT%EOutpRoC    !RS: Debugging: Formerly EvapOUT(1)
 
             QsucLn=EvapPAR%EvapSucLnQLoss   !RS: Debugging: Formerly EvapPAR(5)
             DTsucLn=EvapPAR%EvapSucLnTempChg  !RS: Debugging: Formerly EvapPAR(6)
@@ -456,12 +456,12 @@
                     END IF
                     IsFirstTimeEvaporator=.FALSE. 
 
-                    !Always detailed
-                    EvapPAR%EvapSimpCoil=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53) !RS: Debugging: Simple case 
+                    !Always detailed    !RS: Debugging: There's no need for this to be set
+                    !EvapPAR%EvapSimpCoil=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53) !RS: Debugging: Simple case 
 
                 ELSE
                     CALL Evaporator(Ref$) !,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
-                    EvapPAR%EvapFirstTime=0 !No longer first time !RS: Debugging: Formerly EvapPAR(38)
+                    EvapPAR%EvapFirstTime=1 !0 !No longer first time !RS: Debugging: Formerly EvapPAR(38)
                 END IF
             END IF
 
