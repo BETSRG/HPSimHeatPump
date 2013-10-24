@@ -597,6 +597,7 @@
     INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
     INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
     REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    REAL :: LmodTubeKeep    !RS: Debugging: Placeholder for LmodTube that keeps the previous one
     
     CHARACTER(LEN=11),PARAMETER :: FMT_107 = "(A66,F10.3)"
 
@@ -783,14 +784,21 @@
                     DO K=1,NumOfMods
     
                         IF (IsSimpleCoil .EQ. 1) THEN
-                            SELECT CASE(K)
-                            CASE (1)
-                                LmodTube=Lcoil/NumOfCkts !Start with guessing the whole length
-                            CASE (2)
-                                LmodTube=Lcoil/NumOfCkts-Ckt(I)%Tube(J)%Seg(1)%Len
-                            CASE (3)
-                                LmodTube=Lcoil/NumOfCkts-(Ckt(I)%Tube(J)%Seg(1)%Len+Ckt(I)%Tube(J)%Seg(2)%Len)
-                            END SELECT
+                            !SELECT CASE(K)
+                            !CASE (1)
+                            !    LmodTube=Lcoil/NumOfCkts !Start with guessing the whole length
+                            !CASE (2)
+                            !    LmodTube=Lcoil/NumOfCkts-Ckt(I)%Tube(J)%Seg(1)%Len
+                            !CASE (3)
+                            !    LmodTube=Lcoil/NumOfCkts-(Ckt(I)%Tube(J)%Seg(1)%Len+Ckt(I)%Tube(J)%Seg(2)%Len)
+                            !END SELECT
+                            IF (K .EQ. 1) THEN  !RS: Debugging: Handling every module
+                                LmodTube=Lcoil/NumofCkts
+                                LmodTubeKeep=LmodTube
+                            ELSE
+                                LmodTube=LmodTubeKeep-Ckt(I)%Tube(J)%Seg(1)%Len
+                                LmodTubeKeep=LmodTube
+                            END IF
                         END IF
                         CALL CalcCoilSegment(I,I,J,K,CoilType) !RS: Debugging: Temporarily setting in an Epsilon-NTU method
                         !CALL RachelCoilModel(I,J,K,CoilType)

@@ -280,8 +280,8 @@
                 END IF 
                 IsFirstTimeCondenser=.FALSE.
 
-                !Always detailed
-                CondPAR%CondSimpCoil=0   !RS: Debugging: Formerly CONDPAR(44)
+                !Always detailed    !RS: Debugging: There's no need for this to be set
+                !CondPAR%CondSimpCoil=0   !RS: Debugging: Formerly CONDPAR(44)
 
             ELSE
                 CALL Condenser(Ref$) !,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
@@ -447,7 +447,7 @@
             CapTubeIN%CTIPiEx=PiExp       !Inlet pressure    !RS: Debugging: Formerly CapTubeIN(2)
             CapTubeIN%CTIHiEx=CondOUT%COuthRiE !HiExp       !Inlet enthalpy    !RS: Debugging: Formerly CapTubeIN(3)
             CapTubeIN%CTIPiEv=EvapIN%EInpRi !PiEvp       !Evaporator inlet pressure !RS: Debugging: Formerly CapTubeIN(4)
-            CapTubeIN%CTIPoEv=EvapOUT%EOuthRoC  !Evaporator outlet pressure    !RS: Debugging: Formerly EvapOUT(1), CapTubEIN(5)
+            CapTubeIN%CTIPoEv=EvapOUT%EOutpRoC  !Evaporator outlet pressure    !RS: Debugging: Formerly EvapOUT(1), CapTubEIN(5)
 
             !CALL CapillaryTubeChoi(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)  
             !CALL CapillaryTubeORNL(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)  !RS: Debugging: Extraneous PureRef

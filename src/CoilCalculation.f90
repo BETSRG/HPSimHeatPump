@@ -837,8 +837,8 @@ REAL Ke       !Expansion coefficient, [-]
   RePl=Gmax*Pl/muA
       
   SELECT CASE (FinType)
-  !CASE (1,2,3,4,6,7,8,9,10)
-  CASE (PLAINFIN,WAVYFIN)  !RS: No allowance for louver fins
+  CASE (1,2,3,4,6,7,8,9,10) !RS: Debugging: Allowing all fin types here
+  !CASE (PLAINFIN,WAVYFIN)  !RS: No allowance for louver fins
   !CASE (PLAINFIN,WAVYFIN, 3)    !RS Comment: 3 is the Louver fin type, such as is used in the MC condenser case
   !RS Comment: Trying to implement the MC case(s), but it's unclear what's actually useful.
 
