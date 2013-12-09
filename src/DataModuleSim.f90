@@ -61,6 +61,7 @@ REAL,DIMENSION(2) :: InitiateTemp
 INTEGER :: TimeStep=0
 
 INTEGER(2), SAVE:: IsCoolingMode !1=yes; 0=no   !RS: Debugging: Saving this throughout
+INTEGER(2), SAVE:: CoilMode !0=condenser, 1=evaporator  !RS: Debugging: This is for a test in ZeroConvergence (11/8/13)
 
 !REAL CompIN(3)
 !REAL CompPAR(26)
@@ -419,7 +420,6 @@ TYPE(CondOutlet) :: CondOUT
 TYPE EvapParameters
     REAL EvapSucLnLen
     REAL EvapSucLnOD
-    REAL CondDisLnTWThick
     REAL EvapSucLnElev
     REAL EvapSucLnQLoss
     REAL EvapSucLnTempChg
@@ -585,7 +585,7 @@ TYPE CompParameters
     REAL CompQLossFrac
     REAL CompQLoss
     REAL CompIntVol
-    REAL CompPwrCor
+    !REAL CompPwrCor !RS: Debugging: This is never set; used once in Compressor 262
     REAL CompPWrMult
     REAL CompMFRMult
 END TYPE CompParameters

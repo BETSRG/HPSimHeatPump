@@ -134,9 +134,10 @@
 
         PRINT=.TRUE.
         IF (MODE .EQ. 2) THEN !.OR. MODE .EQ. 4 .OR. MODE .EQ. 5) THEN    !RS: Debugging: Due to Mode Mismatch
+            !RS: This is for design mode
             IREFC=0 !for specified subcooling, set to zero
             !for specifed flow control, set to 3 
-        ELSE
+        ELSE    !RS: This is for simulation modes
             IREFC=3
         END IF
 
