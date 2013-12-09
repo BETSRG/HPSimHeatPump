@@ -107,6 +107,7 @@
 ! -------------------------------------- !
 ! Some documentation would be really useful.
     REAL FUNCTION ZeroConvergence(AX,F,TOL1,TOL2,DX,FB,IERROR)
+    USE DataSimulation !, ONLY: CoilMode  !RS: Debugging: This is for a test below (11/8/13)
     implicit none
     !
     LOGICAL FIRST
@@ -159,7 +160,22 @@
         TOLF = TOL2      !ISI - 05/31/05
         XM = 0.5*(C - B) !ISI - 05/31/05 
 
-        IF (ABS(XM) .LE. TOLX) THEN
+        !RS: Debugging: According to the original ORNL flowchart, for the evaporator case, it should
+        ! only exit out if both terms are converged.
+        !IF (CoilMode .EQ. 1) THEN    !RS: Debugging: Testing (11/8/13)
+        !    IF (ABS(XM) .LE. TOLX .AND. ABS(FB) .LE. TOLF) THEN
+        !        EXIT
+        !    END IF
+        !ELSE
+        !    IF (ABS(XM) .LE. TOLX) THEN
+        !        EXIT
+        !    END IF
+        !    IF (ABS(FB) .LE. TOLF) THEN
+        !        EXIT
+        !    END IF
+        !END IF
+
+        IF (ABS(XM) .LE. TOLX) THEN    !RS: Debugging: Testing above (11/8/13)
             EXIT
         END IF
         IF (ABS(FB) .LE. TOLF) THEN

@@ -410,7 +410,7 @@ REAL, INTENT(IN)  :: bMin    !b-coefficient for minimum reference point
 REAL, INTENT(IN)  :: Tmin    !Minimum reference temperature, C
 REAL, INTENT(IN)  :: aMax    !a-coefficient for maximum reference point
 REAL, INTENT(IN)  :: bMax    !b-coefficient for maximum reference point
-REAL, INTENT(IN)  :: Tmax    !Maximum referenece temperature, C
+REAL, INTENT(IN)  :: Tmax    !Maximum reference temperature, C
 REAL, INTENT(IN)  :: DP      !Pressure drop across TXV, kPa
 REAL, INTENT(IN)  :: Tevp    !Evaporating temperature, C
 REAL, INTENT(OUT) :: CF      !Pressure drop correction factor

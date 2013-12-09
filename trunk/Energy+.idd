@@ -418,13 +418,28 @@ ExpansionDeviceData,
     N12, \field Capillary Tube Coil Diameter (Heating)
 	 \type real
 	 \ip-units in
-    !--- Distibutor ---
-    N13, \field Distibutor Tube Length (Cooling)
+    !--- Distributor ---
+    N13, \field Distributor Tube Length (Cooling)
 	 \type real
 	 \ip-units in
-    N14; \field Distibutor Tube Length (Heating)
+    N14, \field Distributor Tube Length (Heating)
 	 \type real
 	 \ip-units in
+    !--- TXV ---
+    N15, \field TXV Rated Capacity
+	 \type real
+	 \units tons
+    N16, \field TXV Static Superheat
+	 \type real
+	 \units Rankine
+    N17, \field TXV Maximum Effective Operating Superheat
+	 \type real
+	 \units Rankine
+    N18, \field TXV Superheat at Rating Conditions
+	 \type real
+	 \units Rankine
+    N19; \field TXV Bypass or Bleed Factor
+	 \type real
  
 RefrigerantLineData,
 	\unique-object
@@ -1245,7 +1260,9 @@ ODCcktCircuiting_TubeNumbers,
 	    \type real
 	N3, \field Number of Tubes in Circuit 3
 	    \type real
-	N4; \field Number of Tubes in Circuit 4
+	N4, \field Number of Tubes in Circuit 4
+	    \type real
+	N5; \field Number of Tubes in Circuit 5
 	    \type real
 
 ODCcktCircuit1_TubeSequence,
@@ -1267,7 +1284,15 @@ ODCcktCircuit1_TubeSequence,
 	    \type real
 	N9, \field Tube Number
 	    \type real
-	N10; \field Tube Number
+	N10, \field Tube Number
+	    \type real
+	N11, \field Tube Number
+	    \type real
+	N12, \field Tube Number
+	    \type real
+	N13, \field Tube Number
+	    \type real
+	N14; \field Tube Number
 	     \type real
 
 ODCcktCircuit2_TubeSequence,
@@ -1285,8 +1310,20 @@ ODCcktCircuit2_TubeSequence,
 	    \type real
 	N7, \field Tube Number
 	    \type real
-	N8; \field Tube Number
+	N8, \field Tube Number
 	    \type real
+	N9, \field Tube Number
+	    \type real
+	N10, \field Tube Number
+	    \type real
+	N11, \field Tube Number
+	    \type real
+	N12, \field Tube Number
+	    \type real
+	N13, \field Tube Number
+	    \type real
+	N14; \field Tube Number
+	     \type real
 
 ODCcktCircuit3_TubeSequence,
 	N1, \field Tube Number
@@ -1303,8 +1340,20 @@ ODCcktCircuit3_TubeSequence,
 	    \type real
 	N7, \field Tube Number
 	    \type real
-	N8; \field Tube Number
+	N8, \field Tube Number
 	    \type real
+	N9, \field Tube Number
+	    \type real
+	N10, \field Tube Number
+	    \type real
+	N11, \field Tube Number
+	    \type real
+	N12, \field Tube Number
+	    \type real
+	N13, \field Tube Number
+	    \type real
+	N14; \field Tube Number
+	     \type real
 
 ODCcktCircuit4_TubeSequence,
 	N1, \field Tube Number
@@ -1325,7 +1374,45 @@ ODCcktCircuit4_TubeSequence,
 	    \type real
 	N9, \field Tube Number
 	    \type real
-	N10; \field Tube Number
+	N10, \field Tube Number
+	    \type real
+	N11, \field Tube Number
+	    \type real
+	N12, \field Tube Number
+	    \type real
+	N13, \field Tube Number
+	    \type real
+	N14; \field Tube Number
+	     \type real
+
+ODCcktCircuit5_TubeSequence,
+	N1, \field Tube Number
+	    \type real
+	N2, \field Tube Number
+	    \type real
+	N3, \field Tube Number
+	    \type real
+	N4, \field Tube Number
+	    \type real
+	N5, \field Tube Number
+	    \type real
+	N6, \field Tube Number
+	    \type real
+	N7, \field Tube Number
+	    \type real
+	N8, \field Tube Number
+	    \type real
+	N9, \field Tube Number
+	    \type real
+	N10, \field Tube Number
+	    \type real
+	N11, \field Tube Number
+	    \type real
+	N12, \field Tube Number
+	    \type real
+	N13, \field Tube Number
+	    \type real
+	N14; \field Tube Number
 	     \type real
 
 ODCcktVelocityProfile,

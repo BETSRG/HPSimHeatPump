@@ -237,7 +237,6 @@ INTEGER,PARAMETER :: PANASONIC = 4
   !TsoCmp = Numbers(27) !UserSpecifiedRatingCondTemperature
   !Subcool = Numbers(28) !UserSpecifiedRatingSubcooling
   !Super = Numbers(29) !UserSpecifiedRatingSuperheat
-  !_________
 
     !Flow:
 
@@ -260,7 +259,7 @@ INTEGER,PARAMETER :: PANASONIC = 4
     Qshellfrac = CompPAR%CompQLossFrac    !RS: Debugging: Formerly PAR(21)
     Qshell = CompPAR%CompQLoss    !RS: Debugging: Formerly PAR(22)
     VolCmp = CompPAR%CompIntVol    !RS: Debugging: Formerly PAR(23)
-    Wcorrect = CompPAR%CompPwrCor  !RS: Debugging: Formerly PAR(24)
+    !Wcorrect = CompPAR%CompPwrCor  !RS: Debugging: Formerly PAR(24)    !RS: Debugging: CompPwrCor is never set
     PwrMultiplier=CompPAR%CompPwrMult   !RS: Debugging: Formerly PAR(25)
     mdotMultiplier=CompPAR%CompMFRMult  !RS: Debugging: Formerly PAR(26)
     

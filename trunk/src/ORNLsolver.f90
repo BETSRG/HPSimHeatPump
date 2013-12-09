@@ -154,7 +154,7 @@
 
     !Oil fraction
     CondPAR%CondOilMassFrac=0.007          ! VL_Magic_Number    ! VL_Index_Replace   !RS: Debugging: Formerly CONDPAR(42)
-    EvapPAR%EvapOilMassFrac=0.007 !RS: Debugging: Moving data array up !EvapPAR(35)=0.007       ! VL_Magic_Number    ! VL_Index_Replace
+    EvapPAR%EvapOilMassFrac=0.007 !RS: Debugging:Formerly EvapPAR(35)=0.007       ! VL_Magic_Number    ! VL_Index_Replace
 
     IF (TaiE-TsiCmp .LT. 10) THEN     ! VL_Magic_Number number 10 ....
         TsiCmp = TaiE - 10 !Correct initial guess
@@ -686,7 +686,8 @@
 
         END SELECT
         
-        ! VL : Check if a GOTO 30 was intended previously ... and skip code block accordingly ....        
+        ! VL : Check if a GOTO 30 was intended previously ... and skip code block accordingly .... 
+        !RS: Debugging: The following is only skipped for the CoilOnlySim case; otherwise, all the tolerances are being reset
         IF (FLAG_GOTO_30 .EQ. .FALSE.) THEN !RS: This code block is being triggered, which means it redefines all the values defined in the Orifice and TXV block
         
             !comment block starts here
@@ -697,7 +698,7 @@
             CNDCON=0.1 !0.3 !Subcooling, F	! VL_Magic_Number
             CHRGECONV=0.05 !0.1 !Charge, lbm	! VL_Magic_Number
 
-            EVPCON=1 !0.1 !0.2 !SUPERHEAT
+            EVPCON=0.1 !1 !0.1 !0.2 !SUPERHEAT !RS: Debugging: Testing the tolerance (11/8/13)
 
             FLOCON=5 !Mass flow rate, lbm/hr	! VL_Magic_Number
             EVAPPAR%EvapPressTolConv =0.1 ! 7	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly EVAPPAR(34)

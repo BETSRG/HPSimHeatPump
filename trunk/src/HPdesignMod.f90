@@ -374,6 +374,7 @@
         XMaC=CFMcnd*RhoAiC
         XMaE=CFMevp*RhoAiE
 
+        CoilMode=0  !RS: Debugging: This is for a test in ZeroConvergence (11/18/13)
         TSOCMP = ZeroConvergence(TSAT1,CNDNSR,1E-3,CNDCON,STEP,DIFFER,IERROR)
 
         IF (IERROR .GE. 3) THEN
@@ -495,6 +496,7 @@
         END IF
         CALL IssueOutputMessage( '>> Compressor suction saturation temperature: '//TRIM(tmpString)//Tunit)
 
+        CoilMode=1  !RS: Debugging: This is for a test in ZeroConvergence (11/18/13)
         TAIIE = ZeroConvergence(TAIE1,EVPTR,AMBCON,EVPCON,STEP,DIFFER,IERROR)
 
         IF (IERROR .GE. 3) THEN
@@ -595,7 +597,7 @@
             TSICMP = TSICMP-(TSATSV-TSICMP)/(TAISV-TAIIE)*DIFF
             IF (ABS(TSICMPprev-TSICMP) .LE. 0.01) THEN
                 !VL: Previously: GO TO 900 !0.05 F !ISI - 08/02/06
-                EXIT
+                EXIT !RS: Debugging: Seeing if it'll converge on the air inlet temp (11/13/13)
             END IF
             DIFSGN = DIFF
             IF (TSICMP .GT. TAIIEI) THEN

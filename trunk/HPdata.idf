@@ -6,14 +6,14 @@ Model,
 MainDesignData,
     False, !field SI Units Flag
     2, !field Calculation Mode
-    1, !2, !field System Type
+    2, !field System Type
     TRUE, !field Is in Cooling Mode
     !FALSE, !field Is in Cooling Mode (NOT with -18C outside!)
     R410A, !field Refrigerant Name
-    95, !38,!50, !95, !field Outdoor Entering Drybulb Temperature [°F]
+    95, !38, !50, !95, !field Outdoor Entering Drybulb Temperature [°F]
     75, !35, !45,  !75, !field Outdoor Entering Wetbulb Temperature [°F]
-    90, !70, !80, !field Indoor Entering Drybulb Temperature [°F]
-    53, !65, !67, !field Indoor Entering Wetbulb Temperature [°F]
+    80, !90, !70, !80, !field Indoor Entering Drybulb Temperature [°F]
+    67, !53, !65, !67, !field Indoor Entering Wetbulb Temperature [°F]
     9.53; !field Design Refrigerant Charge Mass [lbm]
 
 CompressorData,
@@ -108,7 +108,7 @@ ExpansionDeviceData,
     TXV, !field Expansion Device Type (Heating)
     !--- Short Tube Orifice ---
     0.5, !field Short Tube Length (Cooling) [in]
-    0.07, !field Short Tube Diameter (Cooling) [in]
+    0.067, !field Short Tube Diameter (Cooling) [in]
     0, !field Short Tube Chamfer Depth (Cooling) [in]
     0.5, !field Short Tube Length (Heating) [in]
     0.046, !field Short Tube Diameter (Heating) [in]
