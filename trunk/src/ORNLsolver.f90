@@ -1,17 +1,57 @@
-!************************************************************************************
-!*  © 2013 Oklahoma State University, BETSRG Lab.
-!************************************************************************************
-!*
-!*   Name: ORNLsolver.f90
-!*
-!*   Purpose:
-!*       Main Program where the Heat Pump Simulation starts.
-!*
-!*   Revision History:
-!*
-!*                                     
-!*
-!************************************************************************************/
+
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! This is the main program; it drives the simulation cycle.
+!
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! This program is the driver for the simulation; it does not represent any physical part of the system.
+
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! This program drives the simulation and calls the major routines.
+
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! Output Files:
+!   YorkHP.out
+!   YorkHP.log
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! NA
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains 1 method:
+!    PROGRAM SimulationCycle
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! NA
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! 2013-12-17 | RAS | Filled in header 
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! Some code clean up would be useful, as would adding some more documentation about each section.
+
     PROGRAM SimulationCycle
 
     !
@@ -213,7 +253,7 @@
     !Get simulation starting time
     TimeStart=SECNDS(0.0)
     CoolHeatModeFlag = IsCoolingMode
-    TimeInterval = 15.0                 ! VL_Magic_Number number    !RS: Debugging: Was 25.0, resetting to 15 min
+    TimeInterval = 15.0                 ! VL_Magic_Number number    !RS: Debugging: Was 25.0, resetting to 15 sec(?)
     PrevSimTime = 0.0
     Timestep=0
     LastDefrostInitTime = 0.0
@@ -225,8 +265,7 @@
         !FirstTimeChargeLoop=.TRUE.
         TimeStep = TimeStep+1
 
-        CurSimTime=(TimeStep-1)*TimeInterval  !PrevSimTime+
-        !PrevSimTime=CurSimTime
+        CurSimTime=(TimeStep-1)*TimeInterval
         IF(FrostingPeriod) THEN
             CALL EvaluateFrostModel
         ELSE IF(DefrostingPeriod) THEN

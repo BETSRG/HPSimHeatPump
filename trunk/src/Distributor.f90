@@ -5,60 +5,65 @@
 ! ************************************** !
 ! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
 ! -------------------------------------- !
-! Provide a 1 or 2 sentence overview of this module.  
-! In most cases, it is probably not a useful entry and can be inferred from the name of the module anyway.
+! These routines model the distributor in the heat pump cycle.
 !
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
 ! -------------------------------------- !
-! This component represents something...or nothing...in a heat pump system.
+! This component represents a distributor in a heat pump system.
 ! A description of the component is found at:
-! some website
+! NA for now
 ! From that website: 
-!  - It does something
+!  - NA for now
 
 ! ************************************** !
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
-! Here's a one line summary of what this does for the simulation itself.
-! This module takes inputs such as...and modifies them like so...and outputs these things
+! There is an added pressure drop to the short tube or capillary tube due to the
+! distributor, as well as there being additional refrigerant mass.
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
 ! -------------------------------------- !
-! Check for any OPEN statements in the code
-! Check for any WRITE statements in the code
-!  Note that writing to unit "*" or "6" means just write to the terminal, not to a file
+! There are no input or output files associated with these routines.
 
 ! ************************************** !
 ! -- MODULE LEVEL VARIABLES/STRUCTURES - !
 ! -------------------------------------- !
-! What vars and structures are defined at the *module* level...are units defined?  Any other notes?
+! No variables or structures are defined at the module level.
 
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
-! This module contains X methods:
-!    PUBLIC InitSomething -- What does this do (in one line)?
-!      Called by what other modules?
+! This module contains 5 methods:
+!   PUBLIC Distributor -- Calculates the pressure drop and capacity of the distributor
+!       Called by CapillaryTube.f90
+!       Called by ShortTube.f90
+!   PRIVATE CalcDPnoz -- Calculates the nozzle pressure drop
+!       Called internally by Distributor
+!   PRIVATE CalcDPtube -- Calculates the tube pressure drop
+!       Called internally by Distributor
+!   PRIVATE CalcQNozRated -- Calculates the rated nozzle capacity
+!       Called internally by Distributor
+!   PRIVATE CalcQTubeRated -- Calculates the rated tube capacity
+!       Called internally by Distributor
 
 ! ************************************** !
 ! -- ISSUES/BUGS/TICKETS --------------- !
 ! -------------------------------------- !
-! Are there any interesting issues with this, unfuddle ticket numbers?
+! There are no known issues with these routines.
 
 ! ************************************** !
 ! -- CHANGELOG ------------------------- !
 ! -------------------------------------- !
 ! 2012-12-11 | ESL | Initial header
-! YEAR-MM-DD | ABC | Some other log message? 
+! 2013-12-17 | RAS | Filled out the header 
 
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! Put some notes for what needs to happen here
-! Silly things are fine
-! Somethings these small silly things are great to grab on to when starting up with the code after being off for a while
+! Some additional documentation would be good, especially with respect to what
+! some of the numbers in the pressure drop calculations are.
 
 SUBROUTINE Distributor(Ref$,LTUBE,Nckts,mdotRef,TiExp,HiExp,PoEvp, &
                        HoEvpRtd,Qtube,DPtot,ErrorFlag)

@@ -1,3 +1,125 @@
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! This module is responsible for calculating and giving back refrigerant properties.
+!
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! This module does not represent a physical component of the system.
+
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! This module calculates and returns refrigerant properties.
+
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! The only input file is the simulation IDF.
+! There are no output files.
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! There are a number of variables and one structure set defined at the module level.
+! They are mainly refrigerant parameters.
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains 13 methods:
+!   PRIVATE GetFluidPropertiesData -- Reads in all of the fluid property data
+!       Called internally
+!   PUBLIC Pcrit -- Calculates the refrigerant critical pressure
+!       Called by CapillaryTube.f90
+!       Called by CoilCalculation.f90
+!       Called by Condenser.f90
+!       Called by Evaporator.f90
+!       Called by ShortTub.f90
+!   PUBLIC Tcrit -- Calculates the refrigerant critical temperature
+!       Called by CapillaryTube.f90
+!       Called by CoilCalculation.f90
+!       Called by Condenser.f90
+!       Called by Evaporator.f90
+!       Called by ShortTub.f90
+!   PUBLIC MW -- Calculates the refrigerant molecular weight
+!       Called by Condenser.f90
+!       Called by Evaporator.f90
+!   PUBLIC PQ -- Calculates the refrigerant properties using pressure & quality
+!       Called by Accumulator.f90
+!       Called by AirTempLoop.f90
+!       Called by CapillaryTube.f90
+!       Called by Compressor.f90
+!       Called by Condenser.f90
+!       Called by Distributor.f90
+!       Called by DumpHPsimOutput.f90
+!       Called by Evaporator.f90
+!       Called by FlowRateLoop.f90
+!       Called by HPDesignMod.f90
+!       Called by OilMixtureCalculation.f90
+!       Called by ORNLsolver.f90
+!       Called by ShortTube.f90
+!       Called by ThermalExpansionValve.f90
+!   PUBLIC TQ -- Calculates the refrigerant properties using temperature & quality
+!       Called by Accumulator.f90
+!       Called by CapillaryTube.f90
+!       Called by Condenser.f90
+!       Called by Evaporator.f90
+!       Called by FlowRateLoop.f90
+!       Called by HPDesignMod.f90
+!       Called by ORNLsolver.f90
+!       Called by ShortTube.f90
+!   PUBLIC TP -- Calculates the refrigerant properties using temperature & pressure
+!       Called by Accumulator.f90
+!       Called by Compressor.f90
+!       Called by Distributor.f90
+!       Called by FlowRateLoop.f90
+!       Called by HPDesignMod.f90
+!       Called by ORNLsolver.f90
+!       Called by ShortTube.f90
+!       Called by ThermalExpansionValve.f90
+!   PUBLIC PH -- Calculates the refrigerant properties using pressure & enthalpy
+!       Called by Accumulator.f90
+!       Called by AirTempLoop.f90
+!       Called by CapillaryTube.f90
+!       Called by Compressor.f90
+!       Called by Condenser.f90
+!       Called by DumpHPsimOutput.f90
+!       Called by Evaporator.f90
+!       Called by HPDesignMod.f90
+!       Called by ShortTube.f90
+!   PUBLIC PS -- Calculates the refrigerant properties using pressure & entropy
+!       Called by Compressor.f90
+!       Called by PsychrometricChart.f90
+!   PUBLIC FindRefrigerant -- Finds the refrigerant index
+!       Called internally only
+!   PUBLIC FindArrayIndex -- Finds a point in an array
+!       Called internally only
+!   PUBLIC FindArrayIndexSC -- Finds a point in an array; straight interval halving
+!       Called internally only
+!   PRIVATE GetInterpolatedSatProp -- Interpolates to find saturated properties
+!       Called internally only
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! There are no known issues.
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! 2013-12-18 | RAS | Filled out the header
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! This seems fairly well-documented already, so nothing stands out as needing to be done currently.
 
 MODULE FluidProperties_HPSim
         !RS Comment: Renamed FluidProperties_HPSim from FluidProperties as Energy+ already has a different refrigerant file

@@ -161,7 +161,7 @@
     REAL HdisIsenMap !Map based insentropic discharge enthalpy, kJ/kg
     REAL HsucMap     !Map based suction enthalpy, kJ/kg
     REAL Wcorrect    !Correction factor for power calc. with different input voltage
-    REAL Mcorrect    !Correction factor for mass flow rate
+!    REAL Mcorrect    !Correction factor for mass flow rate !RS: Debugging: Removed because it's hardcoded to 1
     REAL PwrMultiplier    !Power multiplier
     REAL mdotMultiplier   !Mass flow rate multiplier
     INTEGER I !Loop control
@@ -344,8 +344,9 @@ INTEGER,PARAMETER :: PANASONIC = 4
 
     mdot=mdotMap*(rhosuc/rhoMap)
 
-    Mcorrect=1 !0.95
-    mdot=mdot*Mcorrect
+    !RS: If Mcorrect is hardcoded to 1, then it is useless (12/16/13)
+    !Mcorrect=1 !0.95
+    !mdot=mdot*Mcorrect
 
     Power=PowerMap*(mdot/mdotMap)*(HdisIsen-Hsuc)/(HdisIsenMap-HsucMap)
 

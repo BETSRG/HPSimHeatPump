@@ -1,4 +1,90 @@
-MODULE InputProcessor_HPSim
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! This module contains routines to read and process data from input files.
+!
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! This module does not represent any physical component in the heat pump cycle.
+
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! This module reads in and processes input file data.
+
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! Input Files:
+!   Energy+.idd
+!   in.idf
+! Output File:
+!   eplusout.audit
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! There are a nuber of variables and structures defined for the module.
+! There are definitions, parameters, and general variables.
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains 12 methods:
+!   PUBLIC ProcessInput -- This processes the input file for the program
+!       Called by ORNLsolver.f90
+!   PUBLIC FindIteminList -- This finds a certain string in a list of strings
+!       Called by GetRefrigerantProperties.f90
+!   PUBLIC SameString -- This compares two strings to see if they're equal
+!       Called by GetRefrigerantProperties.f90
+!   PUBLIC MakeUPPERCase -- This turns a string into all uppercase letters
+!       Called by GetRefrigerantProperties.f90
+!   PUBLIC ProcessNumber -- This turns a numeric string into a number
+!       Called internally only
+!   PUBLIC GetNumObjectsFound -- This gives the number of inputs found in a run
+!       Called by GetRefrigerantProperties.f90
+!   PUBLIC GetObjectItem -- This gets the number object from the IDFRecord structure
+!       Called by Compressor.f90
+!       Called by Condenser.f90
+!       Called by Evaporator.f90
+!       Called by FlowRateLoop.f90
+!       Called by GetHPSimInputs.f90
+!       Called by GetRefrigerantProperties.f90
+!       Called by HPdesignMod.f90
+!       Called by ORNLsolver.f90
+!   PUBLIC GetObjectItemNum -- This gets the number of an object item
+!       Called internally only
+!   PUBLIC GetObjectItemfromFile -- This gets the object from a file
+!       Called internally only
+!   PUBLIC TellMeHowManyObjectItemArgs -- This gives the number of arguments for an item
+!       Called internally only
+!   PUBLIC DeallocateArrays -- This deallocates the arrays used in the module
+!       Called internally only
+!   PRIVATE FindNonSpace -- This finds the first non-space character in a string
+!       Called internally only
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! There are no known errors with this module.
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! 2013-12-18 | RAS | Filled out header
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! Of course, more documentation is almost never out-of-order. 
+
+    MODULE InputProcessor_HPSim
           ! Module containing the input processor routines
 
           ! MODULE INFORMATION:
@@ -23,10 +109,7 @@ MODULE InputProcessor_HPSim
           ! input file and (2) the simulation input data file will be processed
           ! with the data therein being supplied to the actual simulation routines.
 
-
-
           ! OTHER NOTES:
-          !
           !
 
           ! USE STATEMENTS:

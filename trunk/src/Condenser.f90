@@ -5,60 +5,107 @@
 ! ************************************** !
 ! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
 ! -------------------------------------- !
-! Provide a 1 or 2 sentence overview of this module.  
-! In most cases, it is probably not a useful entry and can be inferred from the name of the module anyway.
+! This module simulates the condenser in the heat pump cycle.  
 !
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
 ! -------------------------------------- !
-! This component represents something...or nothing...in a heat pump system.
+! This component is the condenser in the Heat Pump Vapor-Compression cycle.
 ! A description of the component is found at:
-! some website
+! http://en.wikipedia.org/wiki/Condenser_%28heat_transfer%29
 ! From that website: 
-!  - It does something
+!  - This component takes refrigerant from a gas to a liquid state
 
 ! ************************************** !
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
-! Here's a one line summary of what this does for the simulation itself.
-! This module takes inputs such as...and modifies them like so...and outputs these things
+! This module takes the properties of the air entering the condenser and the evaporator properties
+! and ouputs the leaving air properties and heat transfer rates to the fluid.
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
 ! -------------------------------------- !
-! Check for any OPEN statements in the code
-! Check for any WRITE statements in the code
-!  Note that writing to unit "*" or "6" means just write to the terminal, not to a file
-
+! Condenser.csv is an associated output file.
+! The IDF file is used to read in some condenser properties.
+! 
 ! ************************************** !
 ! -- MODULE LEVEL VARIABLES/STRUCTURES - !
 ! -------------------------------------- !
-! What vars and structures are defined at the *module* level...are units defined?  Any other notes?
+! There are a number of variables defined at the module level.
+! These include convergence parameters, error and location flags,
+! circuiting variables, refrigerant property variables,
+! coil and segment variables, and geometry properties.
 
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
-! This module contains X methods:
-!    PUBLIC InitSomething -- What does this do (in one line)?
-!      Called by what other modules?
+! This module contains 23 methods:
+!   PUBLIC Condenser-- Models the condenser in the heat pump cycle
+!       Called by FlowRateLoop.f90
+!       Called by ORNLsolver.f90
+!   PUBLIC MicrochannelCondenser --  A segment-by-segment microchannel condenser model
+!       Called internally only
+!   PUBLIC CalcCondenserInventory -- Calculates the refrigerant inventory of the condenser
+!       Called by HPdesignMod.f90
+!       Called by ORNLsolver.f90
+!   PUBLIC PrintCondenserResult - Prints simulation result to output file "Condenser.csv"
+!       Called by ORNLsolver.f90
+!   PUBLIC EndCondenserCoil -- Cleans and frees allocated arrays
+!       Called by ORNLsolver.f90
+!   PRIVATE InitCondenserCoil -- Initializes condenser geometry and circuiting
+!       Called internally only
+!   PRIVATE RefrigerantParameters -- Converts three refrigerant parameters
+!       Called internally only
+!   PRIVATE DischargeLine -- Calculates discharge line outlet conditions
+!       Called internally only
+!   PRIVATE LiquidLine -- Calculates liquid line outlet conditions
+!       Called internally only
+!   PRIVATE LoadMicrochannelInputs -- Brings in the input data to the microchannel model
+!       Called internally only
+!   PRIVATE LoadMicrochannelOutputs -- Sends out the output data from the microchannel model
+!       Called internally only
+!   PRIVATE InitBoundaryConditions -- Initializes the segment boundary conditions
+!       Called internally only
+!   PRIVATE CalcCircuitRefInletConditions -- Calculates the circuit refrigerant inlet conditions
+!       Called internally only
+!   PRIVATE CalcSegmentRefInletConditions -- Calculates the segment inlet refrigerant pressure and enthalpy
+!       Called internally only
+!   PRIVATE CalcSegmentAirInletConditions -- Calculates the inlet air temp and relative humidity
+!       Called internally only
+!   PRIVATE CalcCoilSegment -- Calculates heat exchanger equations for a segment
+!       Called internally only
+!   PRIVATE CalcSegmentOutletConditions -- Calculates the segment outlet conditions
+!       Called internally only
+!   PRIVATE CalcTransitionSegment -- Calculates the heat transfer in the transition segment
+!       Called internally only
+!   PRIVATE FindTransitionBoundary -- Finds the transition boundary in the transition segment
+!       Called internally only
+!   PRIVATE CalcRefProperty -- Calculates the refrigerant properties
+!       Called internally only
+!   PRIVATE CalcSegmentRefOutletPressure -- Calculates the refrigerant outlet pressure for a segment
+!       Called internally only
+!   PRIVATE UpdateTubeDataFromCircuitData -- Updates tube data from circuit data
+!       Called internally only
+!   PRIVATE InitCondenserStructures -- Allocates and initializes various condenser arrays
+!       Called internally only
 
 ! ************************************** !
 ! -- ISSUES/BUGS/TICKETS --------------- !
 ! -------------------------------------- !
-! Are there any interesting issues with this, unfuddle ticket numbers?
+! Unit conversions may need to be changed.
 
 ! ************************************** !
 ! -- CHANGELOG ------------------------- !
 ! -------------------------------------- !
 ! 2012-12-11 | ESL | Initial header
-! YEAR-MM-DD | ABC | Some other log message? 
+! 2013-12-18 | RAS | Filled out the header
 
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! Put some notes for what needs to happen here
-! Silly things are fine
-! Somethings these small silly things are great to grab on to when starting up with the code after being off for a while
+! Some more documentation would be helpful. The ability of the code to switch from
+! outdoor circuit to indoor and vice-versa needs to be explored; it currently seems
+! to require a manual changing of certain inputs and outputs for the switch.
 
     MODULE CondenserMod
 
@@ -1068,7 +1115,8 @@
     END IF
 
     !Distributor pressure drop - ISI - 07/14/06
-    IF (SystemType .EQ. HEATPUMP) THEN !Heat Pump
+    !RS: The "IF" and "ELSE" sections are identical, and thus the statement is useless (12/16/13)
+    !IF (SystemType .EQ. HEATPUMP) THEN !Heat Pump
 
         !****** Liquid line calculation ******
         IF (LliqLn .GT. 0) THEN 
@@ -1084,27 +1132,27 @@
             hRiExp=hRoCoil
         END IF
 
-    ELSE
-
-        !****** Liquid line calculation ******
-        IF (LliqLn .GT. 0) THEN 
-            CALL LiquidLine
-            IF (ErrorFlag .GT. CONVERGEERROR) THEN
-                WRITE(*,*)'LiquidLine: Refprop error.'
-                CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(24)
-                CALL Condenser_Helper_1
-                RETURN
-            END IF
-        ELSE
-            pRiExp=pRoCoil
-            hRiExp=hRoCoil
-        END IF
-
-    END IF
+    !ELSE
+    !
+    !    !****** Liquid line calculation ******
+    !    IF (LliqLn .GT. 0) THEN 
+    !        CALL LiquidLine
+    !        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+    !            WRITE(*,*)'LiquidLine: Refprop error.'
+    !            CondOUT%COutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(24)
+    !            CALL Condenser_Helper_1
+    !            RETURN
+    !        END IF
+    !    ELSE
+    !        pRiExp=pRoCoil
+    !        hRiExp=hRoCoil
+    !    END IF
+    !
+    !END IF
 
     Pressure=pRiExp*1000    !RS Comment: Unit Conversion
     Enthalpy=hRiExp*1000    !RS Comment: Unit Conversion
-    tRiExp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)   !Expansion Device Refrigerant Inlet Temperatyre
+    tRiExp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)   !Expansion Device Refrigerant Inlet Temperature
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
         ErrorFlag=REFPROPERROR
@@ -3382,6 +3430,7 @@ END IF
     END SUBROUTINE InitCondenserCoil
     
     SUBROUTINE InitCondenserStructures(TempNumofMods)
+    !RS: Debugging: Initialize and allocates the circuit, coil, segment, and tube structures
     
     USE InputProcessor_HPSim
     

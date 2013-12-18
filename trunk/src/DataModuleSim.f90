@@ -63,47 +63,9 @@ INTEGER :: TimeStep=0
 INTEGER(2), SAVE:: IsCoolingMode !1=yes; 0=no   !RS: Debugging: Saving this throughout
 INTEGER(2), SAVE:: CoilMode !0=condenser, 1=evaporator  !RS: Debugging: This is for a test in ZeroConvergence (11/8/13)
 
-!REAL CompIN(3)
-!REAL CompPAR(26)
-!REAL CompOUT(7)
-!
-!!Condenser model passing parameters
-!REAL CondIN(7)  !RS: Debugging: Formerly CondIN(9)
-!REAL CondPAR(45)    !RS: Debugging: Formerly CondPAR(62)
-!REAL CondOUT(20)    !RS: Debugging: Formerly CondOUT(29), CondOUT(24)
-!
-!!Evaporator model passing parameters
-!REAL EvapIN(9)  !RS: Debugging: Formerly EvapIN(9)
-!REAL EvapPAR(39)  !RS: Debugging: Formerly EvapPAR(54)
-!REAL EvapOUT(17)    !RS: Debugging: Formerly EvapOUT(20)
 
 !Expansion device
 INTEGER(2) ExpDevice !1=Orifice; 2=TXV; 3=Cap. Tube
-
-!!Short tube model passing parameters
-!REAL ShTbIN(5)
-!REAL ShTbPAR(5)
-!REAL ShTbOUT(7)
-!
-!!Capillary tube passing parameters
-!REAL CapTubeIN(5)
-!REAL CapTubePAR(5)
-!REAL CapTubeOUT(6)   !RS: Debugging: Formerly CapTubeOUT(7) 
-
-!TXV model passing parameters   !RS: Debugging: These aren't even used in TXV model; nor is the model ever called
-!REAL TxvIN(6)  !RS: Debugging: Never used
-!REAL TxvPAR(1)  !RS: Debugging: Formerly TxvPAR(7)
-!REAL TxvOUT(7) !RS: Debugging: None of these are ever set
-
-!!Accumulator passing parameters
-!REAL AccumIN(3)
-!REAL AccumPAR(10)
-!REAL AccumOUT(2)    !RS: Debugging: Formerly AccumOUT(6)
-
-!Filter Drier passing parameters
-!REAL FilterIN(1)
-!REAL FilterPAR(2)
-!REAL FilterOUT(1)
 
 INTEGER IDCcoilType !Indoor coil coil type
 INTEGER ODCcoilType !Outdoor coil coil type
