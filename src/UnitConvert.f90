@@ -10,12 +10,12 @@
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
 ! -------------------------------------- !
-! THis does not represent a physical component of the heat pump
+! This does not represent a physical component of the heat pump
 
 ! ************************************** !
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
-! THis module takes the parameters for each of the components and converts the inputs to SI units
+! This module takes the parameters for each of the components and converts the inputs to SI units
 ! 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
@@ -44,7 +44,6 @@
 !       ORNLSolver
 !       AirTempLoop
 !    PUBLIC Temperature_C2F
-
 
 ! ************************************** !
 ! -- ISSUES/BUGS/TICKETS --------------- !

@@ -19,8 +19,7 @@
 ! ************************************** !
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
-! This module takes the suction side properties and calculates heat transfer and pressure drop through the valve
-! 
+! This module takes the suction side properties and calculates heat transfer and pressure drop through the valve 
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
@@ -35,11 +34,11 @@
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
-! This module contains X methods:
+! This module contains 2 methods:
 !    PUBLIC SuctionHeatTransfer - calculates heat transfer on the suction side
-!       Evaporator
+!       Called by Evaporator
 !    PUBLIC SuctionPressureDrop - calculates the pressure drop on the suction side
-!       Evaporator
+!       Called by Evaporator
 
 ! ************************************** !
 ! -- ISSUES/BUGS/TICKETS --------------- !
@@ -55,7 +54,7 @@
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! NOthing current needs to be done on this module
+! Nothing currently needs to be done on this module
 !
 MODULE ReversingValveMod
 

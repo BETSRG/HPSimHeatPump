@@ -1,4 +1,6 @@
-MODULE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)      ! EnergyPlus Data-Only Module
+MODULE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)  
+    
+    ! EnergyPlus Data-Only Module
 
 !look at me!
 
@@ -25,7 +27,7 @@ MODULE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with E
           ! na
 
           ! USE STATEMENTS:
-          ! None!--This module is USEd by all other modules; it should not USE anything.
+          ! None!--This module is Used by all other modules; it should not USE anything.
 
 IMPLICIT NONE   ! Enforce explicit typing of all variables
 
@@ -48,7 +50,6 @@ PUBLIC          ! By definition, all variables which are placed in this data
           CHARACTER*80 :: RefName
 
           ! MODULE VARIABLES:
-!INTEGER :: OutputFileInits      ! Unit number for the standard Initialization output file
 INTEGER :: RefrigIndex = 0  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
           ! DERIVED TYPE DEFINITIONS:

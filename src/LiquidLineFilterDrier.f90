@@ -1,16 +1,60 @@
-!************************************************************************************
-!*  © 2013 Oklahoma State University, BETSRG Lab.
-!************************************************************************************
-!*
-!*   Name: LiquidLineFilterDrier.f90
-!*
-!*   Purpose:
-!*
-!*   Revision History:
-!*
-!*                                     
-!*
-!************************************************************************************/
+
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! This routine calculates the pressure drop over the filter drier.
+!
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! This component represents the filter drier in a heat pump system.
+! A description of the component is found at:
+! http://www.achrnews.com/articles/a-guide-to-understanding-filter-drier-functions-and-types
+! From that website: 
+!  - The filter absorbs moisture
+!  - The filter also filters particulates out
+
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! It lowers the expansion device's inlet pressure.
+
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! There are no associated input or output files.
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! There are no variables or structures defined at the module level.
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains 1 method:
+!    PUBLIC CalcFilterDrierDP -- Calculates the pressure drop across the filter drier
+!      Called by FlowRateLoop.f90
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! There are no known issues.
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! 2013-12-17 | RAS | Filled out the header 
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! The actual pressure drop calculation could use some explanation about where the equation comes from.
 
 SUBROUTINE CalcFilterDrierDP !(XIN,PAR,OUT)
 

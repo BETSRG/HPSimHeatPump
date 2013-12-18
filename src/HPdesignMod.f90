@@ -31,7 +31,7 @@
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
-! This module contains 1 methods
+! This module contains 1 method
 !    PUBLIC HPDM -- Runs the entire heat pump simulation
 !      Called by ChargeLoop.f90
 !      Called by ORNLsolver.f90

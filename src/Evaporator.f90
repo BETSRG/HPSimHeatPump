@@ -21,17 +21,20 @@
 ! -------------------------------------- !
 ! This module takes the air properties entering the evaporator and using the properties of the evaporator 
 ! and ouputs the leaving air properties and heat transfer rates to the fluid.
-! 
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
 ! -------------------------------------- !
-! No apparent input or output files
+! No apparent input or output files.
+! The IDF file is used to read in some evaporator properties.
 ! 
 ! ************************************** !
 ! -- MODULE LEVEL VARIABLES/STRUCTURES - !
 ! -------------------------------------- !
-! What vars and structures are defined at the *module* level...are units defined?  Any other notes?
+! There are a lot of variables defined at the module level.
+! These include convergence parameters, error and location flags,
+! circuiting variables, refrigerant property variables,
+! coil and segment variables, and geometry properties.
 
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
@@ -40,7 +43,7 @@
 !    PUBLIC  Evaporator - To predict coil air side and refrigerant side properties, heat transfer, and pressure drop
 !    PUBLIC  MicrochannelEvaporator -  A segment-by-segment microchannel evaporator model
 !    PUBLIC  CalcEvaporatorInventory - calculate refrigerant inventory in evaporator
-!    PUBLIC  PrintEvaporatorResult - To print simulation result to output file "evaporator.csv"
+!    PUBLIC  PrintEvaporatorResult - To print simulation result to output file "Evaporator.csv"
 !    PUBLIC  InitEvaporatorCoil - initialize evaporator geometry and circuiting
 !    PUBLIC  EndEvaporatorCoil - free allocated arrays
 !    PRIVATE RefrigerantParameters - calculates refrigerant parameters
@@ -73,12 +76,14 @@
 ! -------------------------------------- !
 ! 2012-12-11 | ESL | Initial header
 ! 2012-12-19 | JEH | Header Modification
+! 2013-12-18 | RAS | Finished filling out the header
 
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-!
-!
+! Some more documentation would be helpful. The ability of the code to switch from
+! indoor circuit to outdoor and vice-versa needs to be explored; it currently seems
+! to require manual changing of certain inputs and outputs for the switch.
 
 MODULE EvaporatorMod
 

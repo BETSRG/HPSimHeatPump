@@ -14,7 +14,7 @@
 ! A description of the component is found at:
 ! http://www.e-refrigeration.com/learn-refrigeration/system-components/refrigeration-accumulator
 ! From that website: 
-!  - Accumulators store excess liquid refrig and oild that didn't boil in evap
+!  - Accumulators store excess liquid refrig and oil that didn't boil in evap
 !  - It is situated between the evap and compressor in suction line
 !  - It operates as the liquid strikes a plate and reflects back into a holding tank
 
@@ -153,10 +153,9 @@ CONTAINS
             PD, PDYN, AMASS2, DP1MAX, DP2MAX, RMMAX, DP, RM, DIFF1, AMASS1, Z1, Z2, &
             IHOLE, J, RMT, I, DIFF2, SLOPE, ERROR
 
-    ! VL : Flags to assist with dismantling of GOTO-based control structures ....
-    ! Change names of the flags to reflect the intention of the GOTO statements ... 
-    INTEGER   :: FLAG_GOTO_40 !FLAG_GOTO_15, 
-    !INTEGER   ::  FLAG_GOTO_100, FLAG_GOTO_201
+    ! VL : Flag to assist with dismantling of GOTO-based control structures ....
+    ! Change names of the flag to reflect the intention of the GOTO statements ... 
+    INTEGER   :: FLAG_GOTO_40 
     
     CHARACTER(LEN=57),PARAMETER :: FMT_602 = "(' ACCUML DOES NOT CONVERGE, MAX.ERROR =',1PE10.3,' LBM')"
     
@@ -194,7 +193,7 @@ CONTAINS
     REAL,PARAMETER :: PI=3.14159265
     !
 
-    ! VL: Initialize default values for GOTO flags
+    ! VL: Initialize default values for GOTO flag
     FLAG_GOTO_40 = .FALSE.
 
     mdot=AccumIN%AccImdot !RS: Debugging: Formerly XIN(1)

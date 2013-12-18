@@ -5,61 +5,96 @@
 ! ************************************** !
 ! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
 ! -------------------------------------- !
-! Provide a 1 or 2 sentence overview of this module.  
-! In most cases, it is probably not a useful entry and can be inferred from the name of the module anyway.
+! These routines deal with error handling for the simulation.
 !
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
 ! -------------------------------------- !
-! This component represents something...or nothing...in a heat pump system.
-! A description of the component is found at:
-! some website
-! From that website: 
-!  - It does something
+! There is no physical representation of anything in the heat pump system.
 
 ! ************************************** !
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
-! Here's a one line summary of what this does for the simulation itself.
-! This module takes inputs such as...and modifies them like so...and outputs these things
+! These routines report and handle any errors that occur in the simulation.
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
 ! -------------------------------------- !
-! Check for any OPEN statements in the code
-! Check for any WRITE statements in the code
-!  Note that writing to unit "*" or "6" means just write to the terminal, not to a file
+! There are no associated input or output files.
 
 ! ************************************** !
 ! -- MODULE LEVEL VARIABLES/STRUCTURES - !
 ! -------------------------------------- !
-! What vars and structures are defined at the *module* level...are units defined?  Any other notes?
+! There are no variables or structures defined at the module level.
 
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
 ! This module contains X methods:
-!    PUBLIC InitSomething -- What does this do (in one line)?
-!      Called by what other modules?
+!   PRIVATE IssueHPFatalError -- Stops the program if there is a fatal error
+!       Called internally by AbortEnergyPlus
+!   PUBLIC IssueRefPropError -- Issues a refrigerant properties error
+!       Called by Accumulator.f90
+!       Called by CapillaryTube.f90
+!       Called by Compressor.f90
+!       Called by Distributor.f90
+!       Called by FlowRateLoop.f90
+!       Called by HPDesignMod.f90
+!       Called by ShortTube.f90
+!       Called by ThermalExpansionValve.f90
+!   PUBLIC IssueOutputMessage -- Issues a message
+!       Called by AirTempLoop.f90
+!       Called by ChargeLoop.f90
+!       Called by FlowRateLoop.f90
+!       Called by HPdesignMod.f90
+!       Called by ORNLsolver.f90
+!   PRIVATE AbortEnergyPlus -- Stops the program if there's a fatal error
+!       Called internally by ShowFatalError
+!   PRIVATE CloseMiscOpenFiles -- Closes any open files
+!       Called internally by AbortEnergyPlus & EndEnergyPlus
+!   PUBLIC EndEnergyPlus -- Terminates with no errors
+!       Called by ORNLsolver.f90
+!   PUBLIC GetNewUnitNumber -- Gives a new number for a file
+!       Called internally
+!       Called by InputProcessor.f90
+!   PUBLIC ShowFatalError -- Gives a fatal error and terminates
+!       Called by CoilCalculation.f90
+!       Called by GetRefrigerantProperties.f90
+!       Called by InputProcessor.f90
+!       Called internally
+!   PUBLIC ShowSevereError -- Gives a severe error
+!       Called by CoilCalculation.f90
+!       Called by GetRefrigerantProperties.f90
+!       Called by InputProcessor.f90
+!       Called internally
+!   PUBLIC ShowContinueError -- Gives a continuing error
+!       Called by GetRefrigerantProperties.f90
+!       Called by InputProcessor.f90
+!       Called internally
+!   PUBLIC ShowMessage -- Gives a message
+!       Called by InputProcessor.f90
+!       Called internally
+!   PUBLIC ShowWarningError -- Gives an error message with a warning
+!       Called by InputProcessor.f90
+!       Called internally
+!   PRIVATE ShowErrorMessage -- Gives an error message
+!       Called internally
 
 ! ************************************** !
 ! -- ISSUES/BUGS/TICKETS --------------- !
 ! -------------------------------------- !
-! Are there any interesting issues with this, unfuddle ticket numbers?
+! There are no known issues with these routines.
 
 ! ************************************** !
 ! -- CHANGELOG ------------------------- !
 ! -------------------------------------- !
 ! 2012-12-11 | ESL | Initial header
-! YEAR-MM-DD | ABC | Some other log message? 
+! 2013-12-17 | RAS | Filled out header
 
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! Put some notes for what needs to happen here
-! Silly things are fine
-! Somethings these small silly things are great to grab on to when starting up with the code after being off for a while
-
+! Some additional documentation or clean-up might be useful, but it's pretty standard.
 
 SUBROUTINE IssueHPFatalError(exitCode)
 

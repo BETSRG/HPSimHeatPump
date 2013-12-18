@@ -185,8 +185,8 @@
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! There are a number of subroutines that are never called. It would probably be a good idea to clean up anything that is out of date or not used.
-! Also, some more documentation might be useful.
+! There are a number of subroutines that are never called. It would probably be a good idea to clean up anything
+! that is out of date or not used. Also, some more documentation would be useful.
 
 MODULE CoilCalcMod
 

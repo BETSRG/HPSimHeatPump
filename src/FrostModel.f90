@@ -16,7 +16,7 @@
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
 ! Calculates the frost thickness for consdenser simulation
-! This module takes the paramets of the condenser coil and outputs the frost thickness on the condenser
+! This module takes the parameters of the condenser coil and outputs the frost thickness on the condenser
 !
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
@@ -26,7 +26,7 @@
 ! ************************************** !
 ! -- MODULE LEVEL VARIABLES/STRUCTURES - !
 ! -------------------------------------- !
-! NO variables defined at the module level
+! No variables defined at the module level
 
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
@@ -40,7 +40,7 @@
 ! ************************************** !
 ! -- ISSUES/BUGS/TICKETS --------------- !
 ! -------------------------------------- !
-! NO tickets
+! No tickets
 
 ! ************************************** !
 ! -- CHANGELOG ------------------------- !
@@ -52,8 +52,6 @@
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
 ! Maybe remove EvaluateDefrostModel, it doesn't do anything
-! 
-! 
 
 MODULE FrostModel
 

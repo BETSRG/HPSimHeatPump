@@ -5,12 +5,12 @@
 ! ************************************** !
 ! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
 ! -------------------------------------- !
-! This module calculates the air-side superheating or subcooling.  This is done by utilizing the evaporator model. 
+! This function calculates the air-side superheating or subcooling.  This is done by utilizing the evaporator model. 
 !
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
 ! -------------------------------------- !
-! This module does not model any specific component of the Heat Pump.
+! This function does not model any specific component of the Heat Pump.
 ! 
 ! ************************************** !
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
@@ -27,14 +27,13 @@
 ! ************************************** !
 ! -- MODULE LEVEL VARIABLES/STRUCTURES - !
 ! -------------------------------------- !
-! There are no variables called at the module level, all of the variables are called at the function level
+! There are no variables called at the module level; all of the variables are called at the function level
 
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
-! This module contains X methods:
-!    REAL FUNCTION EVPTR - calculates the evaporator superheat and subcool
-!    
+! This module contains 1 method:
+!    REAL FUNCTION EVPTR - calculates the evaporator superheat and subcool    
 
 ! ************************************** !
 ! -- ISSUES/BUGS/TICKETS --------------- !
@@ -52,7 +51,7 @@
 ! -------------------------------------- !
 ! No notes/ToDo/Recommendations
 !
-!
+
 REAL FUNCTION EVPTR(TINPUT,IERR)
     !
     !       EVPTR(TEMPERATURE) = SUPCAL(TEMPERATURE) - SUPERE

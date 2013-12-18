@@ -5,60 +5,67 @@
 ! ************************************** !
 ! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
 ! -------------------------------------- !
-! Provide a 1 or 2 sentence overview of this module.  
-! In most cases, it is probably not a useful entry and can be inferred from the name of the module anyway.
+! This module deals with the thermal expansion valve, calculating
+! the Q over it.
 !
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
 ! -------------------------------------- !
-! This component represents something...or nothing...in a heat pump system.
+! This component represents the thermal expansion valve in a heat pump system.
 ! A description of the component is found at:
-! some website
-! From that website: 
-!  - It does something
+! http://en.wikipedia.org/wiki/Thermal_expansion_valve
+! http://www.swtc.edu/ag_power/air_conditioning/lecture/expansion_valve.htm
+! From those websites: 
+!  - TXV is a flow metering device
+!  - It uses fluid temperature to control how much fluid passes through
+!  - This lowers the pressure and expands the fluid into a vapor
 
 ! ************************************** !
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
-! Here's a one line summary of what this does for the simulation itself.
-! This module takes inputs such as...and modifies them like so...and outputs these things
+! This calculates the Q for the TXV; this has no real purpose in the
+! overall simulation though as the Q is never effectively used.
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
 ! -------------------------------------- !
-! Check for any OPEN statements in the code
-! Check for any WRITE statements in the code
-!  Note that writing to unit "*" or "6" means just write to the terminal, not to a file
+! There are no input or output files directly connected to this module.
 
 ! ************************************** !
 ! -- MODULE LEVEL VARIABLES/STRUCTURES - !
 ! -------------------------------------- !
-! What vars and structures are defined at the *module* level...are units defined?  Any other notes?
+! No module level variables or structures are defined
 
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
-! This module contains X methods:
-!    PUBLIC InitSomething -- What does this do (in one line)?
-!      Called by what other modules?
+! This module contains 4 methods:
+!   PUBLIC TXV -- Calculates and returns Qtxv
+!       Called once by HPdesignMod.f90
+!   PRIVATE CalcQtxv -- Does the actual Qtxv calculation
+!       Called once by internal TXV routine
+!   PRIVATE InterpolateQtxv -- Determines the TXV capacity
+!       Called once by CalcQtxv
+!   PRIVATE InterpolateCF_DP -- Determines the pressure drop correction factor
+!       Called once by CalcQtxv
 
 ! ************************************** !
 ! -- ISSUES/BUGS/TICKETS --------------- !
 ! -------------------------------------- !
-! Are there any interesting issues with this, unfuddle ticket numbers?
+! This module is essentially useless in the current version of the code;
+! it only returns Qtxv, which is only ever used to be printed out.
 
 ! ************************************** !
 ! -- CHANGELOG ------------------------- !
 ! -------------------------------------- !
 ! 2012-12-11 | ESL | Initial header
-! YEAR-MM-DD | ABC | Some other log message? 
+! 2013-12-17 | RAS | Filled out the header 
 
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! Put some notes for what needs to happen here
-! Silly things are fine
-! Somethings these small silly things are great to grab on to when starting up with the code after being off for a while
+! Make this module useful again by either improving what it returns or
+! by allowing the rest of the code to actually use Qtxv.
 
 MODULE TXVMOD
 

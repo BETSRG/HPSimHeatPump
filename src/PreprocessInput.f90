@@ -15,8 +15,7 @@
 ! ************************************** !
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
-! THis module removes previously backed-up input files and backs up the current files.
-! 
+! This module removes previously backed-up input files and backs up the current files.
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
@@ -30,7 +29,7 @@
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
-! This module contains X methods:
+! This module contains 1 methods:
 !    PUBLIC PreProcessInput
 !      ORNLSolver
 
@@ -48,7 +47,7 @@
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! NO apparent to do items, besides removing extraneous lines
+! No apparent to do items, besides removing extraneous lines
 
 MODULE InputPreProcessor
 

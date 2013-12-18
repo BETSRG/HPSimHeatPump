@@ -7,24 +7,20 @@
 ! -------------------------------------- !
 ! This module calculates the charge of the system  
 !
-!
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
 ! -------------------------------------- !
 ! This module does not model or represent a specific component of the system
 ! 
-! 
 ! ************************************** !
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
-! This module calculates the system charge based on the superheat/subcooling
-! 
+! This module calculates the system charge based on the superheat/subcooling 
 !
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
 ! -------------------------------------- !
-! No input/output files, only to variables
-! 
+! No input/output files, only to variables 
 !  
 ! ************************************** !
 ! -- MODULE LEVEL VARIABLES/STRUCTURES - !
@@ -48,14 +44,12 @@
 ! -------------------------------------- !
 ! 2012-12-11 | ESL | Initial header
 ! 2012-12-12 | JEH | Header Revision
-! YEAR-MM-DD | ABC | Some other log message? 
 
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
 ! No notes or recommendations at this time
-!
-!
+
 
 REAL FUNCTION CHARGM(DTVALU,IERR)
 
