@@ -5,7 +5,7 @@
 ! ************************************** !
 ! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
 ! -------------------------------------- !
-! This is a multi-purpose iteration routine 
+! This is a multi-purpose iteration routine; there is no known method used.
 !
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
@@ -37,18 +37,20 @@
 ! ************************************** !
 ! -- ISSUES/BUGS/TICKETS --------------- !
 ! -------------------------------------- !
-! No apparent issues
+! A better look needs to be taken at why the root bracketing is exponential.
+! "X2 = X2 + 2.0**(ICOUNT-1)*DX*SIGN"
 
 ! ************************************** !
 ! -- CHANGELOG ------------------------- !
 ! -------------------------------------- !
 ! 2012-12-11 | ESL | Initial header
 ! 2012-12-29 | JEH | Filled out header
+! 2013-12-18 | RAS | Updated Issues & To-Do
 
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! Nothing needs to be done at this point
+! The root bracketing needs to be looked at. In addition, some documentation would be good.
 
  SUBROUTINE GUESS3(X1,Y1,X2,Y2,SUBA,DX,TOL,IERROR)
       implicit none
@@ -68,7 +70,7 @@
 
       DO WHILE (.TRUE.)
           Y1 = SUBA(X1,IERR)
-          X2 = X1                                !Initilize ISI - 03/26/04
+          X2 = X1                                !Initialize ISI - 03/26/04
           ICOUNT = ICOUNT + 1
           IF (IERR .EQ. 0) THEN
               EXIT
@@ -98,7 +100,7 @@
       
       DO WHILE (.TRUE.)
 
-          Y2 = SUBA(X2,IERR)          !RS Comment: The compressor saturation temperature seems to be iterating the wrong way with the MC case
+          Y2 = SUBA(X2,IERR)    !RS Comment: The compressor saturation temperature seems to be iterating the wrong way with the MC case
           ICOUNT = ICOUNT + 1
           SLOPE = (Y2 - Y1)/(X2 - X1)
           IF (IERR .NE. 0) THEN 

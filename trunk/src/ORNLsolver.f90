@@ -389,7 +389,7 @@
 
         SELECT CASE(MODE)
 
-        CASE(FIXEDORIFICESIM)
+        CASE(FIXEDORIFICESIM)   !RS: Fixed Orifice Simulation Mode
             CALL IssueOutputMessage('***** System Simulation (Fixed Orifice) *****')
             ICHRGE=2	! VL_User_Setting
 
@@ -404,7 +404,7 @@
             EVAPPAR%EvapPressTolConv=7 !Pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly EVAPPAR(34)
             CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(40)
 
-        CASE(ORIFICEANDTXVDESIGN)
+        CASE(ORIFICEANDTXVDESIGN)   !RS: Orifice and TXV Design Mode
             CALL IssueOutputMessage('***** Design Calculation (Orifice and TXV) *****')
             ICHRGE=0	! VL_User_Setting
 
@@ -418,7 +418,7 @@
             EVAPPAR%EvapPressTolConv=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EVAPPAR(34)
             CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(40)
 
-        CASE(FIXEDSUPERHEATSIM)
+        CASE(FIXEDSUPERHEATSIM) !RS: Fixed Superheat/Orifice Design Mode
             CALL IssueOutputMessage('***** Design Calculation (Fixed Orifice) *****')
             ICHRGE=0	! VL_User_Setting
 
@@ -432,7 +432,7 @@
             EVAPPAR%EvapPressTolConv=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EVAPPAR(34)
             CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(40)
 
-        CASE(TXVSIMULATION)
+        CASE(TXVSIMULATION) !RS: TXV Simulation Mode
             CALL IssueOutputMessage('***** System Simulation (TXV) *****')
             ICHRGE=2	! VL_User_Setting
 
@@ -447,7 +447,7 @@
             EVAPPAR%EvapPressTolConv=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EVAPPAR(34)
             CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(40)
 
-        CASE(CONDENSERUNITSIM)
+        CASE(CONDENSERUNITSIM)  !RS: Condenser Unit Simulation
             CALL IssueOutputMessage('***** Condenser Unit Simulation *****')
             ICHRGE=0	! VL_User_Setting
 
@@ -708,7 +708,7 @@
 
             FLAG_GOTO_30 = .TRUE.
 
-        CASE DEFAULT
+        CASE DEFAULT    !RS: Default is Orifice and TXV Design Mode
             CALL IssueOutputMessage( '***** Design Calculation (Orifice and TXV) *****')
             ICHRGE=0
 
