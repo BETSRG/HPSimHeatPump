@@ -7,7 +7,8 @@
 ! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
 ! -------------------------------------- !
 ! This function looks like it checks each iteration for convergence; it's a root solver.
-! It's looking for the zero value.
+! It's looking for the zero value. We believe this module is adapted from the ZBRENT function
+! in Numerical Recipes (1996); thus it uses the Van Wijngaarden-Dekker-Brent method (Section 9.3). 
 
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
@@ -64,7 +65,7 @@
     EXTERNAL F
     DATA FIRST / .TRUE. /
     !
-    CALL GUESS3(AX,FAX,BX,FBX,F,DX,TOL2,IERROR)
+    CALL GUESS3(AX,FAX,BX,FBX,F,DX,TOL2,IERROR) !RS: Initial guesses and bounding of region
     IF (IERROR .NE. 0) THEN
         RETURN
     END IF
@@ -107,12 +108,16 @@
         XM = 0.5*(C - B) !ISI - 05/31/05 
 
         !RS: Debugging: According to the original ORNL flowchart, for the evaporator case, it should
-        ! only exit out if both terms are converged.
-        !IF (CoilMode .EQ. 1) THEN    !RS: Debugging: Testing (11/8/13)
+        ! only exit out if both terms are converged. Therefore, the following commented out lines are
+        ! a test of this. It didn't seem to make a huge difference, so it's been commented back out
+        ! for now.
+        !RS: Debugging: Testing (11/8/13)
+        !IF (CoilMode .EQ. 1) THEN    !RS: If this is the low-side (evaporator) loop, then
         !    IF (ABS(XM) .LE. TOLX .AND. ABS(FB) .LE. TOLF) THEN
-        !        EXIT
+        !        EXIT   !RS: Both convergence criteria have to be met
         !    END IF
-        !ELSE
+        !ELSE   !RS: Otherwise, if it's the high-side loop, then only one of the two
+                ! convergence criteria has to be met.
         !    IF (ABS(XM) .LE. TOLX) THEN
         !        EXIT
         !    END IF
@@ -121,7 +126,7 @@
         !    END IF
         !END IF
 
-        IF (ABS(XM) .LE. TOLX) THEN    !RS: Debugging: Testing above (11/8/13)
+        IF (ABS(XM) .LE. TOLX) THEN    !RS: Debugging: Comment out when testing the above (11/8/13)
             EXIT
         END IF
         IF (ABS(FB) .LE. TOLF) THEN
@@ -182,14 +187,12 @@
 
     END DO
 
-    !
     !   SET ERROR CODES
     !     IERROR = 0, NORMAL RETURN
     !     IERROR = 1, TOLERANCE ON INDEPENDENT VARIABLE EXCEEDED
     !     IERROR = 2, TOLERANCE ON FUNCTION VALUE EXCEEDED
-    !     IERROR = 3, TOLERANCES ON INDEPENDENT VARIABLE AND FUNCTION VALUE
-    !             EXCEEDED
-    !
+    !     IERROR = 3, TOLERANCES ON INDEPENDENT VARIABLE AND FUNCTION VALUE EXCEEDED
+
     ZeroConvergence = B
     IERROR = 0
     IF (ABS(XM) .GT. TOLX) THEN

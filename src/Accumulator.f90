@@ -59,7 +59,6 @@
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! Put accumulator component module variables into a data structure
 ! Check if other module variables can be made method locals
 
 MODULE AccumulatorMod

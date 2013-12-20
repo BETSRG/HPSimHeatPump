@@ -29,7 +29,7 @@
 ! ************************************** !
 ! -- MODULE LEVEL VARIABLES/STRUCTURES - !
 ! -------------------------------------- !
-! There are a nuber of variables and structures defined for the module.
+! There are a number of variables and structures defined for the module.
 ! There are definitions, parameters, and general variables.
 
 ! ************************************** !
