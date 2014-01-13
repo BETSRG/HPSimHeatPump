@@ -5,7 +5,7 @@ Model,
 
 MainDesignData,
     False, !field SI Units Flag
-    2, !field Calculation Mode
+    1, !2, !field Calculation Mode
     2, !field System Type
     TRUE, !field Is in Cooling Mode
     !FALSE, !field Is in Cooling Mode (NOT with -18C outside!)

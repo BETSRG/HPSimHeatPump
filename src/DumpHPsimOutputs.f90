@@ -1002,7 +1002,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       END IF
       
 	  Dshtb=ShTbPAR%ShTbTID  !RS: Debugging: Formerly ShTbPAR(2)
-	  Qtxv=TxvPAR%TXVQ !RS: Debugging: Formerly TxvPAR(1)
+	  Qtxv=TxvOUT%TXVQ !RS: Debugging: Formerly TxvPAR(1)
 	  DcapTube=CapTubePAR%CTTubeID    !RS: Debugging: Formerly CapTubePAR(1)
 	  LcapTube=CapTubePAR%CTTubeLen    !RS: Debugging: Formerly CapTubePAR(2)
 

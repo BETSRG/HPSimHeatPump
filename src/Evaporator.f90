@@ -2331,6 +2331,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             TempNumofMods=NumOfMods
             NumOfCkts = Numbers(15)
             NumofSections = 1   !RS Comment: Not in the input file, but needed for the code to run properly. Set to 1 as there is only one coil section here.
+            !RS: Debugging: The above NumofSections should probably be made as an input in the IDF and IDD; there may be other places in
+            !RS: Debugging: (con.) the code where it's hardcoded to handle only one section. (12/31/13)
 
             SELECT CASE (Alphas(5)(1:1))    !Tube Shift Flag
             CASE ('F','f')
@@ -2340,9 +2342,9 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             END SELECT
 
             
-        !*************************** Inputs ***********************
+    !*************************** Inputs ***********************
         
-          !***************** Indoor coil data ***************** !RS: Debugging: Evaporator & Condenser
+        !***************** Indoor coil data ***************** !RS: Debugging: Evaporator & Condenser
 
   CALL GetObjectItem('IndoorCoilData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)

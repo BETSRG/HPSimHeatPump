@@ -807,11 +807,11 @@ TYPE(FilterOutlet) :: FilterOUT
 !INTEGER, SAVE:: FODP=1
 
 !TXV PAR variable
-TYPE TXVParameters
+TYPE TXVOutput !Parameters  !RS: Changing from parameters to output because that's what TXVQ is
     REAL TXVQ
-END TYPE TXVParameters
+END TYPE TXVOutput !Parameters
 
-TYPE(TXVParameters) :: TXVPAR
-!INTEGER, SAVE:: TXVQ=1
+TYPE(TXVOutput) :: TXVOUT !RS: Changing this from TXVPar to TVXOUT
+INTEGER, SAVE:: TXVQ=1
 
 END MODULE DataSimulation
