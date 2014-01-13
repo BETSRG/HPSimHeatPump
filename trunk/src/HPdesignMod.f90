@@ -369,7 +369,7 @@
         CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
         RhoAiE=AirProp%APDryDens   !RS: Debugging: Formerly AirProp(7)
 
-        !Actual mass flow rate
+        !Actual air mass flow rate
         XMaC=CFMcnd*RhoAiC
         XMaE=CFMevp*RhoAiE
 
@@ -715,7 +715,7 @@
             END IF
 
             CALL TXV(mdotr,PiCmp,PoCmp,Subcooling,Superheat,DPtxv,Qtxv)    !RS: Debugging: Testing: Just commenting this out for now
-            TxvPAR%TXVQ=Qtxv  !RS: Debugging: Formerly TxvPAR(1)
+            TxvOUT%TXVQ=Qtxv  !RS: Debugging: Formerly TxvPAR(1)
 
             !**************Size Capillary Tube**************
             CapTubeIN%CTIMdot=CompOUT%CmpOMdot  !Compressor mass flow rate, kg/s   !RS: Debugging: Formerly CapTubeIN(1), CompOUT(2)

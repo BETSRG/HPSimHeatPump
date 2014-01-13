@@ -24,7 +24,7 @@
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
 ! This calculates the Q for the TXV; this has no real purpose in the
-! overall simulation though as the Q is never effectively used.
+! overall simulation as the Q is never effectively used.
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !

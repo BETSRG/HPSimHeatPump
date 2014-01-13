@@ -102,6 +102,9 @@ END IF
 
 hso=UA*(Tdis-Tsuc)/mdot+hsi
 
+hso = hsi   !RS: Comment: Added by John Gall (1/9/14) for the cooling-only system
+!RS: This may not be necessary; it may be possible to just not call these routines (1/10/14)
+
 END SUBROUTINE SuctionHeatTransfer
 
 !------------------------------------------------------------------------------
@@ -120,6 +123,9 @@ DP = 327.69*mdot + 3.9633   !RS Comment: What are the values from?
 IF (DP .LT. 0) THEN
     DP = 0
 END IF
+
+DP = 0  !RS: Comment: Added by John Gall (1/9/14) for the cooling-only system
+!RS: This may not be necessary; it may be possible to just not call these routines (1/10/14)
 
 END SUBROUTINE SuctionPressureDrop
 

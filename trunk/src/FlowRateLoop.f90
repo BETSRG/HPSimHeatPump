@@ -103,7 +103,7 @@
     REAL DetailedQcnd,DetailedDPcnd
     REAL SimpleQcnd,SimpleDPcnd
     LOGICAL,SAVE :: IsFirstTimeCondenser = .TRUE. !First time to call condenser flag
-    LOGICAL :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the condenser model are allocated !RS: See VL's note 6 lines below
+    LOGICAL :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the condenser model are allocated !RS: See VL's note 26 lines below
     
     CHARACTER(LEN=14) :: tmpString
 
@@ -333,7 +333,7 @@
         END IF
         TSATCI=TSATCI*1.8+32    !RS Comment: Unit Conversion, from C to F
 
-        IF (FilterPAR%FilFlowCap .GT. 0) THEN !Filter drier exits   !RS: Debugging: Formerly FilterPAR(1)
+        IF (FilterPAR%FilFlowCap .GT. 0) THEN !Filter drier exists   !RS: Debugging: Formerly FilterPAR(1)
             FilterIN%FIDP=CondIN%CInmRef !Mass flow rate, kg/s !RS: Debugging: Formerly CondIN(1), FilterIN(1)
             CALL CalcFilterDrierDP  !(FilterIN%FIDP,FilterPAR,FilterOUT,Ref$)
             FilterDP=FilterOUT%FODP   !RS: Debugging: Formerly FilterOUT(1)
