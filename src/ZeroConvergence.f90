@@ -46,32 +46,72 @@
 ! -- CHANGELOG ------------------------- !
 ! -------------------------------------- !
 ! 2012-12-11 | ESL | Initial header
-! 2012-12-12 | RAS | Updated header 
+! 2012-12-12 | RAS | Updated header
+! 12/28/2013 | Karthik | Updated the algorithm and some comments.
 
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! Some documentation would be really useful.
+! Brent's method is a root-finding algorithm which combines root bracketing, bisection, and inverse quadratic interpolation. 
+! It is sometimes known as the van Wijngaarden-Deker-Brent method. 
+! This link below takes you to a soft copy of the book which explains further on how method works and 
+! how it is implemented. 
+! Link is - http://www.fing.edu.uy/if/cursos/fiscomp/extras/numrec/book/f9.pdf
+! I strongly recommend study the approach with Wikipedia first and then
+! Once you have got a good understanding then you can study in above link. (Karthik - 12/28/2013)
 
-    REAL FUNCTION ZeroConvergence(AX,F,TOL1,TOL2,DX,FB,IERROR)
+
+!      /*---------------------------------------------------------------------
+!        |  METHOD: ZeroConvergence
+!        |
+!        |  PURPOSE:  Calculate the Root of a Equation.
+!        |     
+!        |  Pre-condition: For any Given Function F(x) with the initial Interval [a0,b0], such that the conditions for the Brent Method are Satisfied.
+!        |
+!        |  Post-condition: [What we can expect to exist or be true after
+!        |      this method has executed under the pre-condition(s).] None
+!        |
+!        |  PARAMETERS:
+!        |            lowerBoundValue - Lower Bound Value for the Function 
+!        |            FunctionPointer - Address of the Function to be called
+!        |            TOL1 -  Tolerence Level   
+!        |            TOL2 -  Tolerence Level
+!        |            DX -    Step Increment for the Guess Method
+!        |            FB - 
+!        |            IERROR - Error Code
+!        |
+!        |  Returns: Root Value for the Equation. 
+!        | 
+!        | LAST UPDATED - Karthik | 12/28/2013 | Updated the Algorithm, Increased the Tolerence Level (Testing)
+!        *-------------------------------------------------------------------*/
+        
+    REAL FUNCTION ZeroConvergence(lowerBoundValue,FunctionPointer,TOL1,TOL2,DX,FB,IERROR)
     USE DataSimulation !, ONLY: CoilMode  !RS: Debugging: This is for a test below (11/8/13)
     implicit none
     !
     LOGICAL FIRST
-    REAL AX,FAX,BX,FBX,F,TOL1,TOL2
-    REAL A,B,C,D,E,EPS,FA,FB,FC,TOLX,TOLF,XM,P,Q,R,S
+    INTEGER IterationsMAX !Maximum Number of Itrerations before we Return from the Method
+    REAL lowerBoundValue,FunctionValueForLowerBound,upperBoundValue,FunctionValueForUpperBound,FunctionPointer,TOL1,TOL2
+    REAL A,B,C,D,E,EPS,FA,FB,FC,TOLX,TOLF,XM,P,Q,R,S,EPSDEFAULT
     REAL DX, ONE, EPS0
-    INTEGER IERROR, IERR
-    EXTERNAL F
+    INTEGER IERROR, IERR, iter
+    EXTERNAL FunctionPointer
+    PARAMETER (IterationsMAX=100,EPSDEFAULT=3.e-8)
     DATA FIRST / .TRUE. /
-    !
-    CALL GUESS3(AX,FAX,BX,FBX,F,DX,TOL2,IERROR) !RS: Initial guesses and bounding of region
+    
+    !Karthik - Call Guess Method to Get the UpperBound for the selected Function Pointer Method.
+    CALL GUESS3(lowerBoundValue,FunctionValueForLowerBound,upperBoundValue,FunctionValueForUpperBound,FunctionPointer,DX,TOL2,IERROR) 
+    !RS: Initial guesses and bounding of region
     IF (IERROR .NE. 0) THEN
         RETURN
     END IF
+
+    !Karthik - Calculate the Machine Precision of the Current Machine.
+    !This Value is used to calculate the Tolerence Later.
     IF (FIRST) THEN
         EPS = 1.0
-        ONE = 1.0   !VL
+        EPS = EPS/2.0
+        ONE = 1.0 + EPS
         DO WHILE (ONE .GT. 1.0)
             EPS = EPS/2.0
             ONE = 1.0 + EPS0
@@ -79,21 +119,33 @@
 
         FIRST = .FALSE.
     END IF
-    !
+    
+    !Karthik - We use the Same Variable Names as with the original recipie Book, for clarity and easy understanding.
 
-    A = AX
-    B = BX
-    FA = FAX
-    FB = FBX
-    !
+    A = lowerBoundValue
+    B = upperBoundValue
+    FA = FunctionValueForLowerBound
+    FB = FunctionValueForUpperBound
+    
+    !Karthik - Check if the Root is Bracketed or NOT and display error message to the user.
+    
+       IF ((FA .GT.0. .AND. FB .GT. 0.) .OR. (FA .LT.0. .AND. FB .LT. 0.)) THEN
+        !Karthik-Root is NOT Brackted.One of the possibility of this is a wrong calculation of the upperBoundValue from the Guess3 Method
+       END IF
+       
+    C = B
+    FC = FB
 
-    C = A
-    FC = FA
-    D = B-A
-    E = D
-
-    DO WHILE (.TRUE.)
-
+    !DO WHILE (.TRUE.)
+    DO iter=1,IterationsMAX !Karthik - Testing Limit the Number of Iterations to 100 to save computing time.
+        
+        IF ((FB .GT.0. .AND. FC .GT. 0.) .OR. (FB .LT.0. .AND. FC .LT. 0.)) THEN ! Rename a, b, c and adjust bounding interval d.  
+             C = A
+             FC = FA
+             D = B-A
+             E = D
+        END IF
+        
         IF (ABS(FC) .LT. ABS(FB)) THEN
             A = B
             B = C
@@ -103,7 +155,8 @@
             FC = FA        
         END IF
 
-        TOLX = TOL1      !ISI - 05/31/05
+        !TOLX = TOL1      !ISI - 05/31/05
+        TOLX = 2.*EPS*ABS(B)+0.5*TOL1  !Convergence check.      !Karthik: Testing , Increasing the Tolerence Value 12/28/2013
         TOLF = TOL2      !ISI - 05/31/05
         XM = 0.5*(C - B) !ISI - 05/31/05 
 
@@ -125,65 +178,63 @@
         !        EXIT
         !    END IF
         !END IF
-
-        IF (ABS(XM) .LE. TOLX) THEN    !RS: Debugging: Comment out when testing the above (11/8/13)
+        
+        !Karthik - Need to check the Criteria for TOLF.
+        IF (ABS(XM) .LE. TOLX .OR. FB.EQ.0. ) THEN    !RS: Debugging: Comment out when testing the above (11/8/13)
             EXIT
         END IF
         IF (ABS(FB) .LE. TOLF) THEN
             EXIT
         END IF
+        !Karthik - EXIT gives a value for ZeroConvergence and return to calling method.
         
-        IF ((ABS(E) .LT. TOLX) .OR. (ABS(FA) .LE. ABS(FB))) THEN
-            D = XM
-            E = D
-        ELSE
-
-            IF (A .NE. C) THEN
-
+        IF ((ABS(E) .GE. TOLX) .OR. (ABS(FA) .GT. ABS(FB))) THEN
+            
+            S = FB/FA !Atempt Inverse Quadratic Interpolation.
+            IF (A .EQ. C) THEN
+                P = 2.0*XM*S
+                Q = 1.0 - S        
+            ELSE
                 Q = FA/FC
                 R = FB/FC
                 S = FB/FA
                 P = S*(2.0*XM*Q*(Q - R) - (B - A)*(R - 1.0))
-                Q = (Q - 1.0)*(R - 1.0)*(S - 1.0)            
-
-            ELSE
-
-                S = FB/FA
-                P = 2.0*XM*S
-                Q = 1.0 - S
-
+                Q = (Q - 1.0)*(R - 1.0)*(S - 1.0)    
             END IF
 
             IF (P .GT. 0.0) THEN
-                Q = -Q
+                Q = -Q      !Check whether in bounds
             END IF
             P = ABS(P)
 
-            IF (((2.0*P) .GE. (3.0*XM*Q - ABS(TOLX*Q))) .OR. (P .GE. ABS(0.5*E*Q))) THEN
-                D = XM
-                E = D                
+            IF (((2.0*P) .LT. (3.0*XM*Q - ABS(TOLX*Q))) .OR. (P .LT. ABS(E*Q))) THEN
+                E = D       !Accept interpolation.
+                D = P/Q                 
             ELSE
-                E = D
-                D = P/Q          
-            END IF
-
-        END IF
-
-        A = B
-        FA = FB
-        IF (ABS(D) .GT. TOLX) THEN
-            B = B + D
-        END IF
-        IF (ABS(D) .LE. TOLX) THEN
-            B = B + SIGN(TOLX,XM)
-        END IF
-        FB = F(B,IERR)
-        IF ((FB*(FC/ABS(FC))) .GT. 0.) THEN
-            C = A
-            FC = FA
-            D = B-A
+                D = XM      !Interpolation failed, use bisection.
+                E = D         
+            END IF              
+        ELSE
+            D = XM          !Bounds decreasing too slowly, use bisection.
             E = D
         END IF
+        A = B   !Move last best guess to a.
+        FA = FB
+        IF (ABS(D) .GT. TOLX) THEN  !Evaluate new trial root.
+            B = B + D
+        ELSE
+             B = B + SIGN(TOLX,XM) 
+        END IF
+
+        FB = FunctionPointer(B,IERR)
+        
+        !Karthik - We have shifted this check to the begining of Loop
+        !IF ((FB*(FC/ABS(FC))) .GT. 0.) THEN
+        !    C = A
+        !    FC = FA
+        !    D = B-A
+        !    E = D
+        !END IF
 
     END DO
 
