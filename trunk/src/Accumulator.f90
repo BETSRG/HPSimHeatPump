@@ -55,47 +55,47 @@
 ! -- CHANGELOG ------------------------- !
 ! -------------------------------------- !
 ! 2012-12-11 | ESL | Initial header 
+! 02/03/2014 | Karthik | Variable Naming and cleanup of code
 
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
 ! Check if other module variables can be made method locals
+! ErrorFlag values will be set from the Method IssueRefPropError. This is
+! not a standard way of doing this and needs to check more on this (Karthik)
+! -> Elimanate un necessary Temp Variables.
+! -> Variable Names has been changed to the best knowledge, if someone would review the naming convention that would be useful
 
-MODULE AccumulatorMod
+MODULE AccumulatorModule 
 
-    USE DataGlobals_HPSim, ONLY: RefName, RefrigIndex   !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
-    USE DataSimulation
+    USE DataGlobals_HPSim, ONLY: RefName, RefrigIndex !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+    USE DataSimulation                                !Karthik - Use the Global Variables to get data for this module.
 
     IMPLICIT NONE
-
-    LOGICAL, EXTERNAL :: IssueRefPropError
+    LOGICAL, EXTERNAL :: IssueRefPropError             !Karthik - Print out Any Errors
 
 PRIVATE
 
-    REAL :: RatedDP !Rating pressure drop, kPa
-    REAL :: RatedDT !Rating temperature drop, K
-    REAL :: CoeffM !Curve fit coefficient
-    REAL :: CoeffB !Curve fit coefficient
-    REAL :: AccumDP !Pressure drop, kPa
-    REAL DHOLE(2) !Hole diameters, ft
-    REAL DTUBE    !Tube diameter, ft
-    REAL HDIS     !Distance between holes, ft
-    REAL AHGT     !Accumulator height, ft
-    REAL DACC     !Accumulator diameter, ft
-
-    !INTEGER            :: RefrigIndex =0
-    INTEGER(2) RefPropErr  !Error flag:1-error; 0-no error
+    REAL :: RatedPressureDrop         !Unit - kPa
+    REAL :: RatedTemperatureDrop      !Unit -  K
+    REAL :: CoefficientOfCurveFit_M 
+    REAL :: CoefficientOfCurveFit_B
+    REAL :: PressureDropInAccumulator !Unit -  kPa
+    REAL DiameterHole(2)              !Unit -  ft
+    REAL TubeDiameter                 !Unit - ft
+    REAL distanceBetweenHoles         !Unit - ft
+    REAL accumulatorHeight            !Unit - ft
+    REAL accumulatorDiameter          !Unit - ft                            
+    INTEGER(2) RefPropErr             !Error flag:1-error; 0-no error
     REAL Temperature,Quality,Pressure,Enthalpy,Entropy
-
+   
+    !Subroutines
     PUBLIC InitAccumulator
     PUBLIC CalcAccumulatorMass
     PUBLIC CalcAccumulatorDP
 
 
-CONTAINS
-
-    SUBROUTINE CalcAccumulatorMass !(XIN,OUT)
-
+    CONTAINS
     ! ----------------------------------------------------------------------
     !
     !   Description: HPSIM accumulator model
@@ -127,37 +127,7 @@ CONTAINS
     !
     !   Date: June 2005
     !
-    ! ----------------------------------------------------------------------
-
-    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-
-    IMPLICIT NONE
-
-    !Subroutine argument declarations
-    !REAL, INTENT(IN) :: XIN(3)
-    !REAL, INTENT(OUT) :: OUT(2) !RS: Debugging: Formerly OUT(6)
-
-    INTEGER ErrorFlag          !0-No error
-    !1-Accumulator solution not converge
-    !2-Refprop error
-
-    REAL mdot      !Refrigerant mass flow rate, kg/s
-    REAL pRo       !Outlet refrigerant pressure, kPa
-    REAL hRo       !Outlet refrigerant enthalpy, kJ/kg
-    REAL tRo       !Outlet refrigerant temperature, C
-    REAL Tsat      !Saturated temperature, C
-    REAL xRo       !Outlet refrigerant quality, -
-    REAL :: RMASS, rhoVap, V, rhoLiq, VsatLQ, Tsup, CNVAcc, VolAcc, &
-            AccMas, Xlevel, AACC, VHGT, X, RMS, RMSL, RO, ATUBE, WL, &
-            PD, PDYN, AMASS2, DP1MAX, DP2MAX, RMMAX, DP, RM, DIFF1, AMASS1, Z1, Z2, &
-            IHOLE, J, RMT, I, DIFF2, SLOPE, ERROR
-
-    ! VL : Flag to assist with dismantling of GOTO-based control structures ....
-    ! Change names of the flag to reflect the intention of the GOTO statements ... 
-    INTEGER   :: FLAG_GOTO_40 
-    
-    CHARACTER(LEN=57),PARAMETER :: FMT_602 = "(' ACCUML DOES NOT CONVERGE, MAX.ERROR =',1PE10.3,' LBM')"
-    
+    !   NOTE - Old Comments has not been deleted.
     !
     !**** PURPOSE:
     !       TO CALCULATE REFRIGERANT LIQUID LEVEL AND MASS IN AN ACCUMULATOR
@@ -167,216 +137,207 @@ CONTAINS
     !       NATIONAL BUREAU OF STANDARDS, 6/28/82
     !
     !**** INPUT DATA:
-    !       AHGT(ACCHGT)    - ACCUMULATOR HEIGHT  (FT)
-    !       DACC(ACCDIA)    - INNER DIAMETER OF ACCUMULATOR  (FT)
-    !       DHOLE(1)        - INNER DIA. OF OIL RETURN HOLE  (FT)
-    !       DHOLE(2)        - INNER DIA. OF UPPER HOLE  (FT)
-    !       DTUBE(ATBDIA)   - INNER DIA. OF ACCUMULATOR TUBE  (FT)
-    !       HDIS(HOLDIS)    - VERTICAL DISTANCE BETWEEN HOLES  (FT)
+    !       accumulatorHeight(ACCHGT)    - ACCUMULATOR HEIGHT  (FT)
+    !       accumulatorDiameter(ACCDIA)    - INNER DIAMETER OF ACCUMULATOR  (FT)
+    !       DiameterHole(1)        - INNER DIA. OF OIL RETURN HOLE  (FT)
+    !       DiameterHole(2)        - INNER DIA. OF UPPER HOLE  (FT)
+    !       TubeDiameter(ATBDIA)   - INNER DIA. OF ACCUMULATOR TUBE  (FT)
+    !       distanceBetweenHoles(HOLDIS)    - VERTICAL DISTANCE BETWEEN HOLES  (FT)
     !       RMASS           - REFRIG. MASS FLOW RATE  (LBM/H)
-    !       TSUP            - REFRIG. SUPERHEAT  (F)
-    !       V               - SPECIFIC VOLUME OF REFRIGERANT LEAVING ACCUMULATOR
+    !       refrigerantSuperHeat            - REFRIG. SUPERHEAT  (F)
+    !       volumeOfRefLeavingAccumulator             - SPECIFIC VOLUME OF REFRIGERANT LEAVING ACCUMULATOR
     !                         (FT**3/LBM)
-    !       VSATLQ          - SPECIFIC VOLUME OF LIQUID AT ACCUMULATOR PRESSURE
+    !       volumeOfLiquidAtAccuPressure          - SPECIFIC VOLUME OF LIQUID AT ACCUMULATOR PRESSURE
     !                         (FT**3/LBM)
     !**** OUTPUT DATA:
-    !       ACCMAS          - MASS OF REFRIG. IN THE ACCUMULATOR  (LBM)
-    !       VOLACC          - INTERNAL VOLUME OF ACCUMULATOR  (FT**3)
-    !       XLEVEL          - LEVEL OF LIQUID IN ACCUMULATOR  (IN)
+    !       refrigerantMassInAccumulator          - MASS OF REFRIG. IN THE ACCUMULATOR  (LBM)
+    !       volumeOfAccumulatorInternal          - INTERNAL VOLUME OF ACCUMULATOR  (FT**3)
+    !       liquidLevelInAccumulator          - LEVEL OF LIQUID IN ACCUMULATOR  (IN)
     !
-    !        COMMON / ACCDIM / ACCHGT,ACCDIA,DHOLE(2),ATBDIA,HOLDIS
+    !        COMMON / ACCDIM / ACCHGT,ACCDIA,DiameterHole(2),ATBDIA,HOLDIS
     !
-    REAL HL, AHOLE
-    DIMENSION HL(2), AHOLE(2)  !, DHOLE(2)
-    !
+    ! ----------------------------------------------------------------------
+    SUBROUTINE CalcAccumulatorMass
+    
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    IMPLICIT NONE
+
+    INTEGER ErrorFlag
+    !0-No error
+    !1-Accumulator solution not converge
+    !2-Refprop error
+
+    REAL refrigerantMassFlowRate            !Refrigerant mass flow rate, kg/s
+    REAL refrigerantOutletPressure          !Outlet refrigerant pressure, kPa
+    REAL refrigerantOutletEnthalpy          !Outlet refrigerant enthalpy, kJ/kg
+    REAL refrigerantOutletTemperature       !Outlet refrigerant temperature, C
+    REAL saturatedTemperature               !Saturated temperature, C
+    REAL refrigerantOutletQuality           !Outlet refrigerant quality, -
+    REAL :: vapourDensity, volumeOfRefLeavingAccumulator, liquidDensity, volumeOfLiquidAtAccuPressure, refrigerantSuperHeat
+    REAL :: convergenceToleranceForAccum, volumeOfAccumulatorInternal
+    REAL :: refrigerantMassInAccumulator, liquidLevelInAccumulator, areaOfAccumulator, accumulatorVerticalHeight
+    REAL :: refrigerantMassFlowRateInLBM
+    REAL :: refrigerantMassFlowOfLiquid, liquidDensity_Temp, areaOfTube, refrigerantMassFlowPerHoleArea
+    REAL :: refrigerantLiqPressureAtHole, refrigerantVapourPressureAtTube, totalRefrigerantMassinAcc_2, maximumPressureWithOutHoleDist
+    REAL :: maximumPressureWithHoleDist, refrigerantMassFlowAtTopHoleMax, pressureAtHole2, refrigerantMassFlowAtTopHole
+    REAL :: differenceInMassFlow_1, totalRefrigerantMassinAcc_temp, Z1, Z2
+    REAL :: indexOfHolePresent, J, refrigerantMass_Temp, I, differenceInMassFlow_2, SLOPE, ERROR
+    INTEGER   :: boolTerminationFlag            !Termination Flag, change the variable name if you need to.
+    CHARACTER(LEN=57),PARAMETER :: FMT_602 = "(' ACCUML DOES NOT CONVERGE, MAX.ERROR =',1PE10.3,' LBM')"
+    REAL liquidColumnHeight, areaOfHole
+    DIMENSION liquidColumnHeight(2), areaOfHole(2)
     REAL,PARAMETER :: PI=3.14159265
-    !
-
-    ! VL: Initialize default values for GOTO flag
-    FLAG_GOTO_40 = .FALSE.
-
-    mdot=AccumIN%AccImdot !RS: Debugging: Formerly XIN(1)
-    pRo=AccumIN%AccIpRo  !RS: Debugging: Formerly XIN(2)
-    hRo=AccumIN%AccIhRo  !RS: Debugging: Formerly XIN(3)
-    RMASS=mdot/0.000126 !Convert from kg/s to lbm/hr
-
+    
+    boolTerminationFlag = .FALSE.
+    refrigerantMassFlowRate=AccumIN%AccImdot   !RS: Debugging: Formerly XIN(1)
+    refrigerantOutletPressure=AccumIN%AccIpRo  !RS: Debugging: Formerly XIN(2)
+    refrigerantOutletEnthalpy=AccumIN%AccIhRo  !RS: Debugging: Formerly XIN(3)
     ErrorFlag=0
-
-    Pressure=pRo*1000   !RS Comment: Unit Conversion
-    Enthalpy=hRo*1000   !RS Comment: Unit Conversion
-    tRo=PH(RefName,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)  !Outlet Refrigerant Temperature
+    Pressure=refrigerantOutletPressure*1000   !RS Comment: Unit Conversion
+    Enthalpy=refrigerantOutletEnthalpy*1000   !RS Comment: Unit Conversion
+    refrigerantOutletTemperature=PH(RefName,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)  !Outlet Refrigerant Temperature
+    
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly ", OUT(3)"
+        RETURN
+    END IF
+    refrigerantOutletQuality=PH(RefName,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)  !Outlet Refrigerant Quality
     IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly ", OUT(3)"
         RETURN
     END IF
 
-    xRo=PH(RefName,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)  !Outlet Refrigerant Quality
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly ", OUT(3)"
-        RETURN
-    END IF
-
-    Pressure=pRo*1000   !RS Comment: Unit Conversion
+    Pressure=refrigerantOutletPressure*1000   !RS Comment: Unit Conversion
     Quality=1
-    Tsat=PQ(RefName,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)  !Saturated Temperature
+    saturatedTemperature=PQ(RefName,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)  !Saturated Temperature
     IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly ", OUT(3)"
         RETURN
     END IF
 
-    rhoVap=PQ(RefName,Pressure,Quality,'density',RefrigIndex,RefPropErr)    !Vapor Density
+    vapourDensity=PQ(RefName,Pressure,Quality,'density',RefrigIndex,RefPropErr)    !Vapor Density
     IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly ", OUT(3)"
         RETURN
     END IF
 
-    V=1/(rhoVap*0.0625) !Convert from kg/m3 to lbm/ft3
+    volumeOfRefLeavingAccumulator=1/(vapourDensity*0.0625) !Convert from kg/m3 to lbm/ft3
     Quality=0
-    rhoLiq=PQ(RefName,Pressure,Quality,'density',RefrigIndex,RefPropErr)    !Liquid Density
+    liquidDensity=PQ(RefName,Pressure,Quality,'density',RefrigIndex,RefPropErr)    !Liquid Density
     IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly ", OUT(3)"
         RETURN
     END IF
 
-    VSATLQ=1/(rhoLiq*0.0625) !Convert from kg/m3 to lbm/ft3
+    volumeOfLiquidAtAccuPressure=1/(liquidDensity*0.0625) !Convert from kg/m3 to lbm/ft3
+    refrigerantSuperHeat=(refrigerantOutletTemperature-saturatedTemperature)*1.8
+    
+    convergenceToleranceForAccum = 0.001
+    volumeOfAccumulatorInternal = 0.0
+    refrigerantMassInAccumulator = 0.0
+    liquidLevelInAccumulator = 0.0
 
-    TSUP=(tRo-tSat)*1.8
-
-    !
-    CNVACC = 0.001
-    !
-    VOLACC = 0.0
-    ACCMAS = 0.0
-    XLEVEL = 0.0
-
-    IF(AHGT.LE.0.001) THEN
-    !RS: Debugging: Nothing changes 
-    ELSE
-        !
-        AACC = PI*DACC*DACC/4.
-        VOLACC = AACC*AHGT
-        !
-        !       ONLY VAPOR IN ACCUMULATOR
-        !
-        IF(.NOT. xRo.LT.1.) THEN
-            HL(1) = 0.0
-            ACCMAS = VOLACC/V
-            VHGT=AHGT
+    IF(accumulatorHeight.GT.0.001) THEN
+        areaOfAccumulator = PI*accumulatorDiameter*accumulatorDiameter/4.
+        volumeOfAccumulatorInternal = areaOfAccumulator*accumulatorHeight
+        IF(.NOT. refrigerantOutletQuality.LT.1.) THEN       !Check if Only Vapor in Accumulator
+            liquidColumnHeight(1) = 0.0
+            refrigerantMassInAccumulator = volumeOfAccumulatorInternal/volumeOfRefLeavingAccumulator
+            accumulatorVerticalHeight=accumulatorHeight
         ELSE
             !
             !       LIQUID IN ACCUMULATOR
-            !
-            X = xRo
-            RMS = RMASS/3600.
-            RMSL = (1.-X)*RMS
-            RO = 1./VSATLQ
-            !
-            !       LIQUID LEVEL FOR CASE OF BOTTOM HOLE ALONE
-            !
-            AHOLE(1) = PI*DHOLE(1)*DHOLE(1)/4.
-            ATUBE = PI*DTUBE*DTUBE/4.
-            WL = RMSL/AHOLE(1)
-            PD = WL*WL/(.585*.585*2.*RO)
-            PDYN = 0.5*(X*RMS/ATUBE)**2.*V
-            HL(1) = (PD-PDYN)/(RO*32.2)
-            IF(HL(1).LT.0.) THEN
-                HL(1) = 0.
+            refrigerantMassFlowRateInLBM=refrigerantMassFlowRate/0.000126     !Convert from kg/s to lbm/hr
+            refrigerantMassFlowRateInLBM = refrigerantMassFlowRateInLBM/3600. !Convert from kg/s to lbm/hr
+            refrigerantMassFlowOfLiquid = (1.-refrigerantOutletQuality)*refrigerantMassFlowRateInLBM
+            liquidDensity_Temp = 1./volumeOfLiquidAtAccuPressure
+            areaOfHole(1) = PI*DiameterHole(1)*DiameterHole(1)/4. !LIQUID LEVEL FOR CASE OF BOTTOM HOLE ALONE
+            areaOfTube = PI*TubeDiameter*TubeDiameter/4.
+            refrigerantMassFlowPerHoleArea = refrigerantMassFlowOfLiquid/areaOfHole(1)
+            refrigerantLiqPressureAtHole = refrigerantMassFlowPerHoleArea*refrigerantMassFlowPerHoleArea/(.585*.585*2.*liquidDensity_Temp)
+            refrigerantVapourPressureAtTube = 0.5*(refrigerantOutletQuality*refrigerantMassFlowRateInLBM/areaOfTube)**2.*volumeOfRefLeavingAccumulator
+            liquidColumnHeight(1) = (refrigerantLiqPressureAtHole-refrigerantVapourPressureAtTube)/(liquidDensity_Temp*32.2)
+            
+            IF(liquidColumnHeight(1).LT.0.) THEN
+                liquidColumnHeight(1) = 0.
             END IF
-            VHGT = AHGT-HL(1)
-            VHGT = AMAX1(0.,VHGT)
-            AMASS2 = AACC*(HL(1)*RO+VHGT/V)
-            !
-            !       CHECK IF BELOW SECOND HOLE
-            !
-            IF(HL(1).LT.HDIS.OR.HDIS.EQ.0.) THEN
-                FLAG_GOTO_40 = .TRUE.
-            END IF
-            IF (FLAG_GOTO_40 .EQ. .FALSE.) THEN
+            
+            accumulatorVerticalHeight = accumulatorHeight-liquidColumnHeight(1)
+            accumulatorVerticalHeight = AMAX1(0.,accumulatorVerticalHeight)
+            totalRefrigerantMassinAcc_2 = areaOfAccumulator*(liquidColumnHeight(1)*liquidDensity_Temp+accumulatorVerticalHeight/volumeOfRefLeavingAccumulator)
 
-                AHOLE(2) = PI*DHOLE(2)*DHOLE(2)/4.
+            IF(liquidColumnHeight(1).LT.distanceBetweenHoles.OR.distanceBetweenHoles.EQ.0.) THEN !CHECK IF BELOW SECOND HOLE
+                boolTerminationFlag = .TRUE.
+            END IF
+            IF (boolTerminationFlag .EQ. .FALSE.) THEN
+                areaOfHole(2) = PI*DiameterHole(2)*DiameterHole(2)/4.
                 !
                 !       CHECK FOR FULL ACCUMULATOR
                 !
-                DP1MAX = AHGT*RO*32.2 + PDYN
-                DP2MAX = (AHGT-HDIS)*RO*32.2 + PDYN
-                RMMAX = 0.585*AHOLE(1)*SQRT(2.*RO*DP1MAX) +0.585*AHOLE(2)*SQRT(2.*RO*DP2MAX)
+                maximumPressureWithOutHoleDist = accumulatorHeight*liquidDensity_Temp*32.2 + refrigerantVapourPressureAtTube
+                maximumPressureWithHoleDist = (accumulatorHeight-distanceBetweenHoles)*liquidDensity_Temp*32.2 + refrigerantVapourPressureAtTube
+                refrigerantMassFlowAtTopHoleMax = 0.585*areaOfHole(1)*SQRT(2.*liquidDensity_Temp*maximumPressureWithOutHoleDist) +0.585*areaOfHole(2)*SQRT(2.*liquidDensity_Temp*maximumPressureWithHoleDist)
 
-                IF(RMSL.LT.RMMAX) THEN
-                    !RS: Debugging: Nothing changes
-                ELSE
-                    VHGT = 0.0
-                    HL(1) = AHGT
-                    AMASS2 = AACC*AHGT*RO
-                    FLAG_GOTO_40 = .TRUE.
-                    !
-                    !       FIND LEVEL ABOVE SECOND HOLE
-                    !
+                IF(refrigerantMassFlowOfLiquid.GT.refrigerantMassFlowAtTopHoleMax) THEN
+                    accumulatorVerticalHeight = 0.0
+                    liquidColumnHeight(1) = accumulatorHeight
+                    totalRefrigerantMassinAcc_2 = areaOfAccumulator*accumulatorHeight*liquidDensity_Temp
+                    boolTerminationFlag = .TRUE. ! FIND LEVEL ABOVE SECOND HOLE
                 END IF        
             END IF
 
-            IF (FLAG_GOTO_40 .EQ. .FALSE.) THEN
-                HL(2) = HL(1)-HDIS
-                DP = HL(2)*RO*32.2 + PDYN
-                RM = 0.585*AHOLE(2)*SQRT(2.*RO*DP)
-                DIFF1 = RM
-                AMASS1 = AMASS2
-                Z1 = HL(1)
-                Z2 = HDIS
-                IHOLE = 0
-                !
+            IF (boolTerminationFlag .EQ. .FALSE.) THEN
+                liquidColumnHeight(2) = liquidColumnHeight(1)-distanceBetweenHoles
+                pressureAtHole2 = liquidColumnHeight(2)*liquidDensity_Temp*32.2 + refrigerantVapourPressureAtTube
+                refrigerantMassFlowAtTopHole = 0.585*areaOfHole(2)*SQRT(2.*liquidDensity_Temp*pressureAtHole2)
+                differenceInMassFlow_1 = refrigerantMassFlowAtTopHole
+                totalRefrigerantMassinAcc_temp = totalRefrigerantMassinAcc_2
+                Z1 = liquidColumnHeight(1)
+                Z2 = distanceBetweenHoles
+                indexOfHolePresent = 0
                 DO J=1,12
-                    HL(1) = Z2
-                    HL(2) = Z2-HDIS
-                    RMT = 0.
-                    !
+                    liquidColumnHeight(1) = Z2
+                    liquidColumnHeight(2) = Z2-distanceBetweenHoles
+                    refrigerantMass_Temp = 0.
                     DO I=1,2
-                        DP = HL(I)*RO*32.2 + PDYN
-                        RM = 0.585*AHOLE(I)*SQRT(2.*RO*DP)
-                        RMT = RMT + RM
+                        pressureAtHole2 = liquidColumnHeight(I)*liquidDensity_Temp*32.2 + refrigerantVapourPressureAtTube
+                        refrigerantMassFlowAtTopHole = 0.585*areaOfHole(I)*SQRT(2.*liquidDensity_Temp*pressureAtHole2)
+                        refrigerantMass_Temp = refrigerantMass_Temp + refrigerantMassFlowAtTopHole
                     END DO
-                    !
-                    DIFF2 = RMT-RMSL
-                    IF(J.EQ.1.AND.DIFF2.GT.0.0) THEN
-                        IHOLE = 1
+                    differenceInMassFlow_2 = refrigerantMass_Temp-refrigerantMassFlowOfLiquid
+                    IF(J.EQ.1.AND.differenceInMassFlow_2.GT.0.0) THEN
+                        indexOfHolePresent = 1
                     END IF
-                    VHGT = AHGT - HL(1)
-                    VHGT = AMAX1(0.,VHGT)
-                    AMASS2 = AACC* (HL(1)*RO + VHGT/V)
-                    !
-                    !       SKIP OUT IF LEVEL WILL NOT RISE ABOVE SECOND HOLE
-                    !
-                    IF(IHOLE.EQ.1) THEN
-                        FLAG_GOTO_40 = .TRUE.
+                    accumulatorVerticalHeight = accumulatorHeight - liquidColumnHeight(1)
+                    accumulatorVerticalHeight = AMAX1(0.,accumulatorVerticalHeight)
+                    totalRefrigerantMassinAcc_2 = areaOfAccumulator* (liquidColumnHeight(1)*liquidDensity_Temp + accumulatorVerticalHeight/volumeOfRefLeavingAccumulator)
+                    IF(indexOfHolePresent.EQ.1) THEN !SKIP OUT IF LEVEL WILL NOT RISE ABOVE SECOND HOLE
+                        boolTerminationFlag = .TRUE.
                         EXIT
                     END IF
-                    !
-                    !       CHECK FOR CONVERGENCE ON LEVEL ABOVE SECOND HOLE
-                    !
-                    IF(ABS(AMASS1-AMASS2).LT.CNVACC) THEN
-                        FLAG_GOTO_40 = .TRUE.
+                    IF(ABS(totalRefrigerantMassinAcc_temp-totalRefrigerantMassinAcc_2).LT.convergenceToleranceForAccum) THEN  !CHECK FOR CONVERGENCE ON LEVEL ABOVE SECOND HOLE
+                        boolTerminationFlag = .TRUE.
                         EXIT
                     END IF
-                    SLOPE = (Z1-Z2)/(DIFF1-DIFF2)
-                    IF(.NOT. ABS(DIFF1).LT.ABS(DIFF2)) THEN
-                        AMASS1 = AMASS2
-                        DIFF1 = DIFF2
+                    SLOPE = (Z1-Z2)/(differenceInMassFlow_1-differenceInMassFlow_2)
+                    IF(.NOT. ABS(differenceInMassFlow_1).LT.ABS(differenceInMassFlow_2)) THEN
+                        totalRefrigerantMassinAcc_temp = totalRefrigerantMassinAcc_2
+                        differenceInMassFlow_1 = differenceInMassFlow_2
                         Z1 = Z2
                     END IF
-                    Z2 = Z1 - DIFF1*SLOPE
-                    Z2 = AMAX1(Z2,HDIS)
+                    Z2 = Z1 - differenceInMassFlow_1*SLOPE
+                    Z2 = AMAX1(Z2,distanceBetweenHoles)
                 END DO
 
-                IF (FLAG_GOTO_40 .EQ. .FALSE.) THEN
-                    !
-                    !       PRINT RESULTS
-                    !
-                    ERROR = AACC*ABS(Z2-Z1)*RO
+                IF (boolTerminationFlag .EQ. .FALSE.) THEN !PRINT RESULTS
+                    ERROR = areaOfAccumulator*ABS(Z2-Z1)*liquidDensity_Temp
                     WRITE(6,FMT_602) ERROR
                 END IF
 
             END IF
-            ACCMAS = AMASS2
+            refrigerantMassInAccumulator = totalRefrigerantMassinAcc_2
         END IF
-        XLEVEL = HL(1)*12.
+        liquidLevelInAccumulator = liquidColumnHeight(1)*12.
     END IF
 
-    AccumOUT%AccOMass=ACCMAS*0.4563    !Total mass, convert from lbm to kg !RS: Debugging: Formerly OUT(1)
-    AccumOUT%AccODP=AccumDP  !RS: Debugging: Formerly OUT(2)
+    AccumOUT%AccOMass=refrigerantMassInAccumulator*0.4563    !Total mass, convert from lbm to kg !RS: Debugging: Formerly OUT(1)
+    AccumOUT%AccODP=PressureDropInAccumulator  !RS: Debugging: Formerly OUT(2)
 
     RETURN
 
@@ -384,7 +345,7 @@ CONTAINS
 
     !******************************************************************************
 
-    SUBROUTINE CalcAccumulatorDP(mdot,TsatEvp,TsatCnd,Subcooling,Superheat,Xliq,Xvap,EstDP)
+    SUBROUTINE CalcAccumulatorDP(refrigerantMassFlowRate,evaporatingTemperature,condensingTemperature,Subcooling,Superheat,liquidLineQuality,suctionLineQuality,estimatedPressureDrop)
 
     ! ----------------------------------------------------------------------
     !
@@ -405,123 +366,119 @@ CONTAINS
 
     IMPLICIT NONE
 
-    REAL, INTENT(IN) :: mdot !Refrigerant mass flow rate, kg/s
-    REAL, INTENT(IN) :: TsatEvp !Evaporating temperature, C
-    REAL, INTENT(IN) :: TsatCnd !Condensing temperature, C
-    REAL, INTENT(IN) :: Subcooling !Subcooling, K
-    REAL, INTENT(IN) :: Superheat !Superheat, K
-    REAL, INTENT(INOUT) :: Xliq !Liquid line quality
-    REAL, INTENT(INOUT) :: Xvap !Suction line quality
-    REAL, INTENT(OUT) :: EstDP !Estimated pressure drop, kPa
+    REAL, INTENT(IN) :: refrigerantMassFlowRate !Refrigerant mass flow rate, kg/s
+    REAL, INTENT(IN) :: evaporatingTemperature  !Evaporating temperature, C
+    REAL, INTENT(IN) :: condensingTemperature   !Condensing temperature, C
+    REAL, INTENT(IN) :: Subcooling              !Subcooling, K
+    REAL, INTENT(IN) :: Superheat               !Superheat, K
+    REAL, INTENT(INOUT) :: liquidLineQuality    !Liquid line quality
+    REAL, INTENT(INOUT) :: suctionLineQuality   !Suction line quality
+    REAL, INTENT(OUT) :: estimatedPressureDrop  !Estimated pressure drop, kPa
 
-    INTEGER ErrorFlag          !0-No error
+    INTEGER ErrorFlag   
+    !0-No error
     !1-Accumulator solution not converge
     !2-Refprop error
 
     REAL MaxCapacity !Max. system capacity, ton 
-    REAL QsysTon     !System capacity, ton
-    REAL EstDT       !Estimated temperature drop, kPa
-    REAL Psuc        !Suction presure, kPa
-    REAL Pdis        !Discharge pressure, kPa 
-    REAL Hliq        !Liquid enthalpy, kJ/kg
-    REAL Hvap        !Vapor enthalpy, kJ/kg
-    REAL Psat1,Psat2 !Saturation pressure, kPa
-
-    !Flow:
-
-    IF (Xliq .GT. 1) THEN
-        Xliq=1
+    REAL systemCapacityInTon     !System capacity, ton
+    REAL estimatedPressureDrop_Temp       !Estimated temperature drop, kPa
+    REAL suctionPressure        !Suction presure, kPa
+    REAL dischargePressure         !Discharge pressure, kPa 
+    REAL liquildEnthalpy         !Liquid enthalpy, kJ/kg
+    REAL vaporEnthalpy         !Vapor enthalpy, kJ/kg
+    REAL saturationPressure_1, saturationPressure_2!Saturation pressure, kPa
+    IF (liquidLineQuality .GT. 1) THEN
+        liquidLineQuality=1
     END IF
-    IF (Xliq .LT. 0) THEN
-        Xliq=0
+    IF (liquidLineQuality .LT. 0) THEN
+        liquidLineQuality=0
     END IF
-    IF (Xvap .GT. 1) THEN
-        Xvap=1
+    IF (suctionLineQuality .GT. 1) THEN
+        suctionLineQuality=1
     END IF
-    IF (Xvap .LT. 0) THEN
-        Xvap=0
+    IF (suctionLineQuality .LT. 0) THEN
+        suctionLineQuality=0
     END IF
 
     ErrorFlag=0
 
-    Temperature=TsatEvp
+    Temperature=evaporatingTemperature
     Quality=1
-    Psuc=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)  !Suction Pressure
+    suctionPressure=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)  !Suction Pressure
     IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
         RETURN
     END IF
-    Psuc=Psuc/1000  !RS Comment: Unit Conversion
+    suctionPressure=suctionPressure/1000  !RS Comment: Unit Conversion
 
-    Temperature=TsatCnd
+    Temperature=condensingTemperature
     Quality=1
-    Pdis=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)  !Discharge Pressure
+    dischargePressure=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)  !Discharge Pressure
     IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
         RETURN
     END IF
-    Pdis=Pdis/1000  !RS Comment: Unit Conversion
+    dischargePressure=dischargePressure/1000  !RS Comment: Unit Conversion
 
     IF (Superheat .GT. 0) THEN
-        Pressure=Psuc*1000  !RS Comment: Unit Conversion
-        Temperature=TsatEvp+Superheat
-        Hvap=TP(RefName,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr) !Vapor Enthalpy
+        Pressure=suctionPressure*1000  !RS Comment: Unit Conversion
+        Temperature=evaporatingTemperature+Superheat
+        vaporEnthalpy=TP(RefName,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr) !Vapor Enthalpy
         IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
             RETURN
         END IF
-        Hvap=Hvap/1000  !RS Comment: Unit Conversion
+        vaporEnthalpy=vaporEnthalpy/1000  !RS Comment: Unit Conversion
     ELSE
-        Pressure=Psuc*1000  !RS Comment: Unit Conversion
-        Quality=Xvap
-        Hvap=PQ(RefName,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr) !Vapor Enthalpy
+        Pressure=suctionPressure*1000  !RS Comment: Unit Conversion
+        Quality=suctionLineQuality
+        vaporEnthalpy=PQ(RefName,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr) !Vapor Enthalpy
         IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
             RETURN
         END IF
-        Hvap=Hvap/1000  !RS Comment: Unit Conversion
+        vaporEnthalpy=vaporEnthalpy/1000  !RS Comment: Unit Conversion
     END IF
 
     IF (Subcooling .GT. 0) THEN
-        Pressure=Pdis*1000  !RS Comment: Unit Conversion
-        Temperature=TsatCnd-Subcooling
-        Hliq=TP(RefName,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr) !Liquid Enthalpy
+        Pressure=dischargePressure*1000  !RS Comment: Unit Conversion
+        Temperature=condensingTemperature-Subcooling
+        liquildEnthalpy=TP(RefName,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr) !Liquid Enthalpy
         IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
             RETURN
         END IF
-        Hliq=Hliq/1000  !RS Comment: Unit Conversion
+        liquildEnthalpy=liquildEnthalpy/1000  !RS Comment: Unit Conversion
     ELSE
-        Pressure=Pdis*1000  !RS Comment: Unit Conversion
-        Quality=Xliq
-        Hliq=PQ(RefName,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr) !Liquid Enthalpy
+        Pressure=dischargePressure*1000  !RS Comment: Unit Conversion
+        Quality=liquidLineQuality
+        liquildEnthalpy=PQ(RefName,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr) !Liquid Enthalpy
         IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
             RETURN
         END IF
-        Hliq=Hliq/1000  !RS Comment: Unit Conversion
+        liquildEnthalpy=liquildEnthalpy/1000  !RS Comment: Unit Conversion
     END IF
 
-    QsysTon=mdot*(Hvap-Hliq)*0.28435 !Convert from kW to ton
+    systemCapacityInTon=refrigerantMassFlowRate*(vaporEnthalpy-liquildEnthalpy)*0.28435 !Convert from kW to ton
 
-    IF (CoeffM .NE. 0 .OR. CoeffB .NE. 0) THEN
-        MaxCapacity = CoeffM * TsatEvp + CoeffB
+    IF (CoefficientOfCurveFit_M .NE. 0 .OR. CoefficientOfCurveFit_B .NE. 0) THEN
+        MaxCapacity = CoefficientOfCurveFit_M * evaporatingTemperature + CoefficientOfCurveFit_B
 
-        IF (RatedDP .NE. 0) THEN
-            EstDP = QsysTon / MaxCapacity * RatedDP
+        IF (RatedPressureDrop .NE. 0) THEN
+            estimatedPressureDrop = systemCapacityInTon / MaxCapacity * RatedPressureDrop
         ELSE
-            EstDT = QsysTon / MaxCapacity * RatedDT
-            Psat1 = Psuc
-
-            Temperature=TsatEvp-EstDT
+            estimatedPressureDrop_Temp = systemCapacityInTon / MaxCapacity * RatedTemperatureDrop
+            saturationPressure_1 = suctionPressure
+            Temperature=evaporatingTemperature-estimatedPressureDrop_Temp
             Quality=1
-            Psat2=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr) !Saturation Pressure 2
+            saturationPressure_2=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr) !Saturation Pressure 2
             IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
                 RETURN
             END IF
-            Psat2=Psat2/1000    !RS Comment: Unit Conversion
-
-            RatedDP = Psat1 - Psat2 !Rated Pressure Drop
-            EstDP = QsysTon / MaxCapacity * RatedDP
+            saturationPressure_2=saturationPressure_2/1000    !RS Comment: Unit Conversion
+            RatedPressureDrop = saturationPressure_1 - saturationPressure_2 !Rated Pressure Drop
+            estimatedPressureDrop = systemCapacityInTon / MaxCapacity * RatedPressureDrop
         END IF
 
     END IF
 
-    AccumDP=EstDP
+    PressureDropInAccumulator=estimatedPressureDrop
 
     RETURN
 
@@ -567,20 +524,18 @@ CONTAINS
     !Flow:
 
     !Convert from m to ft
-    DACC = AccumPAR%AccD/0.3048 !ACCDIA    !RS: Debugging: Formerly PAR(1)
-    AHGT = AccumPAR%AccH/0.3048 !ACCHGT    !RS: Debugging: Formerly PAR(2)
-    DHOLE(1)=AccumPAR%AccD1/0.3048  !RS: Debugging: Formerly PAR(3)
-    DHOLE(2)=AccumPAR%AccD2/0.3048  !RS: Debugging: Formerly PAR(4)
-    HDIS = AccumPAR%AccHDis/0.3048 !HOLDIS    !RS: Debugging: Formerly PAR(5)
-    DTUBE = AccumPAR%AccDTube/0.3048 !ATBDIA   !RS: Debugging: Formerly PAR(6)
+    accumulatorDiameter = AccumPAR%AccD/0.3048 !ACCDIA    !RS: Debugging: Formerly PAR(1)
+    accumulatorHeight = AccumPAR%AccH/0.3048 !ACCHGT    !RS: Debugging: Formerly PAR(2)
+    DiameterHole(1)=AccumPAR%AccD1/0.3048  !RS: Debugging: Formerly PAR(3)
+    DiameterHole(2)=AccumPAR%AccD2/0.3048  !RS: Debugging: Formerly PAR(4)
+    distanceBetweenHoles = AccumPAR%AccHDis/0.3048 !HOLDIS    !RS: Debugging: Formerly PAR(5)
+    TubeDiameter = AccumPAR%AccDTube/0.3048 !ATBDIA   !RS: Debugging: Formerly PAR(6)
 
-    RatedDP=AccumPAR%AccDP  !RS: Debugging: Formerly PAR(7)
-    RatedDT=AccumPAR%AccDT  !RS: Debugging: Formerly PAR(8)
-    CoeffM=AccumPAR%AccCM   !RS: Debugging: Formerly PAR(9)
-    CoeffB=AccumPAR%AccCB  !RS: Debugging: Formerly PAR(10)
+    RatedPressureDrop=AccumPAR%AccDP  !RS: Debugging: Formerly PAR(7)
+    RatedTemperatureDrop=AccumPAR%AccDT  !RS: Debugging: Formerly PAR(8)
+    CoefficientOfCurveFit_M=AccumPAR%AccCM   !RS: Debugging: Formerly PAR(9)
+    CoefficientOfCurveFit_B=AccumPAR%AccCB  !RS: Debugging: Formerly PAR(10)
 
     RETURN
-
     END SUBROUTINE InitAccumulator
-
     END MODULE

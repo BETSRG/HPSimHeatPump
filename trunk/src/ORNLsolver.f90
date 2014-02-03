@@ -87,7 +87,7 @@
     USE CompressorMod
     USE CondenserMod
     USE EvaporatorMod
-    USE AccumulatorMod
+    USE AccumulatorModule
     USE UnitConvertMod
     USE DataSimulation
     USE FrostModel
