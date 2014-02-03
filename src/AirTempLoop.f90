@@ -62,7 +62,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     !
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE EvaporatorMod
-    USE AccumulatorMod
+    USE AccumulatorModule
     USE DataSimulation
     USE DataGlobals_HPSim, ONLY: MaxNameLength, RefrigIndex  !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
     USE UnitConvertMod, ONLY: Temperature_F2C

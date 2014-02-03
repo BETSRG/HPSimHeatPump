@@ -60,7 +60,7 @@
     USE ShortTubeMod
     USE CapillaryTubeMod
     USE TXVMOD
-    USE AccumulatorMod
+    USE AccumulatorModule
     USE DataSimulation
     USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
     USE InputProcessor_HPSim    !RS: Debugging: Bringing over from GetHPSimInputs
