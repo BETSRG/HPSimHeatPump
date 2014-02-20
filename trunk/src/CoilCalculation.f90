@@ -572,6 +572,7 @@ SUBROUTINE hcRefside(CoilType,TubeType,ID,mRef,Qout, & !CoilType,TubeType,ID,ktu
 !------------------------------------------------------------------------
 
 USE OilMixtureMod
+USE DataGlobals_HPSim!RS: Debugging: Added for determination of sigma for testing (2/13/14)
 
 IMPLICIT NONE
 
@@ -614,6 +615,16 @@ REAL EF    !Heat transfer enhancement factor, [-]
 !Subroutine local variables:
 REAL xRef	  !Quality of refrigerant, [-]
 REAL Gref     !Refrigerant mass flux, [kg/s-m^2]
+!REAL Ref$   !RS: Debugging: Adding for testing of method (2/13/14)
+!REAL sigma  !RS: Debugging: Cavallini (2/14/14)
+!REAL hfg    !RS: Debugging: Cavallini (2/14/14)
+!REAL DT     !RS: Debugging: Cavallini (2/14/14)
+
+!RS: Debugging: Adding for testing of method (2/13/14)
+!Ref$='R22'
+!sigma=SigmaTest !RS: Debugging: Cavallini (2/14/14)
+!hfg=hfgTest     !RS: Debugging: Cavallini (2/14/14)
+!DT=DTTEST       !RS: Debugging: Cavallini (2/14/14)
 
 !Flow:
 
@@ -626,8 +637,8 @@ REAL Gref     !Refrigerant mass flux, [kg/s-m^2]
 		IF (CoilType .EQ. CONDENSERCOIL) THEN
 				CALL hTPDobson(CoilType,ID,xRef,mRef,vg,vf,mug,muf,kL,kV,CpL,CpV,hcRef)		
 				!CALL hTPCavallini(CoilType,ID,xRef,mRef,vg,vf,mug,muf,kL,kV,CpL,CpV,sigma,hfg,DT,hcRef)
-				!CALL hTPShahCond(ID,xRef,mRef,vg,vf,muRef,mug,muf,kL,CpL,Psat,Pcrit,hcRef) 
-				!CALL hTPCZ(ID,Quality,mRef,vg,vf,mug,muf,kL,CpL,hcRef)
+				!CALL hTPShahCond(ID,xRef,mRef,mug,muf,kL,kV,CpL,CpV,Psat,Pcrit,hcRef) 
+				!CALL hTPCZ(ID,xRef,mRef,vg,vf,mug,muf,kL,CpL,hcRef)
 		ELSEIF(CoilType .EQ. MCCONDENSER) THEN
 				CALL hTPShahCond(ID,xRef,mRef,mug,muf,kL,kV,CpL,CpV,Psat,Pcrit,hcRef)
                 !(ID,xRef,mRef,vgi,vfi,muRef,mug,muf,kL,kV,CpL,CpV,Psat,Pcrit,hTP)
@@ -652,7 +663,7 @@ REAL Gref     !Refrigerant mass flux, [kg/s-m^2]
 		  CpRef=CpL
 		END IF
 		CALL hSPDittus(CoilType,ID,mRef,xRef,muRef,mug,muf,kRef,CpRef,hcRef)
-		!CALL hSPPetukhov(ID,mRef,Quality,mu,mug,muf,k,Cp,hcRef)
+		!CALL hSPPetukhov(ID,mRef,xRef,muRef,mug,muf,kRef,CpRef,hcRef) !(ID,mRef,Quality,mu,mug,muf,k,Cp,hcRef)
 		!CALL hSPGnielinski(ID,mRef,xRef,muRef,mug,muf,kRef,CpRef,hcRef)
 	END IF
 
@@ -768,9 +779,12 @@ REAL Ke       !Expansion coefficient, [-]
 !Flow:
 
   !Obtain Air Properties
-  muA = VISCA(REAL(tAiCoil)) !Viscosity
-  CPair=CPA(REAL(tAiCoil))
-  kA = AKA(REAL(tAiCoil))   !Conductivity
+  !muA = VISCA(REAL(tAiCoil)) !Viscosity !RS: Replace: VISCA (2/19/14)
+  muA=Viscosity(tAiCoil,AirProp%APHumRat) !RS: Replace: VISCA (2/19/14)
+  !CPair=CPA(REAL(tAiCoil))  !RS: Replace: CPA (2/19/14)
+  CPair=CPAirFunction(tAiCoil,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
+  !kA = AKA(REAL(tAiCoil))   !Conductivity   !RS: Replace: AKA (2/19/14)
+  kA=Conductivity(tAiCoil,AirProp%APHumRat) !RS: Replace: VISCA (2/19/14)
   PrAir = muA*CPair/kA !Prandtl #
 
   !Outside radius, including collar  Sankar adjusted frost thickness
@@ -1755,6 +1769,7 @@ SUBROUTINE hTPCavallini(CoilType,ID,xRef,mRef,vgi,vfi,mug,muf,kL,kV,CpL,CpV,sigm
 
 IMPLICIT NONE
 
+
 !Subroutine passing variables:
 !Inputs:
 INTEGER CoilType !1=Condenser; 2=Evaporator; 
@@ -2550,14 +2565,15 @@ REAL PF        !Pressure enhancement factor
 		!CALL TwoPhaseDPMoriyama(CoilType,tRi,tRo,pRi,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
         !                        dPmom,dPgrav,mRef,ID,muRef,mug,muf,sigma,HtCoil,Lcoil)
 	ELSE
-		!CALL TWOPhasedPChoi(TubeType,tRi,tRo,hf,hg,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod, &
-		!					dPfric,dPmom,dPgrav,mRef,ID,OD,muRef,mug,muf, &
-		!					HtCoil,Lcoil)
+       !CALL TWOPhasedPChoi(hf,hg,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod, &
+							!dPfric,dPmom,dPgrav,mRef,ID,mug,muf, &
+							!HtCoil,Lcoil)
+                            
 		CALL TWOPhasedPSouza(xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
 							 dPfric,dPmom,dPgrav,mRef,ID,mug,muf,HtCoil,Lcoil) !Modified by ISI 07/09/06 !dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
 
-		!CALL TWOPhasedPLM(tRi,tRo,pRi,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
-        !                  dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
+  		!CALL TWOPhasedPLM(xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
+    !                          dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
 	END IF
   ELSEIF ((xRi .LT. 1 .AND. xRi .GT. 0) .AND. xRo .GE. 1) THEN !Evaporator outlet
 
@@ -2585,19 +2601,20 @@ REAL PF        !Pressure enhancement factor
 			!CALL TwoPhaseDPMoriyama(CoilType,tRi,tRo,pRi,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
 			!						dPmom,dPgrav,mRef,ID,muRef,mug,muf,sigma,HtCoil,Lcoil)
 
-			!CALL TWOPhasedPLM(tRi,tRo,pRi,xRi,0.9999,vRi,vgi,vfi,vgo,vfo,Lmod*FracTP,dPfricTP, &
-		    !                  dPmomTP,dPgravTP,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
+			!CALL TWOPhasedPLM(xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
+            !                      dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
 
 		ELSE
 
-			!CALL TWOPhasedPChoi(TubeType,tRi,tRo,hf,hg,xRi,0.9999,vRi,vgi,vfi,vgo,vfo,Lmod*FracTP, &
-			!					dPfricTP,dPmomTP,dPgravTP,mRef,ID,OD,muRef,mug,muf, &
-			!					HtCoil,Lcoil)
+			!CALL TWOPhasedPChoi(hf,hg,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod, &
+			!				dPfric,dPmom,dPgrav,mRef,ID,mug,muf, &
+			!				HtCoil,Lcoil)
+            
 			CALL TWOPhasedPSouza(xRi,0.9999,vRi,vgi,vfi,vgo,vfo,Lmod*FracTP, & !tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
 								 dPfricTP,dPmomTP,dPgravTP,mRef,ID,mug,muf,HtCoil,Lcoil) !Modified by ISI 07/09/06 !dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
 		
-			!CALL TWOPhasedPLM(tRi,tRo,pRi,xRi,0.9999,vRi,vgi,vfi,vgo,vfo,Lmod*FracTP,dPfricTP, &
-		    !                  dPmomTP,dPgravTP,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
+  		    !CALL TWOPhasedPLM(xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
+        !                      dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
 
 		END IF
 

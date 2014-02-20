@@ -9,12 +9,13 @@ MainDesignData,
     2, !field System Type
     TRUE, !field Is in Cooling Mode
     !FALSE, !field Is in Cooling Mode (NOT with -18C outside!)
-    R410A, !field Refrigerant Name
+    R22, !R410A, !field Refrigerant Name
     95, !38, !50, !95, !field Outdoor Entering Drybulb Temperature [°F]
-    75, !35, !45,  !75, !field Outdoor Entering Wetbulb Temperature [°F]
+    75, !35, !45, !75, !field Outdoor Entering Wetbulb Temperature [°F]
     80, !90, !70, !80, !field Indoor Entering Drybulb Temperature [°F]
     67, !53, !65, !67, !field Indoor Entering Wetbulb Temperature [°F]
     9.53; !field Design Refrigerant Charge Mass [lbm]
+
 
 CompressorData,
     H89B283ABC:60:230:1, !field Compressor Model
@@ -579,16 +580,16 @@ ODCcktVelocityProfileRawData,
 !Group Fluid Properties
 
 FluidNames,
-    !R22, REFRIGERANT,     !- name and type for fluid 1
+    R22, REFRIGERANT; !,     !- name and type for fluid 1
     !R134a, REFRIGERANT,   !- name and type for fluid 2
     !R407c, REFRIGERANT,   !- name and type for fluid 3
-    R410a, REFRIGERANT;   !- name and type for fluid 4
+    !R410a, REFRIGERANT;   !- name and type for fluid 4
     !R417a, REFRIGERANT,   !- name and type for fluid 5
     !PROPANE, REFRIGERANT; !- name and type for fluid 6
     
-!##include fluidDataFiles\R22.idf
+##include fluidDataFiles\R22.idf
 !##include fluidDataFiles\R134a.idf
 !##include fluidDataFiles\R407c.idf
-##include fluidDataFiles\R410a.idf
+!##include fluidDataFiles\R410a.idf
 !##include fluidDataFiles\R417a.idf
 !##include fluidDataFiles\Propane.idf

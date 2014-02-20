@@ -40,18 +40,22 @@
 ! ************************************** !
 ! -- ISSUES/BUGS/TICKETS --------------- !
 ! -------------------------------------- !
-! NA
+! A better look needs to be taken at why the root bracketing is exponential.
+! "upperBoundVal = upperBoundVal + 2.0**(ICOUNT-1)*DX*SIGN"
 
 ! ************************************** !
 ! -- CHANGELOG ------------------------- !
 ! -------------------------------------- !
 ! 2012-12-11 | ESL | Initial header
-! 2012-12-12 | RAS | Updated header
-! 12/28/2013 | Karthik | Updated the algorithm and some comments.
+! 2012-12-29 | JEH | Filled out header
+! 2013-12-18 | RAS | Updated Issues & To-Do
+! 2013-12-28 | Karthik | Updated the algorithm and some comments.
 
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
+! The root bracketing needs to be looked at. In addition, some documentation would be good.
+!
 ! Brent's method is a root-finding algorithm which combines root bracketing, bisection, and inverse quadratic interpolation. 
 ! It is sometimes known as the van Wijngaarden-Deker-Brent method. 
 ! This link below takes you to a soft copy of the book which explains further on how method works and 
@@ -59,7 +63,13 @@
 ! Link is - http://www.fing.edu.uy/if/cursos/fiscomp/extras/numrec/book/f9.pdf
 ! I strongly recommend study the approach with Wikipedia first and then
 ! Once you have got a good understanding then you can study in above link. (Karthik - 12/28/2013)
-
+! ************************************** !
+! -- REFERENCES ------------------------ !
+! -------------------------------------- !
+! The routine is modified from the ZBRENT function given in Section 9.3
+! of Numerical Recipes (1996). Some additional comments have been taken
+! from or influenced by Forsythe et al. (1977).
+! (List Numerical Recipes, Forsythe, etc.)
 
 !      /*---------------------------------------------------------------------
 !        |  METHOD: ZeroConvergence
@@ -90,7 +100,7 @@
     implicit none
     !
     LOGICAL FIRST
-    INTEGER IterationsMAX !Maximum Number of Itrerations before we Return from the Method
+    INTEGER IterationsMAX !Maximum Number of Iterations before we Return from the Method
     REAL lowerBoundValue,FunctionValueForLowerBound,upperBoundValue,FunctionValueForUpperBound,FunctionPointer,TOL1,TOL2
     REAL A,B,C,D,E,EPS,FA,FB,FC,TOLX,TOLF,XM,P,Q,R,S,EPSDEFAULT
     REAL DX, ONE, EPS0
@@ -120,7 +130,7 @@
         FIRST = .FALSE.
     END IF
     
-    !Karthik - We use the Same Variable Names as with the original recipie Book, for clarity and easy understanding.
+    !Karthik - We use the Same Variable Names as with the original recipe Book, for clarity and easy understanding.
 
     A = lowerBoundValue
     B = upperBoundValue
@@ -130,7 +140,7 @@
     !Karthik - Check if the Root is Bracketed or NOT and display error message to the user.
     
        IF ((FA .GT.0. .AND. FB .GT. 0.) .OR. (FA .LT.0. .AND. FB .LT. 0.)) THEN
-        !Karthik-Root is NOT Brackted.One of the possibility of this is a wrong calculation of the upperBoundValue from the Guess3 Method
+        !Karthik-Root is NOT Bracketed. One of the possibility of this is a wrong calculation of the upperBoundValue from the Guess3 Method
        END IF
        
     C = B
@@ -190,11 +200,11 @@
         
         IF ((ABS(E) .GE. TOLX) .OR. (ABS(FA) .GT. ABS(FB))) THEN
             
-            S = FB/FA !Atempt Inverse Quadratic Interpolation.
-            IF (A .EQ. C) THEN
+            S = FB/FA 
+            IF (A .EQ. C) THEN  !Linear Interpolation
                 P = 2.0*XM*S
                 Q = 1.0 - S        
-            ELSE
+            ELSE    !Attempt Inverse Quadratic Interpolation.
                 Q = FA/FC
                 R = FB/FC
                 S = FB/FA

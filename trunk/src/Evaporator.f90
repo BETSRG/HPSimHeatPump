@@ -860,7 +860,9 @@ CONTAINS
                                     LmodTube=Lcoil/CoilSection(NumSection)%NumOfCkts
                                     LmodTubeKeep=LmodTube
                                 ELSE
-                                    LmodTube=LmodTubeKeep-CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(1)%Len
+                                    LmodTube=LmodTubeKeep/NumOfMods 
+                                !LmodTube=LModTube-CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(1)%Len/NumOfMods !RS: Debugging: Adding
+        !RS: con. "NumOfMods" to account for more than one segment (2/4/14)
                                 END IF
                             END IF
                             CALL CalcCoilSegment(NumSection,I,I,J,K,CoilType)  !RS: Debugging: Temporarily setting in an Epsilon-NTU method
@@ -957,7 +959,8 @@ CONTAINS
                 END IF
     
                 CALL CalcMeanProp(tAiCoil,tAoCoil,tAmod)    !RS Comment: Mean Air Coil Temperature
-                CPair=CPA(REAL(tAmod))  !RS Comment: Finding the specific heat of air
+                !CPair=CPA(REAL(tAmod))  !RS Comment: Finding the specific heat of air   !RS: Replace: CPA (2/19/14)
+                CPair=CPAirFunction(tAmod,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
                 Cair=mAiCoil*CPAir  !RS Comment: Finding the capacity rate of air
     
                 tAoCoil=tAiCoil+CoilSection(NumSection)%QsectionSens/Cair   !RS Comment: Air Coil Outlet Temperature
@@ -1078,7 +1081,8 @@ CONTAINS
     tSAvgCoil = (tSiCoil+tSoCoil)/2
     CoilParams(2)%TSurfCoil=tSAvgCoil
     !Coil air side outlet condition
-    CPair=CPA(REAL(tAmod))  !RS Comment: Finding the specific heat of air
+    !CPair=CPA(REAL(tAmod))  !RS Comment: Finding the specific heat of air   !RS: Replace: CPA (2/19/14)
+    CPair=CPAirFunction(tAmod,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
     Cair=mAiCoil*CPAir  !RS Comment: Finding the capacity rate of air
 
     IF (ABS(QcoilSens) .GT. ABS(Qcoil)) THEN !Make sure sensible heat no larger than total heat, ISI - 12/07/07
@@ -1089,7 +1093,8 @@ CONTAINS
     hAoCoil=hAiCoil+Qcoil/mAiCoil   !RS Comment: Finding the Coil Outlet Air Enthalpy
 
     !Fan air side inlet condition
-    CPair=CPA(REAL(tAoCoil))    !RS Comment: Finding the specific heat of air
+    !CPair=CPA(REAL(tAoCoil))    !RS Comment: Finding the specific heat of air   !RS: Replace: CPA (2/19/14)
+    CPair=CPAirFunction(tAoCoil,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
     Cair=mAiCoil*CPAir  !RS Comment: Finding the capacity rate of air
 
     IF (SystemType .NE. REHEAT) THEN !For reheat system, skip this
@@ -1233,19 +1238,19 @@ CONTAINS
     EvapOUT%EOutpRoC=pRoCoil  !RS: Debugging: Formerly OUT(1)
     EvapOUT%EOuthRoC=hRoCoil  !RS: Debugging: Formerly OUT(2)
     EvapOUT%EOuttAoC=tAoCoil !RS: Debugging: Formerly OUT(3)
-    EvapOUT%EOutrhAoC=rhAoCoil    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(4)
-    EvapOUT%EOutDPair=DPair   !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(5)
+    EvapOUT%EOutrhAoC=rhAoCoil    !RS: Debugging: Only used as an output  !RS: Debugging: Formerly OUT(4)
+    EvapOUT%EOutDPair=DPair   !RS: Debugging: Only used as an output  !RS: Debugging: Formerly OUT(5)
     EvapOUT%EOutpRiC=pRiCmp   !RS: Debugging: Formerly OUT(6)
     EvapOUT%EOuthRiC=hRiCmp   !RS: Debugging: Formerly OUT(7)
     EvapOUT%EOuttRiC=tRiCmp   !RS: Debugging: Formerly OUT(8)
     EvapOUT%EOutxRiC=xRiCmp   !RS: Debugging: Formerly OUT(9)
     EvapOUT%EOuttSHiC=tSHiCmp !RS: Debugging: Formerly OUT(10)
     EvapOUT%EOutQC=Qcoil   !RS: Debugging: Formerly OUT(11)
-    EvapOUT%EOutQCSens=QcoilSens   !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(12)
+    EvapOUT%EOutQCSens=QcoilSens   !RS: Debugging: Only used as an output  !RS: Debugging: Formerly OUT(12)
     EvapOUT%EOutMSucLn=MassSucLn   !RS: Debugging: Formerly OUT(13)
     EvapOUT%EOutMC=0  !RS: Debugging: Never really used?   !RS: Debugging: Formerly OUT(14)
-    EvapOUT%EOutWtAl=WeightAluminum  !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(15)
-    EvapOUT%EOutWtCu=WeightCopper    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(16)
+    EvapOUT%EOutWtAl=WeightAluminum  !RS: Debugging: Only used as an output  !RS: Debugging: Formerly OUT(15)
+    EvapOUT%EOutWtCu=WeightCopper    !RS: Debugging: Only used as an output  !RS: Debugging: Formerly OUT(16)
     EvapOUT%EOutErrFlag=ErrorFlag   !RS: Debugging: Formerly OUT(17)
 
     CALL Evaporator_Helper_1
@@ -3090,8 +3095,11 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 ELSEIF (I .EQ. 3) THEN
                     CALL GetObjectItem('ODCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-                ELSE
+                ELSEIF (I .EQ. 4) THEN
                     CALL GetObjectItem('ODCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                ELSE
+                    CALL GetObjectItem('ODCcktCircuit5_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 END IF
                     Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)                
@@ -3956,10 +3964,6 @@ INTEGER :: NumSection !Loop counter, ISI - 09/10/07
 
 !FLOW:
 
-  !air side inlet conditions
-  CPair=CPA(REAL(tAiCoil))  !RS Comment: Finding the specific heat of air
-  Cair=mAiCoil*CPAir    !RS Comment: Finding the capacity rate of air
-
   AirPropOpt=2
   AirProp%APTDB=tAiCoil    !RS: Debugging: Formerly AirProp(1)
   AirProp%APRelHum=rhAiCoil   !RS: Debugging: Formerly AirProp(3)
@@ -3967,6 +3971,12 @@ INTEGER :: NumSection !Loop counter, ISI - 09/10/07
   hAiCoil=AirProp%APEnth    !RS: Debugging: Formerly AirProp(4)
   wAiCoil=AirProp%APHumRat !ISI - 08/07/06    !RS: Debugging: Formerly AirProp(2)
 
+  !air side inlet conditions
+  !RS: Replace: Moving so as to update the relative humidity before calculating
+  !CPair=CPA(REAL(tAiCoil))  !RS Comment: Finding the specific heat of air   !RS: Replace: CPA (2/19/14)
+  CPair=CPAirFunction(tAiCoil,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
+  Cair=mAiCoil*CPAir    !RS Comment: Finding the capacity rate of air
+  
   tAoCoil=tAiCoil
   wAoCoil=wAiCoil
 
@@ -5412,7 +5422,8 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
             END IF
 
 			!Calc. Cair
-			CPair=CPA(REAL(tAmod))
+			!CPair=CPA(REAL(tAmod))  !RS: Replace: CPA (2/19/14)
+            CPair=CPAirFunction(tAmod,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 			cAir=mAiMod*cpAir
 
 			!Calc. Cmin
@@ -6287,7 +6298,7 @@ REAL FrostThk
 
 	hAoSatSurf=hAiMod-(hAiMod-hAoWet)/(1-EXP(-NTUoWet))
 
-	tAoSat=TS(hAoSatSurf)
+	tAoSat=TS(hAoSatSurf)   !RS: Replace: TS (2/19/14)
 
 	TdbAoWet=tAoSat+(tAiMod-tAoSat)*EXP(-NTUoWet)
 
@@ -6476,7 +6487,7 @@ REAL,PARAMETER :: Le=0.89 !1  !Lewis number
 
 		hAoSatSurf=hAiMod-(hAiMod-hAoWet)/(1-EXP(-NTUoWet))
 
-		tAoSat=TS(hAoSatSurf)
+		tAoSat=TS(hAoSatSurf)   !RS: Replace: TS (2/19/14)
 
 		TdbAoWet=tAoSat+(tAiMod-tAoSat)*EXP(-NTUoWet)
 
@@ -6742,7 +6753,8 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
     !Tube information
     LmodTube=Ltube/NumOfMods
 
-    CPair=CPA(REAL(tAiCoil))
+    CPair=CPA(REAL(tAiCoil))    !RS: Replace: CPA (2/19/14)
+    CPair=CPAirFunction(tAiCoil,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
     Cair=mAiCoil*CPAir
 
     AirPropOpt=2
@@ -6994,7 +7006,8 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
             CALL CalcMeanProp(Slab(I)%tAi,Slab(I)%tAo,tAmod)    !Calculating mean module air temperature
 
             !Coil air side outlet conditions
-            CPair=CPA(REAL(tAmod))
+            CPair=CPA(REAL(tAmod))  !RS: Replace: CPA (2/19/14)
+            CPair=CPAirFunction(tAmod,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
             Cair=mAicoil*CPAir
 
             Slab(I)%tAo=Slab(I)%tAi+Slab(I)%Qslab/Cair
@@ -7051,14 +7064,16 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
     END IF
 
     !Coil air side outlet conditions
-    CPair=CPA(REAL(tAmod))
+    CPair=CPA(REAL(tAmod))  !RS: Replace: CPA (2/19/14)
+    CPair=CPAirFunction(tAmod,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
     Cair=mAicoil*CPAir
 
     tAoCoil=tAiCoil+QcoilSens/Cair
     hAoCoil=hAiCoil+Qcoil/mAiCoil
 
     !Fan air side inlet conditions
-    CPair=CPA(REAL(tAoCoil))
+    CPair=CPA(REAL(tAoCoil))    !RS: Replace: CPA (2/19/14)
+    CPair=CPAirFunction(tAoCoil,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
     Cair=mAiCoil*CPAir
 
     IF (DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through

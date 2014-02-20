@@ -137,7 +137,7 @@
             !RS: This is for design mode
             IREFC=0 !for specified subcooling, set to zero
             !for specifed flow control, set to 3 
-        ELSE    !RS: This is for simulation modes
+        ELSE    !RS: This is for the simulation modes
             IREFC=3
         END IF
 
@@ -310,7 +310,7 @@
             END SELECT
         END IF
 
-        PiCnd=CondOUT%COutpRiC    !RS: Debugging: Formerly CondOUT(1)
+        PiCnd=CondOUT%COutpRiC   !RS: Debugging: Formerly CondOUT(1)
         PiExp=CondOUT%COutpRiE   !RS: Debugging: Formerly CondOUT(10)
         HiExp=CondOUT%COuthRiE   !RS: Debugging: Formerly CondOUT(11)
         TiExp=CondOUT%COuttRiE   !RS: Debugging: Formerly CondOUT(12)

@@ -933,7 +933,8 @@
     
             CALL CalcMeanProp(tAiCoil,tAoCoil,tAmod)    !RS Comment: Mean Air Coil Temperature
     
-            CPair=CPA(REAL(tAmod))  !RS Comment: Finding the specific heat of air
+            !CPair=CPA(REAL(tAmod))  !RS Comment: Finding the specific heat of air   !RS: Replace: CPA (2/19/14)
+            CPair=CPAirFunction(tAMod,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
             Cair=mAicoil*CPAir      !RS Comment: Finding the capacity rate of air
     
             tAoCoil=tAiCoil+Qcoil/Cair  !RS Comment: Air Coil Outlet Temperature
@@ -1033,14 +1034,16 @@
     tSoCoil=tSoSUM/NmodLast
 
     !Coil air side outlet conditions
-    CPair=CPA(REAL(tAmod))
+    !CPair=CPA(REAL(tAmod))  !RS: Replace: CPA (2/19/14)
+    CPair=CPAirFunction(tAmod,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
     Cair=mAicoil*CPAir
     
     tAoCoil=tAiCoil+Qcoil/Cair
     hAoCoil=hAiCoil+Qcoil/mAiCoil
 
     !Fan air side inlet conditions
-    CPair=CPA(REAL(tAoCoil))
+    !CPair=CPA(REAL(tAoCoil))    !RS: Replace: CPA (2/19/14)
+    CPair=CPAirFunction(tAiCoil,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
     Cair=mAiCoil*CPAir
 
     IF (DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
@@ -2203,11 +2206,11 @@
     NumOfSections=1 !ISI - 09/10/07
 
     !***** Get circuit info *****
-    !IF (ErrorFlag .NE. NOERROR) THEN 
-        !ErrorFlag=CKTFILEERROR !RS: Debugging: Could also be (and often is) a convergence error
-        !CALL InitCondenserCoil_Helper_1
-        !RETURN
-    !END IF
+    IF (ErrorFlag .NE. NOERROR) THEN 
+        ErrorFlag=CKTFILEERROR !RS: Debugging: Could also be (and often is) a convergence error
+        CALL InitCondenserCoil_Helper_1
+        RETURN
+    END IF
     
     !**************************** Model *************************************
 
@@ -2497,9 +2500,12 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 ELSEIF (I .EQ. 3) THEN
                     CALL GetObjectItem('ODCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
-                ELSE
+                ELSEIF (I .EQ. 4) THEN
                     CALL GetObjectItem('ODCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                ELSE 
+                    CALL GetObjectItem('ODCcktCircuit5_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 END IF
                     Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                     DO J=1, Ckt(I)%Ntube
@@ -3996,10 +4002,6 @@ END IF
 
     !FLOW:
 
-    !air side inlet conditions
-    CPair=CPA(REAL(tAiCoil))
-    Cair=mAiCoil*CPAir
-
     AirPropOpt=2
     AirProp%APTDB=tAiCoil  !RS: Debugging: Formerly AirProp(1)
     AirProp%APRelHum=rhAiCoil !RS: Debugging: Formerly AirProp(3)
@@ -4007,6 +4009,12 @@ END IF
     hAiCoil=AirProp%APEnth  !RS: Debugging: Formerly AirProp(4)
     wbAiCoil=AirProp%APTWB !RS: Debugging: Formerly AirProp(5)
 
+    !air side inlet conditions
+    !RS: Replace: Moving after above PsyChart call to update humidity ratio
+    CPair=CPA(REAL(tAiCoil))    !RS: Replace: CPA (2/19/14)
+    CPair=CPAirFunction(tAiCoil,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
+    Cair=mAiCoil*CPAir
+    
     IF (DrawBlow .EQ. BLOWTHROUGH) THEN !Blow through
         tAiCoil=tAiCoil+PwrFan/Cair
         hAiCoil=hAiCoil+PwrFan/mAiCoil
@@ -5024,6 +5032,7 @@ END IF
     USE CoilCalcMod
     USE AirPropMod
     USE OilMixtureMod
+    !USE DataGlobals_HPSim   !RS: Debugging: Cavallini (2/14/14)
 
     IMPLICIT NONE
 
@@ -5207,7 +5216,8 @@ END IF
         END IF
 
         !Calc. Cair
-        CPair=CPA(REAL(tAmod))
+        !CPair=CPA(REAL(tAmod))  !RS: Replace: CPA (2/19/14)
+        CPair=CPAirFunction(tAmod,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
         cAir=mAiMod*cpAir
 
         !Calc. Cmin
@@ -5356,6 +5366,10 @@ END IF
     CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,
     rhAoMod=AirProp%APRelHum  !RS: Debugging: Formerly AirProp(3)
     wbAoMod=AirProp%APTWB  !RS: Debugging: Formerly AirProp(5)
+    
+    !SigmaTest=SigmaMod  !RS: Debugging: Cavallini (2/14/14)
+    !hfgTest=hfgRoMod    !RS: Debugging: Cavallini (2/14/14)
+    !DTTest=DT           !RS: Debugging: Cavallini (2/14/14)
 
     RETURN
 
@@ -5557,7 +5571,8 @@ END IF
             END IF
 
             !Calc. Cair !ISI - 12/05/06
-            CPair=CPA(REAL(tAmod))
+            !CPair=CPA(REAL(tAmod))  !RS: Replace: CPA (2/19/14)
+            CPair=CPAirFunction(tAmod,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
             Cair=mAiMod*CPair
 
             !Calc. Cmin
@@ -5623,7 +5638,8 @@ END IF
             END IF
 
             !Calc. Cair !ISI - 12/05/06
-            CPair=CPA(REAL(tAmod))
+            !CPair=CPA(REAL(tAmod))  !RS: Replace: CPA (2/19/14)
+            CPair=CPAirFunction(tAmod,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
             Cair=mAiMod*CPair
 
             !Calc. Cmin
@@ -6267,7 +6283,8 @@ END IF
     !Tube information
     LmodTube=Ltube/NumOfMods
 
-    CPair=CPA(REAL(tAiCoil))
+    CPair=CPA(REAL(tAiCoil))    !RS: Replace: CPA (2/19/14)
+    CPair=CPAirFunction(tAiCoil,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
     Cair=mAiCoil*CPAir
 
     AirPropOpt=2
@@ -6527,7 +6544,8 @@ END IF
             CALL CalcMeanProp(Slab(I)%tAi,Slab(I)%tAo,tAmod)
 
             !Coil air side outlet conditions
-            CPair=CPA(REAL(tAmod))
+            CPair=CPA(REAL(tAmod))  !RS: Replace: CPA (2/19/14)
+            CPair=CPAirFunction(tAmod,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
             Cair=mAicoil*CPAir
 
             Slab(I)%tAo=Slab(I)%tAi+Slab(I)%Qslab/Cair
@@ -6584,14 +6602,16 @@ END IF
     Qcoil=mRefTot*(hRiCoil-hRoCoil)
 
     !Coil air side outlet conditions
-    CPair=CPA(REAL(tAmod))
+    CPair=CPA(REAL(tAmod))  !RS: Replace: CPA (2/19/14)
+    CPair=CPAirFunction(tAMod,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
     Cair=mAicoil*CPAir
 
     tAoCoil=tAiCoil+Qcoil/Cair
     hAoCoil=hAiCoil+Qcoil/mAiCoil
 
     !Fan air side inlet conditions
-    CPair=CPA(REAL(tAoCoil))
+    CPair=CPA(REAL(tAoCoil))    !RS: Replace: CPA (2/19/14)
+    CPair=CPAirFunction(tAiCoil,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
     Cair=mAiCoil*CPAir
 
     IF (DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through

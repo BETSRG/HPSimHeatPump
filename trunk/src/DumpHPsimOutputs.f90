@@ -263,7 +263,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       TwbiCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
       RhoAiC=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 
-      CPair=CPA(TdbiCnd)
+      CPair=CPA(TdbiCnd)    !RS: Replace: CPA (2/19/14)
+      CPair=CPAirFunction(TdbiCnd,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 
       PoCnd=CondOUT%COutpRoC  !RS: Debugging: Formerly CondOUT(5)
       HoCnd=CondOUT%COuthRoC  !RS: Debugging: Formerly CondOUT(6)
@@ -488,7 +489,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	      TwbiEvp=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
 	      RhoAiE=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 
-	      CPair=CPA(TdbiEvp)
+	      CPair=CPA(TdbiEvp)    !RS: Replace: CPA (2/19/14)
+          CPair=CPAirFunction(TdbiEvp,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 
 	      PoEvp=EvapOUT%EOutpRoC  !RS: Debugging: Formerly EvapOUT(1)
 	      HoEvp=EvapOUT%EOuthRoC  !RS: Debugging: Formerly EvapOUT(2)
@@ -527,7 +529,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	      IF (ABS(QevpSens) .GT. ABS(Qevp)) THEN !Make sure sensible heat is never higher than total heat. ISI - 08/02/07
 	          QevpSens = Qevp
 	          hAoEvp=-Qevp/1000/(CFMevp*RhoAiE)+hAiEvp
-	          SpecHeat=CPA(TdbiEvp)
+	          SpecHeat=CPA(TdbiEvp) !RS: Replace: CPA (2/19/14)
+              SpecHeat=CPAirFunction(TdbiEvp,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 	          TdboEvp=-QevpSens/1000/(CFMevp*RhoAiE*SpecHeat)+TdbiEvp
 	          AirPropOpt=1
 	          AirProp%APTDB=TdboEvp    !RS: Debugging: Formerly AirProp(1)
@@ -660,7 +663,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           TwbiCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
           RhoAiC=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 
-          CPair=CPA(TdbiCnd)
+          CPair=CPA(TdbiCnd)    !RS: Replace: CPA (2/19/14)
+          CPair=CPAirFunction(TdbiCnd,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 
           PoCnd=CondOUT%COutpRoC  !RS: Debugging: Formerly CondOUT(5)
           HoCnd=CondOUT%COuthRoC  !RS: Debugging: Formerly CondOUT(6)
@@ -935,7 +939,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       TwbiCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
       RhoAiC=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 
-      CPair=CPA(TdbiCnd)
+      !CPair=CPA(TdbiCnd)    !RS: Replace: CPA (2/19/14)
+      CPair=CPAirFunction(TdbiCnd,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 
       PoCnd=CondOUT%COutpRoC  !RS: Debugging: Formerly CondOUT(5)
       HoCnd=CondOUT%COuthRoC  !RS: Debugging: Formerly CondOUT(6)
@@ -1114,7 +1119,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  TwbiEvp=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
 	  RhoAiE=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 
-	  CPair=CPA(TdbiEvp)
+	  !CPair=CPA(TdbiEvp)    !RS: Replace: CPA (2/19/14)
+      CPair=CPAirFunction(TdbiEvp,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 
 	  PoEvp=EvapOUT%EOutpRoC  !RS: Debugging: Formerly EvapOUT(1)
 	  HoEvp=EvapOUT%EOuthRoC  !RS: Debugging: Formerly EvapOUT(2)
@@ -1153,7 +1159,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  IF (ABS(QevpSens) .GT. ABS(Qevp)) THEN !Make sure sensible heat is never higher than total heat. ISI - 08/02/07
 	      QevpSens = Qevp
 	      hAoEvp=-Qevp/1000/(CFMevp*RhoAiE)+hAiEvp
-	      SpecHeat=CPA(TdbiEvp)
+	      SpecHeat=CPA(TdbiEvp) !RS: Replace: CPA (2/19/14)
+          SpecHeat=CPAirFunction(TdbiEvp,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 	      TdboEvp=-QevpSens/1000/(CFMevp*RhoAiE*SpecHeat)+TdbiEvp
 	      AirPropOpt=1
 	      AirProp%APTDB=TdboEvp    !RS: Debugging: Formerly AirProp(1)
@@ -1228,7 +1235,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 		  QtotSens=-QevpSens+Qcnd	  
 	  END IF
 	  	
-	  CPair=CPA(REAL(TdboCnd))
+	  CPair=CPA(REAL(TdboCnd))  !RS: Replace: CPA (2/19/14)
+      CPair=CPAirFunction(TdboCnd,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 	  hAoCnd=Qtot/1000/(CFMevp*StandardDensity)+hAiEvp
 	  TdboCnd=QtotSens/1000/(CFMevp*StandardDensity*CPair)+TdbiEvp
 
