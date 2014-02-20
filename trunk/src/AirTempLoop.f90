@@ -103,7 +103,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
         WRITE(PrintString, FMT_800) '>> Evaporator entering air temperature: ',TAIIE,Tunit
     END IF
     CALL IssueOutputMessage( '')
-    CALL IssueOutputMessage( TRIM(PrintString))    
+    CALL IssueOutputMessage(TRIM(PrintString))    
 
     HiEvp=EvapIN%EInhRi !RS: Debugging: Formerly EvapIN(3)
 
