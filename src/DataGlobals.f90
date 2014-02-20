@@ -51,6 +51,9 @@ PUBLIC          ! By definition, all variables which are placed in this data
 
           ! MODULE VARIABLES:
 INTEGER :: RefrigIndex = 0  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+!REAL SigmaTest !RS: Debugging: Cavallini (2/14/14)
+!REAL hfgTest    !RS: Debugging: Cavallini (2/14/14)
+!REAL DTTest     !RS: Debugging: Cavallini (2/14/14)
 
           ! DERIVED TYPE DEFINITIONS:
           ! na

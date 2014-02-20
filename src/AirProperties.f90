@@ -19,6 +19,9 @@
 	PUBLIC VISCA
 	PUBLIC AKA
 	PUBLIC TS
+    PUBLIC Conductivity
+    PUBLIC Viscosity
+    PUBLIC CPAirFunction
 
 	CONTAINS
 
@@ -192,7 +195,7 @@
         END FUNCTION
 !***********************************************************************	
 
-        REAL FUNCTION TS(HS)
+        REAL FUNCTION TS(HS)    !RS: Comment: Accurate between about 0 & 35 C according to John Gall (2/20/14)
         implicit none
 
 ! ----------------------------------------------------------------------
@@ -211,4 +214,97 @@
         END FUNCTION
 !***********************************************************************	
 	
+
+    REAL FUNCTION Viscosity(T,omega)
+    !A curve-fit function for viscosity at standard atmospheric pressure using temperature and humidity ratio
+    !Function written by John Gall, 2/19/14, developed using EES tables
+    !Function implemented by Rachel Spitler, 2/19/14
+    !Viscosity returns in kg/m-s or Pa-s
+    REAL T !Drybulb Temperature; enters in C
+    REAL omega !Humidity Ratio; dimensionless (lbs water/lbs air)
+    
+    T=T+273.15 !Temperature must be in Kelvin for calculation
+
+    Viscosity=-2.63899258E-06+1.22041696E-07*T-3.39028951E-10*T**2+9.38085074E-13*T**3-1.74727339E-15*T**4+ &
+    1.88832644E-18*T**5-8.93100404E-22*T**6+3.64937140E-06*omega+5.40589192E-05*omega**2-1.75221009E-03*omega**3- &
+    9.56224115E-02*omega**4+1.01721262E+00*omega**5-2.90411023E-05*omega**6-8.38510499E-08*T*omega- &
+    6.66693283E-07*T*omega**2+2.87464796E-05*T*omega**3+1.08080907E-03*T*omega**4-8.56573935E-03*T*omega**5+ &
+    4.17691666E-10*T**2*omega+2.91669508E-09*T**2*omega**2-1.79714662E-07*T**2*omega**3-4.45348761E-06*T**2*omega**4+ &
+    1.09387919E-05*T**2*omega**5-1.05990032E-12*T**3*omega-5.26376501E-12*T**3*omega**2+5.39307579E-10*T**3*omega**3+ &
+    7.54358241E-09*T**3*omega**4+8.94390631E-08*T**3*omega**5+1.56449520E-15*T**4*omega+1.46752094E-15*T**4*omega**2- &
+    7.74004805E-13*T**4*omega**3-3.02639597E-12*T**4*omega**4-3.18838955E-10*T**4*omega**5-9.77624818E-19*T**5*omega+ &
+    3.62228022E-18*T**5*omega**2+4.21562455E-16*T**5*omega**3-2.88448086E-15*T**5*omega**4+3.02868674E-13*T**5*omega**5
+
+    T=T-273.15 !Converting back to C
+    
+    RETURN
+    END FUNCTION
+    
+    REAL FUNCTION Conductivity(T,omega)
+    !A curve-fit function for conductivity at standard atmospheric pressure using temperature and humidity ratio
+    !Function written by John Gall, 2/19/14, developed using EES tables
+    !Function implemented by Rachel Spitler, 2/19/14
+    !Conductivity returns in kW/m-k
+    REAL T !Drybulb Temperature; enters in C
+    REAL omega !Humidity Ratio; dimensionless (lbs water/lbs air)
+    
+    T=T+273.15 !Temperature must be in Kelvin for calculation
+    
+    Conductivity=9.80682445E-04+9.08985840E-05*T-3.30678040E-08*T**2+2.36199493E-11*T**3-4.99595330E-14*T**4+ &
+    6.99708802E-17*T**5-4.07364329E-20*T**6+4.84035162E-03*omega-4.61926181E-02*omega**2-2.39809182E-01*omega**3- &
+    3.50193353E+01*omega**4+5.77865105E+02*omega**5-6.95234708E-02*omega**6-3.21006378E-05*T*omega+6.11486828E-04*T*omega**2+ &
+    3.13721248E-03*T*omega**3+3.49142245E-01*T*omega**4-4.71971578E+00*T*omega**5+3.58018349E-08*T**2*omega- &
+    3.79079053E-06*T**2*omega**2-1.19688437E-05*T**2*omega**3-1.10105993E-03*T**2*omega**4+4.55860193E-03*T**2*omega**5+ &
+    4.35541522E-10*T**3*omega+1.08299931E-08*T**3*omega**2+9.21252918E-09*T**3*omega**3+5.00126319E-07*T**3*omega**4+ &
+    5.78375627E-05*T**3*omega**5-8.51658226E-13*T**4*omega-1.59630736E-11*T**4*omega**2+3.79447691E-11*T**4*omega**3+ &
+    3.18448537E-09*T**4*omega**4-1.94386839E-07*T**4*omega**5+5.90998540E-16*T**5*omega+9.26815281E-15*T**5*omega**2- &
+    5.97258541E-14*T**5*omega**3-4.11201230E-12*T**5*omega**4+1.81436172E-10*T**5*omega**5
+
+    T=T-273.15 !Converting back to C
+    
+    RETURN
+    END FUNCTION
+    
+    REAL FUNCTION CPAirFunction(T,dw)
+    !Modified from the E+ function PsyCpAirFnWTdb; info on that is below
+    !Function implemented by Rachel Spitler, 2/19/14
+
+          ! FUNCTION INFORMATION:
+          !       AUTHOR         J. C. VanderZee
+          !       DATE WRITTEN   Feb. 1994
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS FUNCTION:
+          ! This function provides the heat capacity of air {kJ/kg-C} as function of humidity ratio.
+
+          ! METHODOLOGY EMPLOYED:
+          ! take numerical derivative of PsyHFnTdbW function
+
+          ! REFERENCES:
+          ! see PsyHFnTdbW ref. to ASHRAE Fundamentals
+          ! USAGE:  cpa = PsyCpAirFnWTdb(w,T)
+
+          ! USE STATEMENTS:
+          ! na
+
+          ! FUNCTION ARGUMENT DEFINITIONS:
+      REAL dw    ! humidity ratio {kgWater/kgDryAir}
+      REAL T    ! input temperature {Celsius}
+      
+          ! FUNCTION LOCAL VARIABLE DECLARATIONS:
+      REAL h1  ! PsyHFnTdbW result of input parameters
+      REAL tt  ! input temperature (T) + .1
+      REAL h2  ! PsyHFnTdbW result of input humidity ratio and tt
+      REAL w  ! humidity ratio
+
+      w=MAX(dw,1.0d-5)
+      h1 = 1.00484d3*T+w*(2.50094d6+1.85895d3*T)
+      tt = T + 0.1d0
+      h2 = 1.00484d3*tt+w*(2.50094d6+1.85895d3*tt)
+      CPAirFunction = ((h2-h1)/0.1d0)/1000 !Converting to kJ
+
+      RETURN
+END FUNCTION CPAirFunction
+    
 	END MODULE AirPropMod
