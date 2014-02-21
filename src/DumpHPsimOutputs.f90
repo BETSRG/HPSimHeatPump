@@ -1235,7 +1235,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 		  QtotSens=-QevpSens+Qcnd	  
 	  END IF
 	  	
-	  CPair=CPA(REAL(TdboCnd))  !RS: Replace: CPA (2/19/14)
+	  !CPair=CPA(REAL(TdboCnd))  !RS: Replace: CPA (2/19/14)
+      !RS: Debugging: Should update the humidity ratio (2/20/14)
       CPair=CPAirFunction(TdboCnd,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 	  hAoCnd=Qtot/1000/(CFMevp*StandardDensity)+hAiEvp
 	  TdboCnd=QtotSens/1000/(CFMevp*StandardDensity*CPair)+TdbiEvp

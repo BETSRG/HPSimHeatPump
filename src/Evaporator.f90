@@ -195,7 +195,7 @@ REAL VelDevMod
 REAL tAiMod,tAoMod,tAmod
 REAL rhAiMod,rhAoMod
 REAL wbAoMod
-REAL hAiMod,hAoMod
+REAL hAiMod,hAoMod,hAmod    !RS: Debugging: Adding the last for !RS: Replace (2/20/14)
 
 REAL DPmod !Pressure drop in module, kPa
 REAL SigmaMod !Surface tension, N/m
@@ -645,6 +645,7 @@ CONTAINS
     REAL DPvalve        !Reversing valve pressure drop, kPa
     REAL hRsuc          !Suction enthalpy, kPa
     INTEGER NumSection  !Section number, ISI - 09/10/07
+    REAL humrat !RS: Replace: CPA (2/20/14) Finding outlet humidity ratio
 
     REAL :: tSAvgCoil = 0.0
     
@@ -959,8 +960,10 @@ CONTAINS
                 END IF
     
                 CALL CalcMeanProp(tAiCoil,tAoCoil,tAmod)    !RS Comment: Mean Air Coil Temperature
+                CALL CalcMeanProp(hAiCoil,hAoCoil,hAmod)    !RS Comment: Mean Air Coil Temperature
                 !CPair=CPA(REAL(tAmod))  !RS Comment: Finding the specific heat of air   !RS: Replace: CPA (2/19/14)
-                CPair=CPAirFunction(tAmod,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
+                humrat=HUMTH(tAmod,hAmod)   !RS: Replace: CPA (2/20/14) Finding outlet humidity ratio
+                CPair=CPAirFunction(tAmod,humrat)  !RS: Replace: CPA (2/19/14)
                 Cair=mAiCoil*CPAir  !RS Comment: Finding the capacity rate of air
     
                 tAoCoil=tAiCoil+CoilSection(NumSection)%QsectionSens/Cair   !RS Comment: Air Coil Outlet Temperature
@@ -1082,7 +1085,10 @@ CONTAINS
     CoilParams(2)%TSurfCoil=tSAvgCoil
     !Coil air side outlet condition
     !CPair=CPA(REAL(tAmod))  !RS Comment: Finding the specific heat of air   !RS: Replace: CPA (2/19/14)
-    CPair=CPAirFunction(tAmod,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
+    CALL CalcMeanProp(tAiCoil,tAoCoil,tAmod)    !RS Comment: Mean Air Coil Temperature
+    CALL CalcMeanProp(hAiCoil,hAoCoil,hAmod)    !RS Comment: Mean Air Coil Humidity
+    humrat=HUMTH(tAmod,hAmod)   !RS: Replace: CPA (2/20/14) Finding outlet humidity ratio
+    CPair=CPAirFunction(tAmod,humrat) !AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
     Cair=mAiCoil*CPAir  !RS Comment: Finding the capacity rate of air
 
     IF (ABS(QcoilSens) .GT. ABS(Qcoil)) THEN !Make sure sensible heat no larger than total heat, ISI - 12/07/07
@@ -1094,7 +1100,8 @@ CONTAINS
 
     !Fan air side inlet condition
     !CPair=CPA(REAL(tAoCoil))    !RS Comment: Finding the specific heat of air   !RS: Replace: CPA (2/19/14)
-    CPair=CPAirFunction(tAoCoil,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
+    humrat=HUMTH(tAoCoil,hAoCoil)  !RS: Replace: CPA (2/20/14) Finding outlet humidity ratio
+    CPair=CPAirFunction(tAoCoil,humrat)  !RS: Replace: CPA (2/19/14)
     Cair=mAiCoil*CPAir  !RS Comment: Finding the capacity rate of air
 
     IF (SystemType .NE. REHEAT) THEN !For reheat system, skip this
@@ -1121,7 +1128,8 @@ CONTAINS
     WetFlag=0
     RowNum=0
     CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
-    IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
+    IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair, &
+    hAoCoil)
     !CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
     !IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
     !Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
@@ -4352,10 +4360,19 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
             END IF
 		ELSE
 			RowNum=CoilSection(NumSection)%Ckt(II)%Tube(III)%RowNum
-		END IF
+        END IF
+        
+        !RS: Replace: Copying this up here so that the air enthalpy will be properly updated for AirSideCalc CALL (2/21/14)
+        AirPropOpt=2
+		AirProp%APTDB=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tAi    !RS: Debugging: Formerly AirProp(1)
+		AirProp%APRelHum=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%rhAi   !RS: Debugging: Formerly AirProp(3)
+		CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+		hAiMod=AirProp%APEnth  !RS: Debugging: Formerly AirProp(4)
+        
 		IF (RowNum .EQ. 0) THEN
 			CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,tAiCoil,mAiCoil,DensityIn,DensityIn,Pt,Pl,Ltube,HtCoil, &
-							 IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)  
+							 IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil, &
+                             AiCoil,FaceVel,hco,DPair,hAiMod)  
             !CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
     !IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
     !Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
@@ -4363,7 +4380,8 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 
 		ELSE
 			CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,tAiMod,mAiCoil,DensityIn,DensityIn,Pt,Pl,Ltube,HtCoil, &
-							 IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
+							 IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil, &
+                             AiCoil,FaceVel,hco,DPair,hAiMod)
         END IF
         !Module surface areas
 	    AoMod=AoCoil*LmodTube/Lcoil
@@ -4471,11 +4489,19 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 		mAiMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%mAi !*Slab(I)%Pass(II)%Ntube
 		tAiMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%tAi
 		rhAiMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%rhAi
+        
+        !RS: Replace: Copying this up here so that the enthalpy of air will be properly updated for AirSideCalc CALL (2/21/14)
+        AirPropOpt=2
+		AirProp%APTDB=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%tAi   !RS: Debugging: Formerly AirProp(1)
+		AirProp%APRelHum=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%rhAi  !RS: Debugging: Formerly AirProp(3)
+		CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+		hAiMod=AirProp%APEnth   !RS: Debugging: Formerly AirProp(4)
 
 		WetFlag=0
 		RowNum=0 !Ckt(I)%Tube(J)%RowNum
 		CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,tAiMod,mAiCoil,DensityIn,DensityIn,Pt,Pl,Ltube,HtCoil, &
-		 				 IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
+		 				 IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil, &
+                         AiCoil,FaceVel,hco,DPair,hAiMod)
         !CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
     !IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
     !Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
@@ -5254,6 +5280,7 @@ REAL PrevhRoMod   !Previous value of hRoMod
 INTEGER RefBCiter   !Iteration loop counter
 LOGICAL IsTransitSegmentCalled !Flag to indicate if 'CalcTransitSegment' is called
 LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
+REAL humrat !RS: Replace: CPA (2/20/14) Finding outlet humidity ratio
 
 !FLOW:
 
@@ -5423,7 +5450,10 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 
 			!Calc. Cair
 			!CPair=CPA(REAL(tAmod))  !RS: Replace: CPA (2/19/14)
-            CPair=CPAirFunction(tAmod,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
+            CALL CalcMeanProp(TAiCoil,TAoCoil,TAmod)    !RS Comment: Mean Air Coil Temperature
+            CALL CalcMeanProp(hAiCoil,hAoCoil,hAmod)    !RS Comment: Mean Air Coil Humidity
+            humrat=HUMTH(tAmod,hAmod)   !RS: Replace: CPA (2/20/14) Finding outlet humidity ratio
+            CPair=CPAirFunction(tAmod,humrat)  !RS: Replace: CPA (2/19/14)
 			cAir=mAiMod*cpAir
 
 			!Calc. Cmin
@@ -6675,6 +6705,7 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
     REAL hRsuc            !Suction enthalpy, kJ/kg
     REAL DPcoil, DPcoilPrev !Coil pressure drop, kPa
     REAL mdothRo !mdot x outlet enthalpy
+    REAL humrat !RS: Replace: CPA (2/20/14) Finding outlet humidity ratio
     
     INTEGER, PARAMETER :: MaxNameLength = 200   !RS: Debugging: Bringing through
 
@@ -6753,16 +6784,17 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
     !Tube information
     LmodTube=Ltube/NumOfMods
 
-    CPair=CPA(REAL(tAiCoil))    !RS: Replace: CPA (2/19/14)
-    CPair=CPAirFunction(tAiCoil,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
-    Cair=mAiCoil*CPAir
-
+    !RS: Replace: Moving this up so that Cp will be calculated with updated air properties
     AirPropOpt=2
     AirProp%APTDB=tAiCoil  !RS: Debugging: Formerly AirProp(1)
     AirProp%APRelHum=rhAiCoil !RS: Debugging: Formerly AirProp(3)
     CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
     hAiCoil=AirProp%APEnth  !RS: Debugging: Formerly AirProp(4)
     wbAiCoil=AirProp%APTWB !RS: Debugging: Formerly AirProp(5)
+    
+    CPair=CPA(REAL(tAiCoil))    !RS: Replace: CPA (2/19/14)
+    CPair=CPAirFunction(tAiCoil,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
+    Cair=mAiCoil*CPAir
 
     IF (DrawBlow .EQ. BLOWTHROUGH) THEN !Blow through
         tAiCoil=tAiCoil+PwrFan/Cair
@@ -7064,7 +7096,7 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
     END IF
 
     !Coil air side outlet conditions
-    CPair=CPA(REAL(tAmod))  !RS: Replace: CPA (2/19/14)
+    !CPair=CPA(REAL(tAmod))  !RS: Replace: CPA (2/19/14)
     CPair=CPAirFunction(tAmod,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
     Cair=mAicoil*CPAir
 
@@ -7072,8 +7104,10 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
     hAoCoil=hAiCoil+Qcoil/mAiCoil
 
     !Fan air side inlet conditions
-    CPair=CPA(REAL(tAoCoil))    !RS: Replace: CPA (2/19/14)
-    CPair=CPAirFunction(tAoCoil,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
+    
+    !CPair=CPA(REAL(tAoCoil))    !RS: Replace: CPA (2/19/14)
+    humrat=HUMTH(tAoCoil,hAoCoil)  !RS: Replace: CPA (2/20/14) Finding outlet humidity ratio
+    CPair=CPAirFunction(tAoCoil,humrat)  !RS: Replace: CPA (2/19/14)
     Cair=mAiCoil*CPAir
 
     IF (DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
@@ -7098,7 +7132,8 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
     WetFlag=0
     RowNum=0   
     CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
-    IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
+    IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair, &
+    hAoCoil)
     
     !CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
     !IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
