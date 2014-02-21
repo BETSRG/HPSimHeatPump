@@ -22,6 +22,7 @@
     PUBLIC Conductivity
     PUBLIC Viscosity
     PUBLIC CPAirFunction
+    PUBLIC HUMTH
 
 	CONTAINS
 
@@ -305,6 +306,72 @@
       CPAirFunction = ((h2-h1)/0.1d0)/1000 !Converting to kJ
 
       RETURN
-END FUNCTION CPAirFunction
+    END FUNCTION CPAirFunction
+    
+    REAL FUNCTION HUMTH (TDB,H) !RS: Replace: Moving a copy here from PsyChart
+
+    !C***********************************************************************
+    !C*    Copyright ASHRAE.  Toolkit for HVAC System Energy Calculations
+    !C***********************************************************************
+    !C*    FUNCTION:               HUMTH
+    !C*
+    !C*    LANGUAGE:               FORTRAN 90
+    !C*
+    !C*    PURPOSE:                Calculate the humidity ratio of moist air
+    !C*                            from dry bulb temperature and enthalpy.
+    !C***********************************************************************
+    !C*    INPUT VARIABLES:
+    !C*    H             Enthalpy                                      (J/kg)
+    !C*    TDB           Dry bulb temperature                             (C)
+    !C*
+    !C*    OUTPUT VARIABLES:
+    !C*    HumTH         Humidity ratio                                   (-)
+    !C*
+    !C*    PROPERTIES:
+    !C*    CpAir         Specific heat of air                        (J/kg C)
+    !C*    CpVap         Specific heat of water vapor                (J/kg C)
+    !C*    Hfg           Reference heat of vaporization of water       (J/kg)
+    !C***********************************************************************
+    !C     MAJOR RESTRICTIONS:     Uses perfect gas relationships
+    !C                             Fit for enthalpy of saturated water vapor
+    !C
+    !C     DEVELOPER:              Shauna Gabel
+    !C                             Michael J. Brandemuehl, PhD, PE
+    !C                             University of Colorado at Boulder
+    !C
+    !C     DATE:                   January 1, 1992
+    !C
+    !C     SUBROUTINES CALLED:     None
+    !C     FUNCTIONS CALLED:       None
+    !C
+    !C     REVISION HISTORY:       None
+    !C
+    !C     REFERENCE:              1989 ASHRAE Handbook - Fundamentals
+    !C***********************************************************************
+    !
+    !
+    !!*** Calculate humidity ratio from dry bulb temperature and enthalpy
+    !!*** hDryAir = CpAir*TDB
+    !!*** hSatVap = Hfg + CpVap*TDB
+    !!*** Enthalpy = hDryAir + W*hSatVap
+    IMPLICIT NONE
+    REAL CpVap,Hfg,CpAir,H,TDB
+
+    H=H*1000 !RS: Debugging: Assuming that h passed in is in kJ/kg (2/20/14)
+    CpVap=1805.
+    Hfg=2501000.
+    CpAir=1004.
+
+    HumTH = (H-CpAir*TDB)/(Hfg+CpVap*TDB)
+    
+    H=H/1000 !RS: Debugging: Converting back to kJ/kg (2/20/14)
+
+    RETURN
+    !***************************
+    !   EVOLUTIONARY HISTORY:
+    !   This subroutine is adapted from ASHRAE Toolkit for Secondary HVAC System 
+    !   Energy Calculations which was originally written in FORTRAN 77.
+    !***************************
+    END FUNCTION HUMTH
     
 	END MODULE AirPropMod

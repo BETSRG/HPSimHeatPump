@@ -684,7 +684,7 @@ END SUBROUTINE hcRefside
 
 SUBROUTINE AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,tAiCoil,mAiCoil,rhoIn,rhoOut,Pt,Pl, &
                        Ltube,HtCoil,ID,OD,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg, &
-					   Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DP)
+					   Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DP,hAir)
 
 !AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,rhoIn,rhoOut,Pt,Pl, &
 !                       Ltube,HtCoil,ID,OD,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg, &
@@ -742,6 +742,7 @@ REAL TubeHeight !Tube Height, [m]
 REAL TubeDepth !Tube Depth, [m]
 REAL FinThk    !Fin thickness, [m]
 REAL FinSpg    !Fin spacing, [m]
+REAL hAir   !RS: Replace: enthalpy of air for replacement (2/21/14)
 
 !Outputs:
 REAL Lcoil    !Coil tube length, [m]
@@ -775,16 +776,18 @@ REAL FinPitch !Fin pitch, [fins/m]
 REAL sigma    !Ratio of Amin to AfrCoil, [-]
 REAL Ki       !Contraction coefficient, [-]
 REAL Ke       !Expansion coefficient, [-]
+REAL humrat !RS: Replace: humidity ratio for replacement (2/21/14)
 
 !Flow:
 
   !Obtain Air Properties
+  humrat=HUMTH(tAiCoil,hAir)    !RS: Replace: humidity ratio for replacement (2/21/14)
   !muA = VISCA(REAL(tAiCoil)) !Viscosity !RS: Replace: VISCA (2/19/14)
-  muA=Viscosity(tAiCoil,AirProp%APHumRat) !RS: Replace: VISCA (2/19/14)
+  muA=Viscosity(tAiCoil,humrat) !RS: Replace: VISCA (2/19/14)
   !CPair=CPA(REAL(tAiCoil))  !RS: Replace: CPA (2/19/14)
-  CPair=CPAirFunction(tAiCoil,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
+  CPair=CPAirFunction(tAiCoil,humrat)  !RS: Replace: CPA (2/19/14)
   !kA = AKA(REAL(tAiCoil))   !Conductivity   !RS: Replace: AKA (2/19/14)
-  kA=Conductivity(tAiCoil,AirProp%APHumRat) !RS: Replace: VISCA (2/19/14)
+  kA=Conductivity(tAiCoil,humrat) !RS: Replace: VISCA (2/19/14)
   PrAir = muA*CPair/kA !Prandtl #
 
   !Outside radius, including collar  Sankar adjusted frost thickness
