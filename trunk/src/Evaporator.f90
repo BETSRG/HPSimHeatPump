@@ -2277,6 +2277,10 @@ END SUBROUTINE PrintEvaporatorResult
     !INTEGER,PARAMETER :: SI=1
     INTEGER,PARAMETER :: IP=2
     
+    IF (ErrorFlag .EQ. 1) THEN  !RS: Carrying over from the condenser initialization
+        ErrorFlag = 0 !JG set a zero error
+    END IF
+    
     !***** Get circuit info *****
     IF (ErrorFlag .GT. CONVERGEERROR) THEN !NE. NOERROR) THEN   !RS: Debugging: Pushing through convergence errors
         ErrorFlag=CKTFILEERROR

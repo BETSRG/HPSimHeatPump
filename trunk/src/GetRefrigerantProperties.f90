@@ -2591,7 +2591,8 @@ REAL FUNCTION PH(Refrigerant,Pressure,Enthalpy,Property,RefrigIndex,Error)
   END DO
 
   ! find bounds of both hi and lo pressure data
-  PressStart = MAX(LoPressStart, HiPressStart)
+  !PressStart = MAX(LoPressStart, HiPressStart)
+  PressStart = MIN(LoPressStart,HiPressStart)  !JG changed this to min rather than MAX
   PressFinish = RefrigData(RefrigNum)%NumSuperTempPts
   ! calculate interpolation ratio w.r.t temperature
   ! This ratio is used to find enthalpies at the given temperature
@@ -2657,6 +2658,9 @@ REAL FUNCTION PH(Refrigerant,Pressure,Enthalpy,Property,RefrigIndex,Error)
 		END IF
 		HiEnthLoProperty=RefrigData(RefrigNum)%SHTemps(HiEnthalpyIndex)
 		HiEnthHiProperty=HiEnthLoProperty
+		If (LoEnthHiProperty .EQ. 0) Then  !JG change this to get the proper lower property.  Otherwise, bad temperatures result
+		LoEnthHiProperty = HiEnthLoProperty
+		Endif
 		PropertyType = 1
 		CASE ('entropy')
 		!CALCULATE ENTROPY OF SUBCOOLED REGION

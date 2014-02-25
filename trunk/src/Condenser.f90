@@ -2205,6 +2205,10 @@
     !FLOW:
 
     NumOfSections=1 !ISI - 09/10/07
+    
+    If (errorflag .EQ. 1) Then 
+    errorflag = 0 !JG set a zero error
+    End IF
 
     !***** Get circuit info *****
     IF (ErrorFlag .NE. NOERROR) THEN 
@@ -3892,7 +3896,7 @@ END IF
         !Find outlet ref. pressure
         CALL CalcSegmentRefOutletPressure(CoilType,TubeType,pRiMod,hgRiMod,hfRiMod, & !CoilType,TubeType,tRiMod,pRiMod,hgRiMod,hfRiMod, &
         hRiMod,hRoMod,xRiMod,vRiMod,vgRiMod,vfRiMod,mRefTot, &
-        muRiMod,mugRiMod,mufRiMod,LmodDis,LmodTPratio, & !muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodLiq,LmodTPratio, & !RS: Debugging: Extraneous SigmaMod
+        muRiMod,mugRiMod,mufRiMod,LmodLiq,LmodTPratio, & !muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodLiq,LmodTPratio, & !RS: Debugging: Extraneous SigmaMod
         IDliqLn,ElevLiqLn,LmodLiq,DPrefMultiplier,pRoMod)
         IF (ErrorFlag .GT. CONVERGEERROR) THEN
             RETURN
@@ -5312,7 +5316,7 @@ END IF
 
         CALL CalcSegmentRefOutletPressure(CoilType,TubeType,pRiMod,hgRiMod,hfRiMod, & !CoilType,TubeType,tRiMod,pRiMod,hgRiMod,hfRiMod, &
         hRiMod,hRoMod,xRiMod,vRiMod,vgRiMod,vfRiMod,mRefMod, &
-        muRiMod,mugRiMod,mufRiMod,LmodDis,LmodTPratio, & !muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodTube,LmodTPratio, &    !RS: Debugging: Extraneous SigmaMod
+        muRiMod,mugRiMod,mufRiMod,LModTube,LmodTPratio, & !muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodTube,LmodTPratio, &    !RS: Debugging: Extraneous SigmaMod
         Dchannel,HtCoil,Lcoil,DPrefMultiplier,pRoMod)
 
         IF (ErrorFlag .GT. CONVERGEERROR) THEN
