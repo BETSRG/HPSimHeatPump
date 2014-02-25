@@ -218,6 +218,7 @@
 
     REAL FUNCTION Viscosity(T,omega)
     !A curve-fit function for viscosity at standard atmospheric pressure using temperature and humidity ratio
+    !Replacing VISCA dry air function
     !Function written by John Gall, 2/19/14, developed using EES tables
     !Function implemented by Rachel Spitler, 2/19/14
     !Viscosity returns in kg/m-s or Pa-s
@@ -243,6 +244,7 @@
     
     REAL FUNCTION Conductivity(T,omega)
     !A curve-fit function for conductivity at standard atmospheric pressure using temperature and humidity ratio
+    !Replacing AKA dry air function
     !Function written by John Gall, 2/19/14, developed using EES tables
     !Function implemented by Rachel Spitler, 2/19/14
     !Conductivity returns in kW/m-k
@@ -260,6 +262,8 @@
     5.78375627E-05*T**3*omega**5-8.51658226E-13*T**4*omega-1.59630736E-11*T**4*omega**2+3.79447691E-11*T**4*omega**3+ &
     3.18448537E-09*T**4*omega**4-1.94386839E-07*T**4*omega**5+5.90998540E-16*T**5*omega+9.26815281E-15*T**5*omega**2- &
     5.97258541E-14*T**5*omega**3-4.11201230E-12*T**5*omega**4+1.81436172E-10*T**5*omega**5
+    
+    Conductivity=Conductivity*0.001
 
     T=T-273.15 !Converting back to C
     
@@ -268,6 +272,7 @@
     
     REAL FUNCTION CPAirFunction(T,dw)
     !Modified from the E+ function PsyCpAirFnWTdb; info on that is below
+    !Replaces CPA dry air function
     !Function implemented by Rachel Spitler, 2/19/14
 
           ! FUNCTION INFORMATION:
