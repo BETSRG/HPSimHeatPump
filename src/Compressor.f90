@@ -168,6 +168,7 @@
     INTEGER ErrorFlag          !0-No error
     !1-Compressor solution error
     !2-Refprop error
+    REAL, SAVE:: FirstTime=1 !Setting a first time variable
 
     INTEGER(2) RefPropErr  !Error flag:1-error; 0-no error
     LOGICAL, EXTERNAL :: IssueRefPropError
@@ -189,7 +190,7 @@ INTEGER,PARAMETER :: PANASONIC = 4
     
     !RS: Debugging: Bringing this over from GetHPSimInputs
       !***************** Compressor data *****************  !RS: Debugging: Moving: Compressor
-
+IF (FirstTime .EQ. 1) THEN
   CALL GetObjectItem('CompressorData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
@@ -233,6 +234,9 @@ INTEGER,PARAMETER :: PANASONIC = 4
   
   CompPAR%CompPwrMult = Numbers(24) !PowerMultiplier    !RS: Debugging: Formerly PAR(25)
   CompPAR%CompMFRMult = Numbers(25) !MassFlowRateMultiplier !RS: Debugging: Formerly PAR(26)
+  
+  FirstTime=2
+END IF
   !TsiCmp = Numbers(26) !UserSpecifiedRatingEvapTemperature
   !TsoCmp = Numbers(27) !UserSpecifiedRatingCondTemperature
   !Subcool = Numbers(28) !UserSpecifiedRatingSubcooling
