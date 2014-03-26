@@ -1,5 +1,57 @@
-        
-    SUBROUTINE SimulationCycle(QSensUnitOut1,LatOutputProvided1,QUnitOut1,TempOut1) !RS: Attempting to pass variables out
+ ! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! This is the main program; it drives the simulation cycle.
+!
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! This program is the driver for the simulation; it does not represent any physical part of the system.
+
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! This program drives the simulation and calls the major routines.
+
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! Output Files:
+!   YorkHP.out
+!   YorkHP.log
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! NA
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains 1 method:
+!    PROGRAM SimulationCycle
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! NA
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! 2013-12-17 | RAS | Filled in header 
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! Some code clean up would be useful, as would adding some more documentation about each section.
+
+    SUBROUTINE SimulationCycle(QSensUnitOut1,QUnitOut1,TempOut1) !LatOutputProvided1,QUnitOut1,TempOut1) !RS: LatOutputProvided1 isn't being used (1/16/14)
 
     !
     !
@@ -34,7 +86,7 @@
     USE CompressorMod
     USE CondenserMod
     USE EvaporatorMod
-    USE AccumulatorMod
+    USE AccumulatorModule
     USE UnitConvertMod
     USE DataSimulation
     USE FrostModel
@@ -48,6 +100,7 @@
     USE DataLoopNode    !RS: Debugging: Bringing in Node array
     USE PackagedTerminalHeatPump, ONLY: HPSimNodes    !RS: Debugging: Bringing in the inlet nodes
     USE DXCoils !RS: Debugging: Bringing in DXCoilHPSimNum
+    !USE ZeroConvergence
     
     IMPLICIT NONE
 
@@ -60,7 +113,7 @@
 
     INTEGER(2) AirPropOpt			!Air prop calc. option
     INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error 
-    REAL AirProp(8)		!Air properties ! VL Comment: Array Size Explanation??
+    !REAL AirProp(8)		!Air properties ! VL Comment: Array Size Explanation??
 
     REAL TimeStart, TimeSpent !TimeStop,    !RS: Debugging: Extraneous
 
@@ -74,7 +127,8 @@
     REAL CHGDIF
 
     REAL WinTrans
-    INTEGER(2) IsCoolingMode !1=yes; 0=no   
+    !INTEGER(2) IsCoolingMode !1=yes; 0=no  
+    REAL, EXTERNAL :: ZeroConvergence
     REAL, EXTERNAL :: ZEROCH
     REAL, EXTERNAL :: CHARGM
     INTEGER :: FTimeStep !Added Sankar transient    !RS: Debugging: Changed TimeStep to FTimeStep to make sure it wasn't being confused with the E+ TimeStep
@@ -87,10 +141,10 @@
     REAL, SAVE :: ODCFlowConst
     LOGICAL, SAVE :: ONETIME = .TRUE.    !RS: Debugging: Keeps the program from calling the unit conversion subroutine over again.
     
-    REAL(r64), INTENT (OUT) :: QUnitOut1            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
-    REAL(r64), INTENT (OUT) :: LatOutputProvided1   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: Testing: Trying to pass variables out
+    REAL(r64), INTENT (OUT) :: QUnitOut1            !Total capacity delivered to zone !RS: Testing: Trying to pass variables out
+    !REAL(r64), INTENT (OUT) :: LatOutputProvided1   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: Testing: Trying to pass variables out
     REAL(r64), INTENT (OUT) :: QSensUnitOut1            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
-    REAL(r64), INTENT (OUT) :: TempOut1            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
+    REAL(r64), INTENT (OUT) :: TempOut1            !Outdoor drybulb entering condenser !RS: Testing: Trying to pass variables out
     REAL :: QSensUnitOut            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
     REAL :: QUnitOut    !Total capacity delivered to zone !RS: Testing: Passing variables out
     REAL :: LatOutputProvided   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: Testing: Trying to pass variables out
@@ -103,6 +157,13 @@
     REAL DummyHR !RS: Debugging
     REAL QRemain    !RS: Debugging: The difference between qtotalout and the qrequired.
     INTEGER ReturnNode, OutsideNode    !RS: Debugging: These hold the numbers for the return and outside air nodes
+    
+    CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
+    INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
+    REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
+    INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
+    INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
+    REAL(r64), DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
     ! Change names of the flags to reflect the intention of the GOTO statements ...
@@ -129,52 +190,80 @@
     FirstTimeAirTempLoop=.TRUE.                               ! VL Comment: default initialization for program or user setting?
     FirstTimeFlowRateLoop=.TRUE.                              ! VL Comment: default initialization for program or user setting?
     FirstTimeChargeLoop=.TRUE.                                ! VL Comment: default initialization for program or user setting?
-    PrnLog=1                                                  ! VL_User_Setting
-    PrnCon=1                                                  ! VL_User_Setting
 
     WinTrans=0.9  ! VL_Magic_Number
-    CondIN(7) = 0 !VL Comment: CondIN(7)=0*WinTrans !stillwater 0.83 kW/m2 !Harbin 0.82 kW/m2 !Singapore 1.03 kW/m2   ! VL_Index_Replace	! VL_User_Setting
-    CondPAR(36)=0.8   ! VL_Magic_Number    ! VL_Index_Replace
+    CondIN%CInSolFlux = 0 !VL Comment: CondIN(7)=0*WinTrans !stillwater 0.83 kW/m2 !Harbin 0.82 kW/m2 !Singapore 1.03 kW/m2   ! VL_Index_Replace	! VL_User_Setting
+    CondPAR%CondSurfAbs=0.8   ! VL_Magic_Number    ! VL_Index_Replace
 
-    EvapIN(8)=0   !VL Comment: EvapIN(8)=0*WinTrans !stillwater 0.63 kW/m2 !Harbin 0.52 kW/m2 !Singapore 0.88 kW/m2   ! VL_Index_Replace	! VL_User_Setting
-    EvapPAR(29)=0.8   ! VL_Magic_Number    ! VL_Index_Replace
+    EvapIN%EInSolFlux=0   !VL Comment: EvapIN(8)=0*WinTrans !stillwater 0.63 kW/m2 !Harbin 0.52 kW/m2 !Singapore 0.88 kW/m2   ! VL_Index_Replace	! VL_User_Setting
+    EvapPAR%EvapSurfAbs=0.8   ! VL_Magic_Number    ! VL_Index_Replace
 
     OPEN(5,FILE='YorkHP.out')     ! VL_User_Setting -- file name
     OPEN(6,FILE='YorkHP.log')     ! VL_User_Setting -- file name
     !OPEN(154,FILE='YorkHP.out')     ! VL_User_Setting -- file name
     !OPEN(155,FILE='YorkHP.log')     ! VL_User_Setting -- file name
+    
+    !RS: Debugging: Moving here from GetHPSimInputs
+    !*************** Accumulator **************** !RS: Debugging: Moving: AirTempLoop? ORNLSolver?
+
+  CALL GetObjectItem('AccumulatorData',1,Alphas,NumAlphas, &
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
+  AccumPAR%AccH = Numbers(1)  !Height !RS: Debugging: If this is 0, then everything here is never called !RS: Debugging: Formerly AccumPAR(2)
+  AccumPAR%AccD = Numbers(2)  !Diameter   !RS: Debugging: Formerly AccumPAR(1)
+  AccumPAR%AccD2 = Numbers(3)  !Upper hole diameter    !RS: Debugging: Formerly AccumPAR(4)
+  AccumPAR%AccD1 = Numbers(4)  !Lower hole diameter    !RS: Debugging: Formerly AccumPAR(3)
+  AccumPAR%AccDP = Numbers(5)  !Rating Pressure Drop   !RS: Debugging: Formerly AccumPAR(7)
+  AccumPAR%AccHDis = Numbers(6) !Hole distance   !RS: Debugging: Formerly AccumPAR(5)
+  AccumPAR%AccDT = Numbers(7) !Rating Temperature Drop !RS: Debugging: Formerly AccumPAR(8)
+  AccumPAR%AccCM = Numbers(8) !Coefficient M   !RS: Debugging: Formerly AccumPAR(9)
+  AccumPAR%AccCB = Numbers(9)    !Coefficient B   !RS: Debugging: Formerly AccumPAR(10)
+  !AccumPAR(6)=(SucLnPAR(2)-SucLnPAR(3)/1000*2) !J-tube diameter, mm or in
 
     !Oil fraction
-    CondPAR(59)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
-    EvapPAR(51)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
+    CondPAR%CondOilMassFrac=0.007          ! VL_Magic_Number    ! VL_Index_Replace   !RS: Debugging: Formerly CONDPAR(42)
+    EvapPAR%EvapOilMassFrac=0.007 !RS: Debugging:Formerly EvapPAR(35)=0.007       ! VL_Magic_Number    ! VL_Index_Replace
     
-    CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
-    EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
+    CondPAR%CondFirstTime=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
+    EvapPAR%EvapFirstTime=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
     ErrorFlag=0   !RS: Debugging: Resetting this at the beginning of each run so that errors don't carry over
     
     !RS: Debugging: Commenting out this section since we're only running cooling-only right now
     !IF (ZoneSysEnergyDemand(1)%RemainingOutputRequired .EQ. 0.0) THEN   !RS: Debugging: Checking the remaining
     IF (ZoneSysEnergyDemand(1)%TotalOutputRequired .EQ. 0) THEN
-        QUnitOut=0
-        LatOutputProvided=0
+        QUnitOut1=0
+        !LatOutputProvided1=0
+        QSensUnitOut1=0
         RETURN
     !ELSEIF (ZoneSysEnergyDemand(1)%RemainingOutputRequired .GT. 0.0) THEN   !RS: Debugging: Checking the remaining
     ELSEIF (ZoneSysEnergyDemand(1)%TotalOutputRequired .GT. 0.0) THEN ! .OR. ZoneSysEnergyDemand(1)%RemainingOutputRequired .GT. 0.0) THEN !RS: Debugging: Is it needing a positive heat gain from HPSim?
         IsCoolingMode=0 !RS: Debugging: Heat pump operating in heating mode
-        CondPAR(27)=IsCoolingMode
-        EvapPar(20)=IsCoolingMode
+        CondPAR%CondCoolMode=IsCoolingMode
+        EvapPar%EvapCoolMode=IsCoolingMode
+        !RS: Debugging: We can't currently handle heating mode, and trying to run it in cooling mode is a bad idea
+        QUnitOut1=0
+        !LatOutputProvided1=0
+        QSensUnitOut1=0
+        CALL HPSimNodes(DXCoilHPSimNum,ReturnNode,OutsideNode) !RS: Debugging: Bringing in the node numbers
+        CALL GetTempsOut(OutDryBulbTemp, OutWetBulbTemp, OutBaroPress, RHiC)
+        TaiE=Node(ReturnNode)%Temp 
+        DummyHR=Node(ReturnNode)%HumRat 
+        CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)
+        !DXCoil(DXCoilHPSimNum)%InletAirMassFlowRate = DXCoil(DXCoilHPSimNum)%InletAirMassFlowRateMax    !RS: Debugging: Otherwise it's 0
+        DXCoil(DXCoilHPSimNum)%OutletAirTemp     = TaiE
+        DXCoil(DXCoilHPSimNum)%OutletAirHumRat   = DummyHR
+        DXCoil(DXCoilHPSimNum)%OutletAirEnthalpy = DXCoil(DXCoilHPSimNum)%InletAirEnthalpy
         RETURN  !RS: Debugging: We can't currently handle heating mode, and trying to run it in cooling mode is a bad idea
     ELSE
         IsCoolingMode=1 !RS: Debugging: The heat pump is operating in cooling mode
-        CondPAR(27)=IsCoolingMode
-        EvapPar(20)=IsCoolingMode
+        CondPAR%CondCoolMode=IsCoolingMode
+        EvapPar%EvapCoolMode=IsCoolingMode
     END IF
     
     IF (IsCoolingMode .NE. LastCoolingMode) THEN   !RS: Debugging: Only deallocating and reallocating if cooling mode changed between iterations
         CALL EndCondenserCoil
         CALL EndEvaporatorCoil
-        !CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" only when needed
-        !EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" only when needed
     END IF
 
     CALL HPSimNodes(DXCoilHPSimNum,ReturnNode,OutsideNode) !RS: Debugging: Bringing in the node numbers
@@ -189,7 +278,7 @@
     ELSE    !RS: System with return air
         !TaiE=MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
         !CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
-        TaiE=Node(ReturnNode)%Temp   !RS: Debugging: Hard coding in for test case of RA-only
+        TaiE=Node(ReturnNode)%Temp
         DummyHR=Node(ReturnNode)%HumRat 
         CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)
     END IF
@@ -238,10 +327,14 @@
 
     IF (ONETIME) THEN   !RS: Debugging: Only called once
         
-        CALL UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR, & !TxvPAR,  & !RS: Debugging: Extraneous
-        AccumPAR,FilterPAR,CFMcnd,CFMevp,TaiC,TaiE,TWiC,TWiE, &
-        Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure, &
-        ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength,Tdis,Tliq)
+        CALL UnitConvert
+        TaiE=TaiE*1.8+32
+        TaiC=TaiC*1.8+32
+        
+        !CALL UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR, & !TxvPAR,  & !RS: Debugging: Extraneous
+        !AccumPAR,FilterPAR,CFMcnd,CFMevp,TaiC,TaiE,TWiC,TWiE, &
+        !Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure, &
+        !ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength,Tdis,Tliq)
         
         ONETIME = .FALSE.
 
@@ -253,10 +346,10 @@
     END IF
     
     BaroPressure=(OutBaroPress/1000)    !RS: Debugging: Setting the HPSim baro pressure equal to the E+ (kPa from Pa)
-    EvapPAR(31)=BaroPressure
-    CondPAR(38)=BaroPressure
+    EvapPAR%EvapBarPress=BaroPressure
+    CondPAR%CondBarPress=BaroPressure
     
-    CALL InitAccumulator(AccumPAR)
+    CALL InitAccumulator !(AccumPAR)
 
     !set up Refrigerant variable...why?
     Refrigerant = RefName
@@ -295,41 +388,41 @@
         RHiC=RHiCAct
         RHiE=RHiEAct
         SUPER=SUPERAct
-        EvapIn=0.0
-        EvapOut=0.0
-        CondIn=0.0
-        CondOut=0.0
+        !EvapIn=0.0 !RS: Debugging: Not used
+        !EvapOut=0.0
+        !CondIn=0.0
+        !CondOut=0.0
 
         IF (TWiC .GT. TaiC) THEN
             WRITE(*,*)'## ERROR ## Main: Condenser wet bulb temperature is greater than dry bulb temperature.'
             STOP
         END IF
         AirPropOpt=3                  ! VL_Magic_Number number	! VL_User_Setting
-        AirProp(1)=Temperature_F2C(TaiC)  ! VL_Index_Replace
-        AirProp(5)=TWiC                   ! VL_Index_Replace
-        CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-        RHiC=AirProp(3)               ! VL_Index_Replace
-        RhoAiC=AirProp(7)             ! VL_Index_Replace
+        AirProp%APTDB=Temperature_F2C(TaiC)  ! VL_Index_Replace
+        AirProp%APTWB=TWiC                   ! VL_Index_Replace
+        CALL PsyChart(AirPropOpt,AirPropErr) !CALL PsyChart(AirProp, BaroPressure, 
+        RHiC=AirProp%APRelHum               ! VL_Index_Replace
+        RhoAiC=AirProp%APDryDens              ! VL_Index_Replace
 
-        CondIN(5)=Temperature_F2C(TaiC)   ! VL_Index_Replace
-        CondIN(6)=RHiC                    ! VL_Index_Replace
+        CondIN%CIntAi=Temperature_F2C(TaiC)   ! VL_Index_Replace
+        CondIN%CInrhAi=RHiC                    ! VL_Index_Replace
 
         IF (TWiE .GT. TaiE) THEN !ISI - 11/04/07
             WRITE(*,*)'## ERROR ## Main: Evaporator wet bulb temperature is greater than dry bulb temperature.'
             STOP
         END IF
         AirPropOpt=3                  ! VL_Magic_Number number	! VL_User_Setting
-        AirProp(1)=Temperature_F2C(TaiE)  ! VL_Index_Replace
-        AirProp(5)=TWiE                   ! VL_Index_Replace
-        CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-        RHiE=AirProp(3)               ! VL_Index_Replace
-        RhoAiE=AirProp(7)             ! VL_Index_Replace
+        AirProp%APTDB=Temperature_F2C(TaiE)  ! VL_Index_Replace
+        AirProp%APTWB=TWiE                   ! VL_Index_Replace
+        CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+        RHiE=AirProp%APRelHum              ! VL_Index_Replace
+        RhoAiE=AirProp%APDryDens             ! VL_Index_Replace
         IF (RHiE .LT. 0) THEN   !RS: Debugging: Trying to avoid negative relative humidities
             RHiE=0
         END IF
 
-        EvapIN(5)=Temperature_F2C(TaiE)  !Air side inlet temp. C      ! temp F to C   ! VL_Index_Replace
-        EvapIN(6)=RHiE            !Air side inlet relative humidity                   ! VL_Index_Replace
+        EvapIN%EIntAi=Temperature_F2C(TaiE)  !Air side inlet temp. C      ! temp F to C   ! VL_Index_Replace
+        EvapIN%EInrhAi=RHiE            !Air side inlet relative humidity                   ! VL_Index_Replace
 
         !Initialize
         Temperature=Temperature_F2C(TSICMP)
@@ -342,9 +435,9 @@
         PiCmp=PiCmp/1000.0    ! VL : conversion ?
 
         PiEvp=PiCmp !Evaporator inlet pressure
-        EvapIN(2)=PiEvp   ! VL_Index_Replace
-        EvapOUT(1)=PiEvp  ! VL_Index_Replace
-        EvapOUT(6)=PiEvp  ! VL_Index_Replace
+        EvapIN%EInpRi=PiEvp   ! VL_Index_Replace
+        EvapOUT%EOutpRoC=PiEvp  ! VL_Index_Replace
+        EvapOUT%EOutpRiC=PiEvp  ! VL_Index_Replace
 
         Temperature=Temperature_F2C(TSOCMP)
         Quality=1	! VL_User_Setting
@@ -378,42 +471,31 @@
 
         END IF
 
-        CompIN(1)=PiCmp   ! VL_Index_Replace
-        CompIN(2)=PoCmp	! VL_Index_Replace
-        CompIN(3)=HiCmp	! VL_Index_Replace
+        CompIN%CompInPsuc=PiCmp   ! VL_Index_Replace
+        CompIN%CompInPdis=PoCmp	! VL_Index_Replace
+        CompIN%CompInHsuc=HiCmp	! VL_Index_Replace
         IF (SystemType .NE. EVAPORATORONLY) THEN
-            CALL Compressor(Ref$,PureRef,CompIN,CompPAR,CompOUT)
-            IF (CompOUT(7) .NE. 0) THEN	! VL_Index_Replace
-                SELECT CASE (INT(CompOUT(7)))	! VL_Index_Replace
+            CALL Compressor(Ref$) !,PureRef,CompIN,CompPAR,CompOUT)
+            IF (CompOUT%CmpOErrFlag .NE. 0) THEN	! VL_Index_Replace
+                SELECT CASE (INT(CompOUT%CmpOErrFlag))	! VL_Index_Replace  !RS: Debugging: Formerly CompOUT(7)
                 CASE (1)
-                    WRITE(*,*)'## ERROR ## Highside: Compressor solution error!'
+                    CALL IssueOutputMessage( '## ERROR ## Highside: Compressor solution error!')
                     STOP
                 CASE (2)
-                    WRITE(*,*)'-- WARNING -- Highside: Refprop out of range in compressor model.'
+                    CALL IssueOutputMessage( '-- WARNING -- Highside: Refprop out of range in compressor model.')
                 END SELECT
             END IF 
         END IF
-        WRITE(*,*) 
+        CALL IssueOutputMessage( '')
 
-        EvapOUT(3)=Temperature_F2C(TSICMP) !Initialize for reversing valve calculation        
+        EvapOUT%EOuttAoC=Temperature_F2C(TSICMP) !Initialize for reversing valve calculation        
 
         !IsCoolingMode=CondPAR(27)	! VL_Index_Replace  !RS: Debugging: Removing as IsCoolingMode is set above
-        WRITE(6,*)'Heat Pump Design Tool (ver. 2.0 12/17/09)'  
-        WRITE(*,*)'Heat Pump Design Tool (ver. 2.0 12/17/09)'
+        CALL IssueOutputMessage( 'Heat Pump Design Tool (ver. 2.0 12/17/09)')
         IF (IsCoolingMode .EQ. 1) THEN
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'***** Cooling Mode *****'
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'***** Cooling Mode *****'
-            END IF
+            CALL IssueOutputMessage('***** Cooling Mode *****')
         ELSE
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'***** Heating Mode *****' 
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'***** Heating Mode *****'
-            END IF
+            CALL IssueOutputMessage('***** Heating Mode *****')
         END IF
         
         ! VL: No GOTO statements before this line in this file ..... so this is a nice place to set default values for the flags
@@ -423,12 +505,7 @@
         SELECT CASE(MODE)
 
         CASE(FIXEDORIFICESIM)
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'***** System Simulation (Fixed Orifice) *****'
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'***** System Simulation (Fixed Orifice) *****'
-            END IF
+            CALL IssueOutputMessage('***** System Simulation (Fixed Orifice) *****')
             ICHRGE=2	! VL_User_Setting
 
             !ISI - 08/07/06
@@ -439,16 +516,11 @@
             EVPCON=1 !superheat, F	! VL_User_Setting
 
             FLOCON=5 !mass flow rate, lbm/hr	! VL_Magic_Number	
-            EVAPPAR(50)=7 !Pressure, kPa	! VL_Index_Replace
-            CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace
+            EVAPPAR%EvapPressTolConv=7 !Pressure, kPa	! VL_Index_Replace
+            CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace
 
         CASE(FIXEDSUPERHEATSIM)
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'***** Design Calculation (Fixed Orifice) *****' 
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'***** Design Calculation (Fixed Orifice) *****'
-            END IF
+            CALL IssueOutputMessage('***** Design Calculation (Fixed Orifice) *****')
             ICHRGE=0	! VL_User_Setting
 
             AMBCON=1E-3 !1 !air temperature, F
@@ -458,16 +530,11 @@
             EVPCON=1 !superheat, F	! VL_User_Setting
 
             FLOCON=5 !mass flow rate, lbm/hr
-            EVAPPAR(50)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
-            CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
+            EVAPPAR%EvapPressTolConv=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
+            CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
 
         CASE(TXVSIMULATION)
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'***** System Simulation (TXV) *****' 
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'***** System Simulation (TXV) *****'
-            END IF
+            CALL IssueOutputMessage('***** System Simulation (TXV) *****')
             ICHRGE=2	! VL_User_Setting
 
             !ISI - 08/07/06
@@ -478,10 +545,24 @@
             EVPCON=1 !superheat, F	! VL_User_Setting
 
             FLOCON=5 !mass flow rate, lbm/hr
-            EVAPPAR(50)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
-            CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
+            EVAPPAR%EvapPressTolConv=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
+            CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
 
-        CASE DEFAULT
+        CASE DEFAULT    !RS: Default is Orifice and TXV Design Mode
+            CALL IssueOutputMessage( '***** Design Calculation (Orifice and TXV) *****')
+            ICHRGE=0
+
+            !ISI - 08/07/06
+            AMBCON=1E-3 !1 !air temperature, F	! VL_Magic_Number
+            CNDCON=1 !subcooling, F
+            CHRGECONV=.5 !charge, lbm	! VL_Magic_Number
+
+            EVPCON=1 !superheat, F
+
+            FLOCON=5 !mass flow rate, lbm/hr	! VL_Index_Replace	! VL_Magic_Number
+            EVAPPAR%EvapPressTolConv=7 !Pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly EVAPPAR(34)
+            CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(40)
+
             !FAIL
         END SELECT
         
@@ -499,8 +580,8 @@
             EVPCON=1 !0.1 !0.2 !SUPERHEAT
 
             FLOCON=5 !Mass flow rate, lbm/hr	! VL_Magic_Number
-            EVAPPAR(50) =0.1 ! 7	! VL_Index_Replace	! VL_Magic_Number
-            CONDPAR(56)=0.1 !7 !.05	! VL_Index_Replace	! VL_Magic_Number
+            EVAPPAR%EvapPressTolConv =0.1 ! 7	! VL_Index_Replace	! VL_Magic_Number
+            CONDPAR%CondPressTolConv=0.1 !7 !.05	! VL_Index_Replace	! VL_Magic_Number
 
             DTVALU = SUPER
             IF (MODE .EQ. TXVSIMULATION) THEN
@@ -527,7 +608,7 @@
                 END IF
 
                 !1st run is for coarse convergence criteria
-                DTVALU = ZEROCH(DTVAL,CHARGM,CHRGECONV,CHRGECONV,STEP,CHGDIF,IERROR)    !RS: Debugging: Temporarily setting in an Epsilon-NTU method
+                DTVALU = ZeroConvergence(DTVAL,CHARGM,CHRGECONV,CHRGECONV,STEP,CHGDIF,IERROR)    !RS: Debugging: Temporarily setting in an Epsilon-NTU method
                 !CALL SolveRegulaFalsi(CHRGECONV, MaxIter, Flag, DTVALU, CHARGM, DTVAL, STEP, IError)
                 !      SolveRegulaFalsi(Eps, MaxIte, Flag, XRes, f, X_0, X_1, Par)
             
@@ -547,10 +628,10 @@
                     EVPCON=1 !0.1 !0.2 !SUPERHEAT
 
                     FLOCON=5 !Mass flow rate, lbm/hr	! VL_Magic_Number
-                    EVAPPAR(50) =0.1 ! 7	! VL_Index_Replace	! VL_Magic_Number
-                    CONDPAR(56)=0.1 !7 !.05	! VL_Index_Replace	! VL_Magic_Number
+                    EVAPPAR%EvapPressTolConv =0.1 ! 7	! VL_Index_Replace	! VL_Magic_Number
+                    CONDPAR%CondPressTolConv=0.1 !7 !.05	! VL_Index_Replace	! VL_Magic_Number
 
-                    DTVALU = ZEROCH(DTVAL,CHARGM,CHRGECONV,CHRGECONV,STEP,CHGDIF,IERROR)
+                    DTVALU = ZeroConvergence(DTVAL,CHARGM,CHRGECONV,CHRGECONV,STEP,CHGDIF,IERROR)
                     !CALL SolveRegulaFalsi(CHRGECONV, MaxIter, Flag, DTVALU, CHARGM, DTVAL, STEP,IError)
 
                     FLAG_GOTO_30 = .TRUE.   ! VL : This will not get executed either !!
@@ -580,8 +661,8 @@
                     EVPCON=1 !0.1 !0.2 !SUPERHEAT
 
                     FLOCON=5 !Mass flow rate, lbm/hr	! VL_Magic_Number
-                    EVAPPAR(50) =0.1 !0.01 !7	! VL_Index_Replace	! VL_Magic_Number
-                    CONDPAR(56)=0.1 !0.01 !7 !.05	! VL_Index_Replace	! VL_Magic_Number
+                    EVAPPAR%EvapPressTolConv =0.1 !0.01 !7	! VL_Index_Replace	! VL_Magic_Number
+                    CONDPAR%CondPressTolConv=0.1 !0.01 !7 !.05	! VL_Index_Replace	! VL_Magic_Number
 
                     !2nd run is for refined convergence criteria
                     CALL HPDM(DTVALU)
@@ -661,7 +742,7 @@
     QUnitOut1=QUnitOut
     TempOut1=TaiC
     QSensUnitOut1=QSensUnitOut    !RS: Debugging: Temporarily setting in an Epsilon-NTU method
-    LatOutputProvided1=LatOutputProvided    !RS: Debugging: Temporarily setting in an Epsilon-NTU method
+    !LatOutputProvided1=LatOutputProvided    !RS: Debugging: Not currently used (1/16/14)
 
     CLOSE(666)
 

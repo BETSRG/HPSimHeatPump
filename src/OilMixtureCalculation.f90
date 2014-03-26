@@ -1,8 +1,93 @@
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! This module contains property calculation routines for refrigerant-oil mixtures
+!
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! This module does not represent a physical component of the heat pump system.
+
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! This module calculates and returns fluid properties for refrigerant-oil mixtures.
+
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! There are no associated input or output files.
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! A few Copeland and Bristol oil properties are defined, as are the integers
+! denoting manufacturers.
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains 13 methods:
+!   PUBLIC LocalOilMassFraction -- Calculates the local oil mass fraction
+!       Called by Condenser.f90
+!       Called by Evaporator.f90
+!   PUBLIC OilMixtureSpecificHeat -- Calculates the mixture's specific heat
+!       Called by Condenser.f90
+!       Called by Evaporator.f90
+!   PUBLIC OilMixtureDensity -- Calculates the mixture's density
+!       Called by Condenser.f90
+!       Called by Evaporator.f90
+!   PUBLIC OilMixtureViscosity -- Calculates the mixture's viscosity
+!       Called by Condenser.f90
+!       Called by Evaporator.f90
+!   PUBLIC OilMixtureSurfaceTension -- Calculates the mixture's surface tension
+!       Called by Condenser.f90
+!       Called by Evaporator.f90
+!   PUBLIC OilMixtureThermalConductivity -- Calculates the mixture's thermal conductivity
+!       Called by Condenser.f90
+!       Called by Evaporator.f90
+!   PUBLIC OilMixtureReynoldsNumber -- Calculates the mixture's Reynolds Number
+!       Called internally only
+!   PUBLIC OilMixtureTsat -- Calculates the mixture's saturation temperature
+!       Called by Condenser.f90
+!       Called by Evaporator.f90
+!   PUBLIC OilMixtureHTCevap -- Calculates the mixture's evaporation heat transfer coefficient
+!       Called by CoilCalculation.f90
+!   PUBLIC OilMixtureXtt -- Calculates the mixture's thermal conductivity
+!       Called internally only
+!   PUBLIC OilMixtureOutletEnthalpy -- Calculates the mixture's enthalpy
+!       Never called
+!   PRIVATE OilViscosity -- Calculates the mixture's viscosity
+!       Called internally only
+!   PRIVATE OilDensity -- Calculates the mixture's density
+!       Called internally only
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! There are no known issues.
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! 2013-12-17 | RAS | Filled out the header
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! There is probably some more documentation that could be done.
+! Additionally, OilMixtureOutletEnthalpy doesn't appear to ever be called.
+
 MODULE OilMixtureMod
 
 !Contains refrigerant-oil mixture property calculation
 
-USE DataGlobals, ONLY: RefName
+USE DataGlobals, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
 IMPLICIT NONE
 
@@ -109,7 +194,7 @@ END FUNCTION LocalOilMassFraction
 REAL FUNCTION OilMixtureTsat(Wlocal,Psat)
 
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-USE DataGlobals, ONLY: RefrigIndex  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+USE DataGlobals, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
 IMPLICIT NONE
 
@@ -142,8 +227,8 @@ REAL,PARAMETER :: b4=17.066   !Empirical coefficient
 REAL,PARAMETER :: DP=0.1      !Pressure perturbation, MPa
 
 !LOCAL VARIABLES:
-REAL AA    !Intermeidate variable
-REAL BB    !Intermeidate variable
+REAL AA    !Intermediate variable
+REAL BB    !Intermediate variable
 REAL a0    !Estimate coefficient
 REAL b0    !Estimate coefficient
 REAL Psat1 !1st Perturbed saturation pressure, MPA
@@ -153,10 +238,8 @@ REAL Tsat2 !Saturation temperature at Psat2, K
 
 !EnergyPlus Refprop variables
 INTEGER(2) RefPropErr  !Error flag:1-error; 0-no error
-!REAL Temperature !C    !RS: Debugging: Extraneous
 REAL Quality  !0-1
 REAL Pressure !Pa
-!REAL Enthalpy !J/kg    !RS: Debugging: Extraneous
 
 !FLOW:
 
@@ -422,7 +505,7 @@ REAL, INTENT(IN) :: rhof   !Density of liquid refrigerant, kg/m3
 REAL, INTENT(IN) :: Tref   !Refrigerant temperature, C
 
 !LOCAL VARIABLES:
-REAL rhoOil   !Oil denstiy, kg/m3
+REAL rhoOil   !Oil density, kg/m3
 
 !FLOW:
 
@@ -658,7 +741,7 @@ IMPLICIT NONE
 
 !INPUTS:
 REAL, INTENT(IN) :: Gtot  !Total mass flux, kg/m2-s
-REAL, INTENT(IN) :: Xmix  !Mixutre quality
+REAL, INTENT(IN) :: Xmix  !Mixture quality
 REAL, INTENT(IN) :: ID    !Tube inside diameter, m
 REAL, INTENT(IN) :: muMix !Mixture viscosity, kg/s-m
 REAL, INTENT(IN) :: muVap !Vapor viscosity, kg/s-m
@@ -775,8 +858,6 @@ REAL ReLiq !Liquid Reynolds number
 REAL ReVap !Vapor Reynolds number
 REAL fmix  !Refrigerant-oil mixture friction factor
 REAL fvap  !Vapor refrigerant friction factor
-!REAL DPmix !Refrigerant-oil mixture pressure drop, Pa  !RS: Debugging: Extraneous
-!REAL DPvap !Vapor mixture pressure drop, Pa    !RS: Debugging: Extraneous
 REAL DPmixDZ !Refrigerant-oil mixture pressure drop gradient, Pa/m
 REAL DPvapDZ !Vapor mixture pressure drop gradient, Pa/m
 

@@ -1306,7 +1306,7 @@ SUBROUTINE GetBranchInput
   INTEGER PressureCurveType
   INTEGER PressureCurveIndex
   
-  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 

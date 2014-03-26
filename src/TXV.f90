@@ -1,6 +1,76 @@
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! This module deals with the thermal expansion valve, calculating
+! the Q over it.
+!
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! This component represents the thermal expansion valve in a heat pump system.
+! A description of the component is found at:
+! http://en.wikipedia.org/wiki/Thermal_expansion_valve
+! http://www.swtc.edu/ag_power/air_conditioning/lecture/expansion_valve.htm
+! From those websites: 
+!  - TXV is a flow metering device
+!  - It uses fluid temperature to control how much fluid passes through
+!  - This lowers the pressure and expands the fluid into a vapor
+
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! This calculates the Q for the TXV; this has no real purpose in the
+! overall simulation as the Q is never effectively used.
+
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! There are no input or output files directly connected to this module.
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! No module level variables or structures are defined
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains 4 methods:
+!   PUBLIC TXV -- Calculates and returns Qtxv
+!       Called once by HPdesignMod.f90
+!   PRIVATE CalcQtxv -- Does the actual Qtxv calculation
+!       Called once by internal TXV routine
+!   PRIVATE InterpolateQtxv -- Determines the TXV capacity
+!       Called once by CalcQtxv
+!   PRIVATE InterpolateCF_DP -- Determines the pressure drop correction factor
+!       Called once by CalcQtxv
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! This module is essentially useless in the current version of the code;
+! it only returns Qtxv, which is only ever used to be printed out.
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! 2013-12-17 | RAS | Filled out the header 
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! Make this module useful again by either improving what it returns or
+! by allowing the rest of the code to actually use Qtxv.
+
 MODULE TXVMOD
 
-USE DataGlobals, ONLY: RefName
+USE DataGlobals, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+implicit none
 
 PUBLIC TXV
 PRIVATE CalcQtxv
@@ -46,7 +116,7 @@ SUBROUTINE TXV(mdot,PiCmp,PoCmp,DTsub,DTsup,DP,Qtxv)
 !-----------------------------------------------------------------------------------
 
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-USE DataGlobals, ONLY: RefrigIndex  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+USE DataGlobals, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
 IMPLICIT NONE
 
@@ -60,7 +130,7 @@ REAL, INTENT(IN)  :: DP      !Pressure drop, kPa
 REAL, INTENT(OUT) :: Qtxv    !TXV capacity, kW
 
 !Subroutine local variables
-REAL Temperature,Quality,Pressure !,Enthalpy    !RS: Debugging: Extraneous
+REAL Temperature,Quality,Pressure
 INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
 
 INTEGER ErrorFlag     !0-No error
@@ -347,7 +417,7 @@ REAL, INTENT(IN)  :: bMin    !b-coefficient for minimum reference point
 REAL, INTENT(IN)  :: Tmin    !Minimum reference temperature, C
 REAL, INTENT(IN)  :: aMax    !a-coefficient for maximum reference point
 REAL, INTENT(IN)  :: bMax    !b-coefficient for maximum reference point
-REAL, INTENT(IN)  :: Tmax    !Maximum referenece temperature, C
+REAL, INTENT(IN)  :: Tmax    !Maximum reference temperature, C
 REAL, INTENT(IN)  :: DP      !Pressure drop across TXV, kPa
 REAL, INTENT(IN)  :: Tevp    !Evaporating temperature, C
 REAL, INTENT(OUT) :: CF      !Pressure drop correction factor

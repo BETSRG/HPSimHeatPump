@@ -1,3 +1,66 @@
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! This module calculates the flow rate through a short tube orifice.
+! There are 3 different methods for this, empirical, Choi, and Payne. 
+!
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! The short tube orifice is an expansion device in the heat pump system.
+!
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! This module takes the expansion device inlet conditions and the outlet conditions from 
+! the compressor and the inlet conditions to the evaporator.
+! These inputs are used to calculate the outlet conditions of the expansion device.
+!
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! no input/output files
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! Parameters defined:
+!       PI, UnitL
+! Variables Defined
+!       PiExpDev, HiExpDev, TiExpDev, PoExpDev, HoExpDev, ToExpDev
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains 3 methods:
+!    PUBLIC ShortTube - Calculates the outlet conditions using a semi-empirical model.
+!       FlowRateLoop
+!       HPdesignMod
+!    PUBLIC ShortTubeChoi - Calculates the outlet conditions using Buckingham-Pi theorem
+!    PUBLIC ShortTubePayne - Calculates the outlet conditions using Buckingham-Pi
+!       FlowRateLoop
+!       HPDesignMod
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! NONE
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! 2012-12-29 | JEH | Header Completion 
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! Do we need to retain any subroutines not used in the program?
+
     MODULE ShortTubeMod
 
     IMPLICIT NONE
@@ -18,10 +81,12 @@
     REAL :: HoExpDev
     REAL :: ToExpDev
 
+    LOGICAL, EXTERNAL :: IssueRefPropError
+
     CONTAINS
     !***********************************************************************************
 
-    SUBROUTINE ShortTube(Ref$,PureRef,XIN,PAR,OUT)
+    SUBROUTINE ShortTube !(Ref$) !,XIN,PAR,OUT)  !(Ref$,PureRef,XIN,PAR,OUT) !RS: Debugging: Extraneous PureRef
 
     !-----------------------------------------------------------------------------------
     !
@@ -86,19 +151,23 @@
     !-----------------------------------------------------------------------------------
 
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-    USE DataGlobals, ONLY: RefrigIndex  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE DataGlobals, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE DataSimulation !, ONLY: ShTbTLen, ShTbTID, ShTbChamDep, ShTbECktNum, ShTbDTubeLen, &  !RS: Debugging: Replacing array numbers with variables
+    !                        ShTbINMdotC, ShTbINPiE, ShTbINHiE, ShTbINPiEv, ShTbINPoEv, ShTbOMdotE, ShTbOPoE, ShTbOToE, &
+    !                        ShTbOXoE, ShTbOMDT, ShTbOErrFlag
 
     IMPLICIT NONE
 
     !Subroutine argument declarations
-    CHARACTER*80,     INTENT(IN)  :: Ref$    !Refrigerant name
-    INTEGER(2),       INTENT(IN)  :: PureRef !Refrigerant flag: 1-pure refrigerant
+    !CHARACTER*80,     INTENT(IN)  :: Ref$    !Refrigerant name
+    !INTEGER(2),       INTENT(IN)  :: PureRef !Refrigerant flag: 1-pure refrigerant !RS: Debugging: Extraneous PureRef
     !0-refrigerant mixture
-    REAL, INTENT(IN)  :: XIN(5)
-    REAL, INTENT(IN)  :: PAR(5)
-    REAL, INTENT(OUT) :: OUT(7)
+    !REAL, INTENT(IN)  :: XIN(5)
+    !REAL, INTENT(IN)  :: PAR(5)
+    !REAL, INTENT(OUT) :: OUT(7)
 
-    !Subroutine local variables 
+    !Subroutine local variables         
+    !INTEGER            :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL :: LshTube     !Short tube length, m
@@ -108,21 +177,7 @@
     REAL :: VolDisTube  !Distributor tube volumn, m^3
     REAL :: MassDisTube !Mass in distributor tube, kg
     REAL :: Depth       !Short tube 45 deg chamfer depth, m
-    !REAL :: Subcool     !Degree of subcooling, C   !RS: Debugging: Extraneous
-    REAL :: PiExp       !Inlet pressure of exp. device (Up stream pressure), kPa
-    REAL :: HiExp       !Exp. device inlet enthalpy, kJ/kg
-    REAL :: TiExp       !Exp. device inlet temperature, C
-    REAL :: XiExp       !Exp. device inlet quality
-    REAL :: PoExp       !Exp. device outlet pressure, kPa
-    REAL :: HoExp       !Exp. device outlet enthalpy, kJ/kg
-    REAL :: ToExp       !Exp. device outlet temperature, C
-    REAL :: XoExp       !Exp. device outlet quality
     REAL :: DPdisTot    !Total pressure drop in distributor, kPa
-    REAL :: PiEvp       !Evaporator inlet pressure, kPa
-    REAL :: HiEvp       !Evaporator inlet enthalpy, kJ/kg
-    REAL :: TiEvp       !Evaporator inlet temperature, C
-    REAL :: XiEvp       !Evaporator inlet quality
-    REAL :: PoEvp       !Evaporator outlet pressure, kPa
     REAL :: mdotCmp     !Mass flow rate from compressor, kg/s
     REAL :: mdotExp     !Mass flow rate from exp. device, kg/s
     REAL :: TsiExp      !Liquid saturation temperature of the upstream fluid, C
@@ -158,23 +213,21 @@
     REAL, PARAMETER :: Const=5.08e-005 !Emperical constants
 
     !NIST Refrigerant property variables and functions
-    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    !REAL RefProp(28)   !RS: Debugging: Extraneous
 
     !Flow:
 
-    mdotCmp=XIN(1)
-    PiExp=XIN(2)
-    HiExp=XIN(3)
-    PiEvp=XIN(4)
-    PoEvp=XIN(5)
+    mdotCmp=ShTbIN%ShTbINMdotC  !RS: Debugging: Formerly XIN(1)
+    PiExp=ShTbIN%ShTbINPiE    !RS: Debugging: Formerly XIN(2)
+    HiExp=ShTbIN%ShTbINHiE    !RS: Debugging: Formerly XIN(3)
+    PiEvp=ShTbIN%ShTbINPiEv    !RS: Debugging: Formerly XIN(4)
+    PoEvp=ShTbIN%ShTbINPoEv    !RS: Debugging: Formerly XIN(5)
 
-    LshTube=PAR(1)
-    DshTube=PAR(2)
-    Depth=PAR(3)
-    Nckts=PAR(4)
-    LdisTube=PAR(5)
+    LshTube=ShTbPAR%ShTbTLen  !RS: Debugging: Formerly PAR(1)
+    DshTube=ShTbPAR%ShTbTID  !RS: Debugging: Formerly PAR(2)
+    Depth=ShTbPAR%ShTbChamDep    !RS: Debugging: Formerly PAR(3)
+    Nckts=ShTbPAR%ShTbECktNum    !RS: Debugging: Formerly PAR(4)
+    LdisTube=ShTbPAR%ShTbDTubeLen !RS: Debugging: Formerly PAR(5)
 
     ErrorFlag=0 !Initialize
 
@@ -184,39 +237,33 @@
     Pressure=PiExp*1000 !RS Comment: Unit Conversion
     Enthalpy=HiExp*1000 !RS Comment: Unit Conversion
     TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Inlet Temperature
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     XiExp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Expansion Device Inlet Quality
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     rhoiExp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr) !Expansion Device Inlet Density
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
     Quality=0
     rhofiExp=PQ(Ref$,Pressure,Quality,'density',RefrigIndex,RefPropErr) !Expansion Device Inlet Liquid Density
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     Quality=1
     rhogiExp=PQ(Ref$,Pressure,Quality,'density',RefrigIndex,RefPropErr) !Expansion Device Inlet Vapor Density
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
     Pressure=PiExp*1000 !RS Comment: Unit Conversion
     Quality=0
     TsiExp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Inlet Liquid Saturation Temperature
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
@@ -225,18 +272,15 @@
     Pressure=PiEvp*1000 !RS Comment: Unit Conversion
     Enthalpy=HiEvp*1000 !RS Comment: Unit Conversion
     TiEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Evaporator Inlet Temperature
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     XiEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Evaporator Inlet Quality
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     rhoiEvp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr) !Evaporator Inlet Density
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
@@ -268,13 +312,11 @@
     Pressure=PoExp*1000 !RS Comment: Unit Conversion
     Enthalpy=HoExp*1000 !RS Comment: Unit Conversion
     ToExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Outlet Temperature
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     XoExp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !Expansion Device Outlet Quality
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
@@ -285,8 +327,7 @@
     Temperature=TiExp
     Quality=0
     Psat=TQ(Ref$, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr) !Saturation Pressure
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     Psat=Psat/1000  !RS Comment: Unit Conversion
@@ -365,11 +406,11 @@
 
         ErrorFlag=1
         !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        PiExpDev = XIN(2)
-        HiExpDev = XIN(3)
-        PoExpDev = OUT(2)
-        ToExpDev = OUT(3)
+        ShTbOUT%ShTbOErrFlag=ErrorFlag !RS: Debugging: Formerly OUT(7)
+        PiExpDev = ShTbIN%ShTbINPiE   !RS: Debugging: Formerly XIN(2)
+        HiExpDev = ShTbIN%ShTbINHiE   !RS: Debugging: Formerly XIN(3)
+        PoExpDev = ShTbOUT%ShTbOPoE   !RS: Debugging: Formerly OUT(2)
+        ToExpDev = ShTbOUT%ShTbOToE   !RS: Debugging: Formerly OUT(3)
         hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !Expansion Device Outlet Enthalpy?
         RETURN
 
@@ -379,42 +420,40 @@
     Pressure=PiEvp*1000 !RS Comment: Unit Conversion
     Enthalpy=HiEvp*1000 !RS Comment: Unit Conversion
     TiEvp=PH(Ref$, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)   !Evaporator Inlet Temperature
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     XiEvp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !Evaporator Inlet Quality
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
     IF (mdotExp .LT. 0) THEN
 
         ErrorFlag=1
-        OUT(7)=ErrorFlag
-        PiExpDev = XIN(2)
-        HiExpDev = XIN(3)
-        PoExpDev = OUT(2)
-        ToExpDev = OUT(3)
+        ShTbOUT%ShTbOErrFlag=ErrorFlag !RS: Debugging: Formerly OUT(7)
+        PiExpDev = ShTbIN%ShTbINPiE   !RS: Debugging: Formerly XIN(2)
+        HiExpDev = ShTbIN%ShTbINHiE   !RS: Debugging: Formerly XIN(3)
+        PoExpDev = ShTbOUT%ShTbOPoE   !RS: Debugging: Formerly OUT(2)
+        ToExpDev = ShTbOUT%ShTbOToE   !RS: Debugging: Formerly OUT(3)
         hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !Expansion Device Outlet Enthalpy?
         RETURN
 
     END IF
 
-    OUT(1)=mdotExp
-    OUT(2)=PoExp
-    OUT(3)=ToExp
-    OUT(4)=XoExp
-    OUT(5)=MassDisTube
-    OUT(6)=QdisTube
+    ShTbOUT%ShTbOMdotE=mdotExp  !RS: Debugging: Formerly OUT(1)
+    ShTbOUT%ShTbOPoE=PoExp    !RS: Debugging: Formerly OUT(2)
+    ShTbOUT%ShTbOToE=ToExp    !RS: Debugging: Formerly OUT(3)
+    ShTbOUT%ShTbOXoE=XoExp    !RS: Debugging: Formerly OUT(4)
+    ShTbOUT%ShTbOMDT=MassDisTube  !RS: Debugging: Formerly OUT(5)
+    !OUT(6)=QdisTube    !RS: Debugging: Never used
 
-    OUT(7)=ErrorFlag
+    ShTbOUT%ShTbOErrFlag=ErrorFlag    !RS: Debugging: Formerly OUT(7)
 
-    PiExpDev = XIN(2)
-    HiExpDev = XIN(3)
-    PoExpDev = OUT(2)
-    ToExpDev = OUT(3)
+    PiExpDev = ShTbIN%ShTbINPiE   !RS: Debugging: Formerly XIN(2)
+    HiExpDev = ShTbIN%ShTbINHiE   !RS: Debugging: Formerly XIN(3)
+    PoExpDev = ShTbOUT%ShTbOPoE   !RS: Debugging: Formerly OUT(2)
+    ToExpDev = ShTbOUT%ShTbOToE   !RS: Debugging: Formerly OUT(3)
     hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !Expansion Device Outlet Enthalpy
 
     RETURN
@@ -423,7 +462,7 @@
 
     !***********************************************************************************
 
-    SUBROUTINE ShortTubeChoi(Ref$,PureRef,XIN,PAR,OUT)
+    SUBROUTINE ShortTubeChoi(Ref$) !,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT)  !RS: Debugging: Extraneous PureRef
 
     !-----------------------------------------------------------------------------------
     !
@@ -476,19 +515,22 @@
     !-----------------------------------------------------------------------------------
 
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-    USE DataGlobals, ONLY: RefrigIndex  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE DataGlobals, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE DataSimulation !, ONLY: ShTbTLen, ShTbTID, ShTbChamDep, ShTbECktNum, ShTbDTubeLen, &  !RS: Debugging: Replacing array numbers with variables
+    !                        ShTbINMdotC, ShTbINPiE, ShTbINHiE, ShTbINPiEv, ShTbINPoEv, ShTbOMdotE, ShTbOPoE, ShTbOToE, &
+    !                        ShTbOXoE, ShTbOMDT, ShTbOErrFlag
 
     IMPLICIT NONE
 
     !Subroutine argument declarations
     CHARACTER*80,     INTENT(IN)  :: Ref$    !Refrigerant name
-    INTEGER(2),       INTENT(IN)  :: PureRef !Refrigerant flag: 1-pure refrigerant
+    !INTEGER(2),       INTENT(IN)  :: PureRef !Refrigerant flag: 1-pure refrigerant !RS: Debugging: Extraneous PureRef
     !0-refrigerant mixture
-    REAL, INTENT(IN)  :: XIN(5)
-    REAL, INTENT(IN)  :: PAR(5)
-    REAL, INTENT(OUT) :: OUT(7)
+    !REAL, INTENT(IN)  :: XIN(5)
+    !REAL, INTENT(IN)  :: PAR(5)
+    !REAL, INTENT(OUT) :: OUT(7)
 
-    !Subroutine local variables
+    !Subroutine local variables         
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL :: LshTube     !Short tube length, m
@@ -499,20 +541,7 @@
     REAL :: MassDisTube !Mass in distributor tube, kg
     REAL :: Depth       !Short tube 45 deg chamfer depth, m
     REAL :: Subcooling  !Degree of subcooling, C
-    REAL :: PiExp       !Inlet pressure of exp. device (Up stream pressure), kPa
-    REAL :: HiExp       !Exp. device inlet enthalpy, kJ/kg
-    REAL :: TiExp       !Exp. device inlet temperature, C
-    REAL :: XiExp       !Exp. device inlet quality
-    REAL :: PoExp       !Exp. device outlet pressure, kPa
-    REAL :: HoExp       !Exp. device outlet enthalpy, kJ/kg
-    REAL :: ToExp       !Exp. device outlet temperature, C
-    REAL :: XoExp       !Exp. device outlet quality
     REAL :: DPdisTot    !Total pressure drop in distributor, kPa
-    REAL :: PiEvp       !Evaporator inlet pressure, kPa
-    REAL :: HiEvp       !Evaporator inlet enthalpy, kJ/kg
-    REAL :: TiEvp       !Evaporator inlet temperature, C
-    REAL :: XiEvp       !Evaporator inlet quality
-    REAL :: PoEvp       !Evaporator outlet pressure, kPa
     REAL :: mdotCmp     !Mass flow rate from compressor, kg/s
     REAL :: mdotExp     !Mass flow rate from exp. device, kg/s
     REAL :: TsiExp      !Liquid saturation temperature of the upstream fluid, C
@@ -525,21 +554,9 @@
     REAL :: mufiExp     !Upstream fluid viscosity, Pa-s
     REAL :: mugiExp     !Upstream vapor viscosity, Pa-s
     REAL :: sigma       !Surface tension, N/m
-    !REAL :: Acs         !Cross-sectional area, m^2 !RS: Debugging: Extraneous
-    !REAL :: SUBC        !Temperature ratio, T is in K  !RS: Debugging: Extraneous
-    !REAL :: EVAP        !Pressure ratio, P is in absolute pressure !RS: Debugging: Extraneous
-    !REAL :: PRA         !Pressure ratio, P is in absolute pressure !RS: Debugging: Extraneous
-    !REAL :: DR          !Diameter ratio    !RS: Debugging: Extraneous
-    !REAL :: LD          !Ratio of tube length to diameter  !RS: Debugging: Extraneous
-    !REAL :: Pf          !Downstream pressure for unchoked orifice flow or correlated !RS: Debugging: Extraneous
-                        !saturation pressure used in short tube model, kPa  !RS: Debugging: Extraneous
-    !REAL :: Cc          !Correction factor for chamfered inlet short tubes !RS: Debugging: Extraneous
-    !REAL :: Ctp         !Correction factor for two-phase quality   !RS: Debugging: Extraneous
     REAL :: Psat        !Saturation pressure, kPa
     REAL :: Pcr         !Critical pressure, kPa
     REAL :: Tcr         !Critical temperature, K
-    !REAL :: Y           !Parameter for two-phase quality correction factor calc.   !RS: Debugging: Extraneous
-    !REAL :: Dref        !Reference diameter, mm    !RS: Debugging: Extraneous
     REAL :: HoEvpRtd    !Evaporator outlet rated enthalpy, kJ/kg
     INTEGER(2)		 :: Nckts		!Number of circuits in evaporator
     INTEGER			 :: ErrorFlag	!0-No error
@@ -549,95 +566,80 @@
     !Buckingham pi parameters
     REAL pi01,pi02,pi03,pi04,pi05,pi06,pi07,pi08,pi09,pi10,pi11
 
-    !REAL :: a(4)  !Emperical constants !RS: Debugging: Extraneous
-    !REAL :: b(11) !Emperical constants !RS: Debugging: Extraneous
-    !REAL :: c(3)  !Emperical constants !RS: Debugging: Extraneous
     REAL, PARAMETER :: Const=5.08e-005 !Emperical constants
 
     !NIST Refrigerant property variables and functions
-    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    !REAL RefProp(28)   !RS: Debugging: Extraneous
 
     !Flow:
 
-    mdotCmp=XIN(1)
-    PiExp=XIN(2)
-    HiExp=XIN(3)
-    PiEvp=XIN(4)
-    PoEvp=XIN(5)
+    mdotCmp=ShTbIN%ShTbINMdotC  !RS: Debugging: Formerly XIN(1)
+    PiExp=ShTbIN%ShTbINPiE    !RS: Debugging: Formerly XIN(2)
+    HiExp=ShTbIN%ShTbINHiE    !RS: Debugging: Formerly XIN(3)
+    PiEvp=ShTbIN%ShTbINPiEv    !RS: Debugging: Formerly XIN(4)
+    PoEvp=ShTbIN%ShTbINPoEv    !RS: Debugging: Formerly XIN(5)
 
-    LshTube=PAR(1)
-    DshTube=PAR(2)
-    Depth=PAR(3)
-    Nckts=PAR(4)
-    LdisTube=PAR(5)
+    LshTube=ShTbPAR%ShTbTLen  !RS: Debugging: Formerly PAR(1)
+    DshTube=ShTbPAR%ShTbTID  !RS: Debugging: Formerly PAR(2)
+    Depth=ShTbPAR%ShTbChamDep    !RS: Debugging: Formerly PAR(3)
+    Nckts=ShTbPAR%ShTbECktNum    !RS: Debugging: Formerly PAR(4)
+    LdisTube=ShTbPAR%ShTbDTubeLen !RS: Debugging: Formerly PAR(5)
 
     ErrorFlag=0 !Initialize
 
     Pressure=PiExp*1000 !RS Comment: Unit Conversion
     Enthalpy=HiExp*1000 !RS Comment: Unit Conversion
     TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Inlet Temperature
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     XiExp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Expansion Device Inlet Quality
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     IF (XiExp .LT. 0.0) XiExp = 0.0
     rhoiExp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr) !Expansion Device Inlet Density
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
     Quality=0
     rhofiExp=PQ(Ref$,Pressure,Quality,'density',RefrigIndex,RefPropErr) !Expansion Device Inlet Liquid Density
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     mufiExp=PQ(Ref$,Pressure,Quality,'viscosity',RefrigIndex,RefPropErr)    !Expansion Device Inlet Liquid Dynamic Viscosity
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
     Quality=1
     rhogiExp=PQ(Ref$,Pressure,Quality,'density',RefrigIndex,RefPropErr) !Expansion Device Inlet Vapor Density
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     mugiExp=PQ(Ref$,Pressure,Quality,'viscosity',RefrigIndex,RefPropErr)    !Expansion Device Inlet Vapor Dynamic Viscosity
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
     Pressure=PiExp*1000 !RS Comment: Unit Conversion
     Quality=0
     TsiExp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Saturation Temperature
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
     Temperature=TiExp
     Quality=0
     Psat=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr) !Saturation Pressure
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     Psat=Psat/1000  !RS Comment: Unit Conversion
 
     sigma=TQ(Ref$,Temperature,Quality,'surfacetension',RefrigIndex,RefPropErr)  !Surface Tension
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
@@ -646,18 +648,15 @@
     Pressure=PiEvp*1000 !RS Comment: Unit Conversion
     Enthalpy=HiEvp*1000 !RS Comment: Unit Conversion
     TiEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Evaporator Inlet Temperature
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     XiEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Evaporator Inlet Quality
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     rhoiEvp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr) !Evaporator Inlet Density
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
@@ -716,46 +715,42 @@
     Pressure=PoExp*1000 !RS Comment: Unit Conversion
     Enthalpy=HoExp*1000 !RS Comment: Unit Conversion
     ToExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Outlet Temperature
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     XoExp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !Expansion Device Outlet Quality
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
     Pressure=PiEvp*1000 !RS Comment: Unit Conversion
     Enthalpy=HiEvp*1000 !RS Comment: Unit Conversion
     TiEvp=PH(Ref$, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)   !Evaporator Inlet Temperature
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     XiEvp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !Evaporator Inlet Quality
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
     IF (mdotExp .LT. 0) THEN
         ErrorFlag=1
     ELSE
-        OUT(1)=mdotExp
-        OUT(2)=PoExp
-        OUT(3)=ToExp
-        OUT(4)=XoExp
-        OUT(5)=MassDisTube
-        OUT(6)=QdisTube
+        ShTbOUT%ShTbOMdotE=mdotExp  !RS: Debugging: Formerly OUT(1)
+        ShTbOUT%ShTbOPoE=PoExp    !RS: Debugging: Formerly OUT(2)
+        ShTbOUT%ShTbOToE=ToExp    !RS: Debugging: Formerly OUT(3)
+        ShTbOUT%ShTbOXoE=XoExp    !RS: Debugging: Formerly OUT(4)
+        ShTbOUT%ShTbOMDT=MassDisTube  !RS: Debugging: Formerly OUT(5)
+        !OUT(6)=QdisTube    !RS: Debugging: Never used
     END IF
 
-    OUT(7)=ErrorFlag
+    ShTbOUT%ShTbOErrFlag=ErrorFlag    !RS: Debugging: Formerly OUT(7)
 
-    PiExpDev = XIN(2)
-    HiExpDev = XIN(3)
-    PoExpDev = OUT(2)
-    ToExpDev = OUT(3)
+    PiExpDev = ShTbIN%ShTbINPiE   !RS: Debugging: Formerly XIN(2)
+    HiExpDev = ShTbIN%ShTbINHiE   !RS: Debugging: Formerly XIN(3)
+    PoExpDev = ShTbOUT%ShTbOPoE   !RS: Debugging: Formerly OUT(2)
+    ToExpDev = ShTbOUT%ShTbOToE   !RS: Debugging: Formerly OUT(3)
     hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !Expansion Device Outlet Enthalpy?
 
     RETURN
@@ -764,7 +759,7 @@
 
     !***********************************************************************************
 
-    SUBROUTINE ShortTubePayne(Ref$,PureRef,XIN,PAR,OUT)
+    SUBROUTINE ShortTubePayne(Ref$) !,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT) !RS: Debugging: Extraneous PureRef
 
     !-----------------------------------------------------------------------------------
     !
@@ -817,42 +812,32 @@
 
     USE FluidProperties_HPSim
     USE DataGlobals, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE DataSimulation !, ONLY: ShTbTLen, ShTbTID, ShTbChamDep, ShTbECktNum, ShTbDTubeLen, &  !RS: Debugging: Replacing array numbers with variables
+    !                        ShTbINMdotC, ShTbINPiE, ShTbINHiE, ShTbINPiEv, ShTbINPoEv, ShTbOMdotE, ShTbOPoE, ShTbOToE, &
+    !                        ShTbOXoE, ShTbOMDT, ShTbOErrFlag
 
     IMPLICIT NONE
 
     !Subroutine argument declarations
     CHARACTER*80,     INTENT(IN)  :: Ref$    !Refrigerant name
-    INTEGER(2),       INTENT(IN)  :: PureRef !Refrigerant flag: 1-pure refrigerant
+    !INTEGER(2),       INTENT(IN)  :: PureRef !Refrigerant flag: 1-pure refrigerant !RS: Debugging: Extraneous
     !0-refrigerant mixture
-    REAL, INTENT(IN)  :: XIN(5)
-    REAL, INTENT(IN)  :: PAR(5)
-    REAL, INTENT(OUT) :: OUT(7)
+    !REAL, INTENT(IN)  :: XIN(5)
+    !REAL, INTENT(IN)  :: PAR(5)
+    !REAL, INTENT(OUT) :: OUT(7)
 
-    !Subroutine local variables
+    !Subroutine local variables           
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL :: LshTube     !Short tube length, m
     REAL :: LdisTube    !Distributor tube length, m
     REAL :: DshTube     !Short tube diameter, m
     REAL :: IDDISTUBE   !Distributor inside diameter, in
-    REAL :: VolDisTube  !Distributor tube volumn, m^3
+    REAL :: VolDisTube  !Distributor tube volume, m^3
     REAL :: MassDisTube !Mass in distributor tube, kg
     REAL :: Depth       !Short tube 45 deg chamfer depth, m
     REAL :: Subcooling  !Degree of subcooling, C
-    REAL :: PiExp       !Inlet pressure of exp. device (Up stream pressure), kPa
-    REAL :: HiExp       !Exp. device inlet enthalpy, kJ/kg
-    REAL :: TiExp       !Exp. device inlet temperature, C
-    REAL :: XiExp       !Exp. device inlet quality
-    REAL :: PoExp       !Exp. device outlet pressure, kPa
-    REAL :: HoExp       !Exp. device outlet enthalpy, kJ/kg
-    REAL :: ToExp       !Exp. device outlet temperature, C
-    REAL :: XoExp       !Exp. device outlet quality
     REAL :: DPdisTot    !Total pressure drop in distributor, kPa
-    REAL :: PiEvp       !Evaporator inlet pressure, kPa
-    REAL :: HiEvp       !Evaporator inlet enthalpy, kJ/kg
-    REAL :: TiEvp       !Evaporator inlet temperature, C
-    REAL :: XiEvp       !Evaporator inlet quality
-    REAL :: PoEvp       !Evaporator outlet pressure, kPa
     REAL :: mdotCmp     !Mass flow rate from compressor, kg/s
     REAL :: mdotExp     !Mass flow rate from exp. device, kg/s
     REAL :: Gref        !Mass flux, kg/s-m2
@@ -866,21 +851,10 @@
     REAL :: mufiExp     !Upstream fluid viscosity, Pa-s
     REAL :: mugiExp     !Upstream vapor viscosity, Pa-s
     REAL :: sigma       !Surface tension, N/m
-    !REAL :: Acs         !Cross-sectional area, m^2 !RS: Debugging: Extraneous
-    !REAL :: SUBC        !Temperature ratio, T is in K  !RS: Debugging: Extraneous
-    !REAL :: EVAP        !Pressure ratio, P is in absolute pressure !RS: Debugging: Extraneous
-    !REAL :: PRA         !Pressure ratio, P is in absolute pressure !RS: Debugging: Extraneous
-    !REAL :: DR          !Diameter ratio    !RS: Debugging: Extraneous
-    !REAL :: LD          !Ratio of tube length to diameter  !RS: Debugging: Extraneous
-    !REAL :: Pf          !Downstream pressure for unchoked orifice flow or correlated !RS: Debugging: Extraneous
-                        !saturation pressure used in short tube model, kPa
-    !REAL :: Cc          !Correction factor for chamfered inlet short tubes !RS: Debugging: Extraneous
     REAL :: Ctp         !Correction factor for two-phase quality
     REAL :: Psat        !Saturation pressure, kPa
     REAL :: Pcr         !Critical pressure, kPa
     REAL :: Tcr         !Critical temperature, K
-    !REAL :: Y           !Parameter for two-phase quality correction factor calc.   !RS: Debugging: Extraneous
-    !REAL :: Dref        !Reference diameter, mm    !RS: Debugging: Extraneous
     REAL :: HoEvpRtd    !Evaporator outlet rated enthalpy, kJ/kg
     INTEGER(2)		 :: Nckts		!Number of circuits in evaporator
     INTEGER			 :: ErrorFlag	!0-No error
@@ -896,91 +870,79 @@
     REAL, PARAMETER :: Const=5.08e-005 !Emperical constants
 
     !NIST Refrigerant property variables and functions
-    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    !REAL RefProp(28)    !RS: Debugging: Extraneous
 
     !Flow:
 
-    mdotCmp=XIN(1)
-    PiExp=XIN(2)
-    HiExp=XIN(3)
-    PiEvp=XIN(4)
-    PoEvp=XIN(5)
+    mdotCmp=ShTbIN%ShTbINMdotC  !RS: Debugging: Formerly XIN(1)
+    PiExp=ShTbIN%ShTbINPiE    !RS: Debugging: Formerly XIN(2)
+    HiExp=ShTbIN%ShTbINHiE    !RS: Debugging: Formerly XIN(3)
+    PiEvp=ShTbIN%ShTbINPiEv    !RS: Debugging: Formerly XIN(4)
+    PoEvp=ShTbIN%ShTbINPoEv    !RS: Debugging: Formerly XIN(5)
 
-    LshTube=PAR(1)
-    DshTube=PAR(2)
-    Depth=PAR(3)
-    Nckts=PAR(4)
-    LdisTube=PAR(5)
+    LshTube=ShTbPAR%ShTbTLen  !RS: Debugging: Formerly PAR(1)
+    DshTube=ShTbPAR%ShTbTID  !RS: Debugging: Formerly PAR(2)
+    Depth=ShTbPAR%ShTbChamDep    !RS: Debugging: Formerly PAR(3)
+    Nckts=ShTbPAR%ShTbECktNum    !RS: Debugging: Formerly PAR(4)
+    LdisTube=ShTbPAR%ShTbDTubeLen !RS: Debugging: Formerly PAR(5)
 
     ErrorFlag=0 !Initialize
 
     Pressure=PiExp*1000 !RS Comment: Unit Conversion
     Enthalpy=HiExp*1000 !RS Comment: Unit Conversion
     TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Inlet Temperature
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     XiExp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Expansion Device Inlet Quality
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     IF (XiExp .LT. 0.0) THEN
         XiExp = 0.0
     END IF
     rhoiExp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr) !Expansion Device Inlet Density
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
     Quality=0
     rhofiExp=PQ(Ref$,Pressure,Quality,'density',RefrigIndex,RefPropErr) !Expansion Device Inlet Liquid Density
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     mufiExp=PQ(Ref$,Pressure,Quality,'viscosity',RefrigIndex,RefPropErr)    !Expansion Device Inlet Liquid Density
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
     Quality=1
     rhogiExp=PQ(Ref$,Pressure,Quality,'density',RefrigIndex,RefPropErr) !Expansion Device Inlet Vapor Density
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
-    mugiExp=PQ(Ref$,Pressure,Quality,'viscosity',RefrigIndex,RefPropErr)    !Expansion Device Inlet Vapor Dynamic Viscosity
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+     mugiExp=PQ(Ref$,Pressure,Quality,'viscosity',RefrigIndex,RefPropErr)    !Expansion Device Inlet Vapor Dynamic Viscosity
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
     Pressure=PiExp*1000 !RS Comment: Unit Conversion
     Quality=0
     TsiExp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Inlet Saturation Temperature
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
     Temperature=TiExp
     Quality=0
     Psat=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr) !Saturation Pressure
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     Psat=Psat/1000  !RS Comment: Unit Conversion
 
     sigma=TQ(Ref$,Temperature,Quality,'surfacetension',RefrigIndex,RefPropErr)  !Surface Tension
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
@@ -989,18 +951,15 @@
     Pressure=PiEvp*1000 !RS Comment: Unit Conversion
     Enthalpy=HiEvp*1000 !RS Comment: Unit Conversion
     TiEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Evaporator Inlet Temperature
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     XiEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Evaporator Inlet Quality
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     rhoiEvp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr) !Evaporator Inlet Density
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
@@ -1071,50 +1030,49 @@
     Pressure=PoExp*1000 !RS Comment: Unit Conversion
     Enthalpy=HoExp*1000 !RS Comment: Unit Conversion
     ToExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Outlet Temperature
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     XoExp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !Expansion Device Outlet Quality
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
     Pressure=PiEvp*1000 !RS Comment: Unit Conversion
     Enthalpy=HiEvp*1000 !RS Comment: Unit Conversion
     TiEvp=PH(Ref$, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)   !Evaporator Inlet Temperature
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
     XiEvp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !Evaporator Inlet Quality
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
+    IF (IssueRefPropError(RefPropErr, 'ShortTube')) THEN
         RETURN
     END IF
 
     IF (mdotExp .LT. 0) THEN
         ErrorFlag=1
+        !mdotExp=0   !RS: Debugging: No backwards flow allowed!
     ELSE
-        OUT(1)=mdotExp
-        OUT(2)=PoExp
-        OUT(3)=ToExp
-        OUT(4)=XoExp
-        OUT(5)=MassDisTube
-        OUT(6)=QdisTube    
+        ShTbOUT%ShTbOMdotE=mdotExp  !RS: Debugging: Formerly OUT(1)
+        ShTbOUT%ShTbOPoE=PoExp    !RS: Debugging: Formerly OUT(2)
+        ShTbOUT%ShTbOToE=ToExp    !RS: Debugging: Formerly OUT(3)
+        ShTbOUT%ShTbOXoE=XoExp    !RS: Debugging: Formerly OUT(4)   
+        ShTbOUT%ShTbOMDT=MassDisTube  !RS: Debugging: Formerly OUT(5)
+        !OUT(6)=QdisTube    !RS: Debugging: Not used  
     END IF
 
-    OUT(7)=ErrorFlag
+    ShTbOUT%ShTbOErrFlag=ErrorFlag    !RS: Debugging: Formerly OUT(7)
 
-    PiExpDev = XIN(2)
-    HiExpDev = XIN(3)
-    PoExpDev = OUT(2)
-    ToExpDev = OUT(3)
-
+    PiExpDev = ShTbIN%ShTbINPiE   !RS: Debugging: Formerly XIN(2)
+    HiExpDev = ShTbIN%ShTbINHiE   !RS: Debugging: Formerly XIN(3)
+    PoExpDev = ShTbOUT%ShTbOPoE   !RS: Debugging: Formerly OUT(2)
+    ToExpDev = ShTbOUT%ShTbOToE   !RS: Debugging: Formerly OUT(3)
+    !hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !RS Comment: Expansion Device Outlet Enthalpy?
+    
     IF (XoExp .LT. 0) THEN  !RS: Debugging: Trying to deal with the case when it's subcooled
         hoExpDev = TP(Ref$,ToExpDev,PoExpDev,'enthalpy',RefrigIndex,RefPropErr)
     ELSE
+        XoExp=XoExp/100 !RS: Debugging: Added "/100" to deal with the output of 100 when it wanted it as 1
         hoExpDev = PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !RS Comment: Expansion Device Outlet Enthalpy?
     END IF
 

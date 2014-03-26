@@ -1,15 +1,82 @@
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! These routines model the distributor in the heat pump cycle.
+!
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! This component represents a distributor in a heat pump system.
+! A description of the component is found at:
+! NA for now
+! From that website: 
+!  - NA for now
+
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! There is an added pressure drop to the short tube or capillary tube due to the
+! distributor, as well as there being additional refrigerant mass.
+
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! There are no input or output files associated with these routines.
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! No variables or structures are defined at the module level.
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains 5 methods:
+!   PUBLIC Distributor -- Calculates the pressure drop and capacity of the distributor
+!       Called by CapillaryTube.f90
+!       Called by ShortTube.f90
+!   PRIVATE CalcDPnoz -- Calculates the nozzle pressure drop
+!       Called internally by Distributor
+!   PRIVATE CalcDPtube -- Calculates the tube pressure drop
+!       Called internally by Distributor
+!   PRIVATE CalcQNozRated -- Calculates the rated nozzle capacity
+!       Called internally by Distributor
+!   PRIVATE CalcQTubeRated -- Calculates the rated tube capacity
+!       Called internally by Distributor
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! There are no known issues with these routines.
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! 2013-12-17 | RAS | Filled out the header 
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! Some additional documentation would be good, especially with respect to what
+! some of the numbers in the pressure drop calculations are.
+
 SUBROUTINE Distributor(Ref$,LTUBE,Nckts,mdotRef,TiExp,HiExp,PoEvp, &
                        HoEvpRtd,Qtube,DPtot,ErrorFlag)
 
 !To calculate total pressure drop in distributor
 
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-USE DataGlobals, ONLY: RefrigIndex  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+USE DataGlobals, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
 IMPLICIT NONE
 
 CHARACTER*80,     INTENT(IN) :: Ref$    !Refrigerant name
-REAL, INTENT(IN) :: LTUBE   !Distributor tube length, in
+REAL, INTENT(IN) :: LTUBE   !Distributor tube length, in    !RS: Debugging: Brought in but never used
 INTEGER(2),       INTENT(IN) :: Nckts   !Number of circuits in evaporator
 REAL, INTENT(IN) :: mdotRef !Refrigerant mass flow rate, kg/s
 REAL, INTENT(IN) :: TiExp   !Inlet temperature of expansion device, C
@@ -23,12 +90,10 @@ INTEGER, INTENT(OUT) ::ErrorFlag !Error flag: 0 = no error
 
 REAL, PARAMETER :: SuperRtd = 6.11 !11 F  !Rated superheat, C
 REAL, PARAMETER :: UnitP = 6.895 !(psi X UnitP = kPa)
+           
+REAL Temperature,Quality,Pressure
 
-REAL Temperature,Quality,Pressure !,Enthalpy    !RS: Debugging: Extraneous
-
-!INTEGER(2)       :: RefPropOpt  !Ref prop calc. option !RS: Debugging: Extraneous
 INTEGER(2)       :: RefPropErr  !Error flag:1-error; 0-no error
-!REAL :: RefProp(28)    !RS: Debugging: Extraneous
 
 REAL TiExpF   !Inlet temperature of expansion device, F
 REAL TsoEvp   !Evaporator outlet saturation temperature, C
@@ -43,6 +108,8 @@ REAL LoadTube !Tube loading
 REAL DPnoz    !Pressure drop through nozzle, kPa
 REAL DPtube   !Pressure drop through tube, kPa
 
+LOGICAL, EXTERNAL :: IssueRefPropError
+
 !Flow:
 
   ErrorFlag = 0
@@ -50,10 +117,9 @@ REAL DPtube   !Pressure drop through tube, kPa
   Pressure=PoEvp*1000   !RS Comment: Unit Conversion
   Quality=1
   TsoEvp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr) !Evaporator Outlet Saturation Temperature
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'-- WARNING -- Distributor: Refprop error.'
-      ErrorFlag=2
-	  !VL: Previously: GOTO 200
+  
+  !Karthik - Adding reduntant Variable ErrorFlag Again to Match the Method call signature
+  IF (IssueRefPropError(RefPropErr, 'Distributor', 2, ErrorFlag, ErrorFlag)) THEN 
       RETURN
   END IF
 
@@ -62,10 +128,9 @@ REAL DPtube   !Pressure drop through tube, kPa
   Temperature=ToEvpRtd
   Pressure=PoEvp*1000   !RS Comment: Unit Conversion
   HoEvpRtd=TP(Ref$, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)  !Rated Evaporator Outlet Enthalpy
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'-- WARNING -- Distributor: Refprop error.'
-      ErrorFlag=2
-	  !VL: Previously: GOTO 200
+  
+  !Karthik - Adding reduntant Variable ErrorFlag Again to Match the Method call signature
+  IF (IssueRefPropError(RefPropErr, 'Distributor', 2, ErrorFlag, ErrorFlag)) THEN
       RETURN
   END IF
   HoEvpRtd=HoEvpRtd/1000    !RS Comment: Unit Conversion
@@ -108,8 +173,6 @@ REAL DPtube   !Pressure drop through tube, kPa
   IF (DPtot .LT. 0) THEN
       ErrorFlag = 3
   END IF
-
-  !VL: Previously: 200 CONTINUE
 
   RETURN
 
@@ -219,7 +282,6 @@ REAL, INTENT(IN) :: TSOEVP !Saturated oulet evaporator temperature, F
 REAL, INTENT(OUT) :: QNOZRTD !Rated nozzle capacity, ton
 
 !Local variable
-!REAL a,b !Equation fit constants   !RS: Debugging: Extraneous
 REAL CFnoz !Correction factor for liquid temp. other then 100 F
 
   SELECT CASE (TRIM(Ref$))
@@ -256,6 +318,9 @@ REAL CFnoz !Correction factor for liquid temp. other then 100 F
 
   IF (TITXV .GT. 40) THEN
       CFnoz=0.0001*TITXV**2 - 0.0394*TITXV + 3.7791
+      !Karthik - Add Else part to initlize the Value for CFnoz
+  ELSE
+      CFnoz=1.0
   END IF
 
   QNOZRTD = CFnoz*QNOZRTD
@@ -281,7 +346,6 @@ REAL, INTENT(IN) :: TSOEVP !Saturated oulet evaporator temperature, F
 REAL, INTENT(OUT) :: QTUBERTD !Rated tube capacity, ton
 
 !Local variable
-!REAL a,b !Equation fit constants   !RS: Debugging: Extraneous
 REAL CFtube !Correction factor for tube length other than 30"
 REAL CFnoz !Correction factor for liquid temp. other then 100 F
 
@@ -311,6 +375,9 @@ REAL CFnoz !Correction factor for liquid temp. other then 100 F
 
   IF (TITXV .GT. 40) THEN
       CFnoz=0.0001*TITXV**2 - 0.0394*TITXV + 3.7791
+      !Karthik - Add Else part to initlize the Value for CFnoz
+  ELSE
+      CFnoz=1.0
   END IF
 
   CFtube=(30/LTUBE)**0.333

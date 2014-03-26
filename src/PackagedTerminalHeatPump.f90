@@ -5008,6 +5008,7 @@ SUBROUTINE ControlPTUnitOutput(PTUnitNum,FirstHVACIteration,OpMode,QZnReq,ZoneNu
         IF (WarmupFlag) WRITE(DebugFile,*) 'Error occured during warmup days.'
       END IF
       PartLoadFrac = MAX(MinPLF, ABS(QZnReq - NoCompOutput) / ABS(FullOutput - NoCompOutput))
+        WRITE(DebugFile,*) 'PartLoadFrac: ',PartLoadFrac
     END IF
 
   END IF

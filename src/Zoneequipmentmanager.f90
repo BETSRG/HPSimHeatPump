@@ -2346,19 +2346,12 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
              
            CASE (HPSim)
                WRITE(LogFile,*) 'EnergyPlus Timestep: ',CurrentTime !RS: Debugging: Printing out the current time
-               !CALL SimulationCycle(SysOutputProvided, LatOutputProvided)
                !RS: Implementation: Trying call HPSim from PackagedTerminalHeatPump
                CALL SimPackagedTerminalUnit(PrioritySimOrder(EquipTypeNum)%EquipName, ActualZoneNum, &
                                  FirstHVACIteration, SysOutputProvided, LatOutputProvided, &
                                  ZoneEquipList(CurZoneEqNum)%EquipIndex(EquipPtr))
-                !IF(LogFile .EQ. 9 .OR. LogFile .EQ. 10 .OR. LogFile .EQ. 12 .OR. LogFile .EQ. 13) THEN
-                !    WRITE(*,*) 'Error with DebugFile'    !RS: Debugging: Searching for a mis-set file number
-                !END IF
                !WRITE(LogFile,*) 'Zone Temperature ',MAT(1)  !RS: Debugging
                !WRITE(TimeTemp,FMT_104) CurrentTime,MAT(1)
-               !IF (SysOutPutProvided .LE. 0) THEN   !RS: Debugging: Dealing with times when it's not doing anything
-               !    ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP=ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP/10
-               !END IF
 
            CASE (ZoneDXDehumidifier_Num) ! 'ZoneHVAC:Dehumidifier:DX'
              CALL SimZoneDehumidifier(PrioritySimOrder(EquipTypeNum)%EquipName, ActualZoneNum, &

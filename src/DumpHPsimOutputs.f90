@@ -1,9 +1,64 @@
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! This routine writes outputs to the YorkHP.out file.
+!
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! This component does not represent any physical component of the system
+
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! This routine writes the file YorkHP.out.
+
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! Output File:
+!   YorkHP.out
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! There are no variables or structures defined at the module level.
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains 1 methods:
+!    PUBLIC DumpOutputs -- Writes the .out file outputs
+!      Called by ORNLsolver.f90
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! There are no known issues.
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! 2013-12-17 | RAS | Filled out the header 
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! This could probably use a fair amount of clean-up and probably some revision.
+! I don't think there's a need to rename all the variables brought in when they
+! could be written out straight from data structures.
+
 SUBROUTINE DumpOutputs
 
 USE FluidProperties_HPSim
 USE AirPropMod
 USE DataSimulation
-USE DataGlobals, ONLY: RefrigIndex  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+USE DataGlobals, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
 IMPLICIT NONE
 
@@ -11,10 +66,10 @@ INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
 
 INTEGER(2) AirPropOpt			!Air prop calc. option
 INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error
-REAL AirProp(8)		!Air properties
+!REAL AirProp(8)		!Air properties
 
-REAL Qcnd,Qevp,QevpSens,QevpLat !TsubExp,TsubCnd,TsupEvp,TsupCmp,Tsat   !RS: Debugging: Extraneous
-REAL PwrCmp,mdot,Qtxv,IsCoolingMode !TsiExp,TsoCnd,TsoEvp,  !RS: Debugging: Extraneous
+REAL Qcnd,Qevp,QevpSens,QevpLat
+REAL PwrCmp,mdot,Qtxv
 REAL Dshtb,DrawBlow,CPair,Qtot,QtotSens
 REAL DcapTube,LcapTube
 REAL TAOCND,TAOEVP,COP,SHR,EER
@@ -39,18 +94,11 @@ REAL WeightEvpAluminum,WeightEvpCopper,WeightCndAluminum,WeightCndCopper
 REAL,PARAMETER :: StandardDensity=1.2 !Standard density, kg/m3
 REAL,PARAMETER :: StandardSpecHeat=1.02 !Standard specific heat, kJ/kg-K
 REAL SpecHeat     !Specific heat, kJ/kg-K
-REAL Quality,Pressure,Enthalpy !Temperature,    !RS: Debugging: Extraneous
+REAL Quality,Pressure,Enthalpy
 CHARACTER (len=50) :: Title !Output file title
 
 REAL :: CoilSurfTemp = 0.0
 
-CHARACTER(LEN=9),PARAMETER :: FMT_1007 = "(A17,A42)"
-CHARACTER(LEN=33),PARAMETER :: FMT_1008 = "(A13,F10.3,A10,A10,A13,F10.3,A10)"
-CHARACTER(LEN=15),PARAMETER :: FMT_2001 = "(A13,F10.3,A10)"
-CHARACTER(LEN=15),PARAMETER :: FMT_2004 = "(A56,F10.3,A10)"
-CHARACTER(LEN=14),PARAMETER :: FMT_2007 = "(A16,F10.3,A9)"
-CHARACTER(LEN=13),PARAMETER :: FMT_2009 = "(60(A16,','))"
-CHARACTER(LEN=11),PARAMETER :: FMT_2100 = "(60(E,','))"
 CHARACTER(LEN=13),PARAMETER :: FMT_2200 = "(A32,',',A50)"
 CHARACTER(LEN=3),PARAMETER :: FMT_2204 = "(A)"
 CHARACTER(LEN=23),PARAMETER :: FMT_2208 = "(A33,',',F40.3,',',A15)"
@@ -59,7 +107,6 @@ CHARACTER(LEN=83),PARAMETER :: FMT_2216 = "(A24,',',F18.3,',',F18.3,',',F21.3,',
 CHARACTER(LEN=53),PARAMETER :: FMT_2220 = "(A18,',',A27,',',A27,',',A24,',',A33,',',A25,',',A20)"
 CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',',F33.3,',',F25.3,',',A20)"
 
-  IsCoolingMode=EvapPAR(20)
   SELECT CASE(MODE)
   CASE(FIXEDORIFICESIM)
  
@@ -111,8 +158,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
   IF (MODE .EQ. CONDENSERUNITSIM) THEN
 
       !*******Compressor data*******
-      PiCmp=CompIN(1)
-      HiCmp=CompIN(3)
+      PiCmp=CompIN%CompInPsuc   !RS: Debugging: Formerly CompIN(1)
+      HiCmp=CompIN%CompInHsuc   !RS: Debugging: Formerly CompIN(3)
 
       Pressure=PiCmp*1000   !RS Comment: Unit Conversion
       Enthalpy=HiCmp*1000   !RS Comment: Unit Conversion
@@ -141,8 +188,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           XiCmp=0
       END IF
   
-      PoCmp=CompIN(2)
-      HoCmp=CompOUT(3)
+      PoCmp=CompIN%CompInPdis   !RS: Debugging: Formerly CompIN(2)
+      HoCmp=CompOUT%CmpOHdis  !RS: Debugging: Formerly CompOUT(3)
 
       Pressure=PoCmp*1000   !RS Comment: Unit Conversion
       Enthalpy=HoCmp*1000   !RS Comment: Unit Conversion
@@ -171,12 +218,12 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           XoCmp=0
       END IF
 
-      PwrCmp=CompOUT(1)*1000    !RS Comment: Unit Conversion
-      MassCmp=CompOUT(6)
+      PwrCmp=CompOUT%CmpOPwr*1000    !RS Comment: Unit Conversion    !RS: Debugging: Formerly CompOUT(1)
+      MassCmp=CompOUT%CmpOMCmp    !RS: Debugging: Formerly CompOUT(6)
 
       !*******Condenser*******
-      PiCnd=CondOUT(1)
-      HiCnd=CondOUT(2)
+      PiCnd=CondOUT%COutpRiC  !RS: Debugging: Formerly CondOUT(1)
+      HiCnd=CondOUT%COuthRiC  !RS: Debugging: Formerly CondOUT(2)
 
       Pressure=PiCnd*1000   !RS Comment: Unit Conversion
       Enthalpy=HiCnd*1000   !RS Comment: Unit Conversion
@@ -205,21 +252,22 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           XiCnd=0
       END IF
 
-      TdbiCnd=CondIN(5)
-      RHiCnd=CondIN(6)
+      TdbiCnd=CondIN%CIntAi !RS: Debugging: Formerly CondIN(5)
+      RHiCnd=CondIN%CInrhAi  !RS: Debugging: Formerly CondIN(6)
 
       AirPropOpt=2
-      AirProp(1)=TdbiCnd
-      AirProp(3)=RHiCnd
-      CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-      hAiCnd=AirProp(4)
-      TwbiCnd=AirProp(5)
-      RhoAiC=AirProp(7)
+      AirProp%APTDB=TdbiCnd    !RS: Debugging: Formerly AirProp(1)
+      AirProp%APRelHum=RHiCnd !RS: Debugging: Formerly AirProp(3)
+      CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+      hAiCnd=AirProp%APEnth !RS: Debugging: Formerly AirProp(4)
+      TwbiCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
+      RhoAiC=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 
-      CPair=CPA(TdbiCnd)
+      CPair=CPA(TdbiCnd)    !RS: Replace: CPA (2/19/14)
+      CPair=CPAirFunction(TdbiCnd,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 
-      PoCnd=CondOUT(5)
-      HoCnd=CondOUT(6)
+      PoCnd=CondOUT%COutpRoC  !RS: Debugging: Formerly CondOUT(5)
+      HoCnd=CondOUT%COuthRoC  !RS: Debugging: Formerly CondOUT(6)
 
       Pressure=PoCnd*1000   !RS Comment: Unit Conversion
       Enthalpy=HoCnd*1000   !RS Comment: Unit Conversion
@@ -248,29 +296,28 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           XoCnd=0
       END IF
 
-      !CFMcnd=SCFMcnd
-      Qcnd =CondOUT(15)*1000    !RS Comment: Unit Conversion
+      Qcnd =CondOUT%COutQC*1000    !RS Comment: Unit Conversion    !RS: Debugging: Formerly CondOUT(15)
 
-      TdboCnd=CondOUT(21)
-      RHoCnd=CondOUT(22)
+      TdboCnd=CondOUT%COuttAoC   !RS: Debugging: Formerly CondOUT(3)
+      RHoCnd=CondOUT%COutrhAoC    !RS: Debugging: Formerly CondOUT(4)
 
       AirPropOpt=2
-      AirProp(1)=TdboCnd
-      AirProp(3)=RHoCnd
-      CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-      WaoCnd=AirProp(2)
-      hAoCnd=AirProp(4)
-      TwboCnd=AirProp(5)
-      RhoAoC=AirProp(7)
+      AirProp%APTDB=TdboCnd    !RS: Debugging: Formerly AirProp(1)
+      AirProp%APRelHum=RHoCnd !RS: Debugging: Formerly AirProp(3)
+      CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+      WaoCnd=AirProp%APHumRat !RS: Debugging: Formerly AirProp(2)
+      hAoCnd=AirProp%APEnth !RS: Debugging: Formerly AirProp(4)
+      TwboCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
+      RhoAoC=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 
-      DPaCND=CondOUT(23)*1000   !RS Comment: Unit Conversion
+      DPaCND=CondOUT%COutDPAir*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly CondOUT(19)
 
-      MassCnd=CondOUT(18)
-      MassDisLn=CondOUT(16)
-      MassLiqLn=CondOUT(17)
+      MassCnd=CondOUT%COutMC   !RS: Debugging: Formerly CondOUT(18)
+      MassDisLn=CondOUT%COutMDisLn !RS: Debugging: Formerly CondOUT(16)
+      MassLiqLn=CondOUT%COutMLiqLn !RS: Debugging: Formerly CondOUT(17)
 
-      WeightCndAluminum=CondOUT(28)
-      WeightCndCopper=CondOUT(29)
+      WeightCndAluminum=CondOUT%COutWtAl !RS: Debugging: Formerly CondOUT(8)
+      WeightCndCopper=CondOUT%COutWtCu   !RS: Debugging: Formerly CondOUT(9)
 
       !*******Evaporator*******
       PiEvp=0
@@ -374,7 +421,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           PoCnd=0
           HoCnd=0
 
-          ToCnd=CondOUT(7)
+          ToCnd=CondOUT%COuttRoC  !RS: Debugging: Formerly CondOUT(7)
           XoCnd=0
           TsatoCnd=0
           TsupoCnd=0
@@ -401,8 +448,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           WeightCndCopper=0
 
 	      !*******Evaporator*******
-	      PiEvp=EvapIN(2)
-	      HiEvp=EvapIN(3)
+	      PiEvp=EvapIN%EInpRi   !RS: Debugging: Formerly EvapIN(2)
+	      HiEvp=EvapIN%EInhRi   !RS: Debugging: Formerly EvapIN(3)
 
 	      Pressure=PiEvp*1000   !RS Comment: Unit Conversion
 	      Enthalpy=HiEvp*1000   !RS Comment: Unit Conversion
@@ -431,21 +478,22 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
               XiEvp=0
           END IF
 
-	      TdbiEvp=EvapIN(5)
-	      RHiEvp=EvapIN(6)
+	      TdbiEvp=EvapIN%EIntAi !RS: Debugging: Formerly EvapIN(5)
+	      RHiEvp=EvapIN%EInrhAi  !RS: Debugging: Formerly EvapIN(6)
 
 	      AirPropOpt=2
-	      AirProp(1)=TdbiEvp
-	      AirProp(3)=RHiEvp
-	      CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	      hAiEvp=AirProp(4)
-	      TwbiEvp=AirProp(5)
-	      RhoAiE=AirProp(7)
+	      AirProp%APTDB=TdbiEvp    !RS: Debugging: Formerly AirProp(1)
+	      AirProp%APRelHum=RHiEvp !RS: Debugging: Formerly AirProp(3)
+	      CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+	      hAiEvp=AirProp%APEnth !RS: Debugging: Formerly AirProp(4)
+	      TwbiEvp=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
+	      RhoAiE=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 
-	      CPair=CPA(TdbiEvp)
+	      CPair=CPA(TdbiEvp)    !RS: Replace: CPA (2/19/14)
+          CPair=CPAirFunction(TdbiEvp,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 
-	      PoEvp=EvapOUT(1)
-	      HoEvp=EvapOUT(2)
+	      PoEvp=EvapOUT%EOutpRoC  !RS: Debugging: Formerly EvapOUT(1)
+	      HoEvp=EvapOUT%EOuthRoC  !RS: Debugging: Formerly EvapOUT(2)
 
 	      Pressure=PoEvp*1000   !RS Comment: Unit Conversion
 	      Enthalpy=HoEvp*1000   !RS Comment: Unit Conversion
@@ -474,40 +522,41 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
               XoEvp=0
           END IF
 
-	      DPaEvp=EvapOUT(19)*1000   !RS Comment: Unit Conversion
+	      DPaEvp=EvapOUT%EOutDPAir*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly EvapOUT(5)
 
-	      Qevp =-EvapOUT(11)*1000   !RS Comment: Unit Conversion
-	      QevpSens=-EvapOUT(12)*1000    !RS Comment: Unit Conversion
+	      Qevp =-EvapOUT%EOutQC*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly EvapOUT(11)
+	      QevpSens=-EvapOUT%EOutQCSens*1000    !RS Comment: Unit Conversion    !RS: Debugging: Formerly EvapOUT(12)
 	      IF (ABS(QevpSens) .GT. ABS(Qevp)) THEN !Make sure sensible heat is never higher than total heat. ISI - 08/02/07
 	          QevpSens = Qevp
 	          hAoEvp=-Qevp/1000/(CFMevp*RhoAiE)+hAiEvp
-	          SpecHeat=CPA(TdbiEvp)
+	          SpecHeat=CPA(TdbiEvp) !RS: Replace: CPA (2/19/14)
+              SpecHeat=CPAirFunction(TdbiEvp,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 	          TdboEvp=-QevpSens/1000/(CFMevp*RhoAiE*SpecHeat)+TdbiEvp
 	          AirPropOpt=1
-	          AirProp(1)=TdboEvp
-	          AirProp(4)=hAoEvp
-	          CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	          TwboEvp=AirProp(5)
-	          RHoEvp=AirProp(3)
+	          AirProp%APTDB=TdboEvp    !RS: Debugging: Formerly AirProp(1)
+	          AirProp%APEnth=hAoEvp !RS: Debugging: Formerly AirProp(4)
+	          CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+	          TwboEvp=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
+	          RHoEvp=AirProp%APRelHum !RS: Debugging: Formerly AirProp(3)
 	      ELSE
-    	      TdboEvp=EvapOUT(17)
-	          RHoEvp=EvapOUT(18) 
+    	      TdboEvp=EvapOUT%EOuttAoC   !RS: Debugging: Formerly EvapOUT(3)
+	          RHoEvp=EvapOUT%EOutrhAoC   !RS: Debugging: Formerly EvapOUT(4)
 	          AirPropOpt=2
-	          AirProp(1)=TdboEvp
-	          AirProp(3)=RHoEvp
-	          CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	          TwboEvp=AirProp(5)
-	          RhoAoE=AirProp(7)
+	          AirProp%APTDB=TdboEvp    !RS: Debugging: Formerly AirProp(1)
+	          AirProp%APRelHum=RHoEvp !RS: Debugging: Formerly AirProp(3)
+	          CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+	          TwboEvp=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
+	          RhoAoE=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 	      END IF
 
 	      QevpLat=Qevp-QevpSens
 	      SHR=QevpSens/Qevp
 
-	      MassEvp=EvapOUT(14)
-	      MassSucLn=EvapOUT(13)+AccumOUT(1)
+	      MassEvp=EvapOUT%EOutMC   !RS: Debugging: Formerly EvapOUT(14)
+	      MassSucLn=EvapOUT%EOutMSucLn+AccumOUT%AccOMass !RS: Debugging: Formerly EvapOUT(13), AccumOUT(1)
 
-	      WeightEvpAluminum=EvapOUT(24)
-	      WeightEvpCopper=EvapOUT(25)
+	      WeightEvpAluminum=EvapOUT%EOutWtAl !RS: Debugging: Formerly EvapOUT(15)
+	      WeightEvpCopper=EvapOUT%EOutWtCu   !RS: Debugging: Formerly EvapOUT(16)
 
 	      !*******Exp. device*******
 	      PiExp=0
@@ -554,8 +603,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           TsupoCmp=0
           TsuboCmp=0
 
-          PiCmp=CompIN(1) !PoEvp
-          HiCmp=CompIN(3) !HoEvp
+          PiCmp=CompIN%CompInPsuc !PoEvp    !RS: Debugging: Formerly CompIN(1)
+          HiCmp=CompIN%CompInHsuc !HoEvp    !RS: Debugging: Formerly CompIN(3)
 
 	      Pressure=PiCmp*1000   !RS Comment: Unit Conversion
 	      Enthalpy=HiCmp*1000   !RS Comment: Unit Conversion
@@ -573,8 +622,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       ELSE
 
           !*******Condenser*******
-          PiCnd=CondOUT(1)
-          HiCnd=CondOUT(2)
+          PiCnd=CondOUT%COutpRiC  !RS: Debugging: Formerly CondOUT(1)
+          HiCnd=CondOUT%COuthRiC  !RS: Debugging: Formerly CondOUT(2)
 
           Pressure=PiCnd*1000   !RS Comment: Unit Conversion
           Enthalpy=HiCnd*1000   !RS Comment: Unit Conversion
@@ -603,21 +652,22 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
               XiCnd=0
           END IF
 
-          TdbiCnd=CondIN(5)
-          RHiCnd=CondIN(6)
+          TdbiCnd=CondIN%CIntAi !RS: Debugging: Formerly CondIN(5)
+          RHiCnd=CondIN%CInrhAi  !RS: Debugging: Formerly CondIN(6)
 
           AirPropOpt=2
-          AirProp(1)=TdbiCnd
-          AirProp(3)=RHiCnd
-          CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-          hAiCnd=AirProp(4)
-          TwbiCnd=AirProp(5)
-          RhoAiC=AirProp(7)
+          AirProp%APTDB=TdbiCnd    !RS: Debugging: Formerly AirProp(1)
+          AirProp%APRelHum=RHiCnd !RS: Debugging: Formerly AirProp(3)
+          CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+          hAiCnd=AirProp%APEnth !RS: Debugging: Formerly AirProp(4)
+          TwbiCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
+          RhoAiC=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 
-          CPair=CPA(TdbiCnd)
+          CPair=CPA(TdbiCnd)    !RS: Replace: CPA (2/19/14)
+          CPair=CPAirFunction(TdbiCnd,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 
-          PoCnd=CondOUT(5)
-          HoCnd=CondOUT(6)
+          PoCnd=CondOUT%COutpRoC  !RS: Debugging: Formerly CondOUT(5)
+          HoCnd=CondOUT%COuthRoC  !RS: Debugging: Formerly CondOUT(6)
 
           Pressure=PoCnd*1000   !RS Comment: Unit Conversion
           Enthalpy=HoCnd*1000   !RS Comment: Unit Conversion
@@ -646,28 +696,28 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
               XoCnd=0
           END IF
 
-          Qcnd =CondOUT(15)*1000    !RS Comment: Unit Conversion
+          Qcnd =CondOUT%COutQC*1000    !RS Comment: Unit Conversion    !RS: Debugging: Formerly CondOUT(15)
 
-          TdboCnd=CondOUT(21)
-          RHoCnd=CondOUT(22)
+          TdboCnd=CondOUT%COuttAoC   !RS: Debugging: Formerly CondOUT(3)
+          RHoCnd=CondOUT%COutrhAoC    !RS: Debugging: Formerly CondOUT(4)
 
           AirPropOpt=2
-          AirProp(1)=TdboCnd
-          AirProp(3)=RHoCnd
-          CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-          WaoCnd=AirProp(2)
-          hAoCnd=AirProp(4)
-          TwboCnd=AirProp(5)
-          RhoAoC=AirProp(7)
+          AirProp%APTDB=TdboCnd    !RS: Debugging: Formerly AirProp(1)
+          AirProp%APRelHum=RHoCnd !RS: Debugging: Formerly AirProp(3)
+          CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+          WaoCnd=AirProp%APHumRat !RS: Debugging: Formerly AirProp(2)
+          hAoCnd=AirProp%APEnth !RS: Debugging: Formerly AirProp(4)
+          TwboCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
+          RhoAoC=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 
-          DPaCND=CondOUT(23)*1000   !RS Comment: Unit Conversion
+          DPaCND=CondOUT%COutDPAir*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly CondOUT(19)
 
-          MassCnd=CondOUT(18)
-          MassDisLn=CondOUT(16)
-          MassLiqLn=CondOUT(17)
+          MassCnd=CondOUT%COutMC   !RS: Debugging: Formerly CondOUT(18)
+          MassDisLn=CondOUT%COutMDisLn !RS: Debugging: Formerly CondOUT(16)
+          MassLiqLn=CondOUT%COutMLiqLn !RS: Debugging: Formerly CondOUT(17)
 
-          WeightCndAluminum=CondOUT(28)
-          WeightCndCopper=CondOUT(29)
+          WeightCndAluminum=CondOUT%COutWtAl !RS: Debugging: Formerly CondOUT(8)
+          WeightCndCopper=CondOUT%COutWtCu   !RS: Debugging: Formerly CondOUT(9)
 
           !*******Evaporator*******
           PiEvp=0
@@ -763,7 +813,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           HiCmp=0
           TiCmp=0
           XiCmp=0
-          TsatiCmp=(TSICMP-32)*5/9  !RS Comment: Unit Conversionm, from F to C
+          TsatiCmp=(TSICMP-32)*5/9  !RS Comment: Unit Conversion, from F to C
           TsupiCmp=0
           TsubiCmp=0
 
@@ -784,8 +834,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
   ELSE
 
       !*******Compressor data*******
-      PiCmp=CompIN(1)
-      HiCmp=CompIN(3)
+      PiCmp=CompIN%CompInPSuc   !RS: Debugging: Formerly CompIN(1)
+      HiCmp=CompIN%CompInHSuc   !RS: Debugging: Formerly CompIN(3)
 
       Pressure=PiCmp*1000   !RS Comment: Unit Conversion
       Enthalpy=HiCmp*1000   !RS Comment: Unit Conversion
@@ -814,8 +864,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           XiCmp=0
       END IF
   
-      PoCmp=CompIN(2)
-      HoCmp=CompOUT(3)
+      PoCmp=CompIN%CompInPDis   !RS: Debugging: Formerly CompIN(2)
+      HoCmp=CompOUT%CmpOHDis  !RS: Debugging: Formerly CompOUT(3)
 
       Pressure=PoCmp*1000   !RS Comment: Unit Conversion
       Enthalpy=HoCmp*1000   !RS Comment: Unit Conversion
@@ -844,12 +894,12 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           XoCmp=0
       END IF
 
-      PwrCmp=CompOUT(1)*1000    !RS Comment: Unit Conversion
-      MassCmp=CompOUT(6)
+      PwrCmp=CompOUT%CmpOPwr*1000    !RS Comment: Unit Conversion    !RS: Debugging: Formerly CompOUT(1)
+      MassCmp=CompOUT%CmpOMCmp    !RS: Debugging: Formerly CompOUT(6)
 
       !*******Condenser*******
-      PiCnd=CondOUT(1)
-      HiCnd=CondOUT(2)
+      PiCnd=CondOUT%COutpRiC  !RS: Debugging: Formerly CondOUT(1)
+      HiCnd=CondOUT%COuthRiC  !RS: Debugging: Formerly CondOUT(2)
 
       Pressure=PiCnd*1000   !RS Comment: Unit Conversion
       Enthalpy=HiCnd*1000   !RS Comment: Unit Conversion
@@ -878,21 +928,22 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           XiCnd=0
       END IF
 
-      TdbiCnd=CondIN(5)
-      RHiCnd=CondIN(6)
+      TdbiCnd=CondIN%CIntAi !RS: Debugging: Formerly CondIN(5)
+      RHiCnd=CondIN%CInrhAi  !RS: Debugging: Formerly CondIN(6)
 
       AirPropOpt=2
-      AirProp(1)=TdbiCnd
-      AirProp(3)=RHiCnd
-      CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-      hAiCnd=AirProp(4)
-      TwbiCnd=AirProp(5)
-      RhoAiC=AirProp(7)
+      AirProp%APTDB=TdbiCnd    !RS: Debugging: Formerly AirProp(1)
+      AirProp%APRelHum=RHiCnd !RS: Debugging: Formerly AirProp(3)
+      CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+      hAiCnd=AirProp%APEnth !RS: Debugging: Formerly AirProp(4)
+      TwbiCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
+      RhoAiC=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 
-      CPair=CPA(TdbiCnd)
+      !CPair=CPA(TdbiCnd)    !RS: Replace: CPA (2/19/14)
+      CPair=CPAirFunction(TdbiCnd,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 
-      PoCnd=CondOUT(5)
-      HoCnd=CondOUT(6)
+      PoCnd=CondOUT%COutpRoC  !RS: Debugging: Formerly CondOUT(5)
+      HoCnd=CondOUT%COuthRoC  !RS: Debugging: Formerly CondOUT(6)
 
       Pressure=PoCnd*1000   !RS Comment: Unit Conversion
       Enthalpy=HoCnd*1000   !RS Comment: Unit Conversion
@@ -921,44 +972,44 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           XoCnd=0
       END IF
 
-      Qcnd =CondOUT(15)*1000    !RS Comment: Unit Conversion
+      Qcnd =CondOUT%COutQC*1000    !RS Comment: Unit Conversion    !RS: Debugging: Formerly CondOUT(15)
 
-      TdboCnd=CondOUT(21)
-      RHoCnd=CondOUT(22)
+      TdboCnd=CondOUT%COuttAoC   !RS: Debugging: Formerly CondOUT(3)
+      RHoCnd=CondOUT%COutrhAoC    !RS: Debugging: Formerly CondOUT(4)
 
       AirPropOpt=2
-      AirProp(1)=TdboCnd
-      AirProp(3)=RHoCnd
-      CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-      WaoCnd=AirProp(2)
-      hAoCnd=AirProp(4)
-      TwboCnd=AirProp(5)
-      RhoAoC=AirProp(7)
+      AirProp%APTDB=TdboCnd    !RS: Debugging: Formerly AirProp(1)
+      AirProp%APRelHum=RHoCnd !RS: Debugging: Formerly AirProp(3)
+      CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+      WaoCnd=AirProp%APHumRat !RS: Debugging: Formerly AirProp(2)
+      hAoCnd=AirProp%APEnth !RS: Debugging: Formerly AirProp(4)
+      TwboCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
+      RhoAoC=AirProp%APDryDens  !RS: Debugging: Formerly AirProp(7)
 
-      DPaCND=CondOUT(23)*1000   !RS Comment: Unit Conversion
+      DPaCND=CondOUT%COutDPAir*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly CondOUT(19)
 
-      MassCnd=CondOUT(18)
-      MassDisLn=CondOUT(16)
-      MassLiqLn=CondOUT(17)
+      MassCnd=CondOUT%COutMC   !RS: Debugging: Formerly CondOUT(18)
+      MassDisLn=CondOUT%COutMDisLn !RS: Debugging: Formerly CondOUT(16)
+      MassLiqLn=CondOUT%COutMLiqLn !RS: Debugging: Formerly CondoUT(17)
 
-      WeightCndAluminum=CondOUT(28)
-      WeightCndCopper=CondOUT(29)
+      WeightCndAluminum=CondOUT%COutWtAl !RS: Debugging: Formerly CondOUT(8)
+      WeightCndCopper=CondOUT%COutWtCu   !RS: Debugging: Formerly CondOUT(9)
 
 	  !*******Exp. device*******
       IF (ExpDevice .EQ. 3) THEN
-	      PiExp=CapTubeIN(2)
-	      HiExp=CapTubeIN(3)
-	      MassDisTube=CapTubeOUT(5)     
+	      PiExp=CapTubeIN%CTIPiEx    !RS: Debugging: Formerly CapTubeIN(2)
+	      HiExp=CapTubeIN%CTIHiEx    !RS: Debugging: Formerly CapTubeIN(3)
+	      MassDisTube=CapTubeOUT%CTOMDT !RS: Debugging: Formerly CapTubeOUT(5)
       ELSE
-	      PiExp=ShTbIN(2)
-	      HiExp=ShTbIN(3)
-	      MassDisTube=ShTbOUT(5)
+	      PiExp=ShTbIN%ShTbINPiE   !RS: Debugging: Formerly ShTbIN(2)
+	      HiExp=ShTbIN%ShTbINHiE   !RS: Debugging: Formerly ShTbIN(3)
+	      MassDisTube=ShTbOUT%ShTbOMDT    !RS: Debugging: Formerly ShTbOUT(5)
       END IF
       
-	  Dshtb=ShTbPAR(2)
-	  Qtxv=TxvPAR(1)
-	  DcapTube=CapTubePAR(1)
-	  LcapTube=CapTubePAR(2)
+	  Dshtb=ShTbPAR%ShTbTID  !RS: Debugging: Formerly ShTbPAR(2)
+	  Qtxv=TxvOUT%TXVQ !RS: Debugging: Formerly TxvPAR(1)
+	  DcapTube=CapTubePAR%CTTubeID    !RS: Debugging: Formerly CapTubePAR(1)
+	  LcapTube=CapTubePAR%CTTubeLen    !RS: Debugging: Formerly CapTubePAR(2)
 
 	  Pressure=PiExp*1000   !RS Comment: Unit Conversion
 	  Enthalpy=HiExp*1000   !RS Comment: Unit Conversion
@@ -988,11 +1039,11 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       END IF
 
       IF (ExpDevice .EQ. 3) THEN
-	      PoExp=CapTubeOUT(2)
-	      HoExp=CapTubeIN(3)
+	      PoExp=CapTubeOUT%CTOPoE   !RS: Debugging: Formerly CapTubeOUT(6)???
+	      HoExp=CapTubeIN%CTIHiEx    !RS: Debugging: Formerly CapTubeIN(3)
       ELSE
-	      PoExp=ShTbOUT(2)
-	      HoExp=ShTbIN(3)
+	      PoExp=ShTbOUT%ShTbOPoE  !RS: Debugging: Formerly ShTbOUT(2)
+	      HoExp=ShTbIN%ShTbINHiE   !RS: Debugging: Formerly ShTbIN(3)
       END IF
 
 	  Pressure=PoExp*1000   !RS Comment: Unit Conversion
@@ -1024,11 +1075,11 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       END IF
 
 	  !*******Evaporator*******
-	  PiEvp=EvapIN(2)
-	  HiEvp=EvapIN(3)
+	  PiEvp=EvapIN%EInpRi   !RS: Debugging: Formerly EvapIN(2)
+	  HiEvp=EvapIN%EInhRi   !RS: Debugging: Formerly EvapIN(3)
       
-      PwrODfan=CondPAR(34)*1000 !RS Comment: PwrIDfan is empty unless repopulated; 1000 accounts for CondPAR conversion
-      PwrIDfan=EvapPAR(27)*1000 !RS Comment: PwrODfan is empty unless repopulated; 1000 accounts for EvapPAR conversion
+      PwrODfan=CondPAR%CondFanPwr !*1000 !RS Comment: 1000 accounts for CondPAR conversion !RS: Debugging: Formerly CondPAR(34)
+      PwrIDfan=EvapPAR%EvapFanPwr !*1000 !RS Comment: 1000 accounts for EvapPAR conversion !RS: Debugging: Formerly EvapPAR(27)
 
 	  Pressure=PiEvp*1000   !RS Comment: Unit Conversion
 	  Enthalpy=HiEvp*1000   !RS Comment: Unit Conversion
@@ -1057,21 +1108,22 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           XiEvp=0
       END IF
 
-	  TdbiEvp=EvapIN(5)
-	  RHiEvp=EvapIN(6)
+	  TdbiEvp=EvapIN%EIntAi !RS: Debugging: Formerly EvapIN(5)
+	  RHiEvp=EvapIN%EInrhAi  !RS: Debugging: Formerly EvapIN(6)
 
 	  AirPropOpt=2
-	  AirProp(1)=TdbiEvp
-	  AirProp(3)=RHiEvp
-	  CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	  hAiEvp=AirProp(4)
-	  TwbiEvp=AirProp(5)
-	  RhoAiE=AirProp(7)
+	  AirProp%APTDB=TdbiEvp    !RS: Debugging: Formerly AirProp(1)
+	  AirProp%APRelHum=RHiEvp !RS: Debugging: Formerly AirProp(3)
+	  CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+	  hAiEvp=AirProp%APEnth !RS: Debugging: Formerly AirProp(4)
+	  TwbiEvp=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
+	  RhoAiE=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 
-	  CPair=CPA(TdbiEvp)
+	  !CPair=CPA(TdbiEvp)    !RS: Replace: CPA (2/19/14)
+      CPair=CPAirFunction(TdbiEvp,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 
-	  PoEvp=EvapOUT(1)
-	  HoEvp=EvapOUT(2)
+	  PoEvp=EvapOUT%EOutpRoC  !RS: Debugging: Formerly EvapOUT(1)
+	  HoEvp=EvapOUT%EOuthRoC  !RS: Debugging: Formerly EvapOUT(2)
 
 	  Pressure=PoEvp*1000   !RS Comment: Unit Conversion
 	  Enthalpy=HoEvp*1000   !RS Comment: Unit Conversion
@@ -1100,44 +1152,45 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           XoEvp=0
       END IF
 
-	  DPaEvp=EvapOUT(19)*1000   !RS Comment: Unit Conversion
+	  DPaEvp=EvapOUT%EOutDPAir*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly EvapOUT(5)
 
-	  Qevp =-EvapOUT(11)*1000   !RS Comment: Unit Conversion
-	  QevpSens=-EvapOUT(12)*1000    !RS Comment: Unit Conversion
+	  Qevp =-EvapOUT%EOutQC*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly EvapOUT(11)
+	  QevpSens=-EvapOUT%EOutQCSens*1000    !RS Comment: Unit Conversion    !RS: Debugging: Formerly EvapOUT(12)
 	  IF (ABS(QevpSens) .GT. ABS(Qevp)) THEN !Make sure sensible heat is never higher than total heat. ISI - 08/02/07
 	      QevpSens = Qevp
 	      hAoEvp=-Qevp/1000/(CFMevp*RhoAiE)+hAiEvp
-	      SpecHeat=CPA(TdbiEvp)
+	      SpecHeat=CPA(TdbiEvp) !RS: Replace: CPA (2/19/14)
+          SpecHeat=CPAirFunction(TdbiEvp,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 	      TdboEvp=-QevpSens/1000/(CFMevp*RhoAiE*SpecHeat)+TdbiEvp
 	      AirPropOpt=1
-	      AirProp(1)=TdboEvp
-	      AirProp(4)=hAoEvp
-	      CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	      TwboEvp=AirProp(5)
-	      RHoEvp=AirProp(3)
+	      AirProp%APTDB=TdboEvp    !RS: Debugging: Formerly AirProp(1)
+	      AirProp%APEnth=hAoEvp !RS: Debugging: Formerly AirProp(4)
+	      CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+	      TwboEvp=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
+	      RHoEvp=AirProp%APRelHum !RS: Debugging: Formerly AirProp(3)
 	  ELSE
-    	  TdboEvp=EvapOUT(17)
-	      RHoEvp=EvapOUT(18) 
+    	  TdboEvp=EvapOUT%EOuttAoC   !RS: Debugging: Formerly EvapOUT(3)
+	      RHoEvp=EvapOUT%EOutrhAoC    !RS: Debugging: Formerly EvapOUT(4)
 	      AirPropOpt=2
-	      AirProp(1)=TdboEvp
-	      AirProp(3)=RHoEvp
-	      CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	      TwboEvp=AirProp(5)
-	      RhoAoE=AirProp(7)
+	      AirProp%APTDB=TdboEvp    !RS: Debugging: Formerly AirProp(1)
+	      AirProp%APRelHum=RHoEvp !RS: Debugging: Formerly AirProp(3)
+	      CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+	      TwboEvp=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
+	      RhoAoE=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 	  END IF
 
 	  QevpLat=Qevp-QevpSens
 
-	  MassEvp=EvapOUT(14)
-	  MassSucLn=EvapOUT(13)+AccumOUT(1)
+	  MassEvp=EvapOUT%EOutMC   !RS: Debugging: Formerly EvapOUT(14)
+	  MassSucLn=EvapOUT%EOutMSucLn+AccumOUT%AccOMass !RS: Debugging: Formerly EvapOUT(13), AccumOUT(1)
 
-	  WeightEvpAluminum=EvapOUT(24)
-	  WeightEvpCopper=EvapOUT(25)
+	  WeightEvpAluminum=EvapOUT%EOutWtAl !RS: Debugging: Formerly EvapOUT(15)
+	  WeightEvpCopper=EvapOUT%EOutWtCu   !RS: Debugging: Formerly EvapOUT(16)
 
 	  IF (IsCoolingMode .GT. 0) THEN !ISI - 11/03/2008
-	    DrawBlow=EvapPAR(28)
+	    DrawBlow=EvapPAR%EvapFanLoc    !RS: Debugging: Formerly EvapPAR(28)
 	  ELSE
-	    DrawBlow=CondPAR(35)
+	    DrawBlow=CondPAR%CondFanLoc    !RS: Debugging: Formerly CondPAR(35)
 	  END IF
 
 	  IF (DrawBlow .LT. 2) THEN !draw through
@@ -1163,13 +1216,13 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  END IF
 
       CalChg=CALCHG*UnitM
-      Dshtb=ShTbPAR(2)*1000 !RS Comment: Unit Conversion
-	  DcapTube=CapTubePAR(1)*1000   !RS Comment: Unit Conversion
-	  LcapTube=CapTubePAR(2)*1000   !RS Comment: Unit Conversion
+      Dshtb=ShTbPAR%ShTbTID*1000 !RS Comment: Unit Conversion    !RS: Debugging: Formerly ShTbPAR(2)
+	  DcapTube=CapTubePAR%CTTubeID*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly CapTubePAR(1)
+	  LcapTube=CapTubePAR%CTTubeLen*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly CapTubePAR(2)
 
-      MassAccum=AccumOUT(1)
-      AccumDP=AccumOUT(5)
-      FilterDP=FilterOUT(1)
+      MassAccum=AccumOUT%AccOMass !RS: Debugging: Formerly AccumOUT(1)
+      AccumDP=AccumOUT%AccODP   !RS: Debugging: Formerly AccumOUT(2)
+      FilterDP=FilterOUT%FODP !RS: Debugging: Formerly FilterOUT(1)
   
   END IF
   
@@ -1182,18 +1235,20 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 		  QtotSens=-QevpSens+Qcnd	  
 	  END IF
 	  	
-	  CPair=CPA(REAL(TdboCnd))
+	  !CPair=CPA(REAL(TdboCnd))  !RS: Replace: CPA (2/19/14)
+      !RS: Debugging: Should update the humidity ratio (2/20/14)
+      CPair=CPAirFunction(TdboCnd,AirProp%APHumRat)  !RS: Replace: CPA (2/19/14)
 	  hAoCnd=Qtot/1000/(CFMevp*StandardDensity)+hAiEvp
 	  TdboCnd=QtotSens/1000/(CFMevp*StandardDensity*CPair)+TdbiEvp
 
 	  AirPropOpt=1
-	  AirProp(1)=TdboCnd
-	  AirProp(4)=hAoCnd
-	  CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	  WaoCnd=AirProp(2)
-	  AirProp(3)=RHoCnd	  
-	  TwboCnd=AirProp(5)
-	  RhoAoC=AirProp(7)
+	  AirProp%APTDB=TdboCnd    !RS: Debugging: Formerly AirProp(1)
+	  AirProp%APEnth=hAoCnd !RS: Debugging: Formerly AirProp(4)
+	  CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+	  WaoCnd=AirProp%APHumRat !RS: Debugging: Formerly AirProp(2)
+	  AirProp%APRelHum=RHoCnd !RS: Debugging: Formerly AirProp(3)
+	  TwboCnd=AirProp%APTWB    !RS: Debugging: Formerly AirProp(5)
+	  RhoAoC=AirProp%APDryDens !RS: Debugging: Formerly AirProp(7)
 
 	  Qevp=Qtot
 	  QevpSens=QtotSens
@@ -1283,9 +1338,9 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  MassLiqLn=MassLiqLn/UnitM !RS Comment: Unit Conversion, from kg to lbm
 	  MassDisTube=MassDisTube/UnitM !RS Comment: Unit Conversion, from kg to lbm
 	  MassAccum=MassAccum/UnitM     !RS Comment: Unit Conversion, from kg to lbm
-      Dshtb=ShTbPAR(2)/UnitL*12         !RS Comment: Unit Conversion, from m to in
-	  DcapTube=CapTubePAR(1)/UnitL*12   !RS Comment: Unit Conversion, from m to in
-	  LcapTube=CapTubePAR(2)/UnitL*12   !RS Comment: Unit Conversion, from m to in
+      Dshtb=ShTbPAR%ShTbTID/UnitL*12         !RS Comment: Unit Conversion, from m to in  !RS: Debugging: Formerly ShTbPAR(2)
+	  DcapTube=CapTubePAR%CTTubeID/UnitL*12   !RS Comment: Unit Conversion, from m to in  !RS: Debugging: Formerly CapTubePAR(1)
+	  LcapTube=CapTubePAR%CTTubeLen/UnitL*12   !RS Comment: Unit Conversion, from m to in  !RS: Debugging: Formerly CapTubePAR(2)
 
       TaoEVP=TaoEVP*1.8+32  !RS Comment: Unit Conversion, from C to F
 	  TaoCND=TaoCND*1.8+32  !RS Comment: Unit Conversion, from C to F
@@ -1435,23 +1490,6 @@ CoilSurfTemp=CoilParams(2)%TSurfCoil*9/5+32 !RS Comment: Unit Conversion, from C
   WRITE(5,FMT_2208)'Condenser Tube Area             ',CondTubeArea,NoUnit
   WRITE(5,FMT_2208)'Condenser Fin Area              ',CondFinArea,NoUnit
   WRITE(5,FMT_2208)'Evaporator Surface Temperature  ',CoilSurfTemp,NoUnit
-  
-!!VL: Previously: 
-!!1007 FORMAT(A17,A42)
-!!1008 FORMAT(A13,F10.3,A10,A10,A13,F10.3,A10)
-!!2001 FORMAT(A13,F10.3,A10)
-!!2004 FORMAT(A56,F10.3,A10)
-!!2007 FORMAT(A16,F10.3,A9)
-!!2009 FORMAT(60(A16,','))
-!!2100 FORMAT(60(E,','))
-!!
-!!2200 FORMAT(A32,',',A50)
-!!2204 FORMAT(A)
-!!2208 FORMAT(A33,',',F40.3,',',A15)
-!!2212 FORMAT(A24,',',A18,',',A18,',',A21,',',A29,',',A14,',',A17,',',A16,',',A26)
-!!2216 FORMAT(A24,',',F18.3,',',F18.3,',',F21.3,',',F29.3,',',F14.1,',',F17.3,',',F16.3,',',A26)
-!!2220 FORMAT(A18,',',A27,',',A27,',',A24,',',A33,',',A25,',',A20)
-!!2224 FORMAT(A18,',',F27.3,',',F27.3,',',F24.1,',',F33.3,',',F25.3,',',A20) 
 
 RETURN
 

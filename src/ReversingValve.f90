@@ -1,3 +1,61 @@
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! This is a module that models a reversing valve for the Heat Pump system
+!
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! This represents a reversing valve in a heat pump system
+! A description of the component is found at:
+! http://en.wikipedia.org/wiki/Reversing_valve
+! From that website: 
+!  - It changes the direction of refrigerant flow
+
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! This module takes the suction side properties and calculates heat transfer and pressure drop through the valve 
+
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! no input/output files
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! nothing defined at the module level
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains 2 methods:
+!    PUBLIC SuctionHeatTransfer - calculates heat transfer on the suction side
+!       Called by Evaporator
+!    PUBLIC SuctionPressureDrop - calculates the pressure drop on the suction side
+!       Called by Evaporator
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! No current issues/bugs/tickets
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! 2012-12-29 | JEH | Header Completed
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! Nothing currently needs to be done on this module
+!
 MODULE ReversingValveMod
 
 IMPLICIT NONE
@@ -44,6 +102,9 @@ END IF
 
 hso=UA*(Tdis-Tsuc)/mdot+hsi
 
+hso = hsi   !RS: Comment: Added by John Gall (1/9/14) for the cooling-only system
+!RS: This may not be necessary; it may be possible to just not call these routines (1/10/14)
+
 END SUBROUTINE SuctionHeatTransfer
 
 !------------------------------------------------------------------------------
@@ -62,6 +123,9 @@ DP = 327.69*mdot + 3.9633   !RS Comment: What are the values from?
 IF (DP .LT. 0) THEN
     DP = 0
 END IF
+
+DP = 0  !RS: Comment: Added by John Gall (1/9/14) for the cooling-only system
+!RS: This may not be necessary; it may be possible to just not call these routines (1/10/14)
 
 END SUBROUTINE SuctionPressureDrop
 
