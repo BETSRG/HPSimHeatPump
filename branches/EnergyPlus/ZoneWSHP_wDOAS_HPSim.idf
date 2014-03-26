@@ -1172,7 +1172,7 @@ OutdoorCoilData,
 
 OutdoorFanData,
     297, !field Fan Power [W]
-    3688, !field Fan Air Flow Rate [cfm]
+    4000, !3688, !field Fan Air Flow Rate [cfm]
     1; !field Draw Through (1) or Blow Through (2) [-]
 
 IndoorCoilData,

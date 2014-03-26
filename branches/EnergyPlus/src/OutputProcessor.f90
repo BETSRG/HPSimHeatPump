@@ -5676,7 +5676,7 @@ SUBROUTINE FlushHPOutput()
 
     LOGICAL, SAVE :: OneTime = .TRUE.
     REAL :: CurTime
-    Integer:: OutputFile=152 !1 !RS: Debugging: Trying to avoid problems with E+/HPSim due to hardcoding too low of values
+    Integer:: OutputFile=152 !RS: Debugging: Trying to avoid problems with E+/HPSim due to hardcoding too low of values
     REAL :: QSens, QLat, QTot
 
     CurTime=CurrentTime

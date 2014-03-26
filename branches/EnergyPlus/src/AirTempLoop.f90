@@ -1,3 +1,57 @@
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! This function calculates the air-side superheating or subcooling.  This is done by utilizing the evaporator model. 
+!
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! This function does not model any specific component of the Heat Pump.
+! 
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! This module takes the air inputs into the evaporator and uses them to determine 
+! the superheating or subcooling temperatures in the evaporator.
+!
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! No specified input files
+! No specified output files
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! There are no variables called at the module level; all of the variables are called at the function level
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains 1 method:
+!    REAL FUNCTION EVPTR - calculates the evaporator superheat and subcool    
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! No bugs/tickets outstanding
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! 2012-12-12 | JEH | Header Revisions
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! No notes/ToDo/Recommendations
+!
+
 REAL FUNCTION EVPTR(TINPUT,IERR)
     !
     !       EVPTR(TEMPERATURE) = SUPCAL(TEMPERATURE) - SUPERE
@@ -8,24 +62,24 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     !
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE EvaporatorMod
-    USE AccumulatorMod
+    USE AccumulatorModule
     USE DataSimulation
-    USE DataGlobals, ONLY: MaxNameLength, RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE DataGlobals, ONLY: MaxNameLength, RefrigIndex  !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
     USE UnitConvertMod, ONLY: Temperature_F2C
 
     IMPLICIT NONE
 
-    !CHARACTER (len=15) :: Property !RS: Debugging: Extraneous
-    REAL Quality,Pressure,Enthalpy !Temperature,!RS: Debugging: Extraneous
+    REAL Quality,Pressure,Enthalpy
 
     REAL TINPUT
     INTEGER IERR
-    INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
 
+    INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
+    
     REAL,PARAMETER :: StandardDensity=1.2 !kg/m3
 
-    REAL TAIIE,TSATEI,SUPCAL,SUPCL,TSATCI !XMR, !TROE,TSATEO,SXOE    !RS: Debugging: Set once but never used & Extraneous
-    REAL SUPR,TSAVG,SXIC !TRIC,!DIFFER,Hsuc  !RS: Debugging: Set once but never used & Extraneous
+    REAL TAIIE,TSATEI,SUPCAL,SUPCL,TSATCI
+    REAL SUPR,TSAVG,SXIC
     REAL TsatEvp,TsatCnd,Subcooling,Superheat,AccumDP,Xliq,Xvap
     
     CHARACTER(LEN=13),PARAMETER :: FMT_800 = "(A41,F7.2,A5)"
@@ -44,102 +98,95 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     END IF
 
     IF (Unit .EQ. 1) THEN
-        WRITE (PrintString, FMT_800) '>> Evaporator entering air temperature: ',Temperature_F2C(TAIIE),Tunit
+        WRITE(PrintString, FMT_800) '>> Evaporator entering air temperature: ',Temperature_F2C(TAIIE),Tunit
     ELSE
-        WRITE(*,FMT_800)'>> Evaporator entering air temperature: ',TAIIE,Tunit
+        WRITE(PrintString, FMT_800) '>> Evaporator entering air temperature: ',TAIIE,Tunit
     END IF
-    CALL IssueOutputMessage(PrnLog, PrnCon, '')
-    CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(PrintString))    
+    CALL IssueOutputMessage( '')
+    CALL IssueOutputMessage(TRIM(PrintString))    
 
-    !XMR=CompOUT(2)*3600/UnitM   !RS Comment: Unit Conversion, lbm/s??? !RS: Debugging: Extraneous
-
-    HiEvp=EvapIN(3)
+    HiEvp=EvapIN%EInhRi !RS: Debugging: Formerly EvapIN(3)
 
     IF (FirstTimeAirTempLoop) THEN
-        EvapIN(2)=CompIN(1)+(EvapIN(2)-EvapOUT(6))
+        EvapIN%EInpRi=CompIN%CompInPsuc+(EvapIN%EInpRi-EvapOUT%EOutpRiC)  !RS: Debugging: Formerly EvapIN(2), CompIN(1), EvapOUT(6)
         FirstTimeAirTempLoop=.FALSE.
     END IF
 
-    PiEvp=EvapIN(2)
+    PiEvp=EvapIN%EInpRi !RS: Debugging: Formerly EvapIN(2)
 
     Pressure=PiEvp*1000 !RS Comment: Unit Conversion
     Quality=0
     TSATEI=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
     IF (RefPropErr .GT. 0) THEN
-        CALL IssueOutputMessage(PrnLog, PrnCon, '-- WARNING -- LowSide: Refprop error.')
+        CALL IssueOutputMessage( '-- WARNING -- LowSide: Refprop error.')
         IERR=1
         RETURN
     END IF
     TSATEI=TSATEI*1.8+32    !RS Comment: Unit Conversion, from C to F
 
-    EvapIN(1)=MdotR			!Refrigerant side mass flow rate, kg/s
-    EvapIN(2)=PiEvp			!Evap. inlet pressure, kPa
-    EvapIN(3)=HiEvp			!Refrigerant side inlet enthalpy, kJ/kg
-    EvapIN(4)=XMaE            !Air side mass flow rate, kg/s
-    EvapIN(5)=(TAIIE-32)/1.8  !Air side inlet temp. C
-    EvapIN(6)=RHiE            !Air side inlet relative humidity
-    EvapIN(9)=CompOUT(5)      !Discharge temperature, C
+    EvapIN%EInmRef=MdotR			!Refrigerant side mass flow rate, kg/s  !RS: Debugging: Formerly EvapIN(1)
+    EvapIN%EInpRi=PiEvp			!Evap. inlet pressure, kPa  !RS: Debugging: Formerly EvapIN(2)
+    EvapIN%EInhRi=HiEvp			!Refrigerant side inlet enthalpy, kJ/kg !RS: Debugging: Formerly EvapIN(3)
+    EvapIN%EInmAi=XMaE            !Air side mass flow rate, kg/s    !RS: Debugging: Formerly EvapIN(4)
+    EvapIN%EIntAi=(TAIIE-32)/1.8  !Air side inlet temp. C   !RS: Debugging: Formerly EvapIn(5)
+    EvapIN%EInrhAi=RHiE            !Air side inlet relative humidity !RS: Debugging: Formerly EvapIN(6)
+    EvapIN%EIntRdis=CompOUT%CmpOTdis      !Discharge temperature, C !RS: Debugging: Formerly EvapIn(9), CompOUT(5)
 
     !Take compressor shell loss into account
-    IF (CompPAR(21) .NE. 0) THEN !Shell loss in fraction
-        EvapPAR(32)=CompPAR(21)*CompOUT(1)
+    IF (CompPAR%CompQLossFrac .NE. 0) THEN !Shell loss in fraction    !RS: Debugging: Formerly CompPAR(21)
+        EvapPAR%EvapCompQLoss=CompPAR%CompQLossFrac*CompOUT%CmpOPwr  !RS: Debugging: Formerly EvapPAR(32), CompPAR(21), CompOUT(1)
     ELSE !Shell loss in W
-        EvapPAR(32)=CompPAR(22)/1000    !RS Comment: Unit Conversion
+        EvapPAR%EvapCompQLoss=CompPAR%CompQLoss/1000    !RS Comment: Unit Conversion    !RS: Debugging: Formerly EvapPAR(32) & CompPAR(22)
     END IF
 
-    CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT)
+    CALL Evaporator(Ref$) !,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
     CALL PrintEvaporatorResult 
-    EvapPAR(54)=0 !No longer first time
-    IF (EvapOUT(20) .NE. 0) THEN
-        SELECT CASE (INT(EvapOUT(20)))
+    EvapPAR%EvapFirstTime=0 !No longer first time !RS: Debugging: Formerly EvapPAR(38)
+    IF (EvapOUT%EOutErrFlag .NE. 0) THEN    !RS: Debugging: Formerly EvapOUT(17)
+        SELECT CASE (INT(EvapOUT%EOutErrFlag))  !RS: Debugging: Formerly EvapOUT(17)
         CASE (2)
             IERR=1
             RETURN
         CASE (3,4,5)
-            WRITE(*,*)'Press return to terminate program.'
-            STOP
+            CALL IssueOutputMessage('Press return to terminate program.')
+            STOP   !RS: Debugging: Pushing through for now.
         END SELECT
     END IF
 
-    PoEvp=EvapOUT(1)
-    HoEvp=EvapOUT(2)
-    ToEvp=EvapOUT(3)
-    XoEvp=EvapOUT(4)
-    PiCmp=EvapOUT(6)
-    HiCmp=EvapOUT(7)
-    TiCmp=EvapOUT(8)
-    XiCmp=EvapOUT(9)
+    PoEvp=EvapOUT%EOutpRoC    !RS: Debugging: Formerly EvapOUT(1)
+    HoEvp=EvapOUT%EOuthRoC    !RS: Debugging: Formerly EvapOUT(2)
+    PiCmp=EvapOUT%EOutpRiC    !RS: Debugging: Formerly EvapOUT(6)
+    HiCmp=EvapOUT%EOuthRiC    !RS: Debugging: Formerly EvapOUT(7)
+    XiCmp=EvapOUT%EOutxRiC    !RS: Debugging: Formerly EvapOUT(9)
 
-    IF (AccumPAR(2) .GT. 0) THEN !Accumulator exists
+    IF (AccumPAR%AccH .GT. 0) THEN !Accumulator exists    !RS: Debugging: Formerly AccumPAR(2)
         TsatEvp=(TSICMP-32)*5/9     !RS Comment: Unit Conversion, from F to C
         TsatCnd=(TSOCMP-32)*5/9     !RS Comment: Unit Conversion, from F to C
-        Subcooling=CondOUT(14)
-        Superheat=EvapOUT(10)
-        Xliq=CondOUT(13)
+        Subcooling=CondOUT%COuttSCiE  !RS: Debugging: Formerly CondOUT(14)
+        Superheat=EvapOUT%EOuttSHiC   !RS: Debugging: Formerly EvapOUT(10)
+        Xliq=CondOUT%COutxRiE    !RS: Debugging: Formerly CondOUT(13)
         Xvap=XiCmp
         CALL CalcAccumulatorDP(MdotR,TsatEvp,TsatCnd,Subcooling,Superheat, &
         Xliq,Xvap,AccumDP)
 
         PiCmp=PiCmp-AccumDP
-        EvapOUT(6)=PiCmp
+        EvapOUT%EOutpRiC=PiCmp    !RS: Debugging: Formerly EvapOUT(6)
 
         Pressure=PiCmp*1000 !RS Comment: Unit Conversion
         Enthalpy=HiCmp*1000 !RS Comment: Unit Conversion
         XiCmp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !Compressor Inlet Quality
         IF (RefPropErr .GT. 0) THEN
-            CALL IssueOutputMessage(PrnLog, PrnCon, '-- WARNING -- LowSide: Refprop error.')
+            CALL IssueOutputMessage( '-- WARNING -- LowSide: Refprop error.')
             IERR=1
             RETURN
         END IF
     END IF	
 
-    !TRIC=TiCmp*1.8+32   !RS Comment: Unit Conversion, from C to F  !RS: Debugging: Extraneous
-
     Pressure=PiCmp*1000 !RS Comment: Unit Conversion
     Quality=1
     TSATCI=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
     IF (RefPropErr .GT. 0) THEN
-        CALL IssueOutputMessage(PrnLog, PrnCon, '-- WARNING -- LowSide: Refprop error.')
+        CALL IssueOutputMessage( '-- WARNING -- LowSide: Refprop error.')
         IERR=1
         RETURN
     END IF
@@ -153,7 +200,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     IF (IERR .GE. 1) THEN
         RETURN
     END IF
-    SUPCAL=EvapOUT(10)*1.8 !ISI - 10/07/06
+    SUPCAL=EvapOUT%EOuttSHiC*1.8 !ISI - 10/07/06  !RS: Debugging: Formerly EvapOUT(10)
     SUPCL = SUPCAL
 
     IF (XICMP .LT. 0.) THEN !Edited for refprop table 01-15-04 - ISI
@@ -168,9 +215,6 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     END IF
     EVPTR = SUPCL - SUPR
 
-    !IF(PrintString .EQ. 9 .OR. PrintString .EQ. 13) THEN
-    !    CONTINUE    !RS: Debugging: Searching for a mis-set file number
-    !END IF
     IF(SUPER.LT.0.0) THEN
         SXIC = -SUPER
         WRITE(PrintString,FMT_804) '           Desired quality = ',SXIC*100,Xunit
@@ -181,11 +225,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
             WRITE(PrintString,FMT_804) '           Desired superheat = ',SUPER,DTunit
         END IF
     END IF
-    CALL IssueOutputMessage(PrnLog, PrnCon, PrintString)
-    
-    !IF(PrintString .EQ. 9 .OR. PrintString .EQ. 13) THEN
-    !    CONTINUE    !RS: Debugging: Searching for a mis-set file number
-    !END IF
+    CALL IssueOutputMessage( PrintString)
 
     !This IF block will always report one and only one message based on calculated "quality"
     IF (XICMP .LT. 0.0) THEN
@@ -203,7 +243,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
             WRITE(PrintString,FMT_804)'        Calculated superheat = ',SUPCAL,DTunit
         END IF
     END IF
-    CALL IssueOutputMessage(PrnLog, PrnCon, PrintString)
+    CALL IssueOutputMessage(PrintString)
 
     RETURN
 

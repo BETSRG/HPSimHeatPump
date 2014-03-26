@@ -1,3 +1,63 @@
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! This set of subroutines deals with matrix operations: matrix multiplication, inversion, and solving. 
+
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! There is no physical component representation for this module.
+
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! This is purely a set of mathematical calculation subroutines.
+
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! NA
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! Nothing is defined at the module level; there is no module.
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains 5 methods:
+!   PUBLIC LUD -- Solves a set of linear equations and returns the Lu decomposition
+!      Called by matrix_inverse
+!   PUBLIC matrix_invert_step_2 -- Determines the matrix inverse by back substitution
+!      Called by matrix_inverse
+!   PUBLIC matrix_inverse -- Inverts a matrix
+!      Called by CoilCalc.fd0
+!   PUBLIC CalcMatrixMultVector -- Multiplies a single-row matrix and single-column matrix
+!      Called by CoilCalc.fd0
+!   PUBLIC CalcMatrixMultMatrix -- Multiplies non-singular matrices
+!      Not called by any module or subroutine
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! NA
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! 2012-12-12 | RAS | Updated header
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! Some more documentation might be useful.
+
 !*******************************************************************************
 
 ! This routine converted from a Fortran 77 routine from Wheatley
@@ -110,8 +170,8 @@ SUBROUTINE LUD(a, n, IPVT, det)
 	  REAL det
 	  INTEGER, DIMENSION(n) :: IPVT
 
-      REAL Temp !, RATIO, VALUE !RS: Debugging: Extraneous
-      INTEGER i, IPVTMT, NLESS1, IPLUS1, j !, L !RS: Debugging: Extraneous
+      REAL Temp
+      INTEGER i, IPVTMT, NLESS1, IPLUS1, j
       INTEGER KCOL, JCOL, JROW, TMPVT
 !
       det = 1.
@@ -140,10 +200,6 @@ SUBROUTINE LUD(a, n, IPVT, det)
 !
           If (Abs(a(IPVTMT, i)) < 0.00001) Then
               det = 0.0
-           !   Print '(//)'
-           !   PRINT *, '   MATRIX IS SINGULAR OR NEAR SINGULAR  '
-           !  Print '(//)'
-           !   WRITE(*,*)'   MATRIX IS SINGULAR OR NEAR SINGULAR  '
           End If
 !
 !         INTERCHANGE ROWS IF NECESSARY
@@ -174,11 +230,7 @@ SUBROUTINE LUD(a, n, IPVT, det)
        END DO  
 !
        If (Abs(a(n, n)) < 0.00001) Then
-           !Print '(//)'
-           !PRINT *, '  MATRIX IS SINGULAR OR NEAR SINGULAR '
-           !Print '(//)'
-           !DET = 0#
-           !WRITE(*,*)'   MATRIX IS SINGULAR OR NEAR SINGULAR  '
+            ! error...
        End If
 !
 !  -----------------------------------------------------------------
@@ -201,8 +253,9 @@ End SUBROUTINE
 !routine finds the matrix inverse by back substitution
 
 SUBROUTINE matrix_invert_step_2(a, ainv, pivot, n)
+implicit none
 
-INTEGER n
+INTEGER n, i
 REAL, DIMENSION(n,n) :: a, ainv
 INTEGER, DIMENSION(n) :: pivot
 
@@ -229,6 +282,7 @@ End SUBROUTINE
 !*******************************************************************************
 
 SUBROUTINE matrix_inverse(a, ainv, n)
+implicit none
 
 !
 !
@@ -259,6 +313,7 @@ End SUBROUTINE
 !*******************************************************************************
 
 SUBROUTINE CalcMatrixMultVector(M1, Nrow, M2, M3)
+implicit none
 
 !PURPOSE OF THIS SUBROUTINE:
     !To calculate the product of two matrices, M3=M1*M2
@@ -271,8 +326,8 @@ SUBROUTINE CalcMatrixMultVector(M1, Nrow, M2, M3)
     !Output variable:
         !M3 - Product of matrices M1 and M2
 
-REAL M1(Nrow,Nrow),M2(Nrow),M3(Nrow)
 INTEGER Nrow
+REAL M1(Nrow,Nrow),M2(Nrow),M3(Nrow)
     
 !SUBROUTINE INTERNAL VARIABLE DECLARATIONS:
 INTEGER i !Loop counter for matrix M1 row element
@@ -292,6 +347,7 @@ END SUBROUTINE
 !*******************************************************************************
 
 SUBROUTINE CalcMatrixMultMatrix(M1, NrowM1, NcolM1, M2, NcolM2, M3)
+implicit none
 
 !PURPOSE OF THIS SUBROUTINE:
     !To calculate the product of two matrices, M3=M1*M2
@@ -306,8 +362,8 @@ SUBROUTINE CalcMatrixMultMatrix(M1, NrowM1, NcolM1, M2, NcolM2, M3)
     !Output variable:
         !M3 - Product of matrices M1 and M2
 
-REAL M1(NrowM1,NcolM1), M2(NcolM1,NcolM2), M3(NrowM1,NcolM2)
 INTEGER NrowM1,NcolM1,NcolM2
+REAL M1(NrowM1,NcolM1), M2(NcolM1,NcolM2), M3(NrowM1,NcolM2)
     
 !SUBROUTINE INTERNAL VARIABLE DECLARATIONS:
     INTEGER i !Loop counter for matrix M1 row element

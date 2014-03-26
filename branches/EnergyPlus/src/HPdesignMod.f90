@@ -16,6 +16,7 @@
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
 ! The input, DTVALU, appears to be a guess of temperature. There don't appear to be any direct outputs.
+! This module calls the Evaporator subroutine for the first heat pump run case.
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
@@ -30,7 +31,7 @@
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
-! This module contains 1 methods
+! This module contains 1 method
 !    PUBLIC HPDM -- Runs the entire heat pump simulation
 !      Called by ChargeLoop.f90
 !      Called by ORNLsolver.f90
@@ -59,10 +60,10 @@
     USE ShortTubeMod
     USE CapillaryTubeMod
     USE TXVMOD
-    USE AccumulatorMod
+    USE AccumulatorModule
     USE DataSimulation
-    USE DataEnvironment,      ONLY: StdRhoAir   !RS: Debugging: Trying to see if this changes the iterating conditions at all
-    USE DataGlobals, ONLY: RefrigIndex  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE DataGlobals, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE InputProcessor    !RS: Debugging: Bringing over from GetHPSimInputs
 
     IMPLICIT NONE
 
@@ -71,59 +72,109 @@
     REAL DTVALU
 
     LOGICAL PRINT
-    
+
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
 
     INTEGER(2) AirPropOpt			!Air prop calc. option
     INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error
-    REAL AirProp(8)		!Air properties
+    !REAL AirProp(8)		!Air properties
 
     INTEGER ICHRGE,IMASS,IREFC,LPRINT
-    REAL TAIIEI 
+    REAL TAIIEI
     INTEGER NTAMB,NCROSS
-    REAL DELT2,DTVLMN 
-    REAL TAIIE 
-    INTEGER I 
+    REAL DELT2,DTVLMN
+    REAL TAIIE
+    INTEGER I
     REAL ERRMSG(2)
     REAL TSAT1,CONV,STEP,DIFFER,XMR
     INTEGER IERROR,IER
     REAL TAIE1,DIFF,DIFSGN,PROD,TSATSV,TSATDM,TAISV,TAIDM
-    REAL TsoEvp,LsucLn 
+    REAL TsoEvp,LsucLn
     REAL MassCoil,MassLiqCoil,MassVapCoil
     INTEGER NumIter,MaxIteration
     REAL XMRFLD,ErrXMR,TSICMPprev
     REAL Dshtb,MaxDshTb,MinDshTb
     REAL CapTubeDimension,MaxLen,MinLen
-    REAL Qtxv !,MaxQtxv,MinQtxv,SuperStc,SuperRtd   !RS: Debugging: Extraneous
-    REAL Subcooling, Superheat, DPtxv !, TsatEvp, TsatCnd, AccumDP  !RS: Debugging: Extraneous
+    REAL Qtxv
+    REAL Subcooling, Superheat, DPtxv
     REAL ChargeCorrection !Correction charge for the charge tuning method, lbm
     REAL, EXTERNAL :: CNDNSR, EVPTR
-    REAL ZERO3
+    REAL ZeroConvergence
     REAL, PARAMETER :: Dstep=1
     REAL, PARAMETER :: CapTubeDimStep=1E-3
 
     LOGICAL IsSizeDiameter
-    REAL SimpleEvapOUT(25),DetailedEvapOUT(25) 
     REAL DetailedQevp,DetailedDPevp
     REAL SimpleQevp,SimpleDPevp
     LOGICAL,SAVE :: IsFirstTimeEvaporator = .TRUE. !First time to call evaporator flag
-    INTEGER IsCoolingMode !Cooling mode flag: 1=yes, otherwise=no
     INTEGER ChargeOption !Charge option, 1=no tuning; 2=w/charge tuning
 
     LOGICAL :: FLAG_GOTO_950
+
+    CHARACTER(LEN=200) :: tmpString
+
+    LOGICAL, EXTERNAL :: IssueRefPropError
     
-    CHARACTER(LEN=93),PARAMETER :: FMT_1002 = "('0HPDM: **** FAILED TO CONVERGE ON SUBCOOLING *****',/,  '         DIFFERENCE  =',F8.3,' F')"
-    CHARACTER(LEN=93),PARAMETER :: FMT_1006 = "('0HPDM: **** FAILED TO CONVERGE ON SUPERHEAT *****',/,   '         DIFFERENCE  =',F8.3,' F')"
-    CHARACTER(LEN=213),PARAMETER :: FMT_1013 = "('0        DID NOT CONVERGE ON  EVAPORATOR INLET ',  'AIR TEMPERATURE FOR THIS SATURATION TEMPERATURE.' ,/,'         SET COMPRESSOR INLET SATURATION TEMPERATURE TO',  F8.3,' F AND GO BACK TO CONDENSER ITERATION.')"
-    CHARACTER(LEN=128),PARAMETER :: FMT_1014 = "('0DRIVER: ***** FAILED TO CONVERGE ON EVAPORATOR ',  'INLET AIR TEMPERATURE *****',/, '               DIFFERENCE  =',F8.3,' F')"
-    CHARACTER(LEN=13),PARAMETER :: FMT_700 = "(A44,F7.2,A5)"
-    CHARACTER(LEN=13),PARAMETER :: FMT_704 = "(A13,F7.2,A5)"
+    INTEGER :: TimeStep1 !RS: Testing
+
     
-    INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
+    INTEGER, PARAMETER :: MaxNameLength = 200
+
+    CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
+    INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
+    REAL, DIMENSION(500) :: Numbers    ! brings in data from IP
+    INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
+    INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
+    INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+    REAL(r64), DIMENSION(500) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    REAL RefSimulatedCharge     !Simulated charge at reference point, kg or lbm
+    REAL SimulatedCharge2       !Simulated charge at 2nd reference point, kg or lbm
+    REAL LiquidLength2          !Liquid length at 2nd reference point, m or ft
+  
+        
+    TimeStep1=0 !Karthik - Initialize to 0
+    TAISV=1.0 !Karthik - Initialize to 1
+    TSATSV=1.0 !Karthik - Initialize to 1
     
-  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
-    
-!    INTEGER :: TimeStep1 !RS: Testing
+    IF (EvapPAR%EvapFirstTime .EQ. 1) THEN    !RS: Debugging: Formerly EvapPAR(38)
+          !*************** Charge Tuning Curve ***************  !RS: Debugging: Moving: HPDM
+
+    CALL GetObjectItem('ChargeTuningCurve',1,Alphas,NumAlphas, &
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
+
+        Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
+        SELECT CASE (Alphas(1)(1:1))  !Is Charge Tuning?
+            CASE ('F','f')
+                IsChargeTuning=0  !RS: Debugging: If this is the case, I don't think these inputs are ever used
+            CASE ('T','t')
+                IsChargeTuning=1
+        END SELECT
+  
+        RefSimulatedCharge = Numbers(1)   !Tuning Point #1 Simulated Charge
+        RefLiquidLength = Numbers(2)  !Tuning Point #1 Liquid Length
+        SimulatedCharge2 = Numbers(3) !Tuning Point #2 Simulated Charge
+        LiquidLength2 = Numbers(4)    !Tuning Points #2 Liquid Length
+  
+        !store the refrigerant name in data globals
+        RefName = Ref$
+  
+        !Calculate charge tuning curve
+        IF (MODE .NE. 2 .AND. (RefLiquidLength-LiquidLength2) .NE. 0) THEN
+	        IF (RefChg .GT. 0) THEN
+		        ChargeCurveSlope=(SimulatedCharge2-RefSimulatedCharge)/ &
+						        (LiquidLength2-RefLiquidLength)
+		        ChargeCurveIntercept=RefChg-RefSimulatedCharge
+	        ELSE
+		        ChargeCurveSlope=0
+		        ChargeCurveIntercept=0
+	        END IF
+        END IF
+        ChargeCurveSlope=ChargeCurveSlope*UnitM/UnitL
+	    ChargeCurveIntercept=ChargeCurveIntercept*UnitM
+	    RefLiquidLength=RefLiquidLength*UnitL
+  
+    END IF
 
     MaxIteration=30
     ICHRGE=1
@@ -137,8 +188,9 @@
     ELSE
         IREFC=0
     END IF
-
+    
     TAIIEI=TaiE
+
     NTAMB = 0
     NCROSS = 0
     DELT2 = 1.25
@@ -166,8 +218,7 @@
             Temperature=(TSICMP-32)/1.8 !RS Comment: Unit Conversion, from F to C
             Quality=1
             PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Inlet Pressure
-            IF (RefPropErr .GT. 0) THEN
-                WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+            IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                 STOP
             END IF
             PiCmp=PiCmp/1000    !RS Comment: Unit Conversion
@@ -176,8 +227,7 @@
                 Temperature=(TSICMP+SUPER-32)/1.8   !RS Comment: Unit Conversion, from F to C
                 Pressure=PiCmp*1000 !RS Comment: Unit Conversion
                 HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
-                IF (RefPropErr .GT. 0) THEN
-                    WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                     STOP
                 END IF
                 HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
@@ -186,25 +236,23 @@
                 Pressure=PiCmp*1000 !RS Comment: Unit Conversion
                 Quality=-SUPER
                 HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
-                IF (RefPropErr .GT. 0) THEN
-                    WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                     STOP
                 END IF
                 HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
                 TiCmp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)    !Compressor Inlet Temperature
-                IF (RefPropErr .GT. 0) THEN
-                    WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                     STOP
                 END IF
             END IF
 
-            Xmr=CompOUT(2)
+            Xmr=CompOUT%CmpOMdot  !RS: Debugging: Formerly CompOUT(2)
 
-            PoEvp=EvapOUT(1)
+            PoEvp=EvapOUT%EOutpRoC    !RS: Debugging: Formerly EvapOUT(1)
 
-            QsucLn=EvapPAR(5) 
-            DTsucLn=EvapPAR(6)
-            LsucLn=EvapPAR(1) 
+            QsucLn=EvapPAR%EvapSucLnQLoss   !RS: Debugging: Formerly EvapPAR(5)
+            DTsucLn=EvapPAR%EvapSucLnTempChg  !RS: Debugging: Formerly EvapPAR(6)
+            LsucLn=EvapPAR%EvapSucLnLen   !RS: Debugging: Formerly EvapPAR(1)
 
             IF (LsucLn .GT. 0) THEN
                 IF (QsucLn .NE. 0) THEN
@@ -213,21 +261,18 @@
                     Pressure=PoEvp*1000 !RS Comment: Unit Conversion
                     Enthalpy=HoEvp*1000 !RS Comment: Unit Conversion
                     ToEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Evaporator Outlet Temperature
-                    IF (RefPropErr .GT. 0) THEN
-                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                    IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                         STOP
                     END IF
 
                     XoEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Evaporator Outlet Quality
-                    IF (RefPropErr .GT. 0) THEN
-                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                    IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                         STOP
                     END IF
 
                     Quality=1
                     TsoEvp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Evaporator Outlet Saturation Temperature
-                    IF (RefPropErr .GT. 0) THEN
-                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                    IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                         STOP
                     END IF
 
@@ -244,8 +289,7 @@
                     Temperature=ToEvp
                     Pressure=PoEvp*1000 !RS Comment: Unit Conversion
                     HoEvp=TP(Ref$, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)   !Evaporator Outlet Enthalpy
-                    IF (RefPropErr .GT. 0) THEN
-                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                    IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                         STOP
                     END IF
                     HoEvp=HoEvp/1000    !RS Comment: Unit Conversion
@@ -253,15 +297,13 @@
                     Pressure=PoEvp*1000 !RS Comment: Unit Conversion
                     Enthalpy=HoEvp*1000 !RS Comment: Unit Conversion
                     XoEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Evaporator Outlet Quality
-                    IF (RefPropErr .GT. 0) THEN
-                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                    IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                         STOP
                     END IF
 
                     Quality=1
                     TsoEvp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Evaporator Outlet Saturation Temperature
-                    IF (RefPropErr .GT. 0) THEN
-                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                    IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                         STOP
                     END IF
 
@@ -290,6 +332,10 @@
     FLAG_GOTO_950 = .FALSE.
     DO WHILE (.TRUE.)
         
+        TimeStep1 = TimeStep1+1   !RS: Testing
+
+        CurSimTime=(TimeStep1-1)*TimeInterval  !PrevSimTime+ !RS: Testing
+        
         DO I=1,2
             ERRMSG(I) = 0.0
         END DO
@@ -310,53 +356,32 @@
         END IF
         STEP = 3
 
-        IF (PrnLog .EQ. 1) THEN 
-            WRITE(6,*)
-            WRITE(6,*)'|-------------------- Highside Iteration --------------------|'
-        END IF
-        IF (PrnCon .EQ. 1) THEN
-            WRITE(*,*)
-            WRITE(*,*)'|-------------------- Highside Iteration --------------------|'
-        END IF
+        CALL IssueOutputMessage('|-------------------- Highside Iteration --------------------|')
 
         AirPropOpt=2
-        AirProp(1)=(TaiC-32)*5/9    !RS Comment: Unit Conversion, from F to C
-        AirProp(3)=RHiC
-        CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-        RhoAiC=AirProp(7)
+        AirProp%APTDB=(TaiC-32)*5/9    !RS Comment: Unit Conversion, from F to C   !RS: Debugging: Formerly AirProp(1)
+        AirProp%APRelHum=RHiC !RS: Debugging: Formerly AirProp(3)
+        CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+        RhoAiC=AirProp%APDryDens   !RS: Debugging: Formerly AirProp(7)
 
         AirPropOpt=2
-        AirProp(1)=(TaiE-32)*5/9    !RS Comment: Unit Conversion, from F to C
-        AirProp(3)=RHiE
-        CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-        RhoAiE=AirProp(7)
+        AirProp%APTDB=(TaiE-32)*5/9    !RS Comment: Unit Conversion, from F to C   !RS: Debugging: Formerly AirProp(1)
+        AirProp%APRelHum=RHiE !RS: Debugging: Formerly AirProp(3)
+        CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
+        RhoAiE=AirProp%APDryDens   !RS: Debugging: Formerly AirProp(7)
 
-        !Correct standard CFM to actual CFM first
-        !XMaC=StandardDensity/RhoAoC*StdCFMcnd
-        !XMaE=StandardDensity/RhoAoE*StdCFMevp
-
-        !Actual mass flow rate
+        !Actual air mass flow rate
         XMaC=CFMcnd*RhoAiC
         XMaE=CFMevp*RhoAiE
 
-        TSOCMP = ZERO3(TSAT1,CNDNSR,1E-3,CNDCON,STEP,DIFFER,IERROR)
-        !CALL SolveRegulaFalsi(CNDCON, MaxIter, Flag, TSOCMP, CNDNSR, TSAT1, STEP,IError)
+        CoilMode=0  !RS: Debugging: This is for a test in ZeroConvergence (11/18/13)
+        TSOCMP = ZeroConvergence(TSAT1,CNDNSR,1E-3,CNDCON,STEP,DIFFER,IERROR)
 
         IF (IERROR .GE. 3) THEN
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'## ERROR ## Highside: Failed to find a solution.'
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'## ERROR ## Highside: Failed to find a solution.'
-            END IF
-            WRITE(*,*)'Try another condenser, compressor, or change boundary conditions.'
-            !STOP   !RS: We don't want the program just shutting down.
+            CALL IssueOutputMessage('')
+            CALL IssueOutputMessage('## ERROR ## Highside: Failed to find a solution.')
+            CALL IssueOutputMessage('Try another condenser, compressor, or change boundary conditions.')
+            !STOP  !RS: Debugging: Temporarily setting in an Epsilon-NTU method
         END IF
         FirstTimeFlowRateLoop=.FALSE.
         !ISI 05-25-05
@@ -365,11 +390,6 @@
             EXIT
         END IF
 
-        !IF (IERROR .EQ. 1) THEN !RS: Debugging: Trying to find if the evaporator error is coming from the condenser
-        !    WRITE(*,*) 'Condenser Error =',IERROR
-        !    EvapOUT(20)=10  !RS: Debugging: Dealing with this particular case when errors transfer over from condenser to evaporator
-        !END IF
-        
         IF (LPRINT.EQ.2) THEN 
             PRINT = .TRUE.
             DIFFER = CNDNSR(TSOCMP,IER)
@@ -377,106 +397,79 @@
         IF (ABS(DIFFER) .GT. CONV) THEN
             IF (LPRINT .GT. 1) THEN
                 IF (Unit .EQ. 1) THEN
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'## ERROR ## Highside: Solution not converged on subcooling.'
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'## ERROR ## Highside: Solution not converged on subcooling.'
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'Difference: ',DIFFER/1.8,DTunit
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'Difference: ',DIFFER/1.8,DTunit
-                    END IF
+                    CALL IssueOutputMessage('## ERROR ## Highside: Solution not converged on subcooling.')
+                    WRITE(tmpString,'(F10.3)') DIFFER/1.8
+                    CALL IssueOutputMessage('Difference: '//TRIM(tmpString)//DTunit)
                 ELSE
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'## ERROR ## Highside: Solution not converged on subcooling.'
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'## ERROR ## Highside: Solution not converged on subcooling.'
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'Difference: ',DIFFER,DTunit
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'Difference: ',DIFFER,DTunit
-                    END IF
+                    CALL IssueOutputMessage('## ERROR ## Highside: Solution not converged on subcooling.')
+                    WRITE(tmpString,'(F10.3)') DIFFER
+                    CALL IssueOutputMessage('Difference: '//TRIM(tmpString)//DTunit)
                 END IF  
             END IF
 
             ERRMSG(1) = DIFFER
         END IF
         
-        EvapIN(1)=MdotR           !Refrigerant side mass flow rate, kg/s
-        !EvapIN(2)=CompIN(1)       !Compressor inlet pressure
-        EvapIN(3)=CondOUT(11)     !Exp. device inlet enthalpy, kJ/kg
-        EvapIN(4)=XMaE            !Air side mass flow rate, kg/s
-        EvapIN(5)=(TAIIEI-32)/1.8 !Air side inlet temp. C
-        EvapIN(6)=RHiE            !Air side inlet relative humidity
-        EvapIN(9)=CompOUT(5)      !Discharge temperature, C
+        EvapIN%EInmRef=MdotR           !Refrigerant side mass flow rate, kg/s    !RS: Debugging: Formerly EvapIN(1)
+        EvapIN%EInhRi=CondOUT%COuthRiE     !Exp. device inlet enthalpy, kJ/kg    !RS: Debugging: Formerly EvapIN(3), CondOUT(11)
+        EvapIN%EInmAi=XMaE            !Air side mass flow rate, kg/s    !RS: Debugging: Formerly EvapIN(4)
+        EvapIN%EIntAi=(TAIIEI-32)/1.8 !Air side inlet temp. C   !RS: Debugging: Formerly EvapIN(5)
+        EvapIN%EInrhAi=RHiE            !Air side inlet relative humidity !RS: Debugging: Formerly EvapIN(6)
+        EvapIN%EIntRdis=CompOUT%CmpOTdis      !Discharge temperature, C !RS: Debugging: Formerly EvapIN(9), CompOUT(5)
 
         !Take compressor shell loss into account
-        IF (CompPAR(21) .NE. 0) THEN !Shell loss in fraction
-            EvapPAR(32)=CompPAR(21)*CompOUT(1)
+        IF (CompPAR%CompQLossFrac .NE. 0) THEN !Shell loss in fraction    !RS: Debugging: Formerly CompPAR(21)
+            EvapPAR%EvapCompQLoss=CompPAR%CompQLossFrac*CompOUT%CmpOPwr  !RS: Debugging: Formerly EvapPAR(32), CompPAR(21), CompOUT(1)
         ELSE !Shell loss in W
-            EvapPAR(32)=CompPAR(22)/1000
+            EvapPAR%EvapCompQLoss=CompPAR%CompQLoss/1000    !RS: Debugging: Formerly EvapPAR(32) & CompPAR(22)
         END IF
 
-        IsCoolingMode=EvapPAR(20)
         IF (FirstTimeHPdesignMode) THEN
 
             IF ((IsCoolingMode .GT. 0 .AND. IDCcoilType .EQ. MCEVAPORATOR) .OR. &
             (IsCoolingMode .LT. 1 .AND. ODCcoilType .EQ. MCEVAPORATOR)) THEN
                 !Microchannel coil
-                EvapPAR(54)=1 !First time
-                EvapPAR(53)=0 !Detailed version
-                CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT)
-                EvapPAR(54)=0 !No longer first time
+                EvapPAR%EvapFirstTime=1 !First time   !RS: Debugging: Formerly EvapPAR(38)
+                EvapPAR%EvapSimpCoil=0 !Detailed version !RS: Debugging: Formerly EvapPAR(37)
+                CALL Evaporator(Ref$) !,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
+                EvapPAR%EvapFirstTime=0 !No longer first time !RS: Debugging: Formerly EvapPAR(38)
             ELSE
                 !Plate-fin coil
                 !Run both simple and detailed version to determine which one to use
                 !Change the logic to reset IsFirstTimeEvaporator
                 IF (IsFirstTimeEvaporator) THEN
-                    EvapPAR(54)=1 !First time
-                    EvapPAR(53)=0 !Detailed version
-                    CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,DetailedEvapOUT)
-                    !CALL EndEvaporatorCoil
-                    DetailedQevp=DetailedEvapOUT(11)
-                    DetailedDPevp=EvapIN(2)-DetailedEvapOUT(6)
+                    EvapPAR%EvapFirstTime=1 !First time   !RS: Debugging: Formerly EvapPAR(38)
+                    EvapPAR%EvapSimpCoil=0 !Detailed version !RS: Debugging: Formerly EvapPAR(37)
+                    CALL Evaporator(Ref$) !EvapIN,EvapPAR,DetailedEvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,DetailedEvapOUT) !RS: Debugging: Extraneous PureRef
+                    DetailedQevp=EvapOUT%EOutQC    !RS: Debugging: Formerly DetailedEvapOUT(11)
+                    DetailedDPevp=EvapIN%EInpRi-EvapOUT%EOutpRiC  !RS: Debugging: Formerly EvapIN(2), DetailedEvapOUT(6)
 
-                    EvapPAR(53)=1 !Simple version
-                    CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,SimpleEvapOUT)
-                    !CALL EndEvaporatorCoil
-                    SimpleQevp=SimpleEvapOUT(11)
-                    SimpleDPevp=EvapIN(2)-SimpleEvapOUT(6)
+                    EvapPAR%EvapSimpCoil=1 !Simple version   !RS: Debugging: Formerly EvapPAR(37)
+                    CALL Evaporator(Ref$) !,EvapIN,EvapPAR,SimpleEvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,SimpleEvapOUT)   !RS: Debugging: Extraneous PureRef
+                    SimpleQevp=EvapOUT%EOutQC    !RS: Debugging: Formerly SimpleEvapOUT(11)
+                    SimpleDPevp=EvapIN%EInpRi-EvapOUT%EOutpRiC !RS: Debugging: Formerly EvapIN(2), SimpleEvapOUT(6)
 
                     IF (ABS((SimpleQevp-DetailedQevp)/DetailedQevp) .LT. 0.1 .AND. &
                     ABS((SimpleDPevp-DetailedDPevp)/DetailedDPevp) .LT. 0.1) THEN
-                        EvapPAR(53)=1 !Simple version
-                        EvapOUT=SimpleEvapOUT
+                        EvapPAR%EvapSimpCoil=1 !Simple version   !RS: Debugging: Formerly EvapPAR(37)
                     ELSE
-                        EvapPAR(53)=0 !Detailed version
-                        EvapOUT=DetailedEvapOUT
+                        EvapPAR%EvapSimpCoil=0 !Detailed version !RS: Debugging: Formerly EvapPAR(37)
                     END IF
                     IsFirstTimeEvaporator=.FALSE. 
 
-                    !Always detailed
-                    !EvapPAR(53)=0 !Detailed version    !RS: Debugging: Trying simple coil model (! out line)
-                    EvapOUT=DetailedEvapOUT
+                    !Always detailed    !RS: Debugging: There's no need for this to be set
+                    !EvapPAR%EvapSimpCoil=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53) !RS: Debugging: Simple case 
 
                 ELSE
-                    CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT)
-                    EvapPAR(54)=0 !No longer first time
+                    CALL Evaporator(Ref$) !,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
+                    EvapPAR%EvapFirstTime=1 !0 !No longer first time !RS: Debugging: Formerly EvapPAR(38)
                 END IF
             END IF
 
-            IF (EvapOUT(20) .NE. 0) THEN
-                SELECT CASE (INT(EvapOUT(20)))
+            IF (EvapOUT%EOutErrFlag .NE. 0) THEN    !RS: Debugging: Formerly EvapOUT(17)
+                SELECT CASE (INT(EvapOUT%EOutErrFlag))  !RS: Debugging: Formerly EvapOUT(17)
                 CASE (3,4,5)
-                    !STOP   !RS: Secret Search String
-                    WRITE(DebugFile,*) 'Program wanted to stop because EvapOUT20 .NE. 0' !//(EvapOUT(20))//'.'    !RS: Debugging: Don't want it just stopping
-                    WRITE(*,*) 'EvapOUT(20) .NE. 0' !RS: Debugging
+                    STOP
                 END SELECT
             END IF
             FirstTimeHPdesignMode=.FALSE.
@@ -493,46 +486,22 @@
         TAIE1 = TAIIEI
 
         STEP = 2
-        IF (PrnCon .EQ. 1) THEN
-            WRITE(*,*)
-        END IF
-        IF (PrnCon .EQ. 1) THEN
-            WRITE(*,*)'|-------------------- Lowside Iteration ---------------------|'
-        END IF
-        IF (PrnLog .EQ. 1) THEN
-            WRITE(6,*)
-        END IF
-        IF (PrnLog .EQ. 1) THEN
-            WRITE(6,*)'|-------------------- Lowside Iteration ---------------------|'
-        END IF
-        IF (Unit .EQ. 1) THEN
-            WRITE(*,FMT_700)'Compressor suction saturation temperature: ',(TSICMP-32)*5/9,Tunit
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_700)'Compressor suction saturation temperature: ',(TSICMP-32)*5/9,Tunit
-            END IF
-        ELSE
-            WRITE(*,FMT_700)'Compressor suction saturation temperature: ',TSICMP,Tunit
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_700)'Compressor suction saturation temperature: ',TSICMP,Tunit
-            END IF
-        END IF
 
-        TAIIE = ZERO3(TAIE1,EVPTR,AMBCON,EVPCON,STEP,DIFFER,IERROR)
-        !CALL SolveRegulaFalsi(EVPCON, MaxIter, Flag, TAIIE, EVPTR, TAIE1, STEP,IError)
+        CALL IssueOutputMessage(' ')
+        CALL IssueOutputMessage('|-------------------- Lowside Iteration ---------------------|')
+        IF (Unit .EQ. 1) THEN
+            WRITE(tmpString, '(F10.4)') (TSICMP-32)*5/9
+        ELSE
+            WRITE(tmpString, '(F10.4)') TSICMP
+        END IF
+        CALL IssueOutputMessage( '>> Compressor suction saturation temperature: '//TRIM(tmpString)//Tunit)
+
+        CoilMode=1  !RS: Debugging: This is for a test in ZeroConvergence (11/18/13)
+        TAIIE = ZeroConvergence(TAIE1,EVPTR,AMBCON,EVPCON,STEP,DIFFER,IERROR)
 
         IF (IERROR .GE. 3) THEN
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'## ERROR ## Lowside: Failed to find a solution.'
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'## ERROR ## Lowside: Failed to find a solution.'
-            END IF
+            CALL IssueOutputMessage('')
+            CALL IssueOutputMessage('## ERROR ## Lowside: Failed to find a solution.')
         END IF
 
         IF (LPRINT .GT. 2) THEN
@@ -544,57 +513,39 @@
         IF (ABS(DIFFER) .GT. EVPCON) THEN
             IF (LPRINT .GT. 1) THEN
                 IF (Unit .EQ. 1) THEN
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'## ERROR ## Lowside: Solution not converged on superheat.'
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'## ERROR ## Lowside: Solution not converged on superheat.'
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'Difference: ',DIFFER/1.8,DTunit
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'Difference: ',DIFFER/1.8,DTunit
-                    END IF
+                    CALL IssueOutputMessage('## ERROR ## Lowside: Solution not converged on superheat.')
+                    WRITE(tmpString,'(F10.4)') DIFFER/1.8
+                    CALL IssueOutputMessage('Difference: '//tmpString//DTunit)
                 ELSE
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'## ERROR ## Lowside: Solution not converged on superheat.'
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'## ERROR ## Lowside: Solution not converged on superheat.'
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'Difference: ',DIFFER,DTunit
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'Difference: ',DIFFER,DTunit
-                    END IF
+                    CALL IssueOutputMessage('## ERROR ## Lowside: Solution not converged on superheat.')
+                    WRITE(tmpString,'(F10.4)') DIFFER
+                    CALL IssueOutputMessage('Difference: '//tmpString//DTunit)
                 END IF  
             END IF
             ERRMSG(2) = DIFFER
         END IF
 
         IF(LPRINT.GT.1.AND.IMASS.NE.0) THEN
-            IF (AccumPAR(2) .GT. 0) THEN !Height
-                AccumIN(1)=MdotR
-                AccumIN(2)=CompIN(1) !Pressure
-                AccumIN(3)=CompIN(3) !Enthalpy
-                CALL CalcAccumulatorMass(AccumIN,AccumOUT)
+            IF (AccumPAR%AccH .GT. 0) THEN !Height    !RS: Debugging: Formerly AccumPAR(2)
+                AccumIN%AccImdot= MdotR    !RS: Debugging: Formerly AccumIN(1)
+                AccumIN%AccIpRo=CompIN%CompInPsuc !Pressure  !RS: Debugging: Formerly CompIN(1), AccumIN(2)
+                AccumIN%AccIhRo=CompIN%CompInHsuc !Enthalpy  !RS: Debugging: Formerly CompIN(3), AccumIN(3)
+                CALL CalcAccumulatorMass !(AccumIN,AccumOUT)
             ELSE
-                AccumOUT(1)=0
+                AccumOUT%AccOMass=0
             END IF
 
             CALL CalcCondenserInventory(MassCoil,MassLiqCoil,MassVapCoil,CondLiqTubeLength,CondVapTubeLength,CondTwoPhaseTubeLength,CondNumLiqTubes)
-            CondOUT(18)=MassCoil
+            CondOUT%COutMC=MassCoil    !RS: Debugging: Formerly CondOUT(18)
             CALL CalcEvaporatorInventory(MassCoil,MassLiqCoil,MassVapCoil,EvapLiqTubeLength,EvapVapTubeLength,EvapTwoPhaseTubeLength,EvapNumLiqTubes)
-            EvapOUT(14)=MassCoil
+            EvapOUT%EOutMC=MassCoil    !RS: Debugging: Formerly EvapOUT(14)
 
             IF (ExpDevice .EQ. 1) THEN
-                CALCHG=(CompOUT(6)+CondOUT(16)+CondOUT(17)+CondOUT(18)+ &
-                EvapOUT(13)+EvapOUT(14)+ShTbOUT(5)+AccumOUT(1))/UnitM
+                CALCHG=(CompOUT%CmpOMCmp+CondOUT%COutMDisLn+CondOUT%COutMLiqLn+CondOUT%COutMC+ &   !RS: Debugging: Formerly CompOUT(6), CondOUT(16), CondOUT(17), CondOUT(18)
+                EvapOUT%EOutMSucLn+EvapOUT%EOutMC+ShTbOUT%ShTbOMDT+AccumOUT%AccOMass)/UnitM   !RS: Debugging: Formerly EvapOUT(13), EvapOUT(14), ShTbOUT(5), AccumOUT(1)
             ELSE
-                CALCHG=(CompOUT(6)+CondOUT(16)+CondOUT(17)+CondOUT(18)+ &
-                EvapOUT(13)+EvapOUT(14)+TxvOUT(5)+AccumOUT(1))/UnitM
+                CALCHG=(CompOUT%CmpOMCmp+CondOUT%COutMDisLn+CondOUT%COutMLiqLn+CondOUT%COutMC+ &   !RS: Debugging: Formerly CompOUT(6), CondOUT(16), CondOUT(17), CondOUT(18)
+                EvapOUT%EOutMSucLn+EvapOUT%EOutMC+AccumOUT%AccOMass)/UnitM    !RS: Debugging: Formerly EvapOUT(13)+EvapOUT(14)+TxvOUT(5)+AccumOUT(1))/UnitM
             END IF
         END IF
 
@@ -607,12 +558,10 @@
             EXIT
         END IF
 
-        !VL: Previously: IF(NTAMB.NE.0) GO TO 810
         IF(NTAMB.EQ.0) THEN
             DIFSGN = DIFF
         END IF
 
-        !VL: Previously:810 CONTINUE
         PROD = DIFF*DIFSGN
 
         IF(PROD.GT.0.0.AND.NCROSS.EQ.0) THEN
@@ -633,23 +582,22 @@
                 TSICMP=(TSICMPprev+TAIIEI)/2 !Make sure TSICMP < TAIIEI
             END IF
 
-        ELSE
+        ELSE    !RS: The following runs after DIFF goes negative (because it sets PROD negative) (12/19/13)
 
-            NCROSS = 1
-            !VL: Previously:IF(PROD.GT.0.0) GO TO 820
+            NCROSS = 1  !RS: Ensures that this section will run until the end of the loop (12/19/13)
+            
             IF(PROD.LE.0.0) THEN
                 TSATSV = TSATDM
                 TAISV = TAIDM
             END IF
 
-            !VL: Previously:820     CONTINUE
             TSATDM = TSICMP
             TAIDM = TAIIE
             TSICMPprev=TSICMP
             TSICMP = TSICMP-(TSATSV-TSICMP)/(TAISV-TAIIE)*DIFF
             IF (ABS(TSICMPprev-TSICMP) .LE. 0.01) THEN
                 !VL: Previously: GO TO 900 !0.05 F !ISI - 08/02/06
-                EXIT
+                EXIT !RS: Debugging: Seeing if it'll converge on the air inlet temp (11/13/13)
             END IF
             DIFSGN = DIFF
             IF (TSICMP .GT. TAIIEI) THEN
@@ -660,81 +608,67 @@
 
         NTAMB = NTAMB + 1
         IF(NTAMB.GT.15) THEN
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_1014) DIFF
-            END IF
+            WRITE(tmpString,"('0DRIVER: ***** FAILED TO CONVERGE ON EVAPORATOR ',  'INLET AIR TEMPERATURE *****',/, '               DIFFERENCE  =',F8.3,' F')") DIFF
+            CALL IssueOutputMessage(TRIM(tmpString))
             EXIT
         END IF
         IF (LPRINT .GT. 1) THEN
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_1013)TSICMP
-            END IF
+            WRITE(tmpString,"('0        DID NOT CONVERGE ON  EVAPORATOR INLET ',  'AIR TEMPERATURE FOR THIS SATURATION TEMPERATURE.' ,/,'         SET COMPRESSOR INLET SATURATION TEMPERATURE TO',  F8.3,' F AND GO BACK TO CONDENSER ITERATION.')")TSICMP
+            CALL IssueOutputMessage(TRIM(tmpString))
         END IF
 
         FirstTimeAirTempLoop=.TRUE.
 
         IF (TSICMP .GE. TSOCMP) THEN
-            IF (PrnCon .EQ. 1) THEN !RS: Just simplifying by combining two lines of code
-                WRITE(*,*)
-                WRITE(*,*)'## ERROR ## HPdesign: Failed to find a solution.'
-            END IF
-            IF (PrnLog .EQ. 1) THEN !RS: Just combining two lines of code
-                WRITE(6,*)
-                WRITE(6,*)'## ERROR ## HPdesign: Failed to find a solution.'
-            END IF
-            !STOP   !RS: Debugging: Don't want the code to just shut down.
-            WRITE(6,*)'TSICMP .GE. TSOCMP'  !RS: Debugging: A warning flag
+            CALL IssueOutputMessage('')
+            CALL IssueOutputMessage('## ERROR ## HPdesign: Failed to find a solution.')
+            STOP
         END IF
 
     END DO
-
-    !VL: Functionality moved near GOTO Call ... previously: 850     IF (PrnLog .EQ. 1) WRITE(6,FMT_1014) DIFF
 
     IF (FLAG_GOTO_950 .EQ. .FALSE.) THEN 
 
         IF (IREFC .EQ. 0) THEN
             !**************Size short tube orifice**************
 
-            XMR=CompOUT(2)*3600/UnitM
+            XMR=CompOUT%CmpOMdot*3600/UnitM   !RS: Debugging: Formerly CompOUT(2)
 
-            ShTbIN(1)=CompOUT(2)  !Compressor mass flow rate, kg/s
-            ShTbIN(2)=CondOUT(10) !Exp. device inlet pressure, kPa
-            ShTbIN(3)=CondOUT(11) !Exp. device inlet enthalpy, kJ/kg
-            ShTbIN(4)=EvapIN(2)   !Evaporator inlet pressure, kPa
-            ShTbIN(5)=EvapOUT(1)  !Evaporator outlet pressure, kPa
+            ShTbIN%ShTbINMdotC=CompOUT%CmpOMdot  !Compressor mass flow rate, kg/s  !RS: Debugging: Formerly CompOUT(2), ShTbIN(1)
+            ShTbIN%ShTbINPiE=CondOUT%COutpRiE !Exp. device inlet pressure, kPa  !RS: Debugging: Formerly CondOUT(10), ShTbIN(2)
+            ShTbIN%ShTbINHiE=CondOUT%COuthRiE !Exp. device inlet enthalpy, kJ/kg    !RS: Debugging: Formerly CondOUT(11), ShTbIN(3)
+            ShTbIN%ShTbINPiEv=EvapIN%EInpRi   !Evaporator inlet pressure, kPa   !RS: Debugging: Formerly EvapIN(2), ShTbIN(4)
+            ShTbIN%ShTbINPoEv=EvapOUT%EOutpRoC  !Evaporator outlet pressure, kPa  !RS: Debugging: Formerly EvapOUT(1), ShTbIN(5)
 
-            IF (ShTbPAR(1) .LE. 0) THEN
-                ShTbPAR(1)=0.0127
+            IF (ShTbPAR%ShTbTLen .LE. 0) THEN !RS: Debugging: Formerly ShTbPAR(1)
+                ShTbPAR%ShTbTLen=0.0127   !RS: Debugging: Formerly ShTbPAR(1) ...and a Magic Number
                 !Short Tube: Parameters not defined.
             ELSE
 
-                !Initial guess  !RS: Debugging: Set but never used
-                !Root1=999
-                !Root2=0.0
-                !Dprev1=0.0
-                !Dprev2=0.0
+                !Initial guess
                 NumIter=0
                 MaxDshTb=0
                 MinDshTb=0
 
                 Dshtb=2.0 !1.0 !Initial guess !Short tube diameter, mm
-                ShTbPAR(2)=Dshtb/1000   !RS Comment: Unit Conversion
+                ShTbPAR%ShTbTID=Dshtb/1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly ShTbPAR(2)
 
                 DO NumIter=1, MaxIteration
 
                     !CALL ShortTube(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
-                    CALL ShortTubePayne(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
-                    IF (ShTbOUT(7) .NE. 0) THEN
-                        SELECT CASE (INT(ShTbOUT(7)))
+                    !CALL ShortTubePayne(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
+                    CALL ShortTubePayne(Ref$) !,ShTbIN,ShTbPAR,ShTbOUT)   !RS: Debugging: Extraneous PureRef
+                    IF (ShTbOUT%ShTbOErrFlag .NE. 0) THEN !RS: Debugging: Formerly ShTbOUT(7)
+                        SELECT CASE (INT(ShTbOUT%ShTbOErrFlag))   !RS: Debugging: Formerly ShTbOUT(7)
                         CASE (1)
-                            ShTbPAR(2)=ShTbPAR(2)*1.2
+                            ShTbPAR%ShTbTID=ShTbPAR%ShTbTID*1.2   !RS: Debugging: Formerly ShTbPAR(2)
                             CYCLE
                         END SELECT
                     END IF
 
-                    XMRFLD=ShTbOUT(1)*3600/UnitM    !RS Comment: Unit Conversion, lbm/s??
-                    ToExp=ShTbOUT(3)
-                    XoExp=ShTbOUT(4)
+                    XMRFLD=ShTbOUT%ShTbOMdotE*3600/UnitM    !RS Comment: Unit Conversion, lbm/s??   !RS: Debugging: Formerly ShTbOUT(1)
+                    ToExp=ShTbOUT%ShTbOToE    !RS: Debugging: Formerly ShTbOUT(3)
+                    XoExp=ShTbOUT%ShTbOXoE    !RS: Debugging: Formerly ShTbOUT(4)
 
                     ErrXMR=ABS((XMRFLD-XMR))
                     IF (MaxDshTb .NE. 0 .AND. MinDshTb .NE. 0 .AND. ErrXMR .GT. 1E-4) THEN
@@ -744,7 +678,7 @@
                             MinDshTb=Dshtb
                         END IF
                         Dshtb=(MaxDshTb+MinDshTb)/2
-                        ShTbPAR(2)=Dshtb/1000 !Short tube diameter, m
+                        ShTbPAR%ShTbTID=Dshtb/1000 !Short tube diameter, m   !RS: Debugging: Formerly ShTbPAR(2)
                     ELSEIF (ErrXMR .GT. 1E-4) THEN !Find short tube diameter by secant method
                         IF (XMRFLD .GT. XMR) THEN
                             MaxDshTb=Dshtb
@@ -756,52 +690,42 @@
                         IF (MaxDshTb .NE. 0 .AND. MinDshTb .NE. 0) THEN
                             Dshtb=(MaxDshTb+MinDshTb)/2
                         END IF
-                        ShTbPAR(2)=Dshtb/1000 !Short tube diameter, m
+                        ShTbPAR%ShTbTID=Dshtb/1000 !Short tube diameter, m   !RS: Debugging: Formerly ShTbPAR(2)
                     ELSE
                         EXIT
                     END IF
                 END DO
             END IF
 
-            IF (INT(ShTbOUT(7)) .EQ. 1) THEN
-                IF (PrnCon .EQ. 1) THEN
-                    WRITE(*,*)
-                END IF
-                IF (PrnCon .EQ. 1) THEN
-                    WRITE(*,*)'## ERROR ## HPdesign: Short tube solution error.'
-                END IF
-                IF (PrnLog .EQ. 1) THEN
-                    WRITE(6,*)
-                END IF
-                IF (PrnLog .EQ. 1) THEN
-                    WRITE(6,*)'## ERROR ## HPdesign: Short tube solution error.'
-                END IF
+            IF (INT(ShTbOUT%ShTbOErrFlag) .EQ. 1) THEN    !RS: Debugging: Formerly ShTbOUT(7)
+                CALL IssueOutputMessage( '')
+                CALL IssueOutputMessage('## ERROR ## HPdesign: Short tube solution error.')
                 STOP
             END IF
 
             !**************Size TXV**************
-            mdotr=CompOUT(2)
-            PiCmp=CompIN(1)
-            PoCmp=CompIN(2)
-            Subcooling=CondOUT(14)
-            Superheat=EvapOUT(10)
-            IF (ShTbOUT(2) .NE. 0) THEN
-                DPtxv=CondOUT(10)-ShTbOUT(2)
+            mdotr=CompOUT%CmpOMdot    !RS: Debugging: Formerly CompOUT(2)
+            PiCmp=CompIN%CompInPsuc !RS: Debugging: Formerly CompIN(1)
+            PoCmp=CompIN%CompInPdis !RS: Debugging: Formerly CompIN(2)
+            Subcooling=CondOUT%COuttSCiE  !RS: Debugging: Formerly CondOUT(14)
+            Superheat=EvapOUT%EOuttSHiC   !RS: Debugging: Formerly EvapOUT(10)
+            IF (ShTbOUT%ShTbOPoE .NE. 0) THEN !RS: Debugging: Formerly ShTbOUT(2)
+                DPtxv=CondOUT%COutpRiE-ShTbOUT%ShTbOPoE  !RS: Debugging: Formerly CondOUT(10), ShTbOUT(2)
             ElSE
-                DPtxv=CondOUT(10)-EvapIN(2)
+                DPtxv=CondOUT%COutpRiE-EvapIN%EInpRi !RS: Debugging: Formerly EvapIN(2), CondOUT(10)
             END IF
 
-            CALL TXV(mdotr,PiCmp,PoCmp,Subcooling,Superheat,DPtxv,Qtxv)
-            TxvPAR(1)=Qtxv
+            CALL TXV(mdotr,PiCmp,PoCmp,Subcooling,Superheat,DPtxv,Qtxv)    !RS: Debugging: Testing: Just commenting this out for now
+            TxvOUT%TXVQ=Qtxv  !RS: Debugging: Formerly TxvPAR(1)
 
             !**************Size Capillary Tube**************
-            CapTubeIN(1)=CompOUT(2)  !Compressor mass flow rate, kg/s
-            CapTubeIN(2)=CondOUT(10) !Exp. device inlet pressure, kPa
-            CapTubeIN(3)=CondOUT(11) !Exp. device inlet enthalpy, kJ/kg
-            CapTubeIN(4)=EvapIN(2)   !Evaporator inlet pressure, kPa
-            CapTubeIN(5)=EvapOUT(1)  !Evaporator outlet pressure, kPa
+            CapTubeIN%CTIMdot=CompOUT%CmpOMdot  !Compressor mass flow rate, kg/s   !RS: Debugging: Formerly CapTubeIN(1), CompOUT(2)
+            CapTubeIN%CTIPiEx=CondOUT%COutpRiE !Exp. device inlet pressure, kPa   !RS: Debugging: Formerly CapTubeIN(2), CondOUT(10)
+            CapTubeIN%CTIHiEx=CondOUT%COuthRiE !Exp. device inlet enthalpy, kJ/kg !RS: Debugging: Formerly CapTubeIN(3), CondOUT(11)
+            CapTubeIN%CTIPiEv=EvapIN%EInpRi   !Evaporator inlet pressure, kPa   !RS: Debugging: Formerly CapTubeIN(4), EvapIN(2)
+            CapTubeIN%CTIPoEv=EvapOUT%EOutpRoC  !Evaporator outlet pressure, kPa   !RS: Debugging: Formerly CapTubeIN(5), EvapOUT(1)
 
-            !Initial guess 
+            !Initial guess
             NumIter=0
             MaxLen=0
             MinLen=0
@@ -810,27 +734,28 @@
 
             CapTubeDimension=1e-4 !1E-3 !Initial guess of capillary tube diameter
             IF (IsSizeDiameter .EQ. .TRUE.) THEN
-                CapTubePAR(1)=CapTubeDimension
+                CapTubePAR%CTTubeID=CapTubeDimension  !RS: Debugging: Formerly CapTubePAR(1)
             ELSE
-                CapTubePAR(2)=CapTubeDimension
+                CapTubePAR%CTTubeLen=CapTubeDimension  !RS: Debugging: Formerly CapTubePAR(2)
             END IF
 
             DO NumIter=1, MaxIter
 
                 !CALL CapillaryTubeChoi(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)  
-                CALL CapillaryTubeORNL(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)
+                !CALL CapillaryTubeORNL(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)
+                CALL CapillaryTubeORNL !(Ref$) !,CapTubeIN,CapTubePAR,CapTubeOUT)    !RS: Debugging: Extraneous PureRef
 
-                IF (CapTubeOUT(7) .NE. 0) THEN
-                    SELECT CASE (INT(CapTubeOUT(7)))
+                IF (CapTubeOUT%CTOErrFlag .NE. 0) THEN   !RS: Debugging: Formerly CapTubeOUT(2) 
+                    SELECT CASE (INT(CapTubeOUT%CTOErrFlag))   !RS: Debugging: Formerly CapTubeOUT(2) 
                     CASE (1)
-                        CapTubePAR(1)=CapTubePAR(1)*1.2
+                        CapTubePAR%CTTubeID=CapTubePAR%CTTubeID*1.2 !RS: Debugging: Formerly CapTubePAR(1)
                         CYCLE
                     END SELECT
                 END IF
 
-                XMRFLD=CapTubeOUT(1)*3600/UnitM !RS Comment: Unit Conversion, lbm/s??
-                ToExp=CapTubeOUT(3)
-                XoExp=CapTubeOUT(4)
+                XMRFLD=CapTubeOUT%CTOMdot*3600/UnitM !RS Comment: Unit Conversion, lbm/s??   !RS: Debugging: Formerly CapTubeOUT(1)
+                ToExp=CapTubeOUT%CTOToE !RS: Debugging: Formerly CapTubeOUT(3)
+                XoExp=CapTubeOUT%CTOXoE !RS: Debugging: Formerly CapTubeOUT(4)
 
                 ErrXMR=ABS((XMRFLD-XMR))
 
@@ -876,60 +801,47 @@
                 END IF
 
                 IF (IsSizeDiameter .EQ. .TRUE.) THEN
-                    CapTubePAR(1)=CapTubeDimension
+                    CapTubePAR%CTTubeID=CapTubeDimension  !RS: Debugging: Formerly CapTubePAR(1)
                 ELSE
-                    CapTubePAR(2)=CapTubeDimension
+                    CapTubePAR%CTTubeLen=CapTubeDimension  !RS: Debugging: Formerly CapTubePAR(2)
                 END IF
 
             END DO
 
             IF (NumIter .GT. MaxIter) THEN
-                IF (PrnCon .EQ. 1) THEN
-                    WRITE(*,*)
-                END IF
-                IF (PrnCon .EQ. 1) THEN
-                    WRITE(*,*)'## ERROR ## HPdesign: Capillary tube solution not converged.'
-                END IF
-                IF (PrnLog .EQ. 1) THEN
-                    WRITE(6,*)
-                END IF
-                IF (PrnLog .EQ. 1) THEN
-                    WRITE(6,*)'## ERROR ## HPdesign: Capillary tube solution not converged.'
-                END IF
-                !CALL SLEEP(300) !Wait for 5 minutes and stop
+                CALL IssueOutputMessage( '')
+                CALL IssueOutputMessage('## ERROR ## HPdesign: Capillary tube solution not converged.')
                 STOP
             END IF
 
         END IF
 
         IF (LPRINT.LE.1.AND.IMASS.NE.0) THEN
-            IF (AccumPAR(2) .GT. 0) THEN !Height
-                AccumIN(1)=MdotR
-                AccumIN(2)=CompIN(1) !Pressure
-                AccumIN(3)=CompIN(3) !Enthalpy
-                CALL CalcAccumulatorMass(AccumIN,AccumOUT)
+            IF (AccumPAR%AccH .GT. 0) THEN !Height    !RS: Debugging: Formerly AccumPAR(2)
+                AccumIN%AccImdot=MdotR    !RS: Debugging: Formerly AccumIN(1)
+                AccumIN%AccIpRo=CompIN%CompInPsuc !Pressure  !RS: Debugging: Formerly CompIN(1), AccumIN(2)
+                AccumIN%AccIhRo=CompIN%CompInHsuc !Enthalpy  !RS: Debugging: Formerly CompIN(3), AccumIN(3)
+                CALL CalcAccumulatorMass !(AccumIN,AccumOUT)
             ELSE
-                AccumOUT(1)=0
+                AccumOUT%AccOMass=0   !RS: Debugging: Formerly AccumOUT(1)
             END IF
 
             CALL CalcCondenserInventory(MassCoil,MassLiqCoil,MassVapCoil,CondLiqTubeLength,CondVapTubeLength,CondTwoPhaseTubeLength,CondNumLiqTubes)
-            CondOUT(18)=MassCoil
+            CondOUT%COutMC=MassCoil    !RS: Debugging: Formerly CondOUT(18)
             CALL CalcEvaporatorInventory(MassCoil,MassLiqCoil,MassVapCoil,EvapLiqTubeLength,EvapVapTubeLength,EvapTwoPhaseTubeLength,EvapNumLiqTubes)
-            EvapOUT(14)=MassCoil
+            EvapOUT%EOutMC=MassCoil    !RS: Debugging: Formerly EvapOUT(14)
 
-            CALCHG=(CompOUT(6)+CondOUT(16)+CondOUT(17)+CondOUT(18)+ &
-            EvapOUT(13)+EvapOUT(14)+ShTbOUT(5)+AccumOUT(1))/UnitM
+            CALCHG=(CompOUT%CmpOMCmp+CondOUT%COutMDisLn+CondOUT%COutMLiqLn+CondOUT%COutMC+ &   !RS: Debugging: Formerly CompOUT(6), CondOUT(16), CondOUT(17), CondOUT(18)
+            EvapOUT%EOutMSucLn+EvapOUT%EOutMC+ShTbOUT%ShTbOMDT+AccumOUT%AccOMass)/UnitM   !RS: Debugging: Formerly EvapOUT(13), EvapOUT(14), ShTbOUT(5), AccumOUT(1)
         END IF
 
         IF(ICHRGE.EQ.0.AND.ERRMSG(1).NE.0.) THEN 
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_1002) ERRMSG(1)
-            END IF
+            WRITE(tmpString,"('0HPDM: **** FAILED TO CONVERGE ON SUBCOOLING *****',/,  '         DIFFERENCE  =',F8.3,' F')") ERRMSG(1)
+            CALL IssueOutputMessage(TRIM(tmpString))
         END IF 
         IF(ICHRGE.EQ.0.AND.ERRMSG(2).NE.0.) THEN 
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_1006) ERRMSG(2)
-            END IF
+            WRITE(tmpString,"('0HPDM: **** FAILED TO CONVERGE ON SUPERHEAT *****',/,   '         DIFFERENCE  =',F8.3,' F')") ERRMSG(2)
+            CALL IssueOutputMessage(TRIM(tmpString))
         END IF
 
         IF (IsChargeTuning .GT. 0 .AND. MODE .NE. 2) THEN !Apply charge tuning
@@ -955,9 +867,9 @@
     END IF
 
     CALL CalcCondenserInventory(MassCoil,MassLiqCoil,MassVapCoil,CondLiqTubeLength,CondVapTubeLength,CondTwoPhaseTubeLength,CondNumLiqTubes)
-    CondOUT(18)=MassCoil
+    CondOUT%COutMC=MassCoil    !RS: Debugging: Formerly CondOUT(18)
 
-    CALCHG=(CompOUT(6)+CondOUT(16)+CondOUT(17)+CondOUT(18))/UnitM
+    CALCHG=(CompOUT%CmpOMCmp+CondOUT%COutMDisLn+CondOUT%COutMLiqLn+CondOUT%COutMC)/UnitM   !RS: Debugging: Formerly CompOUT(6), CondOUT(16), CondOUT(17), CondOUT(18) 
 
     IF (IsChargeTuning .GT. 0 .AND. MODE .NE. 2) THEN !Apply charge tuning
         ChargeCorrection=(ChargeCurveIntercept+ChargeCurveSlope*(CondLiqTubeLength-RefLiquidLength))/UnitM
@@ -978,15 +890,5 @@
     END IF
 
     RETURN
-
-    !!VL: Previously: 
-!!1002 FORMAT('0HPDM: **** FAILED TO CONVERGE ON SUBCOOLING *****',/,  '         DIFFERENCE  =',F8.3,' F')
-!!1006 FORMAT('0HPDM: **** FAILED TO CONVERGE ON SUPERHEAT *****',/,   '         DIFFERENCE  =',F8.3,' F')
-!!1013 FORMAT('0        DID NOT CONVERGE ON  EVAPORATOR INLET ',  'AIR TEMPERATURE FOR THIS SATURATION TEMPERATURE.' ,/,'         SET COMPRESSOR INLET SATURATION TEMPERATURE TO',  F8.3,' F AND GO BACK TO CONDENSER ITERATION.')
-!!1014 FORMAT('0DRIVER: ***** FAILED TO CONVERGE ON EVAPORATOR ',  'INLET AIR TEMPERATURE *****',/, '               DIFFERENCE  =',F8.3,' F')
-!!
-!!
-!!700 FORMAT(A44,F7.2,A5)
-!!704 FORMAT(A13,F7.2,A5)
 
     END SUBROUTINE

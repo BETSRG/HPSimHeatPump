@@ -8083,7 +8083,7 @@ REAL(r64) :: EIRFlowModFac         ! EIR modifier (function of actual supply air
 REAL(r64) :: EIR                   ! EIR at part load and off rated conditions
 REAL(r64) :: PLF                   ! Part load factor, accounts for thermal lag at compressor startup, used in power calculation
 REAL(r64) :: QSens                 ! actual sensible capacity
-REAL(r64) :: SysLat                ! latent add/removal from system (kg/s)
+!REAL(r64) :: SysLat                ! latent add/removal from system (kg/s) !RS: Never used currently (1/16/14)
 REAL(r64) :: QLatActual            ! operating latent capacity of DX coil
 REAL(r64) :: QLatRated             ! Rated latent capacity of DX coil
 REAL(r64) :: SHRUnadjusted         ! SHR prior to latent degradation effective SHR calculation
@@ -8122,7 +8122,6 @@ REAL(r64) :: HeatingCoilPLF          ! heating coil PLF (function of PLR), used 
 INTEGER :: DebugFile       =150 !RS: Debugging file denotion, hopefully this works.
     
     OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
-
 
 ! If Performance mode not present, then set to 1.  Used only by Multimode/Multispeed DX coil (otherwise mode = 1)
 IF (PRESENT(PerfMode)) THEN
@@ -8435,7 +8434,7 @@ DXCoil(DXCoilHPSimNum)%PrintLowOutTempMessage = .FALSE.
 !     END IF
 !    END IF
 
-  CALL SimulationCycle(QSens,SysLat,TotCap,CondInletTemp)
+  CALL SimulationCycle(QSens,TotCap,CondInletTemp) !SysLat,TotCap,CondInletTemp)    !RS: SysLat isn't used (1/16/14)
   
   AirMassFlow = DXCoil(DXCoilHPSimNum)%InletAirMassFlowRate !RS: Debugging: Setting this equal immediately after
   !RS: Debugging: I think that the apparatus properties are calculated with entering conditions

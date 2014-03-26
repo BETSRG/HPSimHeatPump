@@ -1,6 +1,59 @@
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! This module calculates the charge of the system  
+!
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! This module does not model or represent a specific component of the system
+! 
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! This module calculates the system charge based on the superheat/subcooling 
+!
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! No input/output files, only to variables 
+!  
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! No module level declarations, all variables are contained within the function.
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains 1 method:
+!    Real Function CHARGM
+!
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! No current issues/bugs
+! open ticket for unit conversions
+!
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! 2012-12-12 | JEH | Header Revision
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! No notes or recommendations at this time
+
+
 REAL FUNCTION CHARGM(DTVALU,IERR)
 
-    USE DataGlobals, ONLY: MaxNameLength
+    USE DataGlobals, ONLY: MaxNameLength  !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
     USE DataSimulation
 
     IMPLICIT NONE
@@ -18,6 +71,8 @@ REAL FUNCTION CHARGM(DTVALU,IERR)
 
     IERR = 0
     ICHRGE=1
+    
+    DTVAL=0.00 !Karthik - Initilized Previous Guess to 0
 
     IF (MODE .EQ. TXVSIMULATION .AND. DTVALU .GT. 80) THEN
         DTVALU=(DTVALU+DTVAL)/2 !If it is higher then 80 F subcooling, take the average of the current and previous guesses ISI - 01/02/09
@@ -34,6 +89,7 @@ REAL FUNCTION CHARGM(DTVALU,IERR)
     ELSE
         CHARGM = ( REFCHG - CALCHG ) !Less superheat, more charge
     END IF
+    
     IF(ICHRGE.EQ.2) THEN
         CHARGM = -CHARGM
     END IF
@@ -43,17 +99,14 @@ REAL FUNCTION CHARGM(DTVALU,IERR)
     IF(ICHRGE.EQ.2) THEN
         IF(DTVALU.LT.0.0) THEN
             DTVAL = -DTVALU/200.
-            !WRITE(sPrint,FMT_1004) DTVAL
+            WRITE(sPrint,FMT_1004) DTVAL
         ELSE
-            !WRITE(sPrint,FMT_1003) DTVAL
+            WRITE(sPrint,FMT_1003) DTVAL
         END IF
         
     ELSE
         IF(DTVALU.LT.0.0) THEN
             Xunit=' (%)'
-            !IF(sPrint .EQ. 9 .OR. sPrint .EQ. 13) THEN
-            !    CONTINUE    !RS: Debugging: Searching for a mis-set file number
-            !END IF
             IF (MODE .EQ. 1) THEN
                 DTVAL = 1.0 + DTVALU/500.
                 WRITE(sPrint,FMT_1000)'Compressor suction quality: ',DTVAL*100,Xunit
@@ -63,16 +116,13 @@ REAL FUNCTION CHARGM(DTVALU,IERR)
                 WRITE(sPrint,FMT_1000)'Condenser quality: ',DTVAL*100,Xunit
             END IF
         ELSE
-            !IF(sPrint .EQ. 9 .OR. sPrint .EQ. 13) THEN
-            !    CONTINUE    !RS: Debugging: Searching for a mis-set file number
-            !END IF
             IF (MODE .EQ. 1) THEN
                 IF (Unit .EQ. 1) THEN
                     DTunit=' (K)'
-                    WRITE(sPrint,FMT_1000)'Compressor suction supreheat: ',DTVAL/1.8,DTunit
+                    WRITE(sPrint,FMT_1000)'Compressor suction superheat: ',DTVAL/1.8,DTunit
                 ELSE
                     DTunit=' (R)'
-                    WRITE(sPrint,FMT_1000)'Compressor suction supreheat: ',DTVAL,DTunit
+                    WRITE(sPrint,FMT_1000)'Compressor suction superheat: ',DTVAL,DTunit
                 END IF
             ELSE
                 IF (Unit .EQ. 1) THEN
@@ -87,25 +137,21 @@ REAL FUNCTION CHARGM(DTVALU,IERR)
         END IF
 
     END IF
-    CALL IssueOutputMessage(PrnLog, PrnCon, '')
-    CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(sPrint))
-    
-    !IF(sPrint .EQ. 9 .OR. sPrint .EQ. 13) THEN
-    !    CONTINUE    !RS: Debugging: Searching for a mis-set file number
-    !END IF
+    CALL IssueOutputMessage( '')
+    CALL IssueOutputMessage( TRIM(sPrint))
 
     IF (Unit .EQ. 1) THEN
         MassUnit = ' (kg)'
         WRITE(sPrint,FMT_1000)'           Desired charge = ',REFCHG*0.4536,MassUnit
-        CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(sPrint))
+        CALL IssueOutputMessage( TRIM(sPrint))
         WRITE(sPrint,FMT_1000)'        Calculated charge = ',CALCHG*0.4536,MassUnit
-        CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(sPrint))
+        CALL IssueOutputMessage( TRIM(sPrint))
     ELSE
         MassUnit = ' (lbm)'
         WRITE(sPrint,FMT_1000)'           Desired charge = ',REFCHG,MassUnit
-        CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(sPrint))
+        CALL IssueOutputMessage( TRIM(sPrint))
         WRITE(sPrint,FMT_1000)'        Calculated charge = ',CALCHG,MassUnit
-        CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(sPrint))
+        CALL IssueOutputMessage( TRIM(sPrint))
     END IF
 
     RETURN 
