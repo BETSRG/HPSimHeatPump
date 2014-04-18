@@ -5678,6 +5678,7 @@ SUBROUTINE FlushHPOutput()
     REAL :: CurTime
     Integer:: OutputFile=152 !RS: Debugging: Trying to avoid problems with E+/HPSim due to hardcoding too low of values
     REAL :: QSens, QLat, QTot
+    REAL tAoCoilEvap, hAoCoilEvap, hAiCoilEvap, tAiCoilEvap
 
     CurTime=CurrentTime
 
@@ -5696,10 +5697,10 @@ SUBROUTINE FlushHPOutput()
 
     IF (CurTime .NE. PrevTime) THEN    !RS: Debugging: Commenting out just to see what other results we get
         CALL GetQOut(QSens,QLat, QTot)
-        CALL GetEvapProp(tAiCoil, hAiCoil, tAoCoil, hAoCoil)
+        CALL GetEvapProp(tAiCoilEvap, hAiCoilEvap, tAoCoilEvap, hAoCoilEvap)
         CALL GetCondProp(pRiCoil, tRiCoil, hRiCoil, pRoCoil, tRoCoil, hRoCoil,tAoCoil, rhAoCoil)
         WRITE(OutputFile, '(15(F12.5,","))') CurTime, QSens, QLat, pRiCoil, tRiCoil, hRiCoil, pRoCoil,  &
-                                            tRoCoil, hRoCoil,tAoCoil, rhAoCoil, tAiCoil, hAiCoil, tAoCoil, hAoCoil
+                                            tRoCoil, hRoCoil,tAoCoil, rhAoCoil, tAiCoilEvap, hAiCoilEvap, tAoCoilEvap, hAoCoilEvap
         PrevTime=CurTime
     END IF
 
