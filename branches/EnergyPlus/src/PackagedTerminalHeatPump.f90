@@ -2803,17 +2803,110 @@ SUBROUTINE GetPTUnit
       ENDIF
     END IF
 
+!    !RS: 4-14-14: Trying to fix no outside air flow
+!    
+!    PTUnit(PTUnitNum)%MaxCoolAirVolFlow       = Numbers(1)
+!    IF (PTUnit(PTUnitNum)%MaxCoolAirVolFlow .LE. 0 .AND. PTUnit(PTUnitNum)%MaxCoolAirVolFlow .NE. AutoSize) THEN
+!      CALL ShowSevereError(TRIM(CurrentModuleObject)//' illegal '//TRIM(cNumericFields(1))//' = ' &
+!                           //TRIM(TrimSigDigits(Numbers(1),7)))
+!      CALL ShowContinueError('Occurs in '//TRIM(CurrentModuleObject)//' = '//TRIM(PTUnit(PTUnitNum)%Name))
+!      ErrorsFound = .TRUE.
+!    END IF
+!
+!    PTUnit(PTUnitNum)%MaxHeatAirVolFlow       = Numbers(2)
+!    IF (PTUnit(PTUnitNum)%MaxHeatAirVolFlow .LE. 0 .AND. PTUnit(PTUnitNum)%MaxHeatAirVolFlow .NE. AutoSize) THEN
+!      CALL ShowSevereError(TRIM(CurrentModuleObject)//' illegal '//TRIM(cNumericFields(2))//' = ' &
+!                           //TRIM(TrimSigDigits(Numbers(2),7)))
+!      CALL ShowContinueError('Occurs in '//TRIM(CurrentModuleObject)//' = '//TRIM(PTUnit(PTUnitNum)%Name))
+!      ErrorsFound = .TRUE.
+!    END IF
+!
+!    PTUnit(PTUnitNum)%MaxNoCoolHeatAirVolFlow = Numbers(3)
+!    IF (PTUnit(PTUnitNum)%MaxNoCoolHeatAirVolFlow .LT. 0 .AND. PTUnit(PTUnitNum)%MaxNoCoolHeatAirVolFlow .NE. AutoSize) THEN
+!      CALL ShowSevereError(TRIM(CurrentModuleObject)//' illegal '//TRIM(cNumericFields(3))//' = ' &
+!                           //TRIM(TrimSigDigits(Numbers(3),7)))
+!      CALL ShowContinueError('Occurs in '//TRIM(CurrentModuleObject)//' = '//TRIM(PTUnit(PTUnitNum)%Name))
+!      ErrorsFound = .TRUE.
+!    END IF
+!
+!    PTUnit(PTUnitNum)%CoolOutAirVolFlow       = Numbers(4)
+!    IF (PTUnit(PTUnitNum)%CoolOutAirVolFlow .LT. 0 .AND. PTUnit(PTUnitNum)%CoolOutAirVolFlow .NE. AutoSize) THEN
+!      CALL ShowSevereError(TRIM(CurrentModuleObject)//' illegal '//TRIM(cNumericFields(4))//' = ' &
+!                           //TRIM(TrimSigDigits(Numbers(4),7)))
+!      CALL ShowContinueError('Occurs in '//TRIM(CurrentModuleObject)//' = '//TRIM(PTUnit(PTUnitNum)%Name))
+!      ErrorsFound = .TRUE.
+!    END IF
+!    
+!    !   only check that SA flow in cooling is >= OA flow in cooling when either or both are not autosized
+!    IF (PTUnit(PTUnitNum)%CoolOutAirVolFlow .GT. PTUnit(PTUnitNum)%MaxCoolAirVolFlow .AND. &
+!        PTUnit(PTUnitNum)%CoolOutAirVolFlow .NE. AutoSize .AND. PTUnit(PTUnitNum)%MaxCoolAirVolFlow .NE. AutoSize) THEN
+!      CALL ShowSevereError(TRIM(CurrentModuleObject)//' '//TRIM(cNumericFields(4))//' cannot be greater than '// &
+!                           TRIM(cNumericFields(1)))
+!      CALL ShowContinueError('Occurs in '//TRIM(CurrentModuleObject)//' = '//TRIM(PTUnit(PTUnitNum)%Name))
+!      ErrorsFound = .TRUE.
+!    END IF
+!
+!    PTUnit(PTUnitNum)%HeatOutAirVolFlow       = Numbers(5)
+!    IF (PTUnit(PTUnitNum)%HeatOutAirVolFlow .LT. 0 .AND. PTUnit(PTUnitNum)%HeatOutAirVolFlow.NE. AutoSize) THEN
+!      CALL ShowSevereError(TRIM(CurrentModuleObject)//' illegal '//TRIM(cNumericFields(5))//' = ' &
+!                           //TRIM(TrimSigDigits(Numbers(5),7)))
+!      CALL ShowContinueError('Occurs in '//TRIM(CurrentModuleObject)//' = '//TRIM(PTUnit(PTUnitNum)%Name))
+!      ErrorsFound = .TRUE.
+!    END IF
+!
+!!   only check that SA flow in heating is >= OA flow in heating when either or both are not autosized
+!    IF (PTUnit(PTUnitNum)%HeatOutAirVolFlow .GT. PTUnit(PTUnitNum)%MaxHeatAirVolFlow .AND. &
+!        PTUnit(PTUnitNum)%HeatOutAirVolFlow .NE. AutoSize .AND. PTUnit(PTUnitNum)%MaxHeatAirVolFlow .NE. AutoSize) THEN
+!      CALL ShowSevereError(TRIM(CurrentModuleObject)//' '//TRIM(cNumericFields(5))//' cannot be greater than '// &
+!                           TRIM(cNumericFields(2)))
+!      CALL ShowContinueError('Occurs in '//TRIM(CurrentModuleObject)//' = '//TRIM(PTUnit(PTUnitNum)%Name))
+!      ErrorsFound = .TRUE.
+!    END IF
+!
+!    PTUnit(PTUnitNum)%NoCoolHeatOutAirVolFlow = Numbers(6)
+!    IF (PTUnit(PTUnitNum)%NoCoolHeatOutAirVolFlow .LT. 0 .AND. PTUnit(PTUnitNum)%NoCoolHeatOutAirVolFlow .NE. AutoSize) THEN
+!      CALL ShowSevereError(TRIM(CurrentModuleObject)//' illegal '//TRIM(cNumericFields(6))//' = ' &
+!                           //TRIM(TrimSigDigits(Numbers(6),7)))
+!      CALL ShowContinueError('Occurs in '//TRIM(CurrentModuleObject)//' = '//TRIM(PTUnit(PTUnitNum)%Name))
+!      ErrorsFound = .TRUE.
+!    END IF
+!!   only check that SA flow when compressor is OFF is >= OA flow when compressor is OFF after fan mode is read in
+!
+!
+!    !RS: 4-14-14: Trying to fix no outside air flow (end)
+    
     !Get fan data
     PTUnit(PTUnitNum)%FanType = Alphas(7)
     PTUnit(PTUnitNum)%FanName = Alphas(8)
     ErrFlag=.FALSE.
-    !CALL GetFanType(TRIM(PTUnit(PTUnitNum)%FanName), PTUnit(PTUnitNum)%FanType_Num, ErrFlag, CurrentModuleObject,Alphas(1))
-    !FanVolFlow = 0.d0
-    !IF (ErrFlag) THEN
-    !  CALL ShowContinueError('...specified in '//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'".')
-    !  ErrorsFound=.TRUE.
-    !END IF
-    !
+    CALL GetFanType(TRIM(PTUnit(PTUnitNum)%FanName), PTUnit(PTUnitNum)%FanType_Num, ErrFlag, CurrentModuleObject,Alphas(1))
+    FanVolFlow = 0.d0
+    IF (ErrFlag) THEN
+      CALL ShowContinueError('...specified in '//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'".')
+      ErrorsFound=.TRUE.
+    END IF
+    
+    !RS: 4-15-14: Trying to fix no outside air flow
+    
+    IF(ErrFlag)THEN
+      CALL ShowContinueError('specified in '//TRIM(CurrentModuleObject)//' = '//TRIM(PTUnit(PTUnitNum)%Name))
+      ErrorsFound = .TRUE.
+    ELSE
+      CALL GetFanIndex(PTUnit(PTUnitNum)%FanName,PTUnit(PTUnitNum)%FanIndex,ErrFlag,CurrentModuleObject)
+      FanInletNodeNum = GetFanInletNode(PTUnit(PTUnitNum)%FanType,PTUnit(PTUnitNum)%FanName,ErrFlag)
+      FanOutletNodeNum = GetFanOutletNode(PTUnit(PTUnitNum)%FanType,PTUnit(PTUnitNum)%FanName,ErrFlag)
+      CALL GetFanVolFlow(PTUnit(PTUnitNum)%FanIndex,FanVolFlow)
+      PTUnit(PTUnitNum)%ActualFanVolFlowRate = FanVolFlow
+      ! Get the fan's availability schedule
+      PTUnit(PTUnitNum)%FanAvailSchedPtr = GetFanAvailSchPtr(PTUnit(PTUnitNum)%FanType,PTUnit(PTUnitNum)%FanName,ErrFlag)
+      IF (ErrFlag) THEN
+        CALL ShowContinueError('...specified in '//TRIM(CurrentModuleObject)//' = '//TRIM(PTUnit(PTUnitNum)%Name))
+        ErrorsFound=.TRUE.
+      ENDIF
+    ENDIF
+
+    !RS: 4-15-14: Trying to fix no outside air flow (end)
+    
     !IF (PTUnit(PTUnitNum)%FanType_Num == FanType_SimpleOnOff)THEN
     !  CALL ValidateComponent(PTUnit(PTUnitNum)%FanType,PTUnit(PTUnitNum)%FanName,IsNotOK, TRIM(CurrentModuleObject))
     !  IF (IsNotOK) THEN
@@ -3092,23 +3185,23 @@ SUBROUTINE GetPTUnit
     ! END IF
     !ENDIF
 
-    !IF (SameString(Alphas(16),'BlowThrough'))  PTUnit(PTUnitNum)%FanPlace = BlowThru
-    !IF (SameString(Alphas(16),'DrawThrough'))  PTUnit(PTUnitNum)%FanPlace = DrawThru
-    !IF (PTUnit(PTUnitNum)%FanPlace .EQ.0) THEN
-    !  CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//'"')
-    !  CALL ShowContinueError('Illegal '//TRIM(cAlphaFields(16))//'="'//TRIM(Alphas(16))//'".')
-    !  ErrorsFound = .TRUE.
-    !END IF
+    IF (SameString(Alphas(10),'BlowThrough'))  PTUnit(PTUnitNum)%FanPlace = BlowThru
+    IF (SameString(Alphas(10),'DrawThrough'))  PTUnit(PTUnitNum)%FanPlace = DrawThru
+    IF (PTUnit(PTUnitNum)%FanPlace .EQ.0) THEN
+      CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//'"')
+      CALL ShowContinueError('Illegal '//TRIM(cAlphaFields(10))//'="'//TRIM(Alphas(10))//'".')
+      ErrorsFound = .TRUE.
+    END IF
 
-    !PTUnit(PTUnitNum)%FanSchedPtr     = GetScheduleIndex(Alphas(17))
-    !IF (.NOT. lAlphaBlanks(17) .AND. PTUnit(PTUnitNum)%FanSchedPtr == 0) THEN
-    !  CALL ShowSevereError(TRIM(CurrentModuleObject)//' = '//TRIM(Alphas(1)))
-    !  CALL ShowContinueError('Illegal '//TRIM(cAlphaFields(17))//' = '//TRIM(Alphas(17)))
-    !  ErrorsFound=.TRUE.
-    !ELSEIF (lAlphaBlanks(17)) THEN
-    !  PTUnit(PTUnitNum)%OpMode = CycFanCycCoil
-    !ENDIF
-    !
+    PTUnit(PTUnitNum)%FanSchedPtr     = GetScheduleIndex(Alphas(11))
+    IF (.NOT. lAlphaBlanks(11) .AND. PTUnit(PTUnitNum)%FanSchedPtr == 0) THEN
+      CALL ShowSevereError(TRIM(CurrentModuleObject)//' = '//TRIM(Alphas(1)))
+      CALL ShowContinueError('Illegal '//TRIM(cAlphaFields(11))//' = '//TRIM(Alphas(11)))
+      ErrorsFound=.TRUE.
+    ELSEIF (lAlphaBlanks(11)) THEN
+      PTUnit(PTUnitNum)%OpMode = CycFanCycCoil
+    ENDIF
+    
     !IF (.NOT. lAlphaBlanks(18)) THEN
     !  PTUnit(PTUnitNum)%AvailManagerListName = Alphas(18)
     !  ErrFlag = .FALSE.
