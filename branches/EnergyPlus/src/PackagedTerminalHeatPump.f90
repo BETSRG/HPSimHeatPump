@@ -3215,202 +3215,202 @@ SUBROUTINE GetPTUnit
     !ENDIF
 
     ! Check component placement
-    !IF (PTUnit(PTUnitNum)%FanPlace == BlowThru) THEN
-    !  ! check that PTUnit inlet node is a zone exhaust node.
-    !  ZoneNodeNotFound = .TRUE.
-    !  DO CtrlZone = 1,NumOfZones
-    !    IF (.not. ZoneEquipConfig(CtrlZone)%IsControlled) CYCLE
-    !    DO NodeNum = 1,ZoneEquipConfig(CtrlZone)%NumExhaustNodes
-    !      IF (PTUnit(PTUnitNum)%AirInNode .EQ. ZoneEquipConfig(CtrlZone)%ExhaustNode(NodeNum)) THEN
-    !        ZoneNodeNotFound = .FALSE.
-    !        EXIT
-    !      END IF
-    !    END DO
-    !  END DO
-    !  IF(ZoneNodeNotFound)THEN
-    !    CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-    !    CALL ShowContinueError('..Heat Pumps air inlet node name must be the same as a zone exhaust node name.')
-    !    CALL ShowContinueError('..Zone exhaust node name is specified in ZoneHVAC:EquipmentConnections object.')
-    !    CALL ShowContinueError('..Heat pumps inlet node name = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirInNode)))
-    !    ErrorsFound=.TRUE.
-    !  END IF
-    !  IF(OANodeNums(4) == 0)THEN
-    !   ! Fan inlet node name must be the same as the heat pump's inlet air node name
-    !    IF (PTUnit(PTUnitNum)%AirInNode /= FanInletNodeNum) THEN
-    !      CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-    !      CALL ShowContinueError('..Fan inlet node name must be the same as the heat pumps inlet air node name')
-    !      CALL ShowContinueError('..when blow through '// &
-    !                            TRIM(cAlphaFields(15))//' is specified and an outdoor air mixer is not used.')
-    !      CALL ShowContinueError('..Fan inlet node name           = '//TRIM(NodeID(FanInletNodeNum)))
-    !      CALL ShowContinueError('..Heat pump air inlet node name = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirInNode)))
-    !      ErrorsFound=.TRUE.
-    !    END IF
-    !  ELSE
-    !    ! Fan inlet node name must be the same as the heat pump's OA mixer mixed air node name
-    !    IF (OANodeNums(4) /= FanInletNodeNum) THEN
-    !      CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-    !      CALL ShowContinueError('..Fan inlet node name must be the same as the heat pumps OutdoorAir:Mixer mixed air node name')
-    !      CALL ShowContinueError('..when blow through '// &
-    !                            TRIM(cAlphaFields(15))//' is specified.')
-    !      CALL ShowContinueError('..Fan inlet node name                   = '//TRIM(NodeID(FanInletNodeNum)))
-    !      CALL ShowContinueError('..OutdoorAir:Mixer mixed air node name = '//TRIM(NodeID(OANodeNums(4))))
-    !      ErrorsFound=.TRUE.
-    !    END IF
-    !    ! check OA Mixer return node
-    !    IF(PTUnit(PTUnitNum)%AirInNode /= OANodeNums(3))THEN
-    !      CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-    !      CALL ShowContinueError('..Heat Pump air inlet node name must be the same as the OutdoorAir:Mixer return air node name.')
-    !      CALL ShowContinueError('..Heat Pump air inlet node name         = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirInNode)))
-    !      CALL ShowContinueError('..OutdoorAir:Mixer return air node name = '//TRIM(NodeID(OANodeNums(3))))
-    !      ErrorsFound=.TRUE.
-    !    END IF
-    !  END IF
-    !  IF(CoolCoilInletNodeNum /= FanOutletNodeNum)THEN
-    !    CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-    !    CALL ShowContinueError('..Fan outlet node name must be the same as the cooling coil inlet node name')
-    !    CALL ShowContinueError('..when blow through '//TRIM(cAlphaFields(15))//' is specified.')
-    !    CALL ShowContinueError('..Fan outlet node name         = '//TRIM(NodeID(FanOutletNodeNum)))
-    !    CALL ShowContinueError('..Cooling coil inlet node name = '//TRIM(NodeID(CoolCoilInletNodeNum)))
-    !    ErrorsFound=.TRUE.
-    !  END IF
-    !  IF(CoolCoilOutletNodeNum /= HeatCoilInletNodeNum)THEN
-    !    CALL ShowSevereError(TRIM(CurrentModuleObject)//' "'//TRIM(PTUnit(PTUnitNum)%Name)//&
-    !                       '" Cooling coil outlet node name must be the same as the heatng coil inlet node name.')
-    !    CALL ShowContinueError('..Cooling coil outlet node name = '//TRIM(NodeID(CoolCoilOutletNodeNum)))
-    !    CALL ShowContinueError('..Heating coil inlet node name  = '//TRIM(NodeID(HeatCoilInletNodeNum)))
-    !    ErrorsFound=.TRUE.
-    !  END IF
-    !  IF(HeatCoilOutletNodeNum /= SuppHeatInletNodeNum)THEN
-    !    CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-    !    CALL ShowContinueError('..Heating coil outlet node name must be the same as the supplemental heating coil inlet node name')
-    !    CALL ShowContinueError('..when blow through '//TRIM(cAlphaFields(15))//' is specified.')
-    !    CALL ShowContinueError('..Heating coil outlet node name              = '//TRIM(NodeID(HeatCoilOutletNodeNum)))
-    !    CALL ShowContinueError('..Supplemental heating coil inlet node name  = '//TRIM(NodeID(SuppHeatInletNodeNum)))
-    !    ErrorsFound=.TRUE.
-    !  END IF
-    !  IF(SuppHeatOutletNodeNum /= PTUnit(PTUnitNum)%AirOutNode)THEN
-    !    CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-    !    CALL ShowContinueError('..Supplemental heating coil outlet node name must be the same as the heat pumps outlet node name.')
-    !    CALL ShowContinueError('..Supplemental heating coil outlet node name = '//TRIM(NodeID(SuppHeatOutletNodeNum)))
-    !    CALL ShowContinueError('..Heat pumps outlet node name                   = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirOutNode)))
-    !    ErrorsFound=.TRUE.
-    !  END IF
-    !  ! check that PTUnit outlet node is a zone inlet node.
-    !  ZoneNodeNotFound = .TRUE.
-    !  DO CtrlZone = 1,NumOfZones
-    !    IF (.not. ZoneEquipConfig(CtrlZone)%IsControlled) CYCLE
-    !    DO NodeNum = 1,ZoneEquipConfig(CtrlZone)%NumInletNodes
-    !      IF (PTUnit(PTUnitNum)%AirOutNode .EQ. ZoneEquipConfig(CtrlZone)%InletNode(NodeNum)) THEN
-    !        ZoneNodeNotFound = .FALSE.
-    !        EXIT
-    !      END IF
-    !    END DO
-    !  END DO
-    !  IF(ZoneNodeNotFound)THEN
-    !    CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-    !    CALL ShowContinueError('..Heat Pumps air outlet node name must be the same as a zone inlet node name.')
-    !    CALL ShowContinueError('..Zone inlet node name is specified in ZoneHVAC:EquipmentConnections object.')
-    !    CALL ShowContinueError('..Heat pumps outlet node name = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirOutNode)))
-    !    ErrorsFound=.TRUE.
-    !  END IF
-    !ELSE ! draw through fan from IF (PTUnit(PTUnitNum)%FanPlace == BlowThru) THEN
-    !  ! check that PTUnit inlet node is a zone exhaust node.
-    !  ZoneNodeNotFound = .TRUE.
-    !  DO CtrlZone = 1,NumOfZones
-    !    IF (.not. ZoneEquipConfig(CtrlZone)%IsControlled) CYCLE
-    !    DO NodeNum = 1,ZoneEquipConfig(CtrlZone)%NumExhaustNodes
-    !      IF (PTUnit(PTUnitNum)%AirInNode .EQ. ZoneEquipConfig(CtrlZone)%ExhaustNode(NodeNum)) THEN
-    !        ZoneNodeNotFound = .FALSE.
-    !        EXIT
-    !      END IF
-    !    END DO
-    !  END DO
-    !  IF(ZoneNodeNotFound)THEN
-    !    CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-    !    CALL ShowContinueError('..Heat Pumps air inlet node name must be the same as a zone exhaust node name.')
-    !    CALL ShowContinueError('..Zone exhaust node name is specified in ZoneHVAC:EquipmentConnections object.')
-    !    CALL ShowContinueError('..Heat pumps inlet node name = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirInNode)))
-    !    ErrorsFound=.TRUE.
-    !  END IF
-    !  IF(OANodeNums(4) == 0)THEN
-    !    ! Cooling coil inlet node name must be the same as heat pump's air inlet node name
-    !    IF(CoolCoilInletNodeNum /= PTUnit(PTUnitNum)%AirInNode)THEN
-    !      CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-    !      CALL ShowContinueError('..Heat pump air inlet node name must be the same as the cooling coil inlet node name')
-    !      CALL ShowContinueError('..when draw through '//TRIM(cAlphaFields(15))// &
-    !                             ' is specified and an outdoor air mixer is not used.')
-    !      CALL ShowContinueError('..Heat pump air inlet node name = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirInNode)))
-    !      CALL ShowContinueError('..Cooling coil inlet node name  = '//TRIM(NodeID(CoolCoilInletNodeNum)))
-    !      ErrorsFound=.TRUE.
-    !    END IF
-    !  ELSE
-    !    ! Cooling coil inlet node name must be the same as the OA mixers mixed air node name
-    !    IF(CoolCoilInletNodeNum /= OANodeNums(4))THEN
-    !      CALL ShowSevereError(TRIM(CurrentModuleObject)//' "'//TRIM(PTUnit(PTUnitNum)%Name)//&
-    !                       '" OutdoorAir:Mixer mixed air node name must be the same as the cooling coil')
-    !      CALL ShowContinueError(' inlet node name when draw through '//TRIM(cAlphaFields(15))//' is specified.')
-    !      CALL ShowContinueError('..OutdoorAir:Mixer mixed air name = '//TRIM(NodeID(OANodeNums(4))))
-    !      CALL ShowContinueError('..Cooling coil inlet node name    = '//TRIM(NodeID(CoolCoilInletNodeNum)))
-    !      ErrorsFound=.TRUE.
-    !    END IF
-    !  ! check OA Mixer return node
-    !    IF(PTUnit(PTUnitNum)%AirInNode /= OANodeNums(3))THEN
-    !      CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-    !      CALL ShowContinueError('..Heat Pump air inlet node name must be the same as the OutdoorAir:Mixer return air node name.')
-    !      CALL ShowContinueError('..Heat Pump air inlet node name         = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirInNode)))
-    !      CALL ShowContinueError('..OutdoorAir:Mixer return air node name = '//TRIM(NodeID(OANodeNums(3))))
-    !      ErrorsFound=.TRUE.
-    !    END IF
-    !  END IF
-    !  IF(CoolCoilOutletNodeNum /= HeatCoilInletNodeNum)THEN
-    !    CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-    !    CALL ShowContinueError('..Cooling coil outlet node name must be the same as the heating coil inlet node name.')
-    !    CALL ShowContinueError('..Cooling coil outlet node name = '//TRIM(NodeID(CoolCoilOutletNodeNum)))
-    !    CALL ShowContinueError('..Heating coil inlet node name  = '//TRIM(NodeID(HeatCoilInletNodeNum)))
-    !    ErrorsFound=.TRUE.
-    !  END IF
-    !  IF(HeatCoilOutletNodeNum /= FanInletNodeNum)THEN
-    !    CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-    !    CALL ShowContinueError('..Heating coil outlet node name must be the same as the fan inlet node name')
-    !    CALL ShowContinueError('..when draw through '//TRIM(cAlphaFields(15))//' is specified.')
-    !    CALL ShowContinueError('..Heating coil outlet node name = '//TRIM(NodeID(HeatCoilOutletNodeNum)))
-    !    CALL ShowContinueError('..Fan inlet node name           = '//TRIM(NodeID(FanInletNodeNum)))
-    !    ErrorsFound=.TRUE.
-    !  END IF
-    !  IF (SuppHeatInletNodeNum /= FanOutletNodeNum) THEN
-    !    CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-    !    CALL ShowContinueError('..Fan outlet node name must be the same as the supplemental heating coil inlet node name ')
-    !    CALL ShowContinueError('..when draw through '//TRIM(cAlphaFields(15))//' is specified.')
-    !    CALL ShowContinueError('..Fan outlet node = '//TRIM(NodeID(FanOutletNodeNum)))
-    !    CALL ShowContinueError('..Supplemental heating coil inlet node = '//TRIM(NodeID(SuppHeatInletNodeNum)))
-    !    ErrorsFound=.TRUE.
-    !  END IF
-    !  IF(SuppHeatOutletNodeNum /= PTUnit(PTUnitNum)%AirOutNode)THEN
-    !    CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-    !    CALL ShowContinueError('..Supplemental heating coil outlet node name must be the same as the heat pumps outlet node name.')
-    !    CALL ShowContinueError('..Supplemental heating coil outlet node name = '//TRIM(NodeID(SuppHeatOutletNodeNum)))
-    !    CALL ShowContinueError('..Heat pumps outlet node name                = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirOutNode)))
-    !    ErrorsFound=.TRUE.
-    !  END IF
-    !  ! check that PTUnit outlet node is a zone inlet node.
-    !  ZoneNodeNotFound = .TRUE.
-    !  DO CtrlZone = 1,NumOfZones
-    !    IF (.not. ZoneEquipConfig(CtrlZone)%IsControlled) CYCLE
-    !    DO NodeNum = 1,ZoneEquipConfig(CtrlZone)%NumInletNodes
-    !      IF (PTUnit(PTUnitNum)%AirOutNode .EQ. ZoneEquipConfig(CtrlZone)%InletNode(NodeNum)) THEN
-    !        ZoneNodeNotFound = .FALSE.
-    !        EXIT
-    !      END IF
-    !    END DO
-    !  END DO
-    !  IF(ZoneNodeNotFound)THEN
-    !    CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-    !    CALL ShowContinueError('..Heat Pumps air outlet node name must be the same as a zone inlet node name.')
-    !    CALL ShowContinueError('..Zone inlet node name is specified in ZoneHVAC:EquipmentConnections object.')
-    !    CALL ShowContinueError('..Heat pumps outlet node name = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirOutNode)))
-    !    ErrorsFound=.TRUE.
-    !  END IF
-    !ENDIF ! IF (PTUnit(PTUnitNum)%FanPlace == BlowThru) THEN
+    IF (PTUnit(PTUnitNum)%FanPlace == BlowThru) THEN
+      ! check that PTUnit inlet node is a zone exhaust node.
+      ZoneNodeNotFound = .TRUE.
+      DO CtrlZone = 1,NumOfZones
+        IF (.not. ZoneEquipConfig(CtrlZone)%IsControlled) CYCLE
+        DO NodeNum = 1,ZoneEquipConfig(CtrlZone)%NumExhaustNodes
+          IF (PTUnit(PTUnitNum)%AirInNode .EQ. ZoneEquipConfig(CtrlZone)%ExhaustNode(NodeNum)) THEN
+            ZoneNodeNotFound = .FALSE.
+            EXIT
+          END IF
+        END DO
+      END DO
+      IF(ZoneNodeNotFound)THEN
+        CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+        CALL ShowContinueError('..Heat Pumps air inlet node name must be the same as a zone exhaust node name.')
+        CALL ShowContinueError('..Zone exhaust node name is specified in ZoneHVAC:EquipmentConnections object.')
+        CALL ShowContinueError('..Heat pumps inlet node name = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirInNode)))
+        ErrorsFound=.TRUE.
+      END IF
+      IF(OANodeNums(4) == 0)THEN
+       ! Fan inlet node name must be the same as the heat pump's inlet air node name
+        IF (PTUnit(PTUnitNum)%AirInNode /= FanInletNodeNum) THEN
+          CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+          CALL ShowContinueError('..Fan inlet node name must be the same as the heat pumps inlet air node name')
+          CALL ShowContinueError('..when blow through '// &
+                                TRIM(cAlphaFields(15))//' is specified and an outdoor air mixer is not used.')
+          CALL ShowContinueError('..Fan inlet node name           = '//TRIM(NodeID(FanInletNodeNum)))
+          CALL ShowContinueError('..Heat pump air inlet node name = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirInNode)))
+          ErrorsFound=.TRUE.
+        END IF
+      ELSE
+        ! Fan inlet node name must be the same as the heat pump's OA mixer mixed air node name
+        IF (OANodeNums(4) /= FanInletNodeNum) THEN
+          CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+          CALL ShowContinueError('..Fan inlet node name must be the same as the heat pumps OutdoorAir:Mixer mixed air node name')
+          CALL ShowContinueError('..when blow through '// &
+                                TRIM(cAlphaFields(15))//' is specified.')
+          CALL ShowContinueError('..Fan inlet node name                   = '//TRIM(NodeID(FanInletNodeNum)))
+          CALL ShowContinueError('..OutdoorAir:Mixer mixed air node name = '//TRIM(NodeID(OANodeNums(4))))
+          ErrorsFound=.TRUE.
+        END IF
+        ! check OA Mixer return node
+        IF(PTUnit(PTUnitNum)%AirInNode /= OANodeNums(3))THEN
+          CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+          CALL ShowContinueError('..Heat Pump air inlet node name must be the same as the OutdoorAir:Mixer return air node name.')
+          CALL ShowContinueError('..Heat Pump air inlet node name         = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirInNode)))
+          CALL ShowContinueError('..OutdoorAir:Mixer return air node name = '//TRIM(NodeID(OANodeNums(3))))
+          ErrorsFound=.TRUE.
+        END IF
+      END IF
+      !IF(CoolCoilInletNodeNum /= FanOutletNodeNum)THEN
+      !  CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+      !  CALL ShowContinueError('..Fan outlet node name must be the same as the cooling coil inlet node name')
+      !  CALL ShowContinueError('..when blow through '//TRIM(cAlphaFields(15))//' is specified.')
+      !  CALL ShowContinueError('..Fan outlet node name         = '//TRIM(NodeID(FanOutletNodeNum)))
+      !  CALL ShowContinueError('..Cooling coil inlet node name = '//TRIM(NodeID(CoolCoilInletNodeNum)))
+      !  ErrorsFound=.TRUE.
+      !END IF
+      IF(CoolCoilOutletNodeNum /= HeatCoilInletNodeNum)THEN
+        CALL ShowSevereError(TRIM(CurrentModuleObject)//' "'//TRIM(PTUnit(PTUnitNum)%Name)//&
+                           '" Cooling coil outlet node name must be the same as the heatng coil inlet node name.')
+        CALL ShowContinueError('..Cooling coil outlet node name = '//TRIM(NodeID(CoolCoilOutletNodeNum)))
+        CALL ShowContinueError('..Heating coil inlet node name  = '//TRIM(NodeID(HeatCoilInletNodeNum)))
+        ErrorsFound=.TRUE.
+      END IF
+      IF(HeatCoilOutletNodeNum /= SuppHeatInletNodeNum)THEN
+        CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+        CALL ShowContinueError('..Heating coil outlet node name must be the same as the supplemental heating coil inlet node name')
+        CALL ShowContinueError('..when blow through '//TRIM(cAlphaFields(15))//' is specified.')
+        CALL ShowContinueError('..Heating coil outlet node name              = '//TRIM(NodeID(HeatCoilOutletNodeNum)))
+        CALL ShowContinueError('..Supplemental heating coil inlet node name  = '//TRIM(NodeID(SuppHeatInletNodeNum)))
+        ErrorsFound=.TRUE.
+      END IF
+      !IF(SuppHeatOutletNodeNum /= PTUnit(PTUnitNum)%AirOutNode)THEN
+      !  CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+      !  CALL ShowContinueError('..Supplemental heating coil outlet node name must be the same as the heat pumps outlet node name.')
+      !  CALL ShowContinueError('..Supplemental heating coil outlet node name = '//TRIM(NodeID(SuppHeatOutletNodeNum)))
+      !  CALL ShowContinueError('..Heat pumps outlet node name                   = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirOutNode)))
+      !  ErrorsFound=.TRUE.
+      !END IF
+      ! check that PTUnit outlet node is a zone inlet node.
+      ZoneNodeNotFound = .TRUE.
+      DO CtrlZone = 1,NumOfZones
+        IF (.not. ZoneEquipConfig(CtrlZone)%IsControlled) CYCLE
+        DO NodeNum = 1,ZoneEquipConfig(CtrlZone)%NumInletNodes
+          IF (PTUnit(PTUnitNum)%AirOutNode .EQ. ZoneEquipConfig(CtrlZone)%InletNode(NodeNum)) THEN
+            ZoneNodeNotFound = .FALSE.
+            EXIT
+          END IF
+        END DO
+      END DO
+      IF(ZoneNodeNotFound)THEN
+        CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+        CALL ShowContinueError('..Heat Pumps air outlet node name must be the same as a zone inlet node name.')
+        CALL ShowContinueError('..Zone inlet node name is specified in ZoneHVAC:EquipmentConnections object.')
+        CALL ShowContinueError('..Heat pumps outlet node name = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirOutNode)))
+        ErrorsFound=.TRUE.
+      END IF
+    ELSE ! draw through fan from IF (PTUnit(PTUnitNum)%FanPlace == BlowThru) THEN
+      ! check that PTUnit inlet node is a zone exhaust node.
+      ZoneNodeNotFound = .TRUE.
+      DO CtrlZone = 1,NumOfZones
+        IF (.not. ZoneEquipConfig(CtrlZone)%IsControlled) CYCLE
+        DO NodeNum = 1,ZoneEquipConfig(CtrlZone)%NumExhaustNodes
+          IF (PTUnit(PTUnitNum)%AirInNode .EQ. ZoneEquipConfig(CtrlZone)%ExhaustNode(NodeNum)) THEN
+            ZoneNodeNotFound = .FALSE.
+            EXIT
+          END IF
+        END DO
+      END DO
+      IF(ZoneNodeNotFound)THEN
+        CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+        CALL ShowContinueError('..Heat Pumps air inlet node name must be the same as a zone exhaust node name.')
+        CALL ShowContinueError('..Zone exhaust node name is specified in ZoneHVAC:EquipmentConnections object.')
+        CALL ShowContinueError('..Heat pumps inlet node name = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirInNode)))
+        ErrorsFound=.TRUE.
+      END IF
+      IF(OANodeNums(4) == 0)THEN
+        ! Cooling coil inlet node name must be the same as heat pump's air inlet node name
+        IF(CoolCoilInletNodeNum /= PTUnit(PTUnitNum)%AirInNode)THEN
+          CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+          CALL ShowContinueError('..Heat pump air inlet node name must be the same as the cooling coil inlet node name')
+          CALL ShowContinueError('..when draw through '//TRIM(cAlphaFields(15))// &
+                                 ' is specified and an outdoor air mixer is not used.')
+          CALL ShowContinueError('..Heat pump air inlet node name = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirInNode)))
+          CALL ShowContinueError('..Cooling coil inlet node name  = '//TRIM(NodeID(CoolCoilInletNodeNum)))
+          ErrorsFound=.TRUE.
+        END IF
+      ELSE
+        ! Cooling coil inlet node name must be the same as the OA mixers mixed air node name
+        !IF(CoolCoilInletNodeNum /= OANodeNums(4))THEN
+        !  CALL ShowSevereError(TRIM(CurrentModuleObject)//' "'//TRIM(PTUnit(PTUnitNum)%Name)//&
+        !                   '" OutdoorAir:Mixer mixed air node name must be the same as the cooling coil')
+        !  CALL ShowContinueError(' inlet node name when draw through '//TRIM(cAlphaFields(15))//' is specified.')
+        !  CALL ShowContinueError('..OutdoorAir:Mixer mixed air name = '//TRIM(NodeID(OANodeNums(4))))
+        !  CALL ShowContinueError('..Cooling coil inlet node name    = '//TRIM(NodeID(CoolCoilInletNodeNum)))
+        !  ErrorsFound=.TRUE.
+        !END IF
+      ! check OA Mixer return node
+        IF(PTUnit(PTUnitNum)%AirInNode /= OANodeNums(3))THEN
+          CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+          CALL ShowContinueError('..Heat Pump air inlet node name must be the same as the OutdoorAir:Mixer return air node name.')
+          CALL ShowContinueError('..Heat Pump air inlet node name         = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirInNode)))
+          CALL ShowContinueError('..OutdoorAir:Mixer return air node name = '//TRIM(NodeID(OANodeNums(3))))
+          ErrorsFound=.TRUE.
+        END IF
+      END IF
+      !IF(CoolCoilOutletNodeNum /= HeatCoilInletNodeNum)THEN
+      !  CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+      !  CALL ShowContinueError('..Cooling coil outlet node name must be the same as the heating coil inlet node name.')
+      !  CALL ShowContinueError('..Cooling coil outlet node name = '//TRIM(NodeID(CoolCoilOutletNodeNum)))
+      !  CALL ShowContinueError('..Heating coil inlet node name  = '//TRIM(NodeID(HeatCoilInletNodeNum)))
+      !  ErrorsFound=.TRUE.
+      !END IF
+      !IF(HeatCoilOutletNodeNum /= FanInletNodeNum)THEN
+      !  CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+      !  CALL ShowContinueError('..Heating coil outlet node name must be the same as the fan inlet node name')
+      !  CALL ShowContinueError('..when draw through '//TRIM(cAlphaFields(15))//' is specified.')
+      !  CALL ShowContinueError('..Heating coil outlet node name = '//TRIM(NodeID(HeatCoilOutletNodeNum)))
+      !  CALL ShowContinueError('..Fan inlet node name           = '//TRIM(NodeID(FanInletNodeNum)))
+      !  ErrorsFound=.TRUE.
+      !END IF
+      !IF (SuppHeatInletNodeNum /= FanOutletNodeNum) THEN
+      !  CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+      !  CALL ShowContinueError('..Fan outlet node name must be the same as the supplemental heating coil inlet node name ')
+      !  CALL ShowContinueError('..when draw through '//TRIM(cAlphaFields(15))//' is specified.')
+      !  CALL ShowContinueError('..Fan outlet node = '//TRIM(NodeID(FanOutletNodeNum)))
+      !  CALL ShowContinueError('..Supplemental heating coil inlet node = '//TRIM(NodeID(SuppHeatInletNodeNum)))
+      !  ErrorsFound=.TRUE.
+      !END IF
+      !IF(SuppHeatOutletNodeNum /= PTUnit(PTUnitNum)%AirOutNode)THEN
+      !  CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+      !  CALL ShowContinueError('..Supplemental heating coil outlet node name must be the same as the heat pumps outlet node name.')
+      !  CALL ShowContinueError('..Supplemental heating coil outlet node name = '//TRIM(NodeID(SuppHeatOutletNodeNum)))
+      !  CALL ShowContinueError('..Heat pumps outlet node name                = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirOutNode)))
+      !  ErrorsFound=.TRUE.
+      !END IF
+      ! check that PTUnit outlet node is a zone inlet node.
+      ZoneNodeNotFound = .TRUE.
+      DO CtrlZone = 1,NumOfZones
+        IF (.not. ZoneEquipConfig(CtrlZone)%IsControlled) CYCLE
+        DO NodeNum = 1,ZoneEquipConfig(CtrlZone)%NumInletNodes
+          IF (PTUnit(PTUnitNum)%AirOutNode .EQ. ZoneEquipConfig(CtrlZone)%InletNode(NodeNum)) THEN
+            ZoneNodeNotFound = .FALSE.
+            EXIT
+          END IF
+        END DO
+      END DO
+      IF(ZoneNodeNotFound)THEN
+        CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+        CALL ShowContinueError('..Heat Pumps air outlet node name must be the same as a zone inlet node name.')
+        CALL ShowContinueError('..Zone inlet node name is specified in ZoneHVAC:EquipmentConnections object.')
+        CALL ShowContinueError('..Heat pumps outlet node name = '//TRIM(NodeID(PTUnit(PTUnitNum)%AirOutNode)))
+        ErrorsFound=.TRUE.
+      END IF
+    ENDIF ! IF (PTUnit(PTUnitNum)%FanPlace == BlowThru) THEN
 
     CompSetFanInlet   = NodeID(FanInletNodeNum)
     CompSetFanOutlet  = NodeID(FanOutletNodeNum)
@@ -3422,8 +3422,8 @@ SUBROUTINE GetPTUnit
     CompSetSupHeatOutlet = NodeID(SuppHeatOutletNodeNum)
 
     ! Add fan to component sets array
-    !CALL SetUpCompSets(PTUnit(PTUnitNum)%UnitType, PTUnit(PTUnitNum)%Name, &
-    !               PTUnit(PTUnitNum)%FanType,PTUnit(PTUnitNum)%FanName,CompSetFanInlet,CompSetFanOutlet)
+    CALL SetUpCompSets(PTUnit(PTUnitNum)%UnitType, PTUnit(PTUnitNum)%Name, &
+                   PTUnit(PTUnitNum)%FanType,PTUnit(PTUnitNum)%FanName,CompSetFanInlet,CompSetFanOutlet)
     !
     !! Add cooling coil to component sets array
     !CALL SetUpCompSets(PTUnit(PTUnitNum)%UnitType, PTUnit(PTUnitNum)%Name, &
