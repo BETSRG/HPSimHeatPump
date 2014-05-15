@@ -4681,7 +4681,7 @@ DO DXCoilIndex = 1, DXCoilHPSimNum
     ErrorsFound=.true.
     IF (IsBlank) Alphas(1)='xxxxx'
   ENDIF
-  DXCoil(DXCoilNum)%Name = Alphas(1)
+  DXCoil(DXCoilNum)%Name = Alphas(10) !RS: Debugging: We actually want the "coil" name (4/28/14) !(1)
 ! Initialize DataHeatBalance heat reclaim variable name for use by heat reclaim coils
   !HeatReclaimDXCoil(DXCoilNum)%Name = DXCoil(DXCoilNum)%Name
   !HeatReclaimDXCoil(DXCoilNum)%SourceType = TRIM(CurrentModuleObject)
