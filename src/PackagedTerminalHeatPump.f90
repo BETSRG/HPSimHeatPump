@@ -3185,20 +3185,34 @@ SUBROUTINE GetPTUnit
     ! END IF
     !ENDIF
 
-    IF (SameString(Alphas(10),'BlowThrough'))  PTUnit(PTUnitNum)%FanPlace = BlowThru
-    IF (SameString(Alphas(10),'DrawThrough'))  PTUnit(PTUnitNum)%FanPlace = DrawThru
+    !RS: Debugging: Adding in this to hopefully place the proper nodes around HPSim (4/28/14)
+    PTUnit(PTUnitNum)%DXCoolCoilType = Alphas(10)
+         PTUnit(PTUnitNum)%DXCoolCoilType_Num = CoilDX_CoolingSingleSpeed
+         PTUnit(PTUnitNum)%DXCoolCoilName=Alphas(10)    !RS: Adding so that it will find an index number
+         ErrFlag = .FALSE.
+         CALL GetDXCoolCoilIndex(PTUnit(PTUnitNum)%DXCoolCoilName,PTUnit(PTUnitNum)%DXCoolCoilIndexNum, &
+                                 ErrFlag, PTUnit(PTUnitNum)%DXCoolCoilType)
+         CoolCoilInletNodeNum = GetDXCoilInletNode(PTUnit(PTUnitNum)%DXCoolCoilType,PTUnit(PTUnitNum)%DXCoolCoilName,ErrFlag)
+         CoolCoilOutletNodeNum = GetDXCoilOutletNode(PTUnit(PTUnitNum)%DXCoolCoilType,PTUnit(PTUnitNum)%DXCoolCoilName,ErrFlag)
+         PTUnit(PTUnitNum)%CondenserNodeNum = &
+                         GetCoilCondenserInletNode(PTUnit(PTUnitNum)%DXCoolCoilType,PTUnit(PTUnitNum)%DXCoolCoilName,ErrFlag)
+         IF(ErrFlag)CALL ShowContinueError('...occurs in '//TRIM(PTUnit(PTUnitNum)%UnitType)// &
+                                           ' "'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+    
+    IF (SameString(Alphas(11),'BlowThrough'))  PTUnit(PTUnitNum)%FanPlace = BlowThru
+    IF (SameString(Alphas(11),'DrawThrough'))  PTUnit(PTUnitNum)%FanPlace = DrawThru
     IF (PTUnit(PTUnitNum)%FanPlace .EQ.0) THEN
       CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//'"')
-      CALL ShowContinueError('Illegal '//TRIM(cAlphaFields(10))//'="'//TRIM(Alphas(10))//'".')
+      CALL ShowContinueError('Illegal '//TRIM(cAlphaFields(11))//'="'//TRIM(Alphas(11))//'".')
       ErrorsFound = .TRUE.
     END IF
 
-    PTUnit(PTUnitNum)%FanSchedPtr     = GetScheduleIndex(Alphas(11))
-    IF (.NOT. lAlphaBlanks(11) .AND. PTUnit(PTUnitNum)%FanSchedPtr == 0) THEN
+    PTUnit(PTUnitNum)%FanSchedPtr     = GetScheduleIndex(Alphas(12))
+    IF (.NOT. lAlphaBlanks(12) .AND. PTUnit(PTUnitNum)%FanSchedPtr == 0) THEN
       CALL ShowSevereError(TRIM(CurrentModuleObject)//' = '//TRIM(Alphas(1)))
-      CALL ShowContinueError('Illegal '//TRIM(cAlphaFields(11))//' = '//TRIM(Alphas(11)))
+      CALL ShowContinueError('Illegal '//TRIM(cAlphaFields(12))//' = '//TRIM(Alphas(12)))
       ErrorsFound=.TRUE.
-    ELSEIF (lAlphaBlanks(11)) THEN
+    ELSEIF (lAlphaBlanks(12)) THEN
       PTUnit(PTUnitNum)%OpMode = CycFanCycCoil
     ENDIF
     
@@ -3273,21 +3287,21 @@ SUBROUTINE GetPTUnit
       !  CALL ShowContinueError('..Cooling coil inlet node name = '//TRIM(NodeID(CoolCoilInletNodeNum)))
       !  ErrorsFound=.TRUE.
       !END IF
-      IF(CoolCoilOutletNodeNum /= HeatCoilInletNodeNum)THEN
-        CALL ShowSevereError(TRIM(CurrentModuleObject)//' "'//TRIM(PTUnit(PTUnitNum)%Name)//&
-                           '" Cooling coil outlet node name must be the same as the heatng coil inlet node name.')
-        CALL ShowContinueError('..Cooling coil outlet node name = '//TRIM(NodeID(CoolCoilOutletNodeNum)))
-        CALL ShowContinueError('..Heating coil inlet node name  = '//TRIM(NodeID(HeatCoilInletNodeNum)))
-        ErrorsFound=.TRUE.
-      END IF
-      IF(HeatCoilOutletNodeNum /= SuppHeatInletNodeNum)THEN
-        CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
-        CALL ShowContinueError('..Heating coil outlet node name must be the same as the supplemental heating coil inlet node name')
-        CALL ShowContinueError('..when blow through '//TRIM(cAlphaFields(15))//' is specified.')
-        CALL ShowContinueError('..Heating coil outlet node name              = '//TRIM(NodeID(HeatCoilOutletNodeNum)))
-        CALL ShowContinueError('..Supplemental heating coil inlet node name  = '//TRIM(NodeID(SuppHeatInletNodeNum)))
-        ErrorsFound=.TRUE.
-      END IF
+      !IF(CoolCoilOutletNodeNum /= HeatCoilInletNodeNum)THEN
+      !  CALL ShowSevereError(TRIM(CurrentModuleObject)//' "'//TRIM(PTUnit(PTUnitNum)%Name)//&
+      !                     '" Cooling coil outlet node name must be the same as the heatng coil inlet node name.')
+      !  CALL ShowContinueError('..Cooling coil outlet node name = '//TRIM(NodeID(CoolCoilOutletNodeNum)))
+      !  CALL ShowContinueError('..Heating coil inlet node name  = '//TRIM(NodeID(HeatCoilInletNodeNum)))
+      !  ErrorsFound=.TRUE.
+      !END IF
+      !IF(HeatCoilOutletNodeNum /= SuppHeatInletNodeNum)THEN
+      !  CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
+      !  CALL ShowContinueError('..Heating coil outlet node name must be the same as the supplemental heating coil inlet node name')
+      !  CALL ShowContinueError('..when blow through '//TRIM(cAlphaFields(15))//' is specified.')
+      !  CALL ShowContinueError('..Heating coil outlet node name              = '//TRIM(NodeID(HeatCoilOutletNodeNum)))
+      !  CALL ShowContinueError('..Supplemental heating coil inlet node name  = '//TRIM(NodeID(SuppHeatInletNodeNum)))
+      !  ErrorsFound=.TRUE.
+      !END IF
       !IF(SuppHeatOutletNodeNum /= PTUnit(PTUnitNum)%AirOutNode)THEN
       !  CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PTUnit(PTUnitNum)%Name)//'"')
       !  CALL ShowContinueError('..Supplemental heating coil outlet node name must be the same as the heat pumps outlet node name.')
@@ -5340,13 +5354,14 @@ SUBROUTINE CalcPTUnit(PTUnitNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,O
                          0.0d0, 0.0d0, &
                          OpMode,0.0d0, PTUnit(PTUnitNum)%MaxONOFFCyclesperHour, &
                          PTUnit(PTUnitNum)%HPTimeConstant, PTUnit(PTUnitNum)%FanDelayTime, 0, 0.0d0)
-      CASE(PTHPSimUnit) !RS: Implementation: Trying call HPSim from DXCoils
-          HPSimFlag = 1 !RS: Implementation: Saying that HPSim IS being used
-          PTUnit(PTUnitNum)%CoolCoilCompIndex = 1   !RS: Implementation: Keeping SimDXCoil from crashing
-            !RS: Implementation: The above is because if it's 0 then DXCoils thinks it has no business being there
-          CALL SimDXCoil(PTUnit(PTUnitNum)%DXCoolCoilName,Off,FirstHVACIteration,0.0d0,  &
-                         PTUnit(PTUnitNum)%CoolCoilCompIndex,PTUnit(PTUnitNum)%OpMode,OnOffAirFlowRatio)
-          AirMassFlow = Node(OutletNode)%MassFlowRate !RS: Debugging: Setting it again because it's reading as 0 for RA-only case
+        !RS: debugging: Commenting this out because it should be 0 when the cooling coil is off; nothing should be happening (5/13/14)
+      !CASE(PTHPSimUnit) !RS: Implementation: Trying call HPSim from DXCoils
+      !    HPSimFlag = 1 !RS: Implementation: Saying that HPSim IS being used
+      !    PTUnit(PTUnitNum)%CoolCoilCompIndex = 1   !RS: Implementation: Keeping SimDXCoil from crashing
+      !      !RS: Implementation: The above is because if it's 0 then DXCoils thinks it has no business being there
+      !    CALL SimDXCoil(PTUnit(PTUnitNum)%DXCoolCoilName,Off,FirstHVACIteration,0.0d0,  &
+      !                   PTUnit(PTUnitNum)%CoolCoilCompIndex,PTUnit(PTUnitNum)%OpMode,OnOffAirFlowRatio)
+      !    AirMassFlow = Node(OutletNode)%MassFlowRate !RS: Debugging: Setting it again because it's reading as 0 for RA-only case
       CASE DEFAULT
     END SELECT
   END IF
@@ -5466,7 +5481,6 @@ SUBROUTINE CalcPTUnit(PTUnitNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,O
                    0.0d0, 0.0d0, &
                    OpMode, 0.0d0, PTUnit(PTUnitNum)%MaxONOFFCyclesperHour, &
                    PTUnit(PTUnitNum)%HPTimeConstant, PTUnit(PTUnitNum)%FanDelayTime, 0, 0.0d0)
-
         CASE DEFAULT
       END SELECT
     END IF
@@ -7625,11 +7639,14 @@ SUBROUTINE SetOnOffMassFlowRateMulSpeed(PTUnitNum, ZoneNum, FirstHVACIteration, 
 
 END SUBROUTINE SetOnOffMassFlowRateMulSpeed
 
-SUBROUTINE HPSimNodes(PTUnitNum,ReturnNode,OutsideNode)   !RS: Debugging: Returns nodal numbers to HPSim
-INTEGER,INTENT(OUT):: ReturnNode,OutsideNode
+SUBROUTINE HPSimNodes(PTUnitNum,MixedNode,OutsideNode)   !RS: Debugging: Returns nodal numbers to HPSim
+USE Fans, ONLY: GetFanOutletNode
+LOGICAL :: ErrFlag = .FALSE. ! Error flag returned during CALL to mining functions
+
+INTEGER,INTENT(OUT):: MixedNode,OutsideNode
 INTEGER,INTENT(IN):: PTUnitNum
 
-    ReturnNode=PTUnit(PTUnitNum)%AirInNode
+    MixedNode=GetFanOutletNode(PTUnit(PTUnitNum)%FanType,PTUnit(PTUnitNum)%FanName,ErrFlag) !PTUnit(PTUnitNum)%AirInNode
     OutsideNode=PTUnit(PTUnitNum)%OutsideAirNode
 
 END SUBROUTINE HPSimNodes

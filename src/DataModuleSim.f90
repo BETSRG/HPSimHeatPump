@@ -77,7 +77,7 @@ REAL CondVapTubeLength		!Condenser vapor tube length, m
 REAL CondTwoPhaseTubeLength !Condenser two-phase tube length, m
 REAL CondNumLiqTubes		!Number of liquid tubes in condenser
 REAL EvapLiqTubeLength		!Evaporator liquid tube length, m
-REAL EvapVapTubeLength		!Evaporaotr vapor tube length, m
+REAL EvapVapTubeLength		!Evaporator vapor tube length, m
 REAL EvapTwoPhaseTubeLength !Evaporator two-phase tube length, m
 REAL EvapNumLiqTubes		!Number of liquid tube length in evaporator
 INTEGER IsChargeTuning    !Flag to indicate if charge tuning is performed
@@ -143,10 +143,10 @@ REAL TOEVP,POEVP,HOEVP,XOEVP	!Evaporator outlet temp. (F); pressure (psi); entha
 
 INTEGER(2)	:: Unit !Unit flag: 1=SI; 2=IP
 
-INTEGER		:: MODE !1-Design mode: Given superheat, subcooling; Compute charge, orifice size   
-					!2-Simulation mode: Given charge, orifice size; Compute superheat, subcooling
-					!3-Design mode: Given expansion device, superheat; Compute charge, subcooling
-					!4-Simulation mode: Given superheat, charge; Compute subcooling, expansion deivce
+INTEGER		:: MODE !1-Simulation mode: Given charge, orifice size; Compute superheat, subcooling
+                    !2-Design mode: Given superheat, subcooling; Compute charge, orifice size   
+					!3-Simulation mode: Given superheat, charge; Compute subcooling, expansion device
+					!4-Design mode: Given expansion device, superheat; Compute charge, subcooling
 
 LOGICAL FirstTimeAirTempLoop	!First time to run AirTempLoop?
 LOGICAL FirstTimeFlowRateLoop   !First time to run FlowRateLoop?

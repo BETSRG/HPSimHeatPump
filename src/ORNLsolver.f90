@@ -156,7 +156,7 @@
     REAL OutBaroPress   !RS: Debugging
     REAL DummyHR !RS: Debugging
     REAL QRemain    !RS: Debugging: The difference between qtotalout and the qrequired.
-    INTEGER ReturnNode, OutsideNode    !RS: Debugging: These hold the numbers for the return and outside air nodes
+    INTEGER MixedNode, OutsideNode    !RS: Debugging: These hold the numbers for the mixed and outside air nodes
     
     CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
     INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
@@ -245,10 +245,10 @@
         QUnitOut1=0
         !LatOutputProvided1=0
         QSensUnitOut1=0
-        CALL HPSimNodes(DXCoilHPSimNum,ReturnNode,OutsideNode) !RS: Debugging: Bringing in the node numbers
+        CALL HPSimNodes(DXCoilHPSimNum,MixedNode,OutsideNode) !RS: Debugging: Bringing in the node numbers
         CALL GetTempsOut(OutDryBulbTemp, OutWetBulbTemp, OutBaroPress, RHiC)
-        TaiE=Node(ReturnNode)%Temp 
-        DummyHR=Node(ReturnNode)%HumRat 
+        TaiE=Node(MixedNode)%Temp 
+        DummyHR=Node(MixedNode)%HumRat 
         CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)
         !DXCoil(DXCoilHPSimNum)%InletAirMassFlowRate = DXCoil(DXCoilHPSimNum)%InletAirMassFlowRateMax    !RS: Debugging: Otherwise it's 0
         DXCoil(DXCoilHPSimNum)%OutletAirTemp     = TaiE
@@ -266,7 +266,7 @@
         CALL EndEvaporatorCoil
     END IF
 
-    CALL HPSimNodes(DXCoilHPSimNum,ReturnNode,OutsideNode) !RS: Debugging: Bringing in the node numbers
+    CALL HPSimNodes(DXCoilHPSimNum,MixedNode,OutsideNode) !RS: Debugging: Bringing in the node numbers
     CALL GetTempsOut(OutDryBulbTemp, OutWetBulbTemp, OutBaroPress, RHiC)    !RS: Debugging: RHiC = outdoor relative humidity
     !TWiC=OutWetBulbTemp !RS: Debugging: Updating outdoor entering wet bulb temperature
     TaiC=Node(OutsideNode)%Temp !OutDryBulbTemp !RS: Debugging: Updating outdoor entering dry bulb temperature !RS: Debugging: Outside Air Node
@@ -278,8 +278,8 @@
     ELSE    !RS: System with return air
         !TaiE=MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
         !CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
-        TaiE=Node(ReturnNode)%Temp
-        DummyHR=Node(ReturnNode)%HumRat 
+        TaiE=Node(MixedNode)%Temp
+        DummyHR=Node(MixedNode)%HumRat 
         CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)
     END IF
     CALL PsyRhFnTdbWPb2(TaiE,DummyHR,OutBaroPress,RHiE)  !RS: Debugging: Converting from humidity ratio to relative humidity
