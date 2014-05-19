@@ -4795,7 +4795,7 @@ REAL j3        !Intermediate variable
 
     SELECT CASE (FinType)
     !CASE (1) !Dry plain fin
-    CASE (PLAINFIN)
+    CASE (PLAINFIN) !,3)
       !McQuiston
 	  !JP=ReDc**(-0.4)*(4*Pl*Pt*Amin/(PI*Dh*Dc*Aface))**(-0.15)
 	  !j4=0.0014+0.2618*JP
