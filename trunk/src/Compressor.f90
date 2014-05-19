@@ -236,6 +236,14 @@ IF (FirstTime .EQ. 1) THEN
   CompPAR%CompMFRMult = Numbers(25) !MassFlowRateMultiplier !RS: Debugging: Formerly PAR(26)
   
   FirstTime=2
+  
+      IF (Unit .EQ. SI)THEN !SI unit inputs   !RS: Debugging: 
+    	CompPAR%CompIntVol=CompPAR%CompIntVol/(100**3) !Compressor internal volume, m^3   !RS: Formerly CompPAR(23)
+    ELSE
+        CompPAR%CompQLoss=CompPAR%CompQLoss*UnitPwr*1000 !Compressor shell heat loss W  !RS: Debugging: Formerly CompPAR(22)
+        CompPAR%CompIntVol=CompPAR%CompIntVol/(12**3)*(UnitL**3) !Compressor internal volume, m^3 !RS: Debugging: Formerly CompPAR(23)
+    END IF
+    
 END IF
   !TsiCmp = Numbers(26) !UserSpecifiedRatingEvapTemperature
   !TsoCmp = Numbers(27) !UserSpecifiedRatingCondTemperature
@@ -252,13 +260,6 @@ END IF
         A(I)= Numbers(13+I) !CompPAR%(I)
         B(I)= Numbers(3+I) !CompPAR%(I+10) 
     END DO
-    
-    IF (Unit .EQ. SI)THEN !SI unit inputs   !RS: Debugging: 
-    	CompPAR%CompIntVol=CompPAR%CompIntVol/(100**3) !Compressor internal volume, m^3   !RS: Formerly CompPAR(23)
-    ELSE
-        CompPAR%CompQLoss=CompPAR%CompQLoss*UnitPwr*1000 !Compressor shell heat loss W  !RS: Debugging: Formerly CompPAR(22)
-        CompPAR%CompIntVol=CompPAR%CompIntVol/(12**3)*(UnitL**3) !Compressor internal volume, m^3 !RS: Debugging: Formerly CompPAR(23)
-    END IF
     
     Qshellfrac = CompPAR%CompQLossFrac    !RS: Debugging: Formerly PAR(21)
     Qshell = CompPAR%CompQLoss    !RS: Debugging: Formerly PAR(22)
@@ -353,6 +354,10 @@ END IF
     !mdot=mdot*Mcorrect
 
     Power=PowerMap*(mdot/mdotMap)*(HdisIsen-Hsuc)/(HdisIsenMap-HsucMap)
+    
+    IF (HdisIsenMap .EQ. HsucMap .AND. HdisIsen .EQ. HSuc) THEN !RS: Debugging: If both are the same, the ratio should be 1
+        Power=PowerMap*(mdot/mdotMap)
+    END IF
 
     Power=Power/Wcorrect
 
