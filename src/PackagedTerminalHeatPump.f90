@@ -5355,13 +5355,13 @@ SUBROUTINE CalcPTUnit(PTUnitNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,O
                          OpMode,0.0d0, PTUnit(PTUnitNum)%MaxONOFFCyclesperHour, &
                          PTUnit(PTUnitNum)%HPTimeConstant, PTUnit(PTUnitNum)%FanDelayTime, 0, 0.0d0)
         !RS: debugging: Commenting this out because it should be 0 when the cooling coil is off; nothing should be happening (5/13/14)
-      !CASE(PTHPSimUnit) !RS: Implementation: Trying call HPSim from DXCoils
-      !    HPSimFlag = 1 !RS: Implementation: Saying that HPSim IS being used
-      !    PTUnit(PTUnitNum)%CoolCoilCompIndex = 1   !RS: Implementation: Keeping SimDXCoil from crashing
-      !      !RS: Implementation: The above is because if it's 0 then DXCoils thinks it has no business being there
-      !    CALL SimDXCoil(PTUnit(PTUnitNum)%DXCoolCoilName,Off,FirstHVACIteration,0.0d0,  &
-      !                   PTUnit(PTUnitNum)%CoolCoilCompIndex,PTUnit(PTUnitNum)%OpMode,OnOffAirFlowRatio)
-      !    AirMassFlow = Node(OutletNode)%MassFlowRate !RS: Debugging: Setting it again because it's reading as 0 for RA-only case
+      CASE(PTHPSimUnit) !RS: Implementation: Trying call HPSim from DXCoils
+          HPSimFlag = 1 !RS: Implementation: Saying that HPSim IS being used
+          PTUnit(PTUnitNum)%CoolCoilCompIndex = 1   !RS: Implementation: Keeping SimDXCoil from crashing
+            !RS: Implementation: The above is because if it's 0 then DXCoils thinks it has no business being there
+          CALL SimDXCoil(PTUnit(PTUnitNum)%DXCoolCoilName,Off,FirstHVACIteration,0.0d0,  &
+                         PTUnit(PTUnitNum)%CoolCoilCompIndex,PTUnit(PTUnitNum)%OpMode,OnOffAirFlowRatio)
+          AirMassFlow = Node(OutletNode)%MassFlowRate !RS: Debugging: Setting it again because it's reading as 0 for RA-only case
       CASE DEFAULT
     END SELECT
   END IF
