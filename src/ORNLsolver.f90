@@ -92,7 +92,7 @@
     USE DataSimulation
     USE FrostModel
     USE InputProcessor_HPSim
-    USE DataGlobals_HPSim, ONLY: RefName, RefrigIndex    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+    USE DataGlobals_HPSimIntegrated, ONLY: RefName, RefrigIndex    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
     IMPLICIT NONE
 
@@ -143,6 +143,7 @@
     INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
     INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
     REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    LOGICAL :: FileExists   !RS: Debugging: To remove instances of NC.txt from previous runs (10/14/14)
     
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
     ! Change names of the flags to reflect the intention of the GOTO statements ...
@@ -152,6 +153,12 @@
     CHARACTER(LEN=14) :: tmpString
     
     !Flow**:
+    OPEN(77,FILE='Test.log')
+    WRITE(77,*) 'This is a test'
+    CLOSE(77)
+    
+    OPEN(5,FILE='YorkHP.out')     ! VL_User_Setting -- file name
+    OPEN(6,FILE='YorkHP.log')     ! VL_User_Setting -- file name
     CALL PreProcessInput
     CALL ProcessInput   !Moved up to avoid errors with "CALL GetInputs"
 
@@ -167,12 +174,24 @@
     EvapIN%EInSolFlux=0   !VL Comment: EvapIN(8)=0*WinTrans !stillwater 0.63 kW/m2 !Harbin 0.52 kW/m2 !Singapore 0.88 kW/m2   ! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EvapIN(8)
     EvapPAR%EvapSurfAbs=0.8   ! VL_Magic_Number    ! VL_Index_Replace   !RS: Debugging: Formerly EvapPAR(29)
 
-    OPEN(5,FILE='YorkHP.out')     ! VL_User_Setting -- file name
-    OPEN(6,FILE='YorkHP.log')     ! VL_User_Setting -- file name
+    !OPEN(5,FILE='YorkHP.out')     ! VL_User_Setting -- file name
+    !OPEN(6,FILE='YorkHP.log')     ! VL_User_Setting -- file name
     !OPEN(5,FILE='YorkHP_PlainFin.out')     ! VL_User_Setting -- file name !RS: Test case output file
     !OPEN(6,FILE='YorkHP_PlainFin.log')     ! VL_User_Setting -- file name !RS: Test case output file
+    WRITE(6,*) 'HPSim Run Begun' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+    
+    OPEN(20,FILE='Crash.txt')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+    WRITE(20,*) 'Initializing crash file'   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+    CLOSE(20)
+    
+    INQUIRE(file='NC.txt',EXIST=FileExists) !RS: Debugging: To remove instances of NC.txt from previous runs (10/14/14)
+    IF (FileExists) THEN    !RS: Debugging: To remove instances of NC.txt from previous runs (10/14/14)
+        OPEN(19, FILE='NC.txt', STATUS='old')   !RS: Debugging: To remove instances of NC.txt from previous runs (10/14/14)
+        CLOSE(19, STATUS='DELETE') !RS: Debugging: To remove instances of NC.txt from previous runs (10/14/14)
+    END IF
 
     CALL GetInputs                ! VL Comment: Reads file "HPdata.ydd"; input and error file names should be sent in as parameters to file ...
+    CALL GetGenOptInputs    !RS: Debugging: Trying to read from the modified GenOpt IDF (9/22/14)
     
     !RS: Debugging: Moving here from GetHPSimInputs
     !*************** Accumulator **************** !RS: Debugging: Moving: AirTempLoop? ORNLSolver?
@@ -207,6 +226,14 @@
     IF (TsoCmp .LE. TsiCmp) THEN
         CALL IssueOutputMessage( 'Compressor suction temperature is greater than discharge temperature.')
         CALL IssueOutputMessage( '## ERROR ## Main: Wrong initial guess!')
+        OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+        CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+        OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+        WRITE(19,*) 'Initializing "Not Converged" file'
+        CLOSE(19)
+        WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+        WRITE(6,*) 'Fatal error recognised in ORNLsolver'
+        CLOSE(6)
         STOP
     END IF
 
@@ -284,6 +311,14 @@
 
         IF (RHiC .GT. TaiC) THEN
             CALL IssueOutputMessage( '## ERROR ## Main: Condenser wet bulb temperature is greater than dry bulb temperature.')
+            OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+            CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+            OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+            WRITE(19,*) 'Initializing "Not Converged" file'
+            CLOSE(19)
+            WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+            WRITE(6,*) 'Fatal error recognised in ORNLsolver'
+            CLOSE(6)
             STOP
         END IF
         AirPropOpt=3                  ! VL_Magic_Number number	! VL_User_Setting
@@ -298,6 +333,14 @@
 
         IF (RHiE .GT. TaiE) THEN !ISI - 11/04/07
             CALL IssueOutputMessage( '## ERROR ## Main: Evaporator wet bulb temperature is greater than dry bulb temperature.')
+            OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+            CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+            OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+            WRITE(19,*) 'Initializing "Not Converged" file'
+            CLOSE(19)
+            WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+            WRITE(6,*) 'Fatal error recognised in ORNLsolver'
+            CLOSE(6)
             STOP
         END IF
         AirPropOpt=3                  ! VL_Magic_Number number	! VL_User_Setting
@@ -316,6 +359,14 @@
         PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Inlet Pressure
         IF (RefPropErr .GT. 0) THEN
             CALL IssueOutputMessage( '## ERROR ## Main: Refrigerant property is out of bound!')
+            OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+            CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+            OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+            WRITE(19,*) 'Initializing "Not Converged" file'
+            CLOSE(19)
+            WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+            WRITE(6,*) 'Fatal error recognised in ORNLsolver'
+            Close(6)
             STOP
         END IF
         PiCmp=PiCmp/1000.0    ! VL : conversion ?
@@ -330,6 +381,13 @@
         PoCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Outlet Pressure
         IF (RefPropErr .GT. 0) THEN
             CALL IssueOutputMessage( '## ERROR ## Main: Refrigerant property is out of bound!')
+            CLOSE(UNIT=20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+            OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+            WRITE(19,*) 'Initializing "Not Converged" file'
+            CLOSE(19)
+            WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+            WRITE(6,*) 'Fatal error recognised in ORNLsolver'
+            Close(6)
             STOP
         END IF  
         PoCmp=PoCmp/1000.0  !RS Comment: Unit Conversion
@@ -341,6 +399,14 @@
             HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
             IF (RefPropErr .GT. 0) THEN
                 CALL IssueOutputMessage( '## ERROR ## Main: Refrigerant property is out of bound!')
+                OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                WRITE(19,*) 'Initializing "Not Converged" file'
+                CLOSE(19)
+                WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                WRITE(6,*) 'Fatal error recognised in ORNLsolver'
+                Close(6)
                 STOP
             END IF
             HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
@@ -351,6 +417,14 @@
             HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
             IF (RefPropErr .GT. 0) THEN
                 CALL IssueOutputMessage( '## ERROR ## Main: Refrigerant property is out of bound!')
+                OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                WRITE(19,*) 'Initializing "Not Converged" file'
+                CLOSE(19)
+                WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                WRITE(6,*) 'Fatal error recognised in ORNLsolver'
+                Close(6)
                 STOP
             END IF
             HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
@@ -362,10 +436,19 @@
         CompIN%CompInHsuc=HiCmp	! VL_Index_Replace  !RS: Debugging: Formerly CompIN(3)
         IF (SystemType .NE. EVAPORATORONLY) THEN
             CALL Compressor(Ref$) !,CompIN,CompPAR,CompOUT) !(Ref$,PureRef,CompIN,CompPAR,CompOUT) !RS: Debugging: Extraneous PureRef
+            !CALL CompressorSimple(Ref$) !RS: Debugging: Running the old compressor for a test (7/20/19)
             IF (CompOUT%CmpOErrFlag .NE. 0) THEN	! VL_Index_Replace  !RS: Debugging: Formerly CompOUT(7)
                 SELECT CASE (INT(CompOUT%CmpOErrFlag))	! VL_Index_Replace  !RS: Debugging: Formerly CompOUT(7)
                 CASE (1)
                     CALL IssueOutputMessage( '## ERROR ## Highside: Compressor solution error!')
+                    OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                    CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                    OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                    WRITE(19,*) 'Initializing "Not Converged" file'
+                    CLOSE(19)
+                    WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                    WRITE(6,*) 'Fatal error recognised in ORNLsolver'
+                    Close(6)
                     STOP
                 CASE (2)
                     CALL IssueOutputMessage( '-- WARNING -- Highside: Refprop out of range in compressor model.')
@@ -376,11 +459,11 @@
 
         EvapOUT%EOuttAoC=Temperature_F2C(TSICMP) !Initialize for reversing valve calculation  !RS: Debugging: EvapOUT(3)     
 
-        CALL IssueOutputMessage( 'Heat Pump Design Tool (ver. 2.0 12/17/09)')
+        !CALL IssueOutputMessage( 'Heat Pump Design Tool (ver. 2.0 12/17/09)')
         IF (IsCoolingMode .EQ. 1) THEN
-            CALL IssueOutputMessage('***** Cooling Mode *****')
+            !CALL IssueOutputMessage('***** Cooling Mode *****')
         ELSE
-            CALL IssueOutputMessage('***** Heating Mode *****')
+            !CALL IssueOutputMessage('***** Heating Mode *****')
         END IF
         
         ! VL: No GOTO statements before this line in this file ..... so this is a nice place to set default values for the flags
@@ -390,7 +473,7 @@
         SELECT CASE(MODE)
 
         CASE(FIXEDORIFICESIM)   !RS: Fixed Orifice Simulation Mode
-            CALL IssueOutputMessage('***** System Simulation (Fixed Orifice) *****')
+            !CALL IssueOutputMessage('***** System Simulation (Fixed Orifice) *****')
             ICHRGE=2	! VL_User_Setting
 
             !ISI - 08/07/06
@@ -405,7 +488,7 @@
             CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(40)
 
         CASE(ORIFICEANDTXVDESIGN)   !RS: Orifice and TXV Design Mode
-            CALL IssueOutputMessage('***** Design Calculation (Orifice and TXV) *****')
+            !CALL IssueOutputMessage('***** Design Calculation (Orifice and TXV) *****')
             ICHRGE=0	! VL_User_Setting
 
             AMBCON=1E-3 !1 !air temperature, F
@@ -419,7 +502,7 @@
             CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(40)
 
         CASE(FIXEDSUPERHEATSIM) !RS: Fixed Superheat/Orifice Design Mode
-            CALL IssueOutputMessage('***** Design Calculation (Fixed Orifice) *****')
+            !CALL IssueOutputMessage('***** Design Calculation (Fixed Orifice) *****')
             ICHRGE=0	! VL_User_Setting
 
             AMBCON=1E-3 !1 !air temperature, F
@@ -448,7 +531,7 @@
             CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(40)
 
         CASE(CONDENSERUNITSIM)  !RS: Condenser Unit Simulation
-            CALL IssueOutputMessage('***** Condenser Unit Simulation *****')
+            !CALL IssueOutputMessage('***** Condenser Unit Simulation *****')
             ICHRGE=0	! VL_User_Setting
 
             !ISI - 08/07/06
@@ -463,13 +546,13 @@
             CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(40)
 
         CASE(COILONLYSIM) !Added for coil only simulation - ISI - 10/23/07  !RS: Debugging: This case isn't used by us
-            CALL IssueOutputMessage('***** Coil Only Simulation *****')
-            CALL IssueOutputMessage('')
+            !CALL IssueOutputMessage('***** Coil Only Simulation *****')
+            !CALL IssueOutputMessage('')
 
             IF (Unit .EQ. 1) THEN !SI Unit
-                CALL IssueOutputMessage('Iteration    mdot(kg/hr)    Capacity(kW)')
+                !CALL IssueOutputMessage('Iteration    mdot(kg/hr)    Capacity(kW)')
             ELSE !IP Unit
-                CALL IssueOutputMessage('Iteration    mdot(lbm/hr)   Capacity(MBtu/hr)')
+                !CALL IssueOutputMessage('Iteration    mdot(lbm/hr)   Capacity(MBtu/hr)')
             END IF
 
             IF (IsCoolingMode .GT. 0) THEN
@@ -709,7 +792,7 @@
             FLAG_GOTO_30 = .TRUE.
 
         CASE DEFAULT    !RS: Default is Orifice and TXV Design Mode
-            CALL IssueOutputMessage( '***** Design Calculation (Orifice and TXV) *****')
+            !CALL IssueOutputMessage( '***** Design Calculation (Orifice and TXV) *****')
             ICHRGE=0
 
             !ISI - 08/07/06
@@ -842,6 +925,17 @@
         CALL IssueOutputMessage( 'Calculation completed successfully.')
         WRITE(tmpString,'(F10.4)') TimeSpent/60
         CALL IssueOutputMessage( 'Time Spent (Min):'//TRIM(tmpString))
+        
+        INQUIRE(file='Time.csv',EXIST=FileExists) !RS: Debug: Keeping track of the runtime; appending to existing if it exists (3/10/18)
+        IF (FileExists) THEN    !RS: Debug: Keeping track of the runtime (3/10/18)
+            OPEN(89, FILE='Time.csv', STATUS='old', ACTION='write', FORM='formatted', POSITION='append')   !RS: Debug: Keeping track of the runtime (3/10/18)
+            WRITE(89,*) TRIM(tmpString), ','  !RS: Debug: Keeping track of the runtime (3/10/18)
+            CLOSE(89)   !RS: Debug: Keeping track of the runtime (3/10/18)
+        ELSE
+            OPEN(89, File='Time.csv')    !RS: Debug: Keeping track of the runtime (3/10/18)
+            WRITE(89,*) TRIM(tmpString), ','  !RS: Debug: Keeping track of the runtime (3/10/18)
+            CLOSE(89)   !RS: Debug: Keeping track of the runtime (3/10/18)
+        END IF
 
         IF (TaiE .GT. 32) THEN !only update time step above freezing temp.  - ISI 12/22/2009
             IF (MODE .NE. FIXEDORIFICESIM .OR. MODE .NE. TXVSIMULATION) THEN
@@ -886,8 +980,14 @@
     END IF
     
     CALL EndEnergyPlus
+    
+    OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+    CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
 
     CLOSE(666)
+    
+    WRITE(6,*) 'HPSim completed successfully' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+    CLOSE(6)
 
     STOP
 

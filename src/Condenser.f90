@@ -109,7 +109,7 @@
 
     MODULE CondenserMod
 
-    USE DataGlobals_HPSim, ONLY: RefName, RefrigIndex    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+    USE DataGlobals_HPSimIntegrated, ONLY: RefName, RefrigIndex    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
     USE DataSimulation, ONLY: IsCoolingMode
     USE CoilCalcMod
 
@@ -472,6 +472,11 @@
     PRIVATE CalcSegmentRefOutletPressure
     PRIVATE UpdateTubeDataFromCircuitData
     PRIVATE InitCondenserStructures !RS: Debugging:
+    PRIVATE PsyTdbFnHWLocal !RS: Debugging: Adding in condenser fan model (9/4/14)
+    PRIVATE SimSimpleFan  !RS: Debugging: Adding in condenser fan model (9/4/14)
+    PRIVATE PsyRhoAirFnPbTdbWLocal !RS: Debugging: Adding in condenser fan model (9/4/14)
+    PRIVATE PsyWFnTdbHLocal !RS: Debugging: Adding in condenser fan model (9/4/14)
+    
     CONTAINS
 
     !***********************************************************************************
@@ -1047,8 +1052,10 @@
     Cair=mAiCoil*CPAir
 
     IF (DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
-        tAoCoil=tAoCoil+PwrFan/Cair
-        hAoCoil=hAoCoil+PwrFan/mAiCoil
+        !tAoCoil=tAoCoil+PwrFan/Cair
+        !hAoCoil=hAoCoil+PwrFan/mAiCoil        
+        CALL SimSimpleFan(tAoCoil,hAoCoil,mAiCoil,tAoCoil,hAoCoil)  !RS: Debugging: Adding in condenser fan model (9/4/14)
+        CondPAR%CondFanPwr=FanOut%Power
     END IF
 
     !RS Comment: Inlet and Outlet Air Properties
@@ -2508,8 +2515,20 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 ELSEIF (I .EQ. 4) THEN
                     CALL GetObjectItem('ODCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
-                ELSE 
+                ELSEIF (I .EQ. 5) THEN
                     CALL GetObjectItem('ODCcktCircuit5_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                ELSEIF (I .EQ. 6) THEN
+                    CALL GetObjectItem('ODCcktCircuit6_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                ELSEIF (I .EQ. 7) THEN
+                    CALL GetObjectItem('ODCcktCircuit7_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                ELSEIF (I .EQ. 8) THEN
+                    CALL GetObjectItem('ODCcktCircuit8_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                ELSE
+                    CALL GetObjectItem('ODCcktCircuit9_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 END IF
                     Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
@@ -3021,8 +3040,17 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 ELSEIF (I .EQ. 5) THEN
                     CALL GetObjectItem('IDCcktCircuit5_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-                ELSE
+                ELSEIF (I .EQ. 6) THEN
                     CALL GetObjectItem('IDCcktCircuit6_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                ELSEIF (I .EQ. 7) THEN
+                    CALL GetObjectItem('IDCcktCircuit7_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                ELSEIF (I .EQ. 8) THEN
+                    CALL GetObjectItem('IDCcktCircuit8_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                ELSE
+                    CALL GetObjectItem('IDCcktCircuit9_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 END IF
                     Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
@@ -4021,8 +4049,10 @@ END IF
     Cair=mAiCoil*CPAir
     
     IF (DrawBlow .EQ. BLOWTHROUGH) THEN !Blow through
-        tAiCoil=tAiCoil+PwrFan/Cair
-        hAiCoil=hAiCoil+PwrFan/mAiCoil
+        !tAiCoil=tAiCoil+PwrFan/Cair
+        !hAiCoil=hAiCoil+PwrFan/mAiCoil
+        CALL SimSimpleFan(tAiCoil,hAiCoil,mAiCoil,tAiCoil,hAiCoil)  !RS: Debugging: Adding in condenser fan model (9/4/14)
+        CondPAR%CondFanPwr=FanOut%Power
     END IF
 
     IF (IsCmpInAirStream .NE. 0) THEN !Compressor in air stream
@@ -5055,7 +5085,7 @@ END IF
     USE CoilCalcMod
     USE AirPropMod
     USE OilMixtureMod
-    !USE DataGlobals_HPSim   !RS: Debugging: Cavallini (2/14/14)
+    !USE DataGlobals_HPSimIntegrated   !RS: Debugging: Cavallini (2/14/14)
 
     IMPLICIT NONE
 
@@ -5313,6 +5343,11 @@ END IF
         CALL CalcRefProperty(pRiMod,hRiMod,hfRiMod,hgRiMod,hfgRiMod,Psat,Tsat,tRiMod,xRiMod, &
         vRiMod,vfRiMod,vgRiMod,cpRiMod,cpfRiMod,cpgRiMod, &
         muRiMod,mufRiMod,mugRiMod,kRiMod,kfRiMod,kgRiMod,SigmaMod)
+        
+        !RS: Debugging: Following lines of code written for case where enthalpy is negative (7/30/16)
+        IF (hRoMod .LE. 0) THEN ! .AND. RefBCiter .EQ. 1) THEN
+            CYCLE !EXIT !RETURN
+        END IF
 
         CALL CalcSegmentRefOutletPressure(CoilType,TubeType,pRiMod,hgRiMod,hfRiMod, & !CoilType,TubeType,tRiMod,pRiMod,hgRiMod,hfRiMod, &
         hRiMod,hRoMod,xRiMod,vRiMod,vgRiMod,vfRiMod,mRefMod, &
@@ -5812,7 +5847,7 @@ END IF
         Psat=TQ(RefName, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr)  !RS Comment: Saturation Pressure
         IF (RefPropErr .GT. 0) THEN
             WRITE(*,*)'-- WARNING -- Condenser: Refprop error. Line 3194'
-            ErrorFlag=REFPROPERROR
+        ErrorFlag=REFPROPERROR
             RETURN
         END IF
         Psat=Psat/1000  !RS Comment: Unit Conversion
@@ -6935,5 +6970,303 @@ END IF
     END SUBROUTINE UpdateTubeDataFromCircuitData
 
     !************************************************************************
+    
+        SUBROUTINE SimSimpleFan(tAiCoil,hAiCoil,MassFlow,tAoCoil,hAoCoil) !RS: Debugging: Adding in condenser fan model (9/4/14)
+        !RS: Debugging: This fan model has been copied from EnergyPlus 7.1 (9/4/14)
 
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Unknown
+          !       DATE WRITTEN   Unknown
+          !       MODIFIED       Brent Griffith, May 2009, added EMS override
+          !                      Chandan Sharma, March 2011, FSEC: Added LocalTurnFansOn and LocalTurnFansOff
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine simulates the simple constant volume fan.
+
+          ! METHODOLOGY EMPLOYED:
+          ! Converts design pressure rise and efficiency into fan power and temperature rise
+          ! Constant fan pressure rise is assumed.
+
+          ! REFERENCES:
+          ! ASHRAE HVAC 2 Toolkit, page 2-3 (FANSIM)
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+   !Integer, Intent(IN) :: FanNum
+   REAL, INTENT(IN) :: tAiCoil
+   REAL, INTENT(IN) :: hAiCoil
+   REAL, INTENT(IN) :: MassFlow !mAiCoil
+   REAL, INTENT(OUT) :: tAoCoil
+   REAL, INTENT(OUT) :: hAoCoil
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+      !REAL(r64) RhoAir
+      !REAL(r64) DeltaPress  ! [N/m2]
+      !REAL(r64) FanEff
+      !REAL(r64) MotInAirFrac
+      !REAL(r64) MotEff
+      !REAL(r64) MassFlow    ! [kg/sec]
+!unused0909      REAL(r64) Tin         ! [C]
+!unused0909      REAL(r64) Win
+      REAL FanShaftPower ! power delivered to fan shaft
+      REAL PowerLossToAir ! fan and motor loss to air stream (watts)
+      !Integer NVPerfNum
+
+   !NVPerfNum  = Fan(FanNum)%NVPerfNum
+
+   !IF (NightVentOn .AND. NVPerfNum > 0) THEN
+   !  DeltaPress = NightVentPerf(NVPerfNum)%DeltaPress
+   !  FanEff = NightVentPerf(NVPerfNum)%FanEff
+   !  MotEff = NightVentPerf(NVPerfNum)%MotEff
+   !  MotInAirFrac = NightVentPerf(NVPerfNum)%MotInAirFrac
+   !ELSE
+   !  DeltaPress = Fan(FanNum)%DeltaPress
+   !  FanEff     = Fan(FanNum)%FanEff
+   !  MotEff     = Fan(FanNum)%MotEff
+   !  MotInAirFrac = Fan(FanNum)%MotInAirFrac
+   !END IF
+
+   !IF (Fan(FanNum)%EMSFanPressureOverrideOn) DeltaPress = Fan(FanNum)%EMSFanPressureValue
+   !IF (Fan(FanNum)%EMSFanEffOverrideOn) FanEff = Fan(FanNum)%EMSFanEffValue
+
+   ! For a Constant Volume Simple Fan the Max Flow Rate is the Flow Rate for the fan
+!unused0909   Tin        = Fan(FanNum)%InletAirTemp
+!unused0909   Win        = Fan(FanNum)%InletAirHumRat
+   !RhoAir     = Fan(FanNum)%RhoAirStdInit
+   !MassFlow   = Fan(FanNum)%InletAirMassFlowRate
+   !IF (Fan(FanNum)%EMSMaxMassFlowOverrideOn) MassFlow = Fan(FanNum)%EMSAirMassFlowValue
+  ! MassFlow   = MIN(MassFlow,Fan(FanNum)%MaxAirMassFlowRate)
+  ! MassFlow   = MAX(MassFlow,Fan(FanNum)%MinAirMassFlowRate)
+   !
+   !Determine the Fan Schedule for the Time step
+  !If( ( GetCurrentScheduleValue(Fan(FanNum)%SchedPtr)>0.0 .or. LocalTurnFansOn) &
+  !      .and. .NOT.LocalTurnFansOff  .and. Massflow>0.0) Then
+   !Fan is operating
+   !Fan(FanNum)%FanPower = MassFlow*DeltaPress/(FanEff*RhoAir) ! total fan power
+   FanOut%HumRat=PsyWFnTdbHLocal(tAiCoil,(hAiCoil*1000))
+   FanOut%RhoAir=PsyRhoAirFnPbTdbWLocal(CondPAR%CondBarPress,tAiCoil,FanOut%HumRat)
+   FanOut%Power=MassFlow*FanOut%DeltaPress/(FanOut%FanEff*(FanOut%RhoAir*1000)) !RhoAir) !RS: Debugging: I think it needs to be *1000
+   FanShaftPower = FanOut%MotorEff * FanOut%Power !Fan(FanNum)%FanPower  ! power delivered to shaft
+   PowerLossToAir = FanShaftPower + (FanOut%Power - FanShaftPower) * FanOut%MotInAirFrac
+   !Fan(FanNum)%OutletAirEnthalpy = Fan(FanNum)%InletAirEnthalpy + PowerLossToAir/MassFlow
+   hAoCoil = hAiCoil +(PowerLossToAir/MassFlow)/1000
+   ! This fan does not change the moisture or Mass Flow across the component
+   !Fan(FanNum)%OutletAirHumRat       = Fan(FanNum)%InletAirHumRat
+   !Fan(FanNum)%OutletAirMassFlowRate = MassFlow
+   !Fan(FanNum)%OutletAirTemp = PsyTdbFnHW(Fan(FanNum)%OutletAirEnthalpy,Fan(FanNum)%OutletAirHumRat)
+   tAoCoil = PsyTdbFnHWLocal((hAoCoil*1000),FanOut%HumRat) !Fan(FanNum)%OutletAirHumRat)
+
+ !Else
+ !  !Fan is off and not operating no power consumed and mass flow rate.
+ !  Fan(FanNum)%FanPower = 0.0
+ !  FanShaftPower = 0.0
+ !  PowerLossToAir = 0.0
+ !  Fan(FanNum)%OutletAirMassFlowRate = 0.0
+ !  Fan(FanNum)%OutletAirHumRat       = Fan(FanNum)%InletAirHumRat
+ !  Fan(FanNum)%OutletAirEnthalpy     = Fan(FanNum)%InletAirEnthalpy
+ !  Fan(FanNum)%OutletAirTemp = Fan(FanNum)%InletAirTemp
+ !  ! Set the Control Flow variables to 0.0 flow when OFF.
+ !  Fan(FanNum)%MassFlowRateMaxAvail = 0.0
+ !  Fan(FanNum)%MassFlowRateMinAvail = 0.0
+ !
+ !End If
+
+ RETURN
+END SUBROUTINE SimSimpleFan
+    
+    FUNCTION PsyTdbFnHWLocal(H,dW) RESULT(TDB)  !RS: Debugging: Adding in condenser fan model (9/4/14)
+
+          ! FUNCTION INFORMATION:
+          !       AUTHOR         J. C. VanderZee
+          !       DATE WRITTEN   Feb. 1994
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS FUNCTION:
+          ! This function provides air temperature from enthalpy and humidity ratio.
+
+          ! METHODOLOGY EMPLOYED:
+          ! na
+
+          ! REFERENCES:
+          ! ASHRAE HANDBOOK OF FUNDAMENTALS, 1972, P100, EQN 32
+          !   by inverting function PsyHFnTdbW
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! FUNCTION ARGUMENT DEFINITIONS:
+      REAL, intent(in) :: H    ! enthalpy {J/kg}
+      REAL, intent(in) :: dW    ! humidity ratio
+      !character(len=*), intent(in), optional :: calledfrom  ! routine this function was called from (error messages) !unused1208
+      REAL        :: TDB  ! result=> dry-bulb temperature {C}
+
+          ! FUNCTION PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! FUNCTION LOCAL VARIABLE DECLARATIONS:
+      REAL W   ! humidity ratio
+
+      W=MAX(dW,1.0d-5)
+      TDB = (H - 2.50094d6 * W)/(1.00484d3 + 1.85895d3*W)
+
+  RETURN
+    END FUNCTION PsyTdbFnHWLocal
+    
+    FUNCTION PsyRhoAirFnPbTdbWLocal(pb,tdb,dw)  RESULT(rhoair)   !RS: Debugging: Adding in condenser fan model (9/4/14)
+
+          ! FUNCTION INFORMATION:
+          !       AUTHOR         G. S. Wright
+          !       DATE WRITTEN   June 2, 1994
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS FUNCTION:
+          ! This function provides density of air as a function of barometric
+          ! pressure, dry bulb temperature, and humidity ratio.
+
+          ! METHODOLOGY EMPLOYED:
+          ! ideal gas law
+          !    universal gas const for air 287 J/(kg K)
+          !    air/water molecular mass ratio 28.9645/18.01534
+
+          ! REFERENCES:
+          ! Wylan & Sontag, Fundamentals of Classical Thermodynamics.
+          ! ASHRAE handbook 1985 Fundamentals, Ch. 6, eqn. (6),(26)
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! FUNCTION ARGUMENT DEFINITIONS:
+      REAL, INTENT(IN)  :: pb     ! barometric pressure (Pascals)
+      REAL, INTENT(IN)  :: tdb    ! dry bulb temperature (Celsius)
+      REAL, INTENT(IN)  :: dw      ! humidity ratio (kgWater/kgDryAir)
+      !character(len=*), intent(in), optional :: calledfrom  ! routine this function was called from (error messages) !unused1208
+      REAL        :: rhoair ! result=> density of air
+
+          ! FUNCTION PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! FUNCTION LOCAL VARIABLE DECLARATIONS:
+      REAL w  ! humidity ratio
+
+      w=MAX(dw,1.0d-5)
+      rhoair = pb/(287.d0*(tdb+273.15)*(1.d0+1.6077687d0*w))
+
+  return
+    end function PsyRhoAirFnPbTdbWLocal
+    
+    FUNCTION PsyWFnTdbHLocal(TDB,H) RESULT(W)    !RS: Debugging: Adding in condenser fan model (9/4/14)
+
+          ! FUNCTION INFORMATION:
+          !       AUTHOR         George Shih
+          !       DATE WRITTEN   May 1976
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS FUNCTION:
+          ! This function provides the humidity ratio from dry-bulb temperature
+          ! and enthalpy.
+
+          ! METHODOLOGY EMPLOYED:
+          ! na
+
+          ! REFERENCES:
+          ! ASHRAE HANDBOOK OF FUNDAMENTALS, 1972, P100, EQN 32
+
+          ! USE STATEMENTS:
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! FUNCTION ARGUMENT DEFINITIONS:
+      REAL, INTENT(IN) :: TDB    ! dry-bulb temperature {C}
+      REAL, INTENT(IN) :: H      ! enthalpy {J/kg}
+      !character(len=*), intent(in), optional :: calledfrom  ! routine this function was called from (error messages)
+      REAL        :: W      ! result=> humidity ratio
+      INTEGER, PARAMETER :: iPSyWFnTdbH =6
+      !INTEGER, DIMENSION(NumPsychMonitors) ::  iPsyErrIndex = NumPsychMonitors*0 ! Number of times error occurred
+      !INTEGER(64), DIMENSION(NumToReport) :: NumTimesCalled=NumToReport*0
+      !INTEGER, PARAMETER :: NumToReport=13
+      !INTEGER, PARAMETER :: NumPsychMonitors=17 ! Parameterization of Number of psychrometric routines that
+                                    ! call for recurring errors
+
+          ! FUNCTION PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! FUNCTION LOCAL VARIABLE DECLARATIONS:
+          ! na
+
+!CP-------- here is 1.2, 1200., 1.004, or 1004.  --------
+      W=(H-1.00484d3*TDB)/(2.50094d6+1.85895d3*TDB)
+!
+#ifdef EP_psych_stats
+      !NumTimesCalled(iPsyWFnTdbH)=NumTimesCalled(iPsyWFnTdbH)+1
+#endif
+
+!                                      VALIDITY TEST.
+      IF (W < 0.0d0) THEN
+#ifdef EP_psych_errors
+        IF (W < -.0001d0) THEN
+          !IF (.not. WarmupFlag) THEN
+            !IF (iPsyErrIndex(iPsyWFnTdbH) == 0) THEN
+              !String=' Dry-Bulb= '//TRIM(TrimSigDigits(TDB,2))//' Enthalpy= '//TRIM(TrimSigDigits(H,3))
+              !CALL ShowWarningMessage('Calculated Humidity Ratio invalid (PsyWFnTdbH)')
+              !if (present(calledfrom)) then
+                !CALL ShowContinueErrorTimeStamp(' Routine='//trim(calledfrom)//',')
+              !else
+                !CALL ShowContinueErrorTimeStamp(' Routine=Unknown,')
+              !endif
+              !CALL ShowContinueError(TRIM(String))
+              !String='Calculated Humidity Ratio= '//TRIM(TrimSigDigits(W,4))
+              !CALL ShowContinueError(TRIM(String)//' ... Humidity Ratio set to .00001')
+            !ENDIF
+            !CALL ShowRecurringWarningErrorAtEnd('Calculated Humidity Ratio invalid (PsyWFnTdbH)',   &
+            !  iPsyErrIndex(iPsyWFnTdbH),ReportMinOf=W,ReportMaxOf=W,ReportMinUnits='[]',ReportMaxUnits='[]')
+          !ENDIF
+        ENDIF
+#endif
+        W=1.d-5
+      ENDIF
+
+      ! W is the result
+
+  RETURN
+END FUNCTION PsyWFnTdbHLocal
+    
     END MODULE CondenserMod

@@ -169,7 +169,7 @@ MODULE FluidProperties_HPSim
 
         ! USE STATEMENTS
 
-USE DataGlobals_HPSim, ONLY: MaxNameLength  !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+USE DataGlobals_HPSimIntegrated, ONLY: MaxNameLength  !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
 IMPLICIT NONE                           ! Enforce explicit typing of all variables
 PRIVATE

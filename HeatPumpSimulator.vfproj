@@ -4,7 +4,7 @@
 		<Platform Name="Win32"/></Platforms>
 	<Configurations>
 		<Configuration Name="Debug|Win32" OutputDirectory="bin\windows\$(ConfigurationName)" IntermediateDirectory="bin\windows\$(ConfigurationName)">
-				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" WarnUnusedVariables="true" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug" Interfaces="true"/>
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" AdditionalIncludeDirectories="C:\Users\lab303user\Documents\betsrg_dual\Heatpump Standalone\src" WarnUnusedVariables="true" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug" Interfaces="true"/>
 				<Tool Name="VFLinkerTool" OutputFile="$(ProjectName)_debug.exe" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" GenerateDebugInformation="true" SubSystem="subSystemConsole"/>
 				<Tool Name="VFResourceCompilerTool"/>
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
@@ -27,38 +27,39 @@
 		<Filter Name="Header Files" Filter="fi;fd"/>
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
-		<File RelativePath=".\src\Accumulator.f90"/>
-		<File RelativePath=".\src\AirProperties.f90"/>
-		<File RelativePath=".\src\AirTempLoop.f90"/>
-		<File RelativePath=".\src\CapillaryTube.f90"/>
-		<File RelativePath=".\src\ChargeLoop.f90"/>
-		<File RelativePath=".\src\CoilCalculation.f90"/>
+		<Filter Name="Shared Code">
+		<File RelativePath=".\Shared Code\Accumulator_Shared.f90"/>
+		<File RelativePath=".\Shared Code\AirProperties_Shared.f90"/>
+		<File RelativePath=".\Shared Code\AirTempLoop_Shared.f90"/>
+		<File RelativePath=".\Shared Code\CapillaryTube_Shared.f90"/>
+		<File RelativePath=".\Shared Code\ChargeLoop_Shared.f90"/>
+		<File RelativePath=".\Shared Code\CoilCalculation_Shared.f90"/>
+		<File RelativePath=".\Shared Code\DataGlobals_Shared.f90"/>
+		<File RelativePath=".\Shared Code\DataModuleSim_Shared.f90"/>
+		<File RelativePath=".\Shared Code\DataStopCodes_Shared.f90"/>
+		<File RelativePath=".\Shared Code\Distributor_Shared.f90"/>
+		<File RelativePath=".\Shared Code\DumpHPsimOutputs_Shared.f90"/>
+		<File RelativePath=".\Shared Code\FrostModel_Shared.f90"/>
+		<File RelativePath=".\Shared Code\GUESS3_Shared.f90"/>
+		<File RelativePath=".\Shared Code\LiquidLineFilterDrier_Shared.f90"/>
+		<File RelativePath=".\Shared Code\MatrixCalculation_Shared.f90"/>
+		<File RelativePath=".\Shared Code\OilMixtureCalculation_Shared.f90"/>
+		<File RelativePath=".\Shared Code\PsychometricChart_Shared.f90"/>
+		<File RelativePath=".\Shared Code\ReversingValve_Shared.f90"/>
+		<File RelativePath=".\Shared Code\ShortTube_Shared.f90"/>
+		<File RelativePath=".\Shared Code\ThermalExpansionValve_Shared.f90"/>
+		<File RelativePath=".\Shared Code\UnitConvert_Shared.f90"/>
+		<File RelativePath=".\Shared Code\WaterProperties_Shared.f90"/>
+		<File RelativePath=".\Shared Code\ZeroConvergence_Shared.f90"/></Filter>
 		<File RelativePath=".\src\Compressor.f90"/>
 		<File RelativePath=".\src\Condenser.f90"/>
-		<File RelativePath=".\src\DataGlobals.f90"/>
-		<File RelativePath=".\src\DataModuleSim.f90"/>
-		<File RelativePath=".\src\DataStopCodes.f90"/>
-		<File RelativePath=".\src\Distributor.f90"/>
-		<File RelativePath=".\src\DumpHPsimOutputs.f90"/>
 		<File RelativePath=".\src\ErrorHandler.f90"/>
 		<File RelativePath=".\src\Evaporator.f90"/>
 		<File RelativePath=".\src\FlowRateLoop.f90"/>
-		<File RelativePath=".\src\FrostModel.f90"/>
 		<File RelativePath=".\src\GetHPsimInputs.f90"/>
 		<File RelativePath=".\src\GetRefrigerantProperties.f90"/>
-		<File RelativePath=".\src\GUESS3.f90"/>
 		<File RelativePath=".\src\HPdesignMod.f90"/>
 		<File RelativePath=".\src\InputProcessor.f90"/>
-		<File RelativePath=".\src\LiquidLineFilterDrier.f90"/>
-		<File RelativePath=".\src\MatrixCalculation.f90"/>
-		<File RelativePath=".\src\OilMixtureCalculation.f90"/>
 		<File RelativePath=".\src\ORNLsolver.f90"/>
-		<File RelativePath=".\src\PreprocessInput.f90"/>
-		<File RelativePath=".\src\PsychometricChart.f90"/>
-		<File RelativePath=".\src\ReversingValve.f90"/>
-		<File RelativePath=".\src\ShortTube.f90"/>
-		<File RelativePath=".\src\ThermalExpansionValve.f90"/>
-		<File RelativePath=".\src\UnitConvert.f90"/>
-		<File RelativePath=".\src\WaterProperties.f90"/>
-		<File RelativePath=".\src\ZeroConvergence.f90"/></Filter></Files>
+		<File RelativePath=".\src\PreprocessInput.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>

@@ -1,0 +1,14 @@
+HPSimVariables,
+N1, \Compressor Mass Flow Rate
+	\note This will be varied by the optimization engine
+N2, \Condenser Fan Air Flow Rate
+	\note This will be varied by the optimization engine
+N3; \Evaporator Fan Air Flow Rate
+	\note This will be varied by the optimization engine
+VariablesToPass,
+N1,
+N2,
+N3,
+N4,
+N5,
+N6;

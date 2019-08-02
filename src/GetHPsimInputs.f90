@@ -56,7 +56,7 @@
 MODULE HeatPumpInput
 
 USE DataSimulation
-USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+USE DataGlobals_HPSimIntegrated, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 implicit none
 
 PRIVATE
@@ -83,6 +83,7 @@ INTEGER,PARAMETER :: SI=1
 INTEGER,PARAMETER :: IP=2
 
 PUBLIC GetInputs
+PUBLIC GetGenOptInputs  !RS: Debugging: Trying to read from the modified GenOpt IDF (9/22/14)
 
 CONTAINS
 
@@ -105,7 +106,7 @@ SUBROUTINE GetInputs
 
 USE DataStopCodes
 USE InputProcessor_HPSim
-USE DataGlobals_HPSim, ONLY: MaxNameLength, RefName !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+USE DataGlobals_HPSimIntegrated, ONLY: MaxNameLength, RefName !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 USE DataSimulation, ONLY: IsCoolingMode !RS: Debugging: Global variable now
 
 IMPLICIT NONE
@@ -263,6 +264,12 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
     ELSE
         CFMevp = Numbers(2)
     END IF
+
+  FanOut%MotorEff=Numbers(4)
+  FanOut%FanEff=Numbers(5)
+  FanOut%DeltaPress=Numbers(6)
+  FanOut%MotInAirFrac=Numbers(7)
+  
   !ODdrawBlow = Numbers(3)   !Draw Through (1) or Blow Through (2)
 
 
@@ -279,6 +286,11 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
         CFMcnd = Numbers(2)
     END IF
   !IDdrawBlow = Numbers(3)   !Draw Through or Blow Through
+  
+  FanOutE%MotorEff=Numbers(4)
+  FanOutE%FanEff=Numbers(5)
+  FanOutE%DeltaPress=Numbers(6)
+  FanOutE%MotInAirFrac=Numbers(7)
 
   !***************** Expansion device data *****************    !RS: Debugging: Moving: Stay here
 
@@ -796,6 +808,61 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
 END SUBROUTINE
 
 !***********************************************************************************
+
+SUBROUTINE GetGenOptInputs()    !RS: Debugging: Trying to read from the modified GenOpt IDF (9/22/14)
+
+USE InputProcessor_HPSim
+USE DataGlobals_HPSimIntegrated, ONLY: MaxNameLength !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+USE DataSimulation, ONLY: inputratio    !RS: The compressor capacity ratio for use in the new compressor model (10/3/14)
+
+CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
+  INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
+  REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
+  INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
+  INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
+  !CHARACTER(len=MaxNameLength)InputLine   !RS: Debugging: Trying to read from the modified GenOpt IDF (9/22/14)
+REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+
+    !RS: Debugging: Trying to read from the modified GenOpt IDF (9/22/14)
+    CALL GetObjectItem2('HPSimVariables',1,Alphas,NumAlphas, &
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
+  !Numbers(1) is the compressor capacity input ratio
+  inputratio=Numbers(1)
+  
+    IF (IsCoolingMode .GT. 0) THEN    !Populating arrays
+        CFMcnd = Numbers(2)    !Fan Air Flow Rate
+        CFMevp = Numbers(3)
+    ELSE
+        CFMevp = Numbers(2)
+        CFMcnd = Numbers(3)
+    END IF
+    
+    CoilParams(1)%AirFlowRate=CFMevp
+    CoilParams(2)%AirFlowRate=CFMcnd
+    
+     CALL GetObjectItem2('VariablesToPass',1,Alphas,NumAlphas, &
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
+  !RS: Reads in information from the secondary IDF to pass along data from E+ (10/10/14)
+  !RS: Debugging: Uncommenting following line to build an exe that lets E+ set the mass flow rate (8/22/15)
+  XMaE=Numbers(1)
+  BaroPressure=Numbers(2)
+  RHiC=Numbers(3)
+  TaiC=Numbers(4)
+  RHiE=Numbers(5)
+  TaiE=Numbers(6)
+  
+  TaiC=(TaiC*1.8)+32
+  TaiE=(TaiE*1.8)+32
+  RHiC=(RHiC*1.8)+32
+  RHiE=(RHiE*1.8)+32
+  BaroPressure=BaroPressure/(1000*6.8947453) !Converting from kPa to Pa to psi
+  
+END SUBROUTINE GetGenOptInputs
 
 END MODULE HeatPumpInput
 

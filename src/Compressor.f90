@@ -64,10 +64,12 @@
 
     PUBLIC  Compressor
     PRIVATE X
+    PUBLIC CompressorSimple
 
     CONTAINS
 
-    SUBROUTINE Compressor(Ref$) !,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT) !RS: Debugging: Extraneous PureRef
+    SUBROUTINE CompressorSimple(Ref$) !Compressor(Ref$) !,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT) !RS: Debugging: Extraneous PureRef
+        !RS: Implementation: Commenting out Compressor call since adding in a different comp model (10/1/14)
 
     ! ----------------------------------------------------------------------
     !
@@ -113,7 +115,7 @@
     ! ----------------------------------------------------------------------
 
     USE FluidProperties_HPSim
-    USE DataGlobals_HPSim, ONLY: RefrigIndex, MaxNameLength,RefName   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE DataGlobals_HPSimIntegrated, ONLY: RefrigIndex, MaxNameLength,RefName   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
     USE InputProcessor_HPSim    !RS: Debugging: Brought over from GetHPSimInputs
     USE UnitConvertMod
 
@@ -236,14 +238,6 @@ IF (FirstTime .EQ. 1) THEN
   CompPAR%CompMFRMult = Numbers(25) !MassFlowRateMultiplier !RS: Debugging: Formerly PAR(26)
   
   FirstTime=2
-  
-      IF (Unit .EQ. SI)THEN !SI unit inputs   !RS: Debugging: 
-    	CompPAR%CompIntVol=CompPAR%CompIntVol/(100**3) !Compressor internal volume, m^3   !RS: Formerly CompPAR(23)
-    ELSE
-        CompPAR%CompQLoss=CompPAR%CompQLoss*UnitPwr*1000 !Compressor shell heat loss W  !RS: Debugging: Formerly CompPAR(22)
-        CompPAR%CompIntVol=CompPAR%CompIntVol/(12**3)*(UnitL**3) !Compressor internal volume, m^3 !RS: Debugging: Formerly CompPAR(23)
-    END IF
-    
 END IF
   !TsiCmp = Numbers(26) !UserSpecifiedRatingEvapTemperature
   !TsoCmp = Numbers(27) !UserSpecifiedRatingCondTemperature
@@ -260,6 +254,13 @@ END IF
         A(I)= Numbers(13+I) !CompPAR%(I)
         B(I)= Numbers(3+I) !CompPAR%(I+10) 
     END DO
+    
+    IF (Unit .EQ. SI)THEN !SI unit inputs   !RS: Debugging: 
+    	CompPAR%CompIntVol=CompPAR%CompIntVol/(100**3) !Compressor internal volume, m^3   !RS: Formerly CompPAR(23)
+    ELSE
+        CompPAR%CompQLoss=CompPAR%CompQLoss*UnitPwr*1000 !Compressor shell heat loss W  !RS: Debugging: Formerly CompPAR(22)
+        CompPAR%CompIntVol=CompPAR%CompIntVol/(12**3)*(UnitL**3) !Compressor internal volume, m^3 !RS: Debugging: Formerly CompPAR(23)
+    END IF
     
     Qshellfrac = CompPAR%CompQLossFrac    !RS: Debugging: Formerly PAR(21)
     Qshell = CompPAR%CompQLoss    !RS: Debugging: Formerly PAR(22)
@@ -354,10 +355,6 @@ END IF
     !mdot=mdot*Mcorrect
 
     Power=PowerMap*(mdot/mdotMap)*(HdisIsen-Hsuc)/(HdisIsenMap-HsucMap)
-    
-    IF (HdisIsenMap .EQ. HsucMap .AND. HdisIsen .EQ. HSuc) THEN !RS: Debugging: If both are the same, the ratio should be 1
-        Power=PowerMap*(mdot/mdotMap)
-    END IF
 
     Power=Power/Wcorrect
 
@@ -406,7 +403,8 @@ END IF
 
     RETURN
 
-    END SUBROUTINE Compressor
+    END SUBROUTINE CompressorSimple !Compressor 
+        !RS: Implementation: Commenting out Compressor call since adding in a different comp model (10/1/14)
 
     !***********************************************************************
 
@@ -423,5 +421,172 @@ END IF
     END FUNCTION
 
     !***********************************************************************
+    
+    SUBROUTINE Compressor(Ref$) !CompressorSimple(Ref$) 
+        !RS: Implementation: Commenting out Compressor call since adding in a different comp model (10/1/14)
+    !Algorithm and structure by John Gall
+    !Program written by Rachel Spitler
+    
+    USE FluidProperties_HPSim
+    USE DataGlobals_HPSimIntegrated, ONLY: RefrigIndex, MaxNameLength,RefName   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE InputProcessor_HPSim    !RS: Debugging: Brought over from GetHPSimInputs
+    USE UnitConvertMod
+    USE DataSimulation, ONLY: inputratio    !RS: The compressor capacity ratio for use in the new compressor model (10/3/14)
+    
+    CHARACTER*80,     INTENT(IN) :: Ref$    !Refrigerant name
+    
+    REAL Temperature,Quality,Pressure,Enthalpy,Entropy
+    INTEGER(2) RefPropErr  !Error flag:1-error; 0-no error
+    LOGICAL, EXTERNAL :: IssueRefPropError
+    
+    REAL volcoeff1
+    REAL volcoeff2
+    REAL volcoeff3
+    REAL volcoeff4
+    REAL volcoeff5
+    REAL isocoeff1
+    REAL isocoeff2
+    REAL isocoeff3
+    REAL isocoeff4
+    REAL isocoeff5
+    REAL isocoeff6
+    REAL isocoeff7
+    
+    REAL full_load_power    !Power at full load
+    !REAL, SAVE:: inputratio    !0 to 1, percentage of capacity required to handle load
+    REAL suction_density    !kg/m^3
+    REAL psuction   !MPa
+    REAL pratio     !Ratio of discharge to suction pressure
+    REAL isEff
+    REAL m_dot
+    REAL suction_volume !m^3
+    REAL volumetric_efficiency
+    REAL n  !Cycles per Second (60 Hz)
+    REAL hsd
+    REAL SATS   !Saturation suction temperature
+    REAL SATD   !Saturated discharge temperature
+    REAL SATSC
+    REAL SATDC
+    REAL Ssuc
+    
+    REAL, SAVE:: FirstTime=1 !Setting a first time variable
+
+!    INTEGER(2) RefPropErr  !Error flag:1-error; 0-no error
+!    LOGICAL:: IssueRefPropError
+    INTEGER ErrorFlag          !0-No error
+    
+    !RS: Debugging: Bringing this over from GetHPSimInputs
+    CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
+    INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
+    REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
+    INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
+    INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
+    INTEGER CompressorManufacturer
+    REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    
+    !Psuc = CompIN%CompInPsuc   !RS: Debugging: Formerly XIN(1)
+    !Pdis = CompIN%CompInPdis   !RS: Debugging: Formerly XIN(2)
+    !Hsuc = CompIN%CompInHsuc   !RS: Debugging: Formerly XIN(3)
+    
+    volcoeff1 = 0.09605984
+    volcoeff2 = 0.347651
+    volcoeff3 = 0.4530326
+    volcoeff4 = -0.001568792
+    volcoeff5 = -6.44515E-06
+
+    isocoeff1 = -0.454209
+    isocoeff2 = 0.1517346
+    isocoeff3 = 0.09022652
+    isocoeff4 = 0.2497634
+    isocoeff5 = -0.2206927
+    isocoeff6 = 0.508598
+    isocoeff7 = -0.08659438
+    
+IF (FirstTime .EQ. 1) THEN
+  CALL GetObjectItem('CompressorData',1,Alphas,NumAlphas, &
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    
+    CompPAR%CompCoeffP1 = Numbers(14) !CompressorPowerCoefficient1 !RS: Debugging: Formerly PAR(1)
+    CompPAR%CompCoeffP2 = Numbers(15) !CompressorPowerCoefficient2 !RS: Debugging: Formerly PAR(2)
+    CompPAR%CompCoeffP3 = Numbers(16) !CompressorPowerCoefficient3 !RS: Debugging: Formerly PAR(3)
+    CompPAR%CompCoeffP4 = Numbers(17) !CompressorPowerCoefficient4 !RS: Debugging: Formerly PAR(4)
+    CompPAR%CompCoeffP5 = Numbers(18) !CompressorPowerCoefficient5 !RS: Debugging: Formerly PAR(5)
+    CompPAR%CompCoeffP6 = Numbers(19) !CompressorPowerCoefficient6 !RS: Debugging: Formerly PAR(6)
+    CompPAR%CompCoeffP7 = Numbers(20) !CompressorPowerCoefficient7 !RS: Debugging: Formerly PAR(7)
+    CompPAR%CompCoeffP8 = Numbers(21) !CompressorPowerCoefficient8 !RS: Debugging: Formerly PAR(8)
+    CompPAR%CompCoeffP9 = Numbers(22) !CompressorPowerCoefficient9 !RS: Debugging: Formerly PAR(9)
+    CompPAR%CompCoeffP10 = Numbers(23) !CompressorPowerCoefficient10   !RS: Debugging: Formerly PAR(10)
+    
+    !inputratio=Numbers(30)    !To start with; this will need to vary
+
+    FirstTime=2
+END IF
+
+    Pressure=CompIN%CompInPsuc*1000  !RS Comment: Unit Conversion
+    Quality=1
+    SATSC=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Suction Dew Point Temperature, C
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7)
+        RETURN
+    END IF
+    
+    SATS=SATSC*1.8+32 
+
+    Enthalpy=CompIN%CompInHSuc*1000
+    suction_density=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)  !Suction Density
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN !RS: Debugging: Formerly OUT(7)
+        RETURN
+    END IF 
+    
+    Enthalpy=CompIN%CompInHsuc*1000
+    Ssuc=PH(Ref$,Pressure,Enthalpy,'entropy',RefrigIndex,RefPropErr)    !Suction Entropy
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7)
+        RETURN
+    END IF
+    
+    Pressure=CompIN%CompInPdis*1000  !RS Comment: Unit Conversion
+    Quality=1
+    SATDC=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Discharge Dew Point Temperature, C
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, CompOUT%CmpOErrFlag)) THEN   !RS: Debugging: Formerly OUT(7)
+        RETURN
+    END IF
+    
+    SATD=SATDC*1.8+32 
+
+    psuction=CompIN%CompInPsuc/(1000)  !From kPa to MPa
+    pratio=CompIN%CompInPdis/CompIN%CompInPsuc
+
+    full_load_power = CompPAR%CompCoeffP1+CompPAR%CompCoeffP2*SATS+CompPAR%CompCoeffP3*SATD+CompPAR%CompCoeffP4*SATS**2+ &
+            CompPAR%CompCoeffP5*SATS*SATD+CompPAR%CompCoeffP6*SATD**2+CompPAR%CompCoeffP7*SATS**3+ &
+            CompPAR%CompCoeffP8*SATD*SATS**2+CompPAR%CompCoeffP9*SATS*SATD**2+CompPAR%CompCoeffP10*SATD**3
+    
+    CompOUT%CmpOPwr = (full_load_power*inputratio + (1-inputratio)*0.1*full_load_power)/1000    !From W to kW
+    
+    
+    volumetric_efficiency = volcoeff1+ volcoeff2*inputratio + volcoeff3*inputratio**2 + volcoeff4*suction_density+ &
+            volcoeff5*suction_density**2
+    
+    suction_volume = 3.2984e-5 !(m^3)
+    
+    n=60
+    
+    m_dot=suction_density*n*suction_volume*volumetric_efficiency
+    
+    isEff = isocoeff1 + isocoeff2*inputratio + isocoeff3*inputratio**2 + isocoeff4*psuction + &
+            isocoeff5*(psuction)**2 + isocoeff6*pratio + isocoeff7*pratio**2
+    
+    Pressure=CompIN%CompInPdis*1000
+    Entropy=Ssuc
+    hsd=PS(Ref$,Pressure,Entropy,'enthalpy',RefrigIndex,RefPropErr)
+    CompOUT%CmpOHdis = CompIN%CompInHsuc + ((hsd/1000) - CompIN%CompInHsuc)/isEff !Discharge enthalpy
+     
+    Pressure=CompIN%CompInPdis*1000  !RS Comment: Unit Conversion
+    Enthalpy=CompOUT%CmpOHdis*1000  !RS Comment: Unit Conversion
+    CompOUT%CmpOTdis=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)    !Discharge Temperature
+     
+    CompOUT%CmpOMdot=m_dot !RS: Debugging: Formerly OUT(2)
+    
+END SUBROUTINE Compressor !CompressorSimple
+        !RS: Implementation: Commenting out Compressor call since adding in a different comp model (10/1/14)
 
     END MODULE CompressorMod

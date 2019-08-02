@@ -80,8 +80,9 @@
     USE ShortTubeMod
     USE CapillaryTubeMod
     USE DataSimulation
-    USE DataGlobals_HPSim, ONLY: RefrigIndex, MaxNameLength, Refname   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE DataGlobals_HPSimIntegrated, ONLY: RefrigIndex, MaxNameLength, Refname   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
     USE InputProcessor_HPSim    !RS: Debugging: Brought over from GetHPSimInputs
+
 
     IMPLICIT NONE
 
@@ -103,7 +104,7 @@
     REAL DetailedQcnd,DetailedDPcnd
     REAL SimpleQcnd,SimpleDPcnd
     LOGICAL,SAVE :: IsFirstTimeCondenser = .TRUE. !First time to call condenser flag
-    LOGICAL :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the condenser model are allocated !RS: See VL's note 26 lines below
+    LOGICAL :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the condenser model are allocated !RS: See VL's note 36 lines below
     
     CHARACTER(LEN=14) :: tmpString
 
@@ -115,6 +116,18 @@
     INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
     INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
     REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    
+    INTEGER :: PVReport=27  !RS: Debugging: Keeping track of cycle points (7/21/14)
+    INTEGER, SAVE :: HighIteration=1   !RS: Debugging: Keeping track of cycle points (7/21/14)
+    REAL ExpDevH, ExpDevP   !RS: Debugging: Keeping track of cycle points (7/21/14)
+    CHARACTER(LEN=25),PARAMETER :: FMT_027 = "(1(I3,','),6(F10.3,','))" !RS: Debugging: Keeping track of cycle points (7/21/14)
+    CHARACTER(LEN=25),PARAMETER :: FMT_028 = "(1(I3,','),4(F10.3,','))" !RS: Debugging: Keeping track of cycle points (7/21/14)
+    INTEGER :: Num_RefPropErr=0 !RS: Debugging: Keeping it from looping indefinitely (12/23/14)
+    !
+    !REAL Qtxv    !RS: Debugging: Implementing TXV again (3/9/19)
+    !REAL Subcooling, Superheat, DPtxv    !RS: Debugging: Implementing TXV again (3/9/19)
+    
+    OPEN(Unit=PVReport,file='PVReport.csv') !RS: Debugging: Keeping track of cycle points (7/21/14)
     
     !RS: Debugging: Moving here from GetHPSimInputs
       !*************** Filter Drier ****************    !RS: Debugging: Moving: FlowRateLoop
@@ -133,7 +146,7 @@
     DO WHILE (.NOT. IsCondenserAllocated)
 
         PRINT=.TRUE.
-        IF (MODE .EQ. 2) THEN !.OR. MODE .EQ. 4 .OR. MODE .EQ. 5) THEN    !RS: Debugging: Due to Mode Mismatch
+        IF (MODE .EQ. 1) THEN !IF (MODE .EQ. 2) THEN !.OR. MODE .EQ. 4 .OR. MODE .EQ. 5) THEN    !RS: Debugging: Due to Mode Mismatch (4/13/19)
             !RS: This is for design mode
             IREFC=0 !for specified subcooling, set to zero
             !for specifed flow control, set to 3 
@@ -149,13 +162,13 @@
             CYCLE
         END IF
 
-        CALL IssueOutputMessage( '')
-        IF (Unit .EQ. 1) THEN
-            WRITE(tmpString,'(F10.4)') (TSOCMP-32)*5/9
-        ELSE
-            WRITE(tmpString,'(F10.4)') TSOCMP
-        END IF
-        CALL IssueOutputMessage( '>> Compressor discharge saturation temperature: '//TRIM(tmpString)//Tunit)
+        !CALL IssueOutputMessage( '')
+        !IF (Unit .EQ. 1) THEN
+        !    WRITE(tmpString,'(F10.4)') (TSOCMP-32)*5/9
+        !ELSE
+        !    WRITE(tmpString,'(F10.4)') TSOCMP
+        !END IF
+        !CALL IssueOutputMessage( '>> Compressor discharge saturation temperature: '//TRIM(tmpString)//Tunit)
 
         !     CALL SUBROUTINE COMP TO DETERMINE THE COMPRESSOR
         !     PERFORMANCE AND REFRIGERANT FLOW RATE 'XMR'
@@ -166,7 +179,22 @@
         IF (IssueRefPropError(RefPropErr, 'FlowRateLoop')) THEN
             CALL IssueOutputMessage('Trying another iterating value....')
             IERR=1
-            CYCLE
+            Num_RefPropErr=Num_RefPropErr + 1   !RS: Debugging: Keeping it from looping indefinitely (12/23/14)
+            IF (Num_RefPropErr .GT. 30) THEN
+                !CALL IssueOutputMessage('Press return to terminate program.')
+                !OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                !WRITE(19,*) 'Initializing "Not Converged" file'
+                !CLOSE(19)
+                !OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                !CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                !WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                !WRITE(6,*) 'More than 30 iterations in CNDNSR'
+                !CLOSE(6)
+                !STOP   !RS: Debugging: Pushing through for now.
+                EXIT
+            ELSE
+                CYCLE
+            END IF
         END IF
 
         PoCmp=PoCmp/1000    !RS Comment: Unit Conversion
@@ -207,6 +235,7 @@
         CompIN%CompInPdis=PoCmp !RS: Debugging: Formerly CompIN(2)
         CompIN%CompInHsuc=HiCmp/1000 !RS: Debugging: Formerly CompIN(3)
         CALL Compressor(Ref$) !,CompIN,CompPAR,CompOUT) !(Ref$,PureRef,CompIN,CompPAR,CompOUT) !RS: Debugging: Extraneous PureRef
+        !CALL CompressorSimple(Ref$) !RS: Debugging: Running the old compressor for a test (7/20/19)
         IF (CompOUT%CmpOErrFlag .NE. 0) THEN !RS: Debugging: Formerly CompOUT(7)
             SELECT CASE (INT(CompOUT%CmpOErrFlag))   !RS: Debugging: Formerly CompOUT(7)
             CASE (1,2)
@@ -216,11 +245,11 @@
             END SELECT
         END IF
 
-        XMR=CompOUT%CmpOMdot*3600/UnitM   !RS Comment: Unit Conversion, lbm/s??   !RS: Debugging: Formerly CompOUT(2)
+        XMR=CompOUT%CmpOMdot*3600/UnitM   !RS Comment: Unit Conversion, lbm/hr   !RS: Debugging: Formerly CompOUT(2)
         HoCmp=CompOUT%CmpOHdis    !RS: Debugging: Formerly CompOUT(3)
         ToCmp=CompOUT%CmpOTdis    !RS: Debugging: Formerly CompOUT(5)
 
-        CondIN%CInmRef=CompOUT%CmpOMdot !XMR*UnitM/3600    !RS Comment: Unit Conversion, kg/hr???  !RS: Debugging: Formerly CondIN(1)
+        CondIN%CInmRef=CompOUT%CmpOMdot !XMR*UnitM/3600    !RS Comment: Unit Conversion, kg/s  !RS: Debugging: Formerly CondIN(1)
         CondIN%CInpRo=PoCmp !RS: Debugging: Formerly CondIN(2)
         CondIN%CInhRo=HoCmp !RS: Debugging: Formerly CondIN(3)
         CondIN%CInmAi=XMaC  !RS: Debugging: Formerly CondIN(4)
@@ -281,6 +310,7 @@
                 END IF 
                 IsFirstTimeCondenser=.FALSE.
 
+                CondPAR%CondSimpCoil=1 !RS: Debugging: Always simple (6/23/14)
                 !Always detailed    !RS: Debugging: There's no need for this to be set
                 !CondPAR%CondSimpCoil=0   !RS: Debugging: Formerly CONDPAR(44)
 
@@ -299,9 +329,25 @@
                 IERR=1
                 CYCLE
             CASE (3)
+                OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                WRITE(19,*) 'Initializing "Not Converged" file'
+                CLOSE(19)
+                WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                WRITE(6,*) 'Fatal error recognised in CDNSR'
+                CLOSE(6)
                 STOP
             CASE (4,5)
                 CALL IssueOutputMessage('## ERROR ## Highside: Coil geometry misdefined.')
+                OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                WRITE(19,*) 'Initializing "Not Converged" file'
+                CLOSE(19)
+                WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                WRITE(6,*) 'Fatal error recognised in CDNSR'
+                CLOSE(6)
                 STOP
             CASE (8) !Too much pressure drop
                 CALL IssueOutputMessage('Trying another iterating value....')
@@ -372,7 +418,15 @@
             IF (TSOCMP .LE. TSICMP) THEN
                 CALL IssueOutputMessage('## ERROR ## Highside: No solution for this configuration.')
                 CALL IssueOutputMessage('Try another condenser or compressor.')
+                OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                WRITE(19,*) 'Initializing "Not Converged" file'
+                CLOSE(19)
                 STOP
+                WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                WRITE(6,*) 'Fatal error recognised in CDNSR'
+                Close(6)
             END IF
             IERR=2
         END IF
@@ -402,38 +456,41 @@
             CNDNSR = CDTRE - DTRE
 
             MdotR=XMR*UnitM/3600    !RS Comment: Unit Conversion, kg/hr??
+            
+            WRITE(PVReport,FMT_028) HighIteration,CompIN%CompInPdis,CompOUT%CmpOHdis,CondOUT%COutpRoC,CondOUT%COuthRoC
+            HighIteration=HighIteration+1 !RS: Debugging: Keeping track of cycle points (7/21/14)
 
-            IF(DTRIE.LT.0.0) THEN
-                SXIE = -DTRIE
-                WRITE(tmpString, '(F10.4)') SXIE*100
-                CALL IssueOutputMessage('           Desired quality = '//TRIM(tmpString)//Xunit)
-            ELSE
-                IF (Unit .EQ. 1) THEN
-                    WRITE(tmpString, '(F10.4)') DTRIE/1.8
-                    CALL IssueOutputMessage('           Desired subcooling = '//TRIM(tmpString)//DTunit)
-                ELSE
-                    WRITE(tmpString, '(F10.4)') DTRIE
-                    CALL IssueOutputMessage('           Desired subcooling = '//TRIM(tmpString)//DTunit)
-                END IF
-            END IF
-
-            IF(XIEXP.GT.0.0) THEN
-                IF (XIEXP .LT. 1) THEN
-                    WRITE(tmpString, '(F10.4)')XIEXP*100
-                    CALL IssueOutputMessage('        Calculated quality = '//TRIM(tmpString)//Xunit)
-                ELSE
-                    WRITE(tmpString, '(F10.4)')-CDTRIE
-                    CALL IssueOutputMessage('      Calculated superheat = '//TRIM(tmpString)//DTunit)
-                END IF
-            ELSE
-                IF (Unit .EQ. 1) THEN
-                    WRITE(tmpString, '(F10.4)')CDTRIE/1.8
-                    CALL IssueOutputMessage('        Calculated subcooling = '//TRIM(tmpString)//DTunit)
-                ELSE  
-                    WRITE(tmpString, '(F10.4)')CDTRIE
-                    CALL IssueOutputMessage('        Calculated subcooling = '//TRIM(tmpString)//DTunit)
-                END IF
-            END IF
+            !IF(DTRIE.LT.0.0) THEN
+            !    SXIE = -DTRIE
+                !WRITE(tmpString, '(F10.4)') SXIE*100
+                !CALL IssueOutputMessage('           Desired quality = '//TRIM(tmpString)//Xunit)
+            !ELSE
+            !    IF (Unit .EQ. 1) THEN
+            !        WRITE(tmpString, '(F10.4)') DTRIE/1.8
+            !        !CALL IssueOutputMessage('           Desired subcooling = '//TRIM(tmpString)//DTunit)
+            !    ELSE
+            !        WRITE(tmpString, '(F10.4)') DTRIE
+            !        !CALL IssueOutputMessage('           Desired subcooling = '//TRIM(tmpString)//DTunit)
+            !    END IF
+            !END IF
+            
+            !IF(XIEXP.GT.0.0) THEN
+            !    IF (XIEXP .LT. 1) THEN
+            !        WRITE(tmpString, '(F10.4)')XIEXP*100
+            !        !CALL IssueOutputMessage('        Calculated quality = '//TRIM(tmpString)//Xunit)
+            !    ELSE
+            !        WRITE(tmpString, '(F10.4)')-CDTRIE
+            !        !CALL IssueOutputMessage('      Calculated superheat = '//TRIM(tmpString)//DTunit)
+            !    END IF
+            !ELSE
+            !    IF (Unit .EQ. 1) THEN
+            !        WRITE(tmpString, '(F10.4)')CDTRIE/1.8
+            !        !CALL IssueOutputMessage('        Calculated subcooling = '//TRIM(tmpString)//DTunit)
+            !    ELSE  
+            !        WRITE(tmpString, '(F10.4)')CDTRIE
+            !        !CALL IssueOutputMessage('        Calculated subcooling = '//TRIM(tmpString)//DTunit)
+            !    END IF
+            !END IF
 
             CYCLE            
         END IF
@@ -454,10 +511,37 @@
             !CALL CapillaryTubeORNL(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)  !RS: Debugging: Extraneous PureRef
             CALL CapillaryTubeORNL !(Ref$) !,CapTubeIN,CapTubePAR,CapTubeOUT)
 
-            XMRFLD=CapTubeOUT%CTOMdot*3600/UnitM !RS Comment: Unit Conversion, lbm/s???  !RS: Debugging: Formerly CapTubeOUT(1)
+            XMRFLD=CapTubeOUT%CTOMdot*3600/UnitM !RS Comment: Unit Conversion, lbm/hr  !RS: Debugging: Formerly CapTubeOUT(1)
             ToExp=CapTubeOUT%CTOToE !RS: Debugging: Formerly CapTubeOUT(3)
             XoExp=CapTubeOUT%CTOXoE !RS: Debugging: Formerly CapTubeOUT(4)
 
+            ExpDevH=CapTubeIN%CTIHiEx   !RS: Debugging: Keeping track of cycle points (7/21/14)
+            ExpDevP=CapTubeOUT%CTOPoE   !RS: Debugging: Keeping track of cycle points (7/21/14)
+            
+        !    
+        !ELSEIF (ExpDevice .EQ. 2) THEN    !RS: Debugging: Implementing TXV again (3/9/19)
+        !    
+        !    !**************Size TXV**************
+        !    mdotr=CompOUT%CmpOMdot    !RS: Debugging: Formerly CompOUT(2)
+        !    PiCmp=CompIN%CompInPsuc !RS: Debugging: Formerly CompIN(1)
+        !    PoCmp=CompIN%CompInPdis !RS: Debugging: Formerly CompIN(2)
+        !    Subcooling=CondOUT%COuttSCiE  !RS: Debugging: Formerly CondOUT(14)
+        !    Superheat=EvapOUT%EOuttSHiC   !RS: Debugging: Formerly EvapOUT(10)
+        !    IF (ShTbOUT%ShTbOPoE .NE. 0) THEN !RS: Debugging: Formerly ShTbOUT(2)
+        !        DPtxv=CondOUT%COutpRiE-ShTbOUT%ShTbOPoE  !RS: Debugging: Formerly CondOUT(10), ShTbOUT(2)
+        !    ElSE
+        !        DPtxv=CondOUT%COutpRiE-EvapIN%EInpRi !RS: Debugging: Formerly EvapIN(2), CondOUT(10)
+        !    END IF
+        !
+        !    CALL TXV(mdotr,PiCmp,PoCmp,Subcooling,Superheat,DPtxv,Qtxv)    !RS: Debugging: Testing: Just commenting this out for now
+        !    TxvOUT%TXVQ=Qtxv  !RS: Debugging: Formerly TxvPAR(1)
+            !XMRFLD=mdotr   !RS Comment: Unit Conversion, lbm/hr    !RS: Debugging: Formerly ShTbOUT(1)
+            !ToExp=ShTbOUT%ShTbOToE    !RS: Debugging: Formerly ShTbOUT(3)
+            !XoExp=ShTbOUT%ShTbOXoE    !RS: Debugging: Formerly ShTbOUT(4)
+            !
+            !ExpDevH=ShTbIN%ShTbINHiE    !RS: Debugging: Keeping track of cycle points (7/21/14)
+            !ExpDevP=ShTbOUT%ShTbOPoE    !RS: Debugging: Keeping track of cycle points (7/21/14)
+            
         ELSE
             ShTbIN%ShTbINMdotC=CompOUT%CmpOMdot !Compressor mass flow rate, kg/s   !RS: Debugging: Formerly CompOUT(2), ShTbIN(1)
             ShTbIN%ShTbINPiE=PiExp !RS: Debugging: Formerly ShTbIN(2)
@@ -483,11 +567,19 @@
                 END SELECT
             END IF
 
-            XMRFLD=ShTbOUT%ShTbOMdotE*3600/UnitM    !RS Comment: Unit Conversion, lbm/s?    !RS: Debugging: Formerly ShTbOUT(1)
+            XMRFLD=ShTbOUT%ShTbOMdotE*3600/UnitM    !RS Comment: Unit Conversion, lbm/hr    !RS: Debugging: Formerly ShTbOUT(1)
             ToExp=ShTbOUT%ShTbOToE    !RS: Debugging: Formerly ShTbOUT(3)
             XoExp=ShTbOUT%ShTbOXoE    !RS: Debugging: Formerly ShTbOUT(4)
+            
+            ExpDevH=ShTbIN%ShTbINHiE    !RS: Debugging: Keeping track of cycle points (7/21/14)
+            ExpDevP=ShTbOUT%ShTbOPoE    !RS: Debugging: Keeping track of cycle points (7/21/14)
+            
         END IF
-
+                    
+        WRITE(PVReport,FMT_027) HighIteration,CompIN%CompInPdis,CompOUT%CmpOHdis,CondOUT%COutpRoC,CondOUT%COuthRoC, &
+            ExpDevH,ExpDevP !RS: Debugging: Keeping track of cycle points (7/21/14)
+        HighIteration=HighIteration+1   !RS: Debugging: Keeping track of cycle points (7/21/14)
+        
         !HoExp=HiExp
         EvapIN%EInhRi=CondOUT%COuthRiE !HiExp !HoExp !RS: Debugging: Formerly EvapIN(3)
 
@@ -499,17 +591,17 @@
             CYCLE
         END IF
 
-        IF (Unit .EQ. 1) THEN
-            WRITE(tmpString, '(F10.4)')XMR*UnitM
-            CALL IssueOutputMessage('     Compressor flow rate = '//TRIM(tmpString)//MdotUnit)
-            WRITE(tmpString, '(F10.4)')XMRFLD*UnitM
-            CALL IssueOutputMessage('    Exp. device flow rate = '//TRIM(tmpString)//MdotUnit)
-        ELSE
-            WRITE(tmpString, '(F10.4)')XMR !/UnitM
-            CALL IssueOutputMessage('     Compressor flow rate = '//TRIM(tmpString)//MdotUnit)
-            WRITE(tmpString, '(F10.4)')XMRFLD
-            CALL IssueOutputMessage('    Exp. device flow rate = '//TRIM(tmpString)//MdotUnit)
-        END IF
+        !IF (Unit .EQ. 1) THEN
+        !    WRITE(tmpString, '(F10.4)')XMR*UnitM
+        !    !CALL IssueOutputMessage('     Compressor flow rate = '//TRIM(tmpString)//MdotUnit)
+        !    WRITE(tmpString, '(F10.4)')XMRFLD*UnitM
+        !    !CALL IssueOutputMessage('    Exp. device flow rate = '//TRIM(tmpString)//MdotUnit)
+        !ELSE
+        !    WRITE(tmpString, '(F10.4)')XMR !/UnitM
+        !    !CALL IssueOutputMessage('     Compressor flow rate = '//TRIM(tmpString)//MdotUnit)
+        !    WRITE(tmpString, '(F10.4)')XMRFLD
+        !    !CALL IssueOutputMessage('    Exp. device flow rate = '//TRIM(tmpString)//MdotUnit)
+        !END IF
 
     END DO
 

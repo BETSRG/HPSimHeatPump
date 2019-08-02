@@ -114,7 +114,7 @@
 
           ! USE STATEMENTS:
           ! Use statements for data only modules
-  USE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+  USE DataGlobals_HPSimIntegrated !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
            ! Use statements for access to subroutines in other modules
 
@@ -268,6 +268,24 @@ TYPE (LineDefinition):: LineItem                        ! Description of current
 TYPE (LineDefinition), ALLOCATABLE, DIMENSION(:)         :: IDFRecords     ! All the objects read from the IDF
 TYPE (SecretObjects), ALLOCATABLE, DIMENSION(:)          :: RepObjects         ! Secret Objects that could replace old ones
 
+!RS: Debugging: Testing to see if we can use more than one IDD and IDF here (9/22/14)
+TYPE (ObjectsDefinition), ALLOCATABLE, DIMENSION(:)      :: ObjectDef2   ! Contains all the Valid Objects on the IDD
+TYPE (SectionsDefinition), ALLOCATABLE, DIMENSION(:)     :: SectionDef2 ! Contains all the Valid Sections on the IDD
+TYPE (FileSectionsDefinition), ALLOCATABLE, DIMENSION(:) :: SectionsonFile2  ! lists the sections on file (IDF)
+TYPE (LineDefinition):: LineItem2                        ! Description of current record
+TYPE (LineDefinition), ALLOCATABLE, DIMENSION(:)         :: IDFRecords2     ! All the objects read from the IDF
+TYPE (SecretObjects), ALLOCATABLE, DIMENSION(:)          :: RepObjects2         ! Secret Objects that could replace old ones
+
+CHARACTER(len=MaxSectionNameLength), ALLOCATABLE, DIMENSION(:) :: ListofSections2
+CHARACTER(len=MaxObjectNameLength),  ALLOCATABLE, DIMENSION(:) :: ListofObjects2
+CHARACTER(len=MaxObjectNameLength) :: CurrentFieldName2   ! Current Field Name (IDD)
+CHARACTER(len=MaxObjectNameLength), ALLOCATABLE, DIMENSION(:) ::   &
+                                   ObsoleteObjectsRepNames2  ! Array of Replacement names for Obsolete objects
+
+INTEGER NumObjectDefs2       ! Count of number of object definitions found in the IDD
+INTEGER NumSectionDefs2      ! Count of number of section defintions found in the IDD
+INTEGER NumIDFRecords2       ! Current "max" IDF records (lines), when reached will be reallocated and new Max set
+
 PUBLIC  ProcessInput
 
 PUBLIC  FindIteminList
@@ -282,6 +300,8 @@ PUBLIC  GetObjectItemfromFile
 PUBLIC  TellMeHowManyObjectItemArgs
 
 PUBLIC  DeallocateArrays
+
+PUBLIC GetObjectItem2   !RS: Debugging: Testing to see if we can use more than one IDD and IDF here (9/22/14)
 
 PRIVATE FindNonSpace
 
@@ -315,6 +335,8 @@ SUBROUTINE ProcessInput
           ! na
 
   USE DataStopCodes
+  USE DataPrecisionGlobals
+  USE dfwin
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -331,21 +353,66 @@ SUBROUTINE ProcessInput
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-	CHARACTER(LEN=32) :: FileName
+	CHARACTER(LEN=75) :: FileName
     
    LOGICAL FileExists ! Check variable for .idd/.idf files
    LOGICAL :: ErrorsInIDD=.false.   ! to check for any errors flagged during data dictionary processing
+   
+    CHARACTER(len=255) :: ProgramPath=' '     ! Path for Program, Energy+.ini. !Karthik - Added for E+ and HP Sim Integration
+    !CHARACTER(len=120) :: VerString='EnergyPlus, Version 1.1.1'      ! String that represents version information
+    CHARACTER(150) :: path, path_1, path_2, StrScalar !, fullname
+REAL path_len,a,b2,c,path_2_len, i, path_1_len
+        
+        path_len = GetModuleFileName (NULL, path, &
+  len(path))
+
+path_1=TRIM(path)
+!StrScalar='C:\Users\lab303user\Documents\betsrg_dual\GenOpt\tmp-genopt-run-6'
+!StrScalar='C:\Users\Rajesh\Desktop\Task\Java_Task\GenOpt\tmp-genopt-run-6'
+
+
+path_1_len=LEN_TRIM(path_1)
+!a= INDEX(path, 'Debug',BACK=.FALSE.)
+
+!b2=path_len-a
+
+!c=path_len-b2
+
+!path_2_len=i-7
+!path_2=path_1(1:c)
+!path_2_len=len(StrScalar)
+!a=INDEX(path_1, 'tmp-genopt-run')
+a=INDEX(path_1, 'HeatPumpSimulator')
+path_2=path_1(1:(a-2))
+
+WRITE(6,*) path_1
+WRITE(6,*) path_2
 
    CALL InitSecretObjects
 
    EchoInputFile=GetNewUnitNumber()
    OPEN(unit=EchoInputFile,file='eplusout.audit')
    !               FullName from StringGlobals is used to build file name with Path
-   IF (LEN_TRIM(ProgramPath) == 0) THEN
-     FullName='Energy+.idd'
-   ELSE
-     FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+.idd'
-   ENDIF
+   !IF (LEN_TRIM(ProgramPath) == 0) THEN
+   !  FullName='Energy+.idd'
+   !ELSE
+   !  FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+.idd'
+   !ENDIF
+   
+   !FullName='C:/Users/Rajesh/Desktop/Task/Java_Task/GenOpt/Energy+.idd' !C:/Users/lab303user/Desktop/GenOpt/HPSim/Energy+.idd'
+   !FullName='C:/Users/lab303user/Desktop/copyfolderstructure/GenOpt/Energy+.idd'
+   !FullName=TRIM(path_2)//'\test.txt'
+   
+   !WRITE(6,*) FullName
+   !INQUIRE(file=FullName,EXIST=FileExists)
+   !IF (.not. FileExists) THEN
+   !  CALL ShowFatalError('test.txt missing. Program terminates. Fullname='//TRIM(FullName))
+   !ENDIF
+   
+   FullName=TRIM(path_2)//'\Energy+.idd'
+   
+   WRITE(6,*) FullName
+   
    ! IF (LEN_TRIM(ProgramPath) == 0) THEN   !RS: Test case input file
    !  FullName='Energy+_3TonAC_410.idd'
    !ELSE
@@ -381,7 +448,16 @@ SUBROUTINE ProcessInput
      REWIND(Unit=EchoInputFile)
    ENDIF
 
-   FileName = "in.idf"
+   !IF (LEN_TRIM(ProgramPath) == 0) THEN
+   !  FileName='in.idf'
+   !ELSE
+   !  FileName=ProgramPath(1:LEN_TRIM(ProgramPath))//'in.idf'
+   !END IF
+   
+   !FileName='C:/Users/lab303user/Desktop/copyfolderstructure/GenOpt/in.idf'
+   FileName=TRIM(path_2)//'\in.idf'
+   !FileName='C:/Users/Rajesh/Desktop/Task/Java_Task/GenOpt/in.idf'
+   !FileName = "in.idf"
    !FileName = "in_longtubes.idf"
 
    INQUIRE(file=FileName,EXIST=FileExists)
@@ -394,8 +470,77 @@ SUBROUTINE ProcessInput
    NumLines=0
 
    Call ProcessInputDataFile
-
+ 
    Close (unit=IDFFile)
+   
+   !RS: Debugging: Testing to see if we can use more than one IDD and IDF here (9/22/14)
+   
+   EchoInputFile=GetNewUnitNumber()
+   OPEN(unit=EchoInputFile,file='HPSimVar.audit')
+   !               FullName from StringGlobals is used to build file name with Path
+   
+   !FullName='C:/Users/lab303user/Desktop/copyfolderstructure/GenOpt/HPSim_Variables.idd'
+   FullName=TRIM(path_2)//'\HPSim_Variables.idd'
+   !FullName='HPSim_Variables.idd'
+   
+   ! IF (LEN_TRIM(ProgramPath) == 0) THEN   !RS: Test case input file
+   !  FullName='Energy+_3TonAC_410.idd'
+   !ELSE
+   !  FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+_3TonAC_410.idd'
+   !ENDIF
+   INQUIRE(file=FullName,EXIST=FileExists)
+   IF (.not. FileExists) THEN
+     CALL ShowFatalError('Energy+.idd missing. Program terminates. Fullname='//TRIM(FullName))
+   ENDIF
+   IDDFile=GetNewUnitNumber()
+   Open (unit=IDDFile, file=FullName, action='READ')
+   NumLines=0
+   
+   WRITE(EchoInputFile,*) ' Processing Data Dictionary (Energy+.idd) File -- Start'
+   
+   Call ProcessDataDicFile2(ErrorsInIDD)
+   
+   ALLOCATE (ListofSections2(NumSectionDefs2), ListofObjects2(NumObjectDefs2))
+   ListofSections2=SectionDef2(1:NumSectionDefs2)%Name
+   ListofObjects2=ObjectDef2(1:NumObjectDefs2)%Name
+   
+   Close (unit=IDDFile)
+   
+   WRITE(EchoInputFile,*) ' Processing Data Dictionary (Energy+.idd) File -- Complete'
+   
+   WRITE(EchoInputFile,*) ' Maximum number of Alpha Args=',MaxAlphaArgsFound
+   WRITE(EchoInputFile,*) ' Maximum number of Numeric Args=',MaxNumericArgsFound
+   WRITE(EchoInputFile,*) ' Number of Object Definitions=',NumObjectDefs2
+   WRITE(EchoInputFile,*) ' Number of Section Definitions=',NumSectionDefs2
+   
+   !If no fatal to here, rewind EchoInputFile -- only keep processing data...
+   IF (.not. ErrorsInIDD) THEN
+     REWIND(Unit=EchoInputFile)
+   ENDIF
+   
+   IF (LEN_TRIM(ProgramPath) == 0) THEN
+     FileName='HPSim_Variables.idf'
+   ELSE
+     FileName=ProgramPath(1:LEN_TRIM(ProgramPath))//'HPSim_Variables.idf'
+   END IF
+   
+   !FileName = "in.idf"
+   !FileName = "in_longtubes.idf"
+   
+   INQUIRE(file=FileName,EXIST=FileExists)
+   IF (.not. FileExists) THEN
+      CALL ShowFatalError('Input file missing. Program terminates.')
+   ENDIF
+   
+   IDFFile=GetNewUnitNumber()
+   Open (unit=IDFFile, file = FileName, action='READ')
+   NumLines=0
+   
+   Call ProcessInputDataFile2
+   
+   Close (unit=IDFFile)
+   
+   !RS: Debugging: End of duplication of IDF and IDD-reading code (9/22/14)
 
    ALLOCATE(IDFRecordsGotten(NumIDFRecords))
    IDFRecordsGotten=.false.
@@ -425,6 +570,8 @@ SUBROUTINE ProcessInput
      CALL ShowFatalError('Out of "range" values and/or blank required fields found in input')
    ENDIF
 
+   CLOSE(unit=EchoInputFile);
+   
   RETURN
 
 END SUBROUTINE ProcessInput
@@ -540,7 +687,7 @@ SUBROUTINE ProcessDataDicFile(ErrorsFound)
        endif
 
      else
-       CALL ShowSevereError(', or ; expected on this line',EchoInputFile)
+       CALL ShowSevereError(', or ; expected on this line')
        ErrorsFound=.true.
      endif
 
@@ -549,6 +696,128 @@ SUBROUTINE ProcessDataDicFile(ErrorsFound)
    RETURN
 
 END SUBROUTINE ProcessDataDicFile
+
+SUBROUTINE ProcessDataDicFile2(ErrorsFound) !RS: Debugging: Testing to see if we can use more than one IDD and IDF here (9/22/14)
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   August 1997
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine processes data dictionary file for EnergyPlus.
+          ! The structure of the sections and objects are stored in derived
+          ! types (SectionDefs and ObjectDefs)
+
+          ! METHODOLOGY EMPLOYED:
+          ! na
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  LOGICAL, INTENT(INOUT) :: ErrorsFound ! set to true if any errors flagged during IDD processing
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+   LOGICAL  :: EndofFile = .false.        ! True when End of File has been reached (IDD or IDF)
+   INTEGER Pos                            ! Test of scanning position on the current input line
+   TYPE (SectionsDefinition), ALLOCATABLE :: TempSectionDef2(:)  ! Like SectionDef, used during Re-allocation
+   TYPE (ObjectsDefinition), ALLOCATABLE :: TempObjectDef2(:)    ! Like ObjectDef, used during Re-allocation
+   LOGICAL BlankLine
+
+   MaxSectionDefs=SectionDefAllocInc
+   MaxObjectDefs=ObjectDefAllocInc
+
+   ALLOCATE (SectionDef2(MaxSectionDefs))
+   SectionDef2%Name=' '        ! Name of the section
+   SectionDef2%NumFound=0      ! Number of this section found in IDF
+
+   ALLOCATE(ObjectDef2(MaxObjectDefs))
+   ObjectDef2%Name=' '                ! Name of the object
+   ObjectDef2%NumParams=0             ! Number of parameters to be processed for each object
+   ObjectDef2%NumAlpha=0              ! Number of Alpha elements in the object
+   ObjectDef2%NumNumeric=0            ! Number of Numeric elements in the object
+   ObjectDef2%MinNumFields=0          ! Minimum number of fields
+   ObjectDef2%NameAlpha1=.false.      ! by default, not the "name"
+   ObjectDef2%ObsPtr=0.               ! by default, not obsolete
+   ObjectDef2%NumFound=0              ! Number of this object found in IDF
+   ObjectDef2%UniqueObject=.false.    ! by default, not Unique
+   ObjectDef2%RequiredObject=.false.  ! by default, not Required
+
+   NumObjectDefs2=0
+   NumSectionDefs=0
+   EndofFile=.false.
+
+   DO WHILE (.not. EndofFile)
+     CALL ReadInputLine(IDDFile,Pos,BlankLine,InputLineLength,EndofFile)
+     IF (BlankLine .or. EndofFile) THEN
+         CYCLE
+     END IF
+     Pos=SCAN(InputLine(1:InputLineLength),',;')
+     If (Pos /= 0) then
+
+       If (InputLine(Pos:Pos) == ';') then
+         CALL AddSectionDef(InputLine(1:Pos-1),ErrorsFound)
+         IF (NumSectionDefs == MaxSectionDefs) THEN
+           ALLOCATE (TempSectionDef2(MaxSectionDefs+SectionDefAllocInc))
+           TempSectionDef2%Name=' '
+           TempSectionDef2%NumFound=0
+           TempSectionDef2(1:MaxSectionDefs)=SectionDef2
+           DEALLOCATE (SectionDef2)
+           ALLOCATE (SectionDef2(MaxSectionDefs+SectionDefAllocInc))
+           SectionDef=TempSectionDef2
+           DEALLOCATE (TempSectionDef2)
+           MaxSectionDefs=MaxSectionDefs+SectionDefAllocInc
+         ENDIF
+       else
+         CALL AddObjectDefandParse2(InputLine(1:Pos-1),Pos,EndofFile,ErrorsFound)
+         IF (NumObjectDefs2 == MaxObjectDefs) THEN
+           ALLOCATE (TempObjectDef2(MaxObjectDefs+ObjectDefAllocInc))
+           TempObjectDef2%Name=' '         ! Name of the object
+           TempObjectDef2%NumParams=0      ! Number of parameters to be processed for each object
+           TempObjectDef2%NumAlpha=0       ! Number of Alpha elements in the object
+           TempObjectDef2%NumNumeric=0     ! Number of Numeric elements in the object
+           TempObjectDef2%MinNumFields=0   ! Minimum number of fields
+           TempObjectDef2%NameAlpha1=.false.  ! by default, not the "name"
+           TempObjectDef2%ObsPtr=0.        ! by default, not obsolete
+           TempObjectDef2%NumFound=0       ! Number of this object found in IDF
+           TempObjectDef2%UniqueObject=.false.    ! by default, not Unique
+           TempObjectDef2%RequiredObject=.false.  ! by default, not Required
+           TempObjectDef2(1:MaxObjectDefs)=ObjectDef2
+           DEALLOCATE (ObjectDef2)
+           ALLOCATE (ObjectDef2(MaxObjectDefs+ObjectDefAllocInc))
+           ObjectDef2=TempObjectDef2
+           DEALLOCATE (TempObjectDef2)
+           MaxObjectDefs=MaxObjectDefs+ObjectDefAllocInc
+         ENDIF
+       endif
+
+     else
+       CALL ShowSevereError(', or ; expected on this line')
+       ErrorsFound=.true.
+     endif
+
+   END DO
+
+   RETURN
+
+END SUBROUTINE ProcessDataDicFile2
+
 
 SUBROUTINE AddSectionDef(ProposedSection,ErrorsFound)
 
@@ -591,21 +860,21 @@ SUBROUTINE AddSectionDef(ProposedSection,ErrorsFound)
 
   SqueezedSection=MakeUPPERCase(ADJUSTL(ProposedSection))
   IF (LEN_TRIM(ADJUSTL(ProposedSection)) > MaxSectionNameLength) THEN
-    CALL ShowWarningError('Section length exceeds maximum, will be truncated='//TRIM(ProposedSection),EchoInputFile)
-    CALL ShowContinueError('Will be processed as Section='//TRIM(SqueezedSection),EchoInputFile)
+    CALL ShowWarningError('Section length exceeds maximum, will be truncated='//TRIM(ProposedSection))
+    CALL ShowContinueError('Will be processed as Section='//TRIM(SqueezedSection))
     ErrorsFound=.true.
   ENDIF
   ErrFlag=.false.
 
   IF (SqueezedSection /= Blank) THEN
     IF (FindItemInList(SqueezedSection,SectionDef%Name,NumSectionDefs) > 0) THEN
-      CALL ShowSevereError(' Already a Section called '//TRIM(SqueezedSection)//'. This definition ignored.',EchoInputFile)
+      CALL ShowSevereError(' Already a Section called '//TRIM(SqueezedSection)//'. This definition ignored.')
       ! Error Condition
       ErrFlag=.true.
       ErrorsFound=.true.
     ENDIF
   ELSE
-    CALL ShowSevereError('Blank Sections not allowed.  Review eplusout.audit file.',EchoInputFile)
+    CALL ShowSevereError('Blank Sections not allowed.  Review eplusout.audit file.')
     ErrFlag=.true.
     ErrorsFound=.true.
   ENDIF
@@ -704,8 +973,8 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
 
   SqueezedObject=MakeUPPERCase(ADJUSTL(ProposedObject))
   IF (LEN_TRIM(ADJUSTL(ProposedObject)) > MaxObjectNameLength) THEN
-    CALL ShowWarningError('Object length exceeds maximum, will be truncated='//TRIM(ProposedObject),EchoInputFile)
-    CALL ShowContinueError('Will be processed as Object='//TRIM(SqueezedObject),EchoInputFile)
+    CALL ShowWarningError('Object length exceeds maximum, will be truncated='//TRIM(ProposedObject))
+    CALL ShowContinueError('Will be processed as Object='//TRIM(SqueezedObject))
     ErrorsFound=.true.
   ENDIF
 
@@ -718,7 +987,7 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
 
   IF (SqueezedObject /= Blank) THEN
     IF (FindItemInList(SqueezedObject,ObjectDef%Name,NumObjectDefs) > 0) THEN
-      CALL ShowSevereError('Already an Object called '//TRIM(SqueezedObject)//'. This definition ignored.',EchoInputFile)
+      CALL ShowSevereError('Already an Object called '//TRIM(SqueezedObject)//'. This definition ignored.')
       ! Error Condition
       ErrFlag=.true.
       ! Rest of Object has to be processed. Error condition will be caught
@@ -1065,7 +1334,7 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
         WRITE(MinMaxString,*) ObjectDef(NumObjectDefs)%NumRangeChks(Count)%FieldNumber
         MinMaxString=ADJUSTL(MinMaxString)
         CALL ShowSevereError('Field #'//TRIM(MinMaxString)//' conflict in Min/Max specifications/values, in class='//  &
-                             TRIM(ObjectDef(NumObjectDefs)%Name),EchoInputFile)
+                             TRIM(ObjectDef(NumObjectDefs)%Name))
         ErrFlag=.true.
       ENDIF
     ENDIF
@@ -1096,7 +1365,7 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
         WRITE(MinMaxString,*) ObjectDef(NumObjectDefs)%NumRangeChks(Count)%FieldNumber
         MinMaxString=ADJUSTL(MinMaxString)
         CALL ShowSevereError('Field #'//TRIM(MinMaxString)//' default is invalid for Min/Max values, in class='//  &
-                             TRIM(ObjectDef(NumObjectDefs)%Name),EchoInputFile)
+                             TRIM(ObjectDef(NumObjectDefs)%Name))
         ErrFlag=.true.
       ENDIF
     ENDIF
@@ -1104,7 +1373,7 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
 
   IF (ErrFlag) THEN
     CALL ShowContinueError('Errors occured in ObjectDefinition for Class='//TRIM(ObjectDef(NumObjectDefs)%Name)// &
-                           ', Object not available for IDF processing.',EchoInputFile)
+                           ', Object not available for IDF processing.')
     DEALLOCATE(ObjectDef(NumObjectDefs)%AlphaorNumeric)
     NumObjectDefs=NumObjectDefs-1
     ErrorsFound=.true.
@@ -1113,6 +1382,503 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
   RETURN
 
 END SUBROUTINE AddObjectDefandParse
+
+
+SUBROUTINE AddObjectDefandParse2(ProposedObject,CurPos,EndofFile,ErrorsFound)   !RS: Debugging: Testing to see if we can use more than one IDD and IDF here (9/22/14)
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   August 1997
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine processes data dictionary file for EnergyPlus.
+          ! The structure of the sections and objects are stored in derived
+          ! types (SectionDefs and ObjectDefs)
+
+          ! METHODOLOGY EMPLOYED:
+          ! na
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS
+  CHARACTER(len=*), INTENT(IN) :: ProposedObject  ! Proposed Object to Add
+  INTEGER, INTENT(INOUT) :: CurPos ! Current position (initially at first ',') of InputLine
+  LOGICAL, INTENT(INOUT) :: EndofFile ! End of File marker
+  LOGICAL, INTENT(INOUT) :: ErrorsFound ! set to true if errors found here
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+  CHARACTER(len=MaxObjectNameLength) SqueezedObject  ! Input Object, Left Justified, UpperCase
+  INTEGER Count  ! Count on arguments, loop
+  INTEGER Pos    ! Position scanning variable
+  LOGICAL EndofObjectDef   ! Set to true when ; has been found
+  LOGICAL ErrFlag   ! Local Error condition flag, when true, object not added to Global list
+  CHARACTER(len=1) TargetChar   ! Single character scanned to test for current field type (A or N)
+  LOGICAL BlankLine ! True when this line is "blank" (may have comment characters as first character on line)
+  LOGICAL(1), ALLOCATABLE, SAVE, DIMENSION(:) :: AlphaorNumeric    ! Array of argument designations, True is Alpha,
+                                                                   ! False is numeric, saved in ObjectDef when done
+  LOGICAL(1), ALLOCATABLE, SAVE, DIMENSION(:) :: TempAN            ! Array (ref: AlphaOrNumeric) for re-allocation procedure
+  LOGICAL(1), ALLOCATABLE, SAVE, DIMENSION(:) :: RequiredFields    ! Array of argument required fields
+  LOGICAL(1), ALLOCATABLE, SAVE, DIMENSION(:) :: TempRqF           ! Array (ref: RequiredFields) for re-allocation procedure
+  CHARACTER(len=MaxObjectNameLength),   &
+              ALLOCATABLE, SAVE, DIMENSION(:) :: AlphFieldChecks   ! Array with alpha field names
+  CHARACTER(len=MaxObjectNameLength),   &
+              ALLOCATABLE, SAVE, DIMENSION(:) :: TempAFC           ! Array (ref: AlphFieldChecks) for re-allocation procedure
+  CHARACTER(len=MaxObjectNameLength),   &
+              ALLOCATABLE, SAVE, DIMENSION(:) :: AlphFieldDefaults ! Array with alpha field defaults
+  CHARACTER(len=MaxObjectNameLength),   &
+              ALLOCATABLE, SAVE, DIMENSION(:) :: TempAFD           ! Array (ref: AlphFieldDefaults) for re-allocation procedure
+  TYPE(RangeCheckDef), ALLOCATABLE, SAVE, DIMENSION(:) :: NumRangeChecks  ! Structure for Range Check, Defaults of numeric fields
+  TYPE(RangeCheckDef), ALLOCATABLE, SAVE, DIMENSION(:) :: TempChecks ! Structure (ref: NumRangeChecks) for re-allocation procedure
+  LOGICAL MinMax   ! Set to true when MinMax field has been found by ReadInputLine
+  LOGICAL Default  ! Set to true when Default field has been found by ReadInputLine
+  LOGICAL AutoSize ! Set to true when Autosizable field has been found by ReadInputLine
+  CHARACTER(len=20) MinMaxString ! Set from ReadInputLine
+  CHARACTER(len=MaxObjectNameLength) AlphDefaultString
+  INTEGER WhichMinMax   !=0 (none/invalid), =1 \min, =2 \min>, =3 \max, =4 \max<
+  REAL Value  ! Value returned by ReadInputLine (either min, max, default or autosize)
+  LOGICAL MinMaxError  ! Used to see if min, max, defaults have been set appropriately (True if error)
+  INTEGER,SAVE   :: MaxANArgs=100  ! Current count of Max args to object
+  LOGICAL ErrorsFoundFlag
+
+  IF (.not. ALLOCATED(AlphaorNumeric)) THEN
+    ALLOCATE (AlphaorNumeric(0:MaxANArgs))
+    ALLOCATE (RequiredFields(0:MaxANArgs))
+    ALLOCATE (NumRangeChecks(MaxANArgs))
+    ALLOCATE (AlphFieldChecks(MaxANArgs))
+    ALLOCATE (AlphFieldDefaults(MaxANArgs))
+    ALLOCATE (ObsoleteObjectsRepNames2(0))
+  ENDIF
+
+  SqueezedObject=MakeUPPERCase(ADJUSTL(ProposedObject))
+  IF (LEN_TRIM(ADJUSTL(ProposedObject)) > MaxObjectNameLength) THEN
+    CALL ShowWarningError('Object length exceeds maximum, will be truncated='//TRIM(ProposedObject))
+    CALL ShowContinueError('Will be processed as Object='//TRIM(SqueezedObject))
+    ErrorsFound=.true.
+  ENDIF
+
+  ! Start of Object parse, set object level items
+  ErrFlag=.false.
+  MinimumNumberOfFields=0
+  ObsoleteObject=.false.
+  UniqueObject=.false.
+  RequiredObject=.false.
+
+  IF (SqueezedObject /= Blank) THEN
+    IF (FindItemInList(SqueezedObject,ObjectDef2%Name,NumObjectDefs2) > 0) THEN
+      CALL ShowSevereError('Already an Object called '//TRIM(SqueezedObject)//'. This definition ignored.')
+      ! Error Condition
+      ErrFlag=.true.
+      ! Rest of Object has to be processed. Error condition will be caught
+      ! at end
+      ErrorsFound=.true.
+    ENDIF
+  ELSE
+    ErrFlag=.true.
+    ErrorsFound=.true.
+  ENDIF
+
+  NumObjectDefs2=NumObjectDefs2+1
+  ObjectDef2(NumObjectDefs2)%Name=SqueezedObject
+  ObjectDef2(NumObjectDefs2)%NumParams=0
+  ObjectDef2(NumObjectDefs2)%NumAlpha=0
+  ObjectDef2(NumObjectDefs2)%NumNumeric=0
+  ObjectDef2(NumObjectDefs2)%NumFound=0
+  ObjectDef2(NumObjectDefs2)%MinNumFields=0
+  ObjectDef2(NumObjectDefs2)%NameAlpha1=.false.
+  ObjectDef2(NumObjectDefs2)%ObsPtr=0
+  ObjectDef2(NumObjectDefs2)%UniqueObject=.false.
+  ObjectDef2(NumObjectDefs2)%RequiredObject=.false.
+  
+  AlphaorNumeric=.true.
+  RequiredFields=.false.
+  AlphFieldChecks=Blank
+  AlphFieldDefaults=Blank
+
+  NumRangeChecks%MinMaxChk=.false.
+  NumRangeChecks%WhichMinMax(1)=0
+  NumRangeChecks%WhichMinMax(2)=0
+  NumRangeChecks%MinMaxString(1)=Blank
+  NumRangeChecks%MinMaxString(2)=Blank
+  NumRangeChecks%MinMaxValue(1)=0.0
+  NumRangeChecks%MinMaxValue(2)=0.0
+  NumRangeChecks%Default=0.0
+  NumRangeChecks%DefaultChk=.false.
+  NumRangeChecks%DefAutoSize=.false.
+  NumRangeChecks%FieldName=Blank
+  NumRangeChecks%AutoSizable=.false.
+  NumRangeChecks%AutoSizeValue=DefAutoSizeValue
+
+  Count=0
+  EndofObjectDef=.false.
+  ! Parse rest of Object Definition
+
+  DO WHILE (.not. EndofFile .and. .not. EndofObjectDef)
+
+    IF (CurPos <= InputLineLength) THEN
+      Pos=SCAN(InputLine(CurPos:InputLineLength),AlphaNum)
+      IF (Pos > 0) then
+
+        Count=Count+1
+        RequiredField=.false.
+
+        IF (Count > MaxANArgs) THEN   ! Reallocation
+          ALLOCATE(TempAN(0:MaxANArgs+ObjectDefAllocInc))
+          TempAN=.false.
+          TempAN(0:MaxANArgs)=AlphaorNumeric
+          DEALLOCATE(AlphaorNumeric)
+          ALLOCATE(TempRqF(0:MaxANArgs+ObjectDefAllocInc))
+          TempRqF=.false.
+          TempRqF(1:MaxANArgs)=RequiredFields
+          DEALLOCATE(RequiredFields)
+          ALLOCATE(TempChecks(MaxANArgs+ObjectDefAllocInc))
+          TempChecks%MinMaxChk=.false.
+          TempChecks%WhichMinMax(1)=0
+          TempChecks%WhichMinMax(2)=0
+          TempChecks%MinMaxString(1)=Blank
+          TempChecks%MinMaxString(2)=Blank
+          TempChecks%MinMaxValue(1)=0.0
+          TempChecks%MinMaxValue(2)=0.0
+          TempChecks%Default=0.0
+          TempChecks%DefaultChk=.false.
+          TempChecks%DefAutoSize=.false.
+          TempChecks%FieldName=Blank
+          TempChecks(1:MaxANArgs)=NumRangeChecks(1:MaxANArgs)
+          DEALLOCATE(NumRangeChecks)
+          ALLOCATE(TempAFC(MaxANArgs+ObjectDefAllocInc))
+          TempAFC=Blank
+          TempAFC(1:MaxANArgs)=AlphFieldChecks
+          DEALLOCATE(AlphFieldChecks)
+          ALLOCATE(TempAFD(MaxANArgs+ObjectDefAllocInc))
+          TempAFD=Blank
+          TempAFD(1:MaxANArgs)=AlphFieldDefaults
+          DEALLOCATE(AlphFieldDefaults)
+          ALLOCATE(AlphaorNumeric(0:MaxANArgs+ObjectDefAllocInc))
+          AlphaorNumeric=TempAN
+          DEALLOCATE(TempAN)
+          ALLOCATE(RequiredFields(0:MaxANArgs+ObjectDefAllocInc))
+          RequiredFields=TempRqF
+          DEALLOCATE(TempRqF)
+          ALLOCATE(NumRangeChecks(MaxANArgs+ObjectDefAllocInc))
+          NumRangeChecks=TempChecks
+          DEALLOCATE(TempChecks)
+          ALLOCATE(AlphFieldChecks(MaxANArgs+ObjectDefAllocInc))
+          AlphFieldChecks=TempAFC
+          DEALLOCATE(TempAFC)
+          ALLOCATE(AlphFieldDefaults(MaxANArgs+ObjectDefAllocInc))
+          AlphFieldDefaults=TempAFD
+          DEALLOCATE(TempAFD)
+          MaxANArgs=MaxANArgs+ObjectDefAllocInc
+        ENDIF
+
+        TargetChar=InputLine(CurPos+Pos-1:CurPos+Pos-1)
+
+        IF (TargetChar == 'A' .or. TargetChar == 'a') THEN
+          AlphaorNumeric(Count)=.true.
+          ObjectDef2(NumObjectDefs2)%NumAlpha=ObjectDef2(NumObjectDefs2)%NumAlpha+1
+          IF (FieldSet) THEN
+              AlphFieldChecks(ObjectDef2(NumObjectDefs2)%NumAlpha)=CurrentFieldName
+          END IF
+          IF (ObjectDef2(NumObjectDefs2)%NumAlpha == 1) THEN
+            IF (INDEX(MakeUpperCase(CurrentFieldName),'NAME') /= 0) THEN
+                ObjectDef2(NumObjectDefs2)%NameAlpha1=.true.
+            END IF
+          ENDIF
+        ELSE
+          AlphaorNumeric(Count)=.false.
+          ObjectDef2(NumObjectDefs2)%NumNumeric=ObjectDef2(NumObjectDefs2)%NumNumeric+1
+          IF (FieldSet) THEN
+              NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%FieldName=CurrentFieldName
+          END IF
+        ENDIF
+
+      ELSE
+        CALL ReadInputLine(IDDFile,CurPos,BlankLine,InputLineLength,EndofFile,  &
+                           MinMax=MinMax,WhichMinMax=WhichMinMax,MinMaxString=MinMaxString,  &
+                           Value=Value,Default=Default,DefString=AlphDefaultString,AutoSizable=AutoSize, &
+                           ErrorsFound=ErrorsFoundFlag)
+        IF (.not. AlphaorNumeric(Count)) THEN
+          ! only record for numeric fields
+          IF (MinMax) THEN
+            NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%MinMaxChk=.true.
+            NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%FieldNumber=Count
+            IF (WhichMinMax <= 2) THEN   !=0 (none/invalid), =1 \min, =2 \min>, =3 \max, =4 \max<
+              NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%WhichMinMax(1)=WhichMinMax
+              NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%MinMaxString(1)=MinMaxString
+              NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%MinMaxValue(1)=Value
+            ELSE
+              NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%WhichMinMax(2)=WhichMinMax
+              NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%MinMaxString(2)=MinMaxString
+              NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%MinMaxValue(2)=Value
+            ENDIF
+          ENDIF   ! End Min/Max
+          IF (Default) THEN
+            NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%DefaultChk=.true.
+            NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%Default=Value
+            IF (AlphDefaultString == 'AUTOSIZE') NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%DefAutoSize=.true.
+          ENDIF
+          IF (AutoSize) THEN
+            NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%AutoSizable=.true.
+            NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%AutoSizeValue=Value
+          ENDIF
+        ELSE  ! Alpha Field
+          IF (Default) THEN
+            AlphFieldDefaults(ObjectDef2(NumObjectDefs2)%NumAlpha)=AlphDefaultString
+          ENDIF
+        ENDIF
+        IF (ErrorsFoundFlag) THEN
+          ErrFlag=.true.
+          ErrorsFoundFlag=.false.
+        ENDIF
+        IF (RequiredField) THEN
+          RequiredFields(Count)=.true.
+          MinimumNumberOfFields=MAX(Count,MinimumNumberOfFields)
+        ENDIF
+        CYCLE
+      ENDIF
+
+      !  For the moment dont care about descriptions on each object
+      IF (CurPos <= InputLineLength) THEN
+        CurPos=CurPos+Pos
+        Pos=SCAN(InputLine(CurPos:InputLineLength),',;')
+      ELSE
+        CALL ReadInputLine(IDDFile,CurPos,BlankLine,InputLineLength,EndofFile)
+        IF (BlankLine .or. EndofFile) THEN
+            CYCLE
+        END IF
+        Pos=SCAN(InputLine(CurPos:InputLineLength),',;')
+      ENDIF
+    ELSE
+      CALL ReadInputLine(IDDFile,CurPos,BlankLine,InputLineLength,EndofFile)
+      CYCLE
+    ENDIF
+
+    IF (Pos <= 0) THEN
+                   ! must be time to read another line
+      CALL ReadInputLine(IDDFile,CurPos,BlankLine,InputLineLength,EndofFile)
+      IF (BlankLine .or. EndofFile) THEN
+          CYCLE
+      END IF
+    ELSE
+      IF (InputLine(CurPos+Pos-1:CurPos+Pos-1) == ';') THEN
+        EndofObjectDef=.true.
+      ENDIF
+      CurPos=CurPos+Pos
+    ENDIF
+
+  END DO
+
+  ! Reached end of object def but there may still be more \ lines to parse....
+  ! Goes until next object is encountered ("not blankline") or end of IDDFile
+  ! If last object is not numeric, then exit immediately....
+    BlankLine=.true.
+    DO WHILE (BlankLine .and. .not.EndofFile)
+    ! It's a numeric object as last one...
+      CALL ReadInputLine(IDDFile,CurPos,BlankLine,InputLineLength,EndofFile,  &
+                         MinMax=MinMax,WhichMinMax=WhichMinMax,MinMaxString=MinMaxString,  &
+                         Value=Value,Default=Default,DefString=AlphDefaultString,AutoSizable=AutoSize, &
+                         ErrorsFound=ErrorsFoundFlag)
+      IF (MinMax) THEN
+        NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%MinMaxChk=.true.
+        NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%FieldNumber=Count
+        IF (WhichMinMax <= 2) THEN   !=0 (none/invalid), =1 \min, =2 \min>, =3 \max, =4 \max<
+          NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%WhichMinMax(1)=WhichMinMax
+          NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%MinMaxString(1)=MinMaxString
+          NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%MinMaxValue(1)=Value
+        ELSE
+          NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%WhichMinMax(2)=WhichMinMax
+          NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%MinMaxString(2)=MinMaxString
+          NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%MinMaxValue(2)=Value
+        ENDIF
+      ENDIF
+      IF (Default .and. .not. AlphaorNumeric(Count)) THEN
+        NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%DefaultChk=.true.
+        NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%Default=Value
+        IF (AlphDefaultString == 'AUTOSIZE') NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%DefAutoSize=.true.
+      ELSEIF (Default .and. AlphaorNumeric(Count)) THEN
+        AlphFieldDefaults(ObjectDef2(NumObjectDefs2)%NumAlpha)=AlphDefaultString
+      ENDIF
+      IF (AutoSize) THEN
+        NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%AutoSizable=.true.
+        NumRangeChecks(ObjectDef2(NumObjectDefs2)%NumNumeric)%AutoSizeValue=Value
+      ENDIF
+      IF (ErrorsFoundFlag) THEN
+        ErrFlag=.true.
+        ErrorsFoundFlag=.false.
+      ENDIF
+    ENDDO
+    IF (.not. BlankLine) THEN
+      BACKSPACE(Unit=IDDFile)
+      EchoInputLine=.false.
+    ENDIF
+  IF (RequiredField) THEN
+    RequiredFields(Count)=.true.
+    MinimumNumberOfFields=MAX(Count,MinimumNumberOfFields)
+  ENDIF
+
+  ObjectDef2(NumObjectDefs2)%NumParams=Count  ! Also the total of ObjectDef(..)%NumAlpha+ObjectDef(..)%NumNumeric
+  ObjectDef2(NumObjectDefs2)%MinNumFields=MinimumNumberOfFields
+  IF (ObsoleteObject) THEN
+    ALLOCATE(TempAFD(NumObsoleteObjects+1))
+    IF (NumObsoleteObjects > 0) THEN
+      TempAFD(1:NumObsoleteObjects)=ObsoleteObjectsRepNames2
+    ENDIF
+    TempAFD(NumObsoleteObjects+1)=ReplacementName
+    DEALLOCATE(ObsoleteObjectsRepNames2)
+    NumObsoleteObjects=NumObsoleteObjects+1
+    ALLOCATE(ObsoleteObjectsRepNames2(NumObsoleteObjects))
+    ObsoleteObjectsRepNames2=TempAFD
+    ObjectDef2(NumObjectDefs)%ObsPtr=NumObsoleteObjects
+    DEALLOCATE(TempAFD)
+  ENDIF
+  IF (RequiredObject) THEN
+    ObjectDef2(NumObjectDefs)%RequiredObject=.true.
+  ENDIF
+  IF (UniqueObject) THEN
+    ObjectDef2(NumObjectDefs)%UniqueObject=.true.
+  ENDIF
+
+  MaxAlphaArgsFound=MAX(MaxAlphaArgsFound,ObjectDef2(NumObjectDefs2)%NumAlpha)
+  MaxNumericArgsFound=MAX(MaxNumericArgsFound,ObjectDef2(NumObjectDefs2)%NumNumeric)
+  ALLOCATE(ObjectDef2(NumObjectDefs2)%AlphaorNumeric(Count))
+  ObjectDef2(NumObjectDefs2)%AlphaorNumeric=AlphaorNumeric(1:Count)
+  ALLOCATE(ObjectDef2(NumObjectDefs2)%NumRangeChks(ObjectDef2(NumObjectDefs2)%NumNumeric))
+  ObjectDef2(NumObjectDefs2)%NumRangeChks=NumRangeChecks(1:ObjectDef2(NumObjectDefs2)%NumNumeric)
+  ALLOCATE(ObjectDef2(NumObjectDefs2)%AlphFieldChks(ObjectDef2(NumObjectDefs2)%NumAlpha))
+  ObjectDef2(NumObjectDefs2)%AlphFieldChks=AlphFieldChecks(1:ObjectDef2(NumObjectDefs2)%NumAlpha)
+  ALLOCATE(ObjectDef2(NumObjectDefs2)%AlphFieldDefs(ObjectDef2(NumObjectDefs2)%NumAlpha))
+  ObjectDef2(NumObjectDefs2)%AlphFieldDefs=AlphFieldDefaults(1:ObjectDef2(NumObjectDefs2)%NumAlpha)
+  ALLOCATE(ObjectDef2(NumObjectDefs2)%ReqField(Count))
+  ObjectDef2(NumObjectDefs2)%ReqField=RequiredFields(1:Count)
+  DO Count=1,ObjectDef2(NumObjectDefs2)%NumNumeric
+    IF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%MinMaxChk) THEN
+    ! Checking MinMax Range (min vs. max and vice versa)
+      MinMaxError=.false.
+      ! check min against max
+      IF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%WhichMinMax(1) == 1) THEN
+        ! min
+        Value=ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%MinMaxValue(1)
+        IF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%WhichMinMax(2) == 3) THEN
+          IF (Value > ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%MinMaxValue(2)) THEN
+              MinMaxError=.true.
+          END IF
+        ELSEIF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%WhichMinMax(2) == 4) THEN
+          IF (Value == ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%MinMaxValue(2)) THEN
+              MinMaxError=.true.
+          END IF
+        ENDIF
+      ELSEIF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%WhichMinMax(1) == 2) THEN
+        ! min>
+        Value=ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%MinMaxValue(1) + TINY(Value)  ! infintesimally bigger than min
+        IF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%WhichMinMax(2) == 3) THEN
+          IF (Value > ObjectDef(NumObjectDefs2)%NumRangeChks(Count)%MinMaxValue(2)) THEN
+              MinMaxError=.true.
+          END IF
+        ELSEIF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%WhichMinMax(2) == 4) THEN
+          IF (Value == ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%MinMaxValue(2)) THEN
+              MinMaxError=.true.
+          END IF
+        ENDIF
+      ENDIF
+      ! check max against min
+      IF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%WhichMinMax(2) == 3) THEN
+        ! max
+        Value=ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%MinMaxValue(2)
+        ! Check max value against min
+        IF (ObjectDef2(NumObjectDefs)%NumRangeChks(Count)%WhichMinMax(1) == 1) THEN
+          IF (Value < ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%MinMaxValue(1)) THEN
+              MinMaxError=.true.
+          END IF
+        ELSEIF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%WhichMinMax(1) == 2) THEN
+          IF (Value == ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%MinMaxValue(1)) THEN
+              MinMaxError=.true.
+          END IF
+        ENDIF
+      ELSEIF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%WhichMinMax(2) == 4) THEN
+        ! max<
+        Value=ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%MinMaxValue(2) - TINY(Value)  ! infintesimally bigger than min
+        IF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%WhichMinMax(1) == 1) THEN
+          IF (Value < ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%MinMaxValue(1)) THEN
+              MinMaxError=.true.
+          END IF
+        ELSEIF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%WhichMinMax(1) == 2) THEN
+          IF (Value == ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%MinMaxValue(1)) THEN
+              MinMaxError=.true.
+          END IF
+        ENDIF
+      ENDIF
+      ! check if error condition
+      IF (MinMaxError) THEN
+        !  Error stated min is not in range with stated max
+        WRITE(MinMaxString,*) ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%FieldNumber
+        MinMaxString=ADJUSTL(MinMaxString)
+        CALL ShowSevereError('Field #'//TRIM(MinMaxString)//' conflict in Min/Max specifications/values, in class='//  &
+                             TRIM(ObjectDef2(NumObjectDefs2)%Name))
+        ErrFlag=.true.
+      ENDIF
+    ENDIF
+    IF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%DefaultChk) THEN
+    ! Check Default against MinMaxRange
+      MinMaxError=.false.
+      Value=ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%Default
+      IF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%WhichMinMax(1) == 1) THEN
+        IF (Value < ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%MinMaxValue(1)) THEN
+            MinMaxError=.true.
+        END IF
+      ELSEIF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%WhichMinMax(1) == 2) THEN
+        IF (Value <= ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%MinMaxValue(1)) THEN
+            MinMaxError=.true.
+        END IF
+      ENDIF
+      IF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%WhichMinMax(2) == 3) THEN
+        IF (Value > ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%MinMaxValue(2)) THEN
+            MinMaxError=.true.
+        END IF
+      ELSEIF (ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%WhichMinMax(2) == 4) THEN
+        IF (Value >= ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%MinMaxValue(2)) THEN
+            MinMaxError=.true.
+        END IF
+      ENDIF
+      IF (MinMaxError) THEN
+        !  Error stated default is not in min/max range
+        WRITE(MinMaxString,*) ObjectDef2(NumObjectDefs2)%NumRangeChks(Count)%FieldNumber
+        MinMaxString=ADJUSTL(MinMaxString)
+        CALL ShowSevereError('Field #'//TRIM(MinMaxString)//' default is invalid for Min/Max values, in class='//  &
+                             TRIM(ObjectDef2(NumObjectDefs)%Name))
+        ErrFlag=.true.
+      ENDIF
+    ENDIF
+  ENDDO
+
+  IF (ErrFlag) THEN
+    CALL ShowContinueError('Errors occured in ObjectDefinition for Class='//TRIM(ObjectDef2(NumObjectDefs)%Name)// &
+                           ', Object not available for IDF processing.')
+    DEALLOCATE(ObjectDef2(NumObjectDefs2)%AlphaorNumeric)
+    NumObjectDefs=NumObjectDefs-1
+    ErrorsFound=.true.
+  ENDIF
+
+  RETURN
+
+END SUBROUTINE AddObjectDefandParse2    !RS: Debugging: Testing to see if we can use more than one IDD and IDF here (9/22/14)
+
+
 
 SUBROUTINE ProcessInputDataFile
 
@@ -1215,7 +1981,7 @@ SUBROUTINE ProcessInputDataFile
        WRITE(LineNum,*) NumLines
        LineNum=ADJUSTL(LineNum)
        CALL ShowMessage('IDF Line='//TRIM(LineNum)//' '//TRIM(InputLine))
-       CALL ShowSevereError(', or ; expected on this line',EchoInputFile)
+       CALL ShowSevereError(', or ; expected on this line')
      endif
 
    END DO
@@ -1242,6 +2008,137 @@ SUBROUTINE ProcessInputDataFile
    RETURN
 
 END SUBROUTINE ProcessInputDataFile
+
+
+SUBROUTINE ProcessInputDataFile2    !RS: Debugging: Testing to see if we can use more than one IDD and IDF here (9/22/14)
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   August 1997
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine processes data dictionary file for EnergyPlus.
+          ! The structure of the sections and objects are stored in derived
+          ! types (SectionDefs and ObjectDefs)
+
+          ! METHODOLOGY EMPLOYED:
+          ! na
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+   TYPE (FileSectionsDefinition), ALLOCATABLE :: TempSectionsonFile(:)   ! Used during reallocation procedure
+   TYPE (LineDefinition), ALLOCATABLE :: TempIDFRecords(:)   ! Used during reallocation procedure
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+
+   LOGICAL :: EndofFile = .false.
+   LOGICAL BlankLine
+   INTEGER Pos
+   CHARACTER(len=25) LineNum
+
+   MaxIDFRecords=ObjectsIDFAllocInc
+   NumIDFRecords2=0
+   MaxIDFSections=SectionsIDFAllocInc
+   NumIDFSections=0
+
+   ALLOCATE (SectionsonFile2(MaxIDFSections))
+   SectionsonFile2%Name=' '        ! Name of this section
+   SectionsonFile2%FirstRecord=0   ! Record number of first object in section
+   SectionsonFile2%LastRecord=0    ! Record number of last object in section
+   ALLOCATE (IDFRecords2(MaxIDFRecords))
+   IDFRecords2%Name=' '          ! Object name for this record
+   IDFRecords2%NumAlphas=0       ! Number of alphas on this record
+   IDFRecords2%NumNumbers=0      ! Number of numbers on this record
+   ALLOCATE (LineItem2%Numbers(MaxNumericArgsFound))
+   ALLOCATE (LineItem2%NumBlank(MaxNumericArgsFound))
+   ALLOCATE (LineItem2%Alphas(MaxAlphaArgsFound))
+   ALLOCATE (LineItem2%AlphBlank(MaxAlphaArgsFound))
+   EndofFile=.false.
+
+   DO WHILE (.not. EndofFile)
+     CALL ReadInputLine(IDFFile,Pos,BlankLine,InputLineLength,EndofFile)
+     IF (BlankLine .or. EndofFile) THEN
+         CYCLE
+     END IF
+     Pos=SCAN(InputLine,',;')
+     If (Pos /= 0) then
+       If (InputLine(Pos:Pos) == ';') then
+         CALL ValidateSection(InputLine(1:Pos-1))
+         IF (NumIDFSections == MaxIDFSections) THEN
+           ALLOCATE (TempSectionsonFile(MaxIDFSections+SectionsIDFAllocInc))
+           TempSectionsonFile%Name=' '        ! Name of this section
+           TempSectionsonFile%FirstRecord=0   ! Record number of first object in section
+           TempSectionsonFile%LastRecord=0    ! Record number of last object in section
+           TempSectionsonFile(1:MaxIDFSections)=SectionsonFile
+           DEALLOCATE (SectionsonFile)
+           ALLOCATE (SectionsonFile(MaxIDFSections+SectionsIDFAllocInc))
+           SectionsonFile2=TempSectionsonFile
+           DEALLOCATE (TempSectionsonFile)
+           MaxIDFSections=MaxIDFSections+SectionsIDFAllocInc
+         ENDIF
+       else
+         CALL ValidateObjectandParse2(InputLine(1:Pos-1),Pos,EndofFile)
+         IF (NumIDFRecords2 == MaxIDFRecords) THEN
+           ALLOCATE(TempIDFRecords(MaxIDFRecords+ObjectsIDFAllocInc))
+           TempIDFRecords%Name=' '          ! Object name for this record
+           TempIDFRecords%NumAlphas=0       ! Number of alphas on this record
+           TempIDFRecords%NumNumbers=0      ! Number of numbers on this record
+           TempIDFRecords(1:MaxIDFRecords)=IDFRecords
+           DEALLOCATE(IDFRecords)
+           ALLOCATE(IDFRecords(MaxIDFRecords+ObjectsIDFAllocInc))
+           IDFRecords2=TempIDFRecords
+           DEALLOCATE(TempIDFRecords)
+           MaxIDFRecords=MaxIDFRecords+ObjectsIDFAllocInc
+         ENDIF
+       endif
+     else
+       !Error condition, no , or ; on first line
+       WRITE(LineNum,*) NumLines
+       LineNum=ADJUSTL(LineNum)
+       CALL ShowMessage('IDF Line='//TRIM(LineNum)//' '//TRIM(InputLine))
+       CALL ShowSevereError(', or ; expected on this line')
+     endif
+
+   END DO
+
+   IF (NumIDFSections > 0) THEN
+     SectionsonFile2(NumIDFSections)%LastRecord=NumIDFRecords
+   ENDIF
+
+   IF (OverallErrorFlag) THEN
+     CALL ShowSevereError('Possible incorrect IDD File')
+     CALL ShowContinueError('Possible Invalid Numerics or other problems')
+     CALL ShowFatalError('Errors occurred on processing IDF file. Preceding condition(s) cause termination.')
+   ENDIF
+
+   IF (NumIDFRecords2 > 0) THEN
+     DO Pos=1,NumObjectDefs2
+       IF (ObjectDef(Pos)%RequiredObject .and. ObjectDef(Pos)%NumFound == 0) THEN
+         CALL ShowSevereError('No items found for Required Object='//TRIM(ObjectDef(Pos)%Name))
+         NumMiscErrorsFound=NumMiscErrorsFound+1
+       ENDIF
+     ENDDO
+   ENDIF
+
+   RETURN
+
+END SUBROUTINE ProcessInputDataFile2    !RS: Debugging: Testing to see if we can use more than one IDD and IDF here (9/22/14)
+
 
 SUBROUTINE ValidateSection(ProposedSection)
 
@@ -1285,13 +2182,13 @@ SUBROUTINE ValidateSection(ProposedSection)
 
   SqueezedSection=MakeUPPERCase(ADJUSTL(ProposedSection))
   IF (LEN_TRIM(ADJUSTL(ProposedSection)) > MaxSectionNameLength) THEN
-    CALL ShowWarningError('Section length exceeds maximum, will be truncated='//TRIM(ProposedSection),EchoInputFile)
-    CALL ShowContinueError('Will be processed as Section='//TRIM(SqueezedSection),EchoInputFile)
+    CALL ShowWarningError('Section length exceeds maximum, will be truncated='//TRIM(ProposedSection))
+    CALL ShowContinueError('Will be processed as Section='//TRIM(SqueezedSection))
   ENDIF
   IF (SqueezedSection(1:3) /= 'END') THEN
     Found=FindIteminList(SqueezedSection,ListofSections,NumSectionDefs)
     IF (Found == 0) THEN
-      CALL ShowWarningError('Did not find "'//TRIM(ADJUSTL(ProposedSection))//'" in list of Sections',EchoInputFile)
+      CALL ShowWarningError('Did not find "'//TRIM(ADJUSTL(ProposedSection))//'" in list of Sections')
     ELSE
       IF (NumIDFSections > 0) THEN
         SectionsonFile(NumIDFSections)%LastRecord=NumIDFRecords
@@ -1373,8 +2270,8 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
 
   SqueezedObject=MakeUPPERCase(ADJUSTL(ProposedObject))
   IF (LEN_TRIM(ADJUSTL(ProposedObject)) > MaxObjectNameLength) THEN
-    CALL ShowWarningError('Object name length exceeds maximum, will be truncated='//TRIM(ProposedObject),EchoInputFile)
-    CALL ShowContinueError('Will be processed as Object='//TRIM(SqueezedObject),EchoInputFile)
+    CALL ShowWarningError('Object name length exceeds maximum, will be truncated='//TRIM(ProposedObject))
+    CALL ShowContinueError('Will be processed as Object='//TRIM(SqueezedObject))
   ENDIF
 
   TestingObject=.true.
@@ -1394,7 +2291,7 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
       ! Check to see if it's a "secret" object
       Found=FindItemInList(SqueezedObject,RepObjects%OldName,NumSecretObjects)
       IF (Found == 0) THEN
-        CALL ShowSevereError('Did not find "'//TRIM(ADJUSTL(ProposedObject))//'" in list of Objects',EchoInputFile)
+        CALL ShowSevereError('Did not find "'//TRIM(ADJUSTL(ProposedObject))//'" in list of Objects')
         ! Will need to parse to next ;
         ErrFlag=.true.
       ELSEIF (RepObjects(Found)%Deleted) THEN
@@ -1484,12 +2381,12 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
             Pos=InputLineLength-CurPos+1
             CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
             CALL ShowWarningError('Comma being inserted after:"'//InputLine(CurPos:InputLineLength-1)//   &
-                                  '" in Object='//TRIM(SqueezedObject),EchoInputFile)
+                                  '" in Object='//TRIM(SqueezedObject))
           ELSE
             Pos=InputLineLength-CurPos+2
             CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
             CALL ShowWarningError('Comma being inserted after:"'//InputLine(CurPos:InputLineLength)// &
-                                '" in Object='//TRIM(SqueezedObject),EchoInputFile)
+                                '" in Object='//TRIM(SqueezedObject))
           ENDIF
         ENDIF
       ENDIF
@@ -1505,14 +2402,14 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
             CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
             CALL ShowWarningError('Alpha Argument length exceeds maximum, will be truncated='// &
                                             TRIM(InputLine(CurPos:CurPos+Pos-2)), EchoInputFile)
-            CALL ShowContinueError('Will be processed as Alpha='//TRIM(SqueezedArg),EchoInputFile)
+            CALL ShowContinueError('Will be processed as Alpha='//TRIM(SqueezedArg))
           ENDIF
         ELSE
           SqueezedArg=' '
         ENDIF
         IF (NumArg == NumArgExpected) THEN
           CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
-          CALL ShowSevereError('Error detected for Object='//TRIM(ObjectDef(Found)%Name),EchoInputFile)
+          CALL ShowSevereError('Error detected for Object='//TRIM(ObjectDef(Found)%Name))
           CALL ShowContinueError(' Maximum arguments reached for this object, trying to process ->'//TRIM(SqueezedArg)//'<-',  &
                            EchoInputFile)
           ErrFlag=.true.
@@ -1521,7 +2418,7 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
           IF (ObjectDef(Found)%AlphaorNumeric(NumArg)) THEN
             IF (NumAlpha == ObjectDef(Found)%NumAlpha) THEN
               CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
-              CALL ShowSevereError('Error detected for Object='//TRIM(ObjectDef(Found)%Name),EchoInputFile)
+              CALL ShowSevereError('Error detected for Object='//TRIM(ObjectDef(Found)%Name))
               CALL ShowContinueError(' Too many Alphas for this object, trying to process ->'//TRIM(SqueezedArg)//'<-',  &
                                EchoInputFile)
               ErrFlag=.true.
@@ -1537,13 +2434,13 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
                   IF (ObjectDef(Found)%NameAlpha1 .and. NumAlpha /= 1) THEN
                     CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
                     CALL ShowSevereError('Error detected in Object='//TRIM(ObjectDef(Found)%Name)//', name='//  &
-                                          TRIM(LineItem%Alphas(1)),EchoInputFile)
+                                          TRIM(LineItem%Alphas(1)))
                   ELSE
                     CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
-                    CALL ShowSevereError('Error detected in Object='//TRIM(ObjectDef(Found)%Name),EchoInputFile)
+                    CALL ShowSevereError('Error detected in Object='//TRIM(ObjectDef(Found)%Name))
                   ENDIF
                   CALL ShowContinueError('Field ['//TRIM(ObjectDef(Found)%AlphFieldChks(NumAlpha))//  &
-                                         '] is required but was blank',EchoInputFile)
+                                         '] is required but was blank')
                   NumBlankReqFieldFound=NumBlankReqFieldFound+1
                 ENDIF
               ELSE
@@ -1556,7 +2453,7 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
           ELSE
             IF (NumNumeric == ObjectDef(Found)%NumNumeric) THEN
               CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
-              CALL ShowSevereError('Error detected for Object='//TRIM(ObjectDef(Found)%Name),EchoInputFile)
+              CALL ShowSevereError('Error detected for Object='//TRIM(ObjectDef(Found)%Name))
               CALL ShowContinueError(' Too many Numbers for this object, trying to process ->'//TRIM(SqueezedArg)//'<-',  &
                                      EchoInputFile)
               ErrFlag=.true.
@@ -1583,13 +2480,13 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
                     IF (ObjectDef(Found)%NameAlpha1) THEN
                       CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
                       CALL ShowSevereError('Error detected in Object='//TRIM(ObjectDef(Found)%Name)// &
-                                           ', name='//TRIM(LineItem%Alphas(1)),EchoInputFile)
+                                           ', name='//TRIM(LineItem%Alphas(1)))
                     ELSE
                       CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
-                      CALL ShowSevereError('Error detected in Object='//TRIM(ObjectDef(Found)%Name),EchoInputFile)
+                      CALL ShowSevereError('Error detected in Object='//TRIM(ObjectDef(Found)%Name))
                     ENDIF
                     CALL ShowContinueError('Field ['//TRIM(ObjectDef(Found)%NumRangeChks(NumNumeric)%FieldName)//  &
-                                     '] is required but was blank',EchoInputFile)
+                                     '] is required but was blank')
                     NumBlankReqFieldFound=NumBlankReqFieldFound+1
                   ENDIF
                   LineItem%Numbers(NumNumeric)=0.0
@@ -1612,7 +2509,7 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
                   Message=TRIM(Message)//'='//TRIM(LineItem%Alphas(1))
                 ENDIF
                 CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
-                CALL ShowSevereError(TRIM(Message),EchoInputFile)
+                CALL ShowSevereError(TRIM(Message))
               ENDIF
             ENDIF
           ENDIF
@@ -1657,12 +2554,12 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
                                   ', name='//TRIM(LineItem%Alphas(1))// &
                                   ', Required Field=['//  &
                                   TRIM(ObjectDef(Found)%AlphFieldChks(NumAlpha))//   &
-                                  '] was blank.',EchoInputFile)
+                                  '] was blank.')
             ELSE
               CALL ShowSevereError('Object='//TRIM(ObjectDef(Found)%Name)//  &
                                   ', Required Field=['//  &
                                   TRIM(ObjectDef(Found)%AlphFieldChks(NumAlpha))//   &
-                                  '] was blank.',EchoInputFile)
+                                  '] was blank.')
             ENDIF
             ErrFlag=.true.
           ELSE
@@ -1695,12 +2592,12 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
                                   ', name='//TRIM(LineItem%Alphas(1))// &
                                   ', Required Field=['//  &
                                   TRIM(ObjectDef(Found)%NumRangeChks(NumNumeric)%FieldName)//   &
-                                  '] was blank.',EchoInputFile)
+                                  '] was blank.')
             ELSE
               CALL ShowSevereError('Object='//TRIM(ObjectDef(Found)%Name)//  &
                                   ', Required Field=['//  &
                                   TRIM(ObjectDef(Found)%NumRangeChks(NumNumeric)%FieldName)//   &
-                                  '] was blank.',EchoInputFile)
+                                  '] was blank.')
             ENDIF
             ErrFlag=.true.
           ELSE
@@ -1742,6 +2639,444 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
   RETURN
 
 END SUBROUTINE ValidateObjectandParse
+
+
+SUBROUTINE ValidateObjectandParse2(ProposedObject,CurPos,EndofFile) !RS: Debugging: Testing to see if we can use more than one IDD and IDF here (9/22/14)
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   September 1997
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine validates the proposed object from the IDF and then
+          ! parses it, putting it into the internal InputProcessor Data structure.
+
+          ! METHODOLOGY EMPLOYED:
+          ! na
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  CHARACTER(len=*), INTENT(IN) :: ProposedObject
+  INTEGER, INTENT(INOUT) :: CurPos
+  LOGICAL, INTENT(INOUT) :: EndofFile
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+  CHARACTER(len=MaxObjectNameLength) SqueezedObject
+  CHARACTER(len=MaxAlphaArgLength) SqueezedArg
+  INTEGER Found
+  INTEGER NumArg
+  INTEGER NumArgExpected
+  INTEGER NumAlpha
+  INTEGER NumNumeric
+  INTEGER Pos
+  LOGICAL EndofObject
+  LOGICAL BlankLine
+  LOGICAL,SAVE  :: ErrFlag=.false.
+  INTEGER LenLeft
+  INTEGER Count
+  CHARACTER(len=20) FieldString
+  CHARACTER(len=MaxObjectNameLength) FieldNameString
+  CHARACTER(len=300) Message
+  CHARACTER(len=500000), SAVE :: LineBuf
+  INTEGER, SAVE :: StartLine
+  INTEGER, SAVE :: NumConxLines
+  INTEGER, SAVE, ALLOCATABLE, DIMENSION(:) :: LineBufLen
+  INTEGER, SAVE :: CurLines
+  INTEGER, SAVE :: CurBufLen
+  CHARACTER(len=25) :: String
+  LOGICAL IDidntMeanIt
+  LOGICAL TestingObject
+  INTEGER TFound
+
+  SqueezedObject=MakeUPPERCase(ADJUSTL(ProposedObject))
+  IF (LEN_TRIM(ADJUSTL(ProposedObject)) > MaxObjectNameLength) THEN
+    CALL ShowWarningError('Object name length exceeds maximum, will be truncated='//TRIM(ProposedObject))
+    CALL ShowContinueError('Will be processed as Object='//TRIM(SqueezedObject))
+  ENDIF
+
+  TestingObject=.true.
+  DO WHILE (TestingObject)
+    ErrFlag=.false.
+    IDidntMeanIt=.false.
+    Found=FindIteminList(SqueezedObject,ListofObjects2,NumObjectDefs2)
+    IF (Found /= 0 .and. ObjectDef2(Found)%ObsPtr > 0) THEN
+      TFound=FindItemInList(SqueezedObject,RepObjects%OldName,NumSecretObjects)
+      IF (TFound /= 0) THEN
+          Found=0    ! being handled differently for this obsolete object
+      END IF
+    ENDIF
+
+    TestingObject=.false.
+    IF (Found == 0) THEN
+      ! Check to see if it's a "secret" object
+      Found=FindItemInList(SqueezedObject,RepObjects%OldName,NumSecretObjects)
+      IF (Found == 0) THEN
+        CALL ShowSevereError('Did not find "'//TRIM(ADJUSTL(ProposedObject))//'" in list of Objects')
+        ! Will need to parse to next ;
+        ErrFlag=.true.
+      ELSEIF (RepObjects(Found)%Deleted) THEN
+        IF (.not. RepObjects(Found)%Used) THEN
+          CALL ShowWarningError('Objects="'//TRIM(ADJUSTL(ProposedObject))//'" have been deleted from the IDD.  Will be ignored.')
+          RepObjects(Found)%Used=.true.
+        ENDIF
+        IDidntMeanIt=.true.
+      ELSE  ! This name is replaced with something else
+        IF (.not. RepObjects(Found)%Used) THEN
+          CALL ShowWarningError('Objects="'//TRIM(ADJUSTL(ProposedObject))//'" are being replaced with this object="'//  &
+                                       TRIM(RepObjects(Found)%NewName)//'"')
+          RepObjects(Found)%Used=.true.
+        ENDIF
+        SqueezedObject=RepObjects(Found)%NewName
+        TestingObject=.true.
+      ENDIF
+    ELSE
+  
+    ! Start Parsing the Object according to definition
+  
+      ErrFlag=.false.
+      LineItem2%Name=SqueezedObject
+      LineItem2%Alphas=' '
+      LineItem2%AlphBlank=.false.
+      LineItem2%NumAlphas=0
+      LineItem2%Numbers=0.0
+      LineItem2%NumNumbers=0
+      LineItem2%NumBlank=.false.
+      NumArgExpected=ObjectDef2(Found)%NumParams
+      ObjectDef2(Found)%NumFound=ObjectDef2(Found)%NumFound+1
+      IF (ObjectDef2(Found)%UniqueObject .and. ObjectDef2(Found)%NumFound > 1) THEN
+        CALL ShowSevereError('Multiple occurrences of Unique Object='//TRIM(ADJUSTL(ProposedObject)))
+        NumMiscErrorsFound=NumMiscErrorsFound+1
+      ENDIF
+      IF (ObjectDef2(Found)%ObsPtr > 0) THEN
+        CALL ShowWarningError('Obsolete object='//TRIM(ADJUSTL(ProposedObject))//  &
+                              ', encountered.  Should be replaced with new object='//  &
+                              TRIM(ObsoleteObjectsRepNames2(ObjectDef(Found)%ObsPtr)))
+      ENDIF
+    ENDIF
+  ENDDO
+
+  NumArg=0
+  NumAlpha=0
+  NumNumeric=0
+  EndofObject=.false.
+  CurPos=CurPos+1
+
+  !  Keep context buffer in case of errors
+  LineBuf=Blank
+  IF (.not. ALLOCATED(LineBufLen)) THEN
+    ALLOCATE(LineBufLen(MaxNumericArgsFound+MaxAlphaArgsFound+1))   !RS Comment: Refrigerant line needs an extra spot for the title
+  ENDIF
+  LineBufLen=0
+  NumConxLines=0
+  StartLine=NumLines
+  LineBuf(1:InputLineLength)=InputLine
+  NumConxLines=1
+  LineBufLen(NumConxLines)=InputLineLength
+  CurLines=NumLines
+  CurBufLen=InputLineLength
+
+  DO WHILE (.not. EndofFile .and. .not. EndofObject)
+    IF (CurLines /= NumLines) THEN
+      NumConxLines=NumConxLines+1
+      LineBuf(CurBufLen+1:CurBufLen+1+InputLineLength)=InputLine
+      LineBufLen(NumConxLines)=InputLineLength
+      CurBufLen=CurBufLen+InputLineLength
+      CurLines=NumLines
+    ENDIF
+    IF (CurPos <= InputLineLength) THEN
+      Pos=SCAN(InputLine(CurPos:InputLineLength),',;')
+      IF (Pos == 0) THEN
+        IF (InputLine(InputLineLength:InputLineLength) == '!' .or.  &
+            InputLine(InputLineLength:InputLineLength) == '\') THEN
+          LenLeft=LEN_TRIM(InputLine(CurPos:InputLineLength-1))
+        ELSE
+          LenLeft=LEN_TRIM(InputLine(CurPos:InputLineLength))
+        ENDIF
+        IF (LenLeft == 0) THEN
+          CurPos=InputLineLength+1
+          CYCLE
+        ELSE
+          IF (InputLine(InputLineLength:InputLineLength) == '!' .or.  &
+              InputLine(InputLineLength:InputLineLength) == '\') THEN
+            Pos=InputLineLength-CurPos+1
+            CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
+            CALL ShowWarningError('Comma being inserted after:"'//InputLine(CurPos:InputLineLength-1)//   &
+                                  '" in Object='//TRIM(SqueezedObject))
+          ELSE
+            Pos=InputLineLength-CurPos+2
+            CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
+            CALL ShowWarningError('Comma being inserted after:"'//InputLine(CurPos:InputLineLength)// &
+                                '" in Object='//TRIM(SqueezedObject))
+          ENDIF
+        ENDIF
+      ENDIF
+    ELSE
+     CALL ReadInputLine(IDFFile,CurPos,BlankLine,InputLineLength,EndofFile)
+     CYCLE
+    ENDIF
+    IF (Pos > 0) THEN
+      IF (.not. ErrFlag) THEN
+        IF (CurPos <= CurPos+Pos-2) THEN
+          SqueezedArg=MakeUPPERCase(ADJUSTL(InputLine(CurPos:CurPos+Pos-2)))
+          IF (LEN_TRIM(ADJUSTL(InputLine(CurPos:CurPos+Pos-2))) > MaxAlphaArgLength) THEN
+            CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
+            CALL ShowWarningError('Alpha Argument length exceeds maximum, will be truncated='// &
+                                            TRIM(InputLine(CurPos:CurPos+Pos-2)), EchoInputFile)
+            CALL ShowContinueError('Will be processed as Alpha='//TRIM(SqueezedArg))
+          ENDIF
+        ELSE
+          SqueezedArg=' '
+        ENDIF
+        IF (NumArg == NumArgExpected) THEN
+          CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
+          CALL ShowSevereError('Error detected for Object='//TRIM(ObjectDef2(Found)%Name))
+          CALL ShowContinueError(' Maximum arguments reached for this object, trying to process ->'//TRIM(SqueezedArg)//'<-',  &
+                           EchoInputFile)
+          ErrFlag=.true.
+        ELSE
+          NumArg=NumArg+1
+          IF (ObjectDef2(Found)%AlphaorNumeric(NumArg)) THEN
+            IF (NumAlpha == ObjectDef2(Found)%NumAlpha) THEN
+              CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
+              CALL ShowSevereError('Error detected for Object='//TRIM(ObjectDef2(Found)%Name))
+              CALL ShowContinueError(' Too many Alphas for this object, trying to process ->'//TRIM(SqueezedArg)//'<-',  &
+                               EchoInputFile)
+              ErrFlag=.true.
+            ELSE
+              NumAlpha=NumAlpha+1
+              LineItem2%NumAlphas=NumAlpha
+              IF (SqueezedArg /= Blank) THEN
+                LineItem2%Alphas(NumAlpha)=SqueezedArg
+              ELSEIF (ObjectDef2(Found)%ReqField(NumArg)) THEN  ! Blank Argument
+                IF (ObjectDef2(Found)%AlphFieldDefs(NumAlpha) /= Blank) THEN
+                  LineItem2%Alphas(NumAlpha)=ObjectDef2(Found)%AlphFieldDefs(NumAlpha)
+                ELSE
+                  IF (ObjectDef2(Found)%NameAlpha1 .and. NumAlpha /= 1) THEN
+                    CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
+                    CALL ShowSevereError('Error detected in Object='//TRIM(ObjectDef2(Found)%Name)//', name='//  &
+                                          TRIM(LineItem2%Alphas(1)))
+                  ELSE
+                    CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
+                    CALL ShowSevereError('Error detected in Object='//TRIM(ObjectDef2(Found)%Name))
+                  ENDIF
+                  CALL ShowContinueError('Field ['//TRIM(ObjectDef2(Found)%AlphFieldChks(NumAlpha))//  &
+                                         '] is required but was blank')
+                  NumBlankReqFieldFound=NumBlankReqFieldFound+1
+                ENDIF
+              ELSE
+                IF (ObjectDef2(Found)%AlphFieldDefs(NumAlpha) /= Blank) THEN
+                  LineItem2%Alphas(NumAlpha)=ObjectDef2(Found)%AlphFieldDefs(NumAlpha)
+                  LineItem2%AlphBlank(NumAlpha)=.true.
+                ENDIF
+              ENDIF
+            ENDIF
+          ELSE
+            IF (NumNumeric == ObjectDef2(Found)%NumNumeric) THEN
+              CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
+              CALL ShowSevereError('Error detected for Object='//TRIM(ObjectDef2(Found)%Name))
+              CALL ShowContinueError(' Too many Numbers for this object, trying to process ->'//TRIM(SqueezedArg)//'<-',  &
+                                     EchoInputFile)
+              ErrFlag=.true.
+            ELSE
+              NumNumeric=NumNumeric+1
+              LineItem2%NumNumbers=NumNumeric
+              IF (SqueezedArg /= Blank) THEN
+                IF (.not. ObjectDef2(Found)%NumRangeChks(NumNumeric)%AutoSizable) THEN
+                  LineItem2%Numbers(NumNumeric)=ProcessNumber(SqueezedArg,Errflag)
+                ELSEIF (SqueezedArg == 'AUTOSIZE') THEN
+                  LineItem2%Numbers(NumNumeric)=ObjectDef2(Found)%NumRangeChks(NumNumeric)%AutoSizeValue
+                ELSE
+                  LineItem2%Numbers(NumNumeric)=ProcessNumber(SqueezedArg,Errflag)
+                ENDIF
+              ELSE
+                IF (ObjectDef2(Found)%NumRangeChks(NumNumeric)%DefaultChk) THEN
+                  IF (.not. ObjectDef2(Found)%NumRangeChks(NumNumeric)%DefAutoSize) THEN
+                    LineItem2%Numbers(NumNumeric)=ObjectDef2(Found)%NumRangeChks(NumNumeric)%Default
+                  ELSE
+                    LineItem2%Numbers(NumNumeric)=ObjectDef2(Found)%NumRangeChks(NumNumeric)%AutoSizeValue
+                  ENDIF
+                ELSE
+                  IF (ObjectDef2(Found)%ReqField(NumArg)) THEN
+                    IF (ObjectDef2(Found)%NameAlpha1) THEN
+                      CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
+                      CALL ShowSevereError('Error detected in Object='//TRIM(ObjectDef2(Found)%Name)// &
+                                           ', name='//TRIM(LineItem2%Alphas(1)))
+                    ELSE
+                      CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
+                      CALL ShowSevereError('Error detected in Object='//TRIM(ObjectDef2(Found)%Name))
+                    ENDIF
+                    CALL ShowContinueError('Field ['//TRIM(ObjectDef2(Found)%NumRangeChks(NumNumeric)%FieldName)//  &
+                                     '] is required but was blank')
+                    NumBlankReqFieldFound=NumBlankReqFieldFound+1
+                  ENDIF
+                  LineItem2%Numbers(NumNumeric)=0.0
+                  LineItem2%NumBlank(NumNumeric)=.true.
+                ENDIF
+                ErrFlag=.false.
+              ENDIF
+              IF (ErrFlag) THEN
+                WRITE(FieldString,*) NumNumeric
+                FieldString=ADJUSTL(FieldString)
+                FieldNameString=ObjectDef2(Found)%NumRangeChks(NumNumeric)%FieldName
+                IF (FieldNameString /= Blank) THEN
+                  Message='Invalid Number in Numeric Field#'//TRIM(FieldString)//' ('//TRIM(FieldNameString)//  &
+                                '), value='//TRIM(SqueezedArg)
+                ELSE ! Field Name not recorded
+                  Message='Invalid Number in Numeric Field#'//TRIM(FieldString)//', value='//TRIM(SqueezedArg)
+                ENDIF
+                Message=TRIM(Message)//', in '//TRIM(ObjectDef2(Found)%Name)
+                IF (ObjectDef2(Found)%NameAlpha1) THEN
+                  Message=TRIM(Message)//'='//TRIM(LineItem2%Alphas(1))
+                ENDIF
+                CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
+                CALL ShowSevereError(TRIM(Message))
+              ENDIF
+            ENDIF
+          ENDIF
+        ENDIF
+      ENDIF
+
+      IF (InputLine(CurPos+Pos-1:CurPos+Pos-1) == ';') THEN
+        EndofObject=.true.
+      ENDIF
+      CurPos=CurPos+Pos
+    ENDIF
+
+  END DO
+
+    ! Store to IDFRecord Data Structure, ErrFlag is true if there was an error
+  ! Check out MinimumNumberOfFields
+  IF (.not. ErrFlag .and. .not. IDidntMeanIt) THEN
+    IF (NumArg < ObjectDef2(Found)%MinNumFields) THEN
+      IF (ObjectDef2(Found)%NameAlpha1) THEN
+        CALL ShowAuditErrorMessage(' ** Warning ** ','Object='//TRIM(ObjectDef2(Found)%Name)//  &
+                            ', name='//TRIM(LineItem2%Alphas(1))//       &
+                            ', entered with less than minimum number of fields.')
+      ELSE
+        CALL ShowAuditErrorMessage(' ** Warning ** ','Object='//TRIM(ObjectDef2(Found)%Name)//  &
+                            ', entered with less than minimum number of fields.')
+      ENDIF
+      CALL ShowAuditErrorMessage(' **   ~~~   ** ','Attempting fill to minimum.')
+      NumAlpha=0
+      NumNumeric=0
+      DO Count=1,ObjectDef2(Found)%MinNumFields
+        IF (ObjectDef2(Found)%AlphaOrNumeric(Count)) THEN
+          NumAlpha=NumAlpha+1
+          IF (NumAlpha <= LineItem2%NumAlphas) CYCLE
+          LineItem2%NumAlphas=LineItem2%NumAlphas+1
+          IF (ObjectDef2(Found)%AlphFieldDefs(LineItem2%NumAlphas) /= Blank) THEN
+            LineItem2%Alphas(LineItem2%NumAlphas)=ObjectDef2(Found)%AlphFieldDefs(LineItem2%NumAlphas)
+            CALL ShowAuditErrorMessage(' **   Add   ** ',TRIM(ObjectDef2(Found)%AlphFieldDefs(LineItem2%NumAlphas))//   &
+                                '   ! field=>'//TRIM(ObjectDef2(Found)%AlphFieldChks(NumAlpha)))
+          ELSEIF (ObjectDef2(Found)%ReqField(Count)) THEN
+            IF (ObjectDef2(Found)%NameAlpha1) THEN
+              CALL ShowSevereError('Object='//TRIM(ObjectDef2(Found)%Name)//  &
+                                  ', name='//TRIM(LineItem2%Alphas(1))// &
+                                  ', Required Field=['//  &
+                                  TRIM(ObjectDef2(Found)%AlphFieldChks(NumAlpha))//   &
+                                  '] was blank.')
+            ELSE
+              CALL ShowSevereError('Object='//TRIM(ObjectDef2(Found)%Name)//  &
+                                  ', Required Field=['//  &
+                                  TRIM(ObjectDef2(Found)%AlphFieldChks(NumAlpha))//   &
+                                  '] was blank.')
+            ENDIF
+            ErrFlag=.true.
+          ELSE
+            LineItem2%Alphas(LineItem2%NumAlphas)=Blank
+            LineItem2%AlphBlank(LineItem2%NumAlphas)=.true.
+            CALL ShowAuditErrorMessage(' **   Add   ** ','<blank field>   ! field=>'//  &
+                                 TRIM(ObjectDef2(Found)%AlphFieldChks(NumAlpha)))
+          ENDIF
+        ELSE
+          NumNumeric=NumNumeric+1
+          IF (NumNumeric <= LineItem2%NumNumbers) THEN
+              CYCLE
+          END IF
+          LineItem2%NumNumbers=LineItem2%NumNumbers+1
+          IF (ObjectDef2(Found)%NumRangeChks(NumNumeric)%Defaultchk) THEN
+            IF (.not. ObjectDef2(Found)%NumRangeChks(NumNumeric)%DefAutoSize) THEN
+              LineItem2%Numbers(NumNumeric)=ObjectDef2(Found)%NumRangeChks(NumNumeric)%Default
+              WRITE(String,*) ObjectDef2(Found)%NumRangeChks(NumNumeric)%Default
+              String=ADJUSTL(String)
+              CALL ShowAuditErrorMessage(' **   Add   ** ',TRIM(String)//  &
+                                  '   ! field=>'//TRIM(ObjectDef2(Found)%NumRangeChks(NumNumeric)%FieldName))
+            ELSE
+              LineItem2%Numbers(NumNumeric)=ObjectDef2(Found)%NumRangeChks(NumNumeric)%AutoSizeValue
+              CALL ShowAuditErrorMessage(' **   Add   ** ','autosize    ! field=>'//  &
+                                  TRIM(ObjectDef(Found)%NumRangeChks(NumNumeric)%FieldName))
+            ENDIF
+          ELSEIF (ObjectDef2(Found)%ReqField(Count)) THEN
+            IF (ObjectDef2(Found)%NameAlpha1) THEN
+              CALL ShowSevereError('Object='//TRIM(ObjectDef2(Found)%Name)//  &
+                                  ', name='//TRIM(LineItem2%Alphas(1))// &
+                                  ', Required Field=['//  &
+                                  TRIM(ObjectDef2(Found)%NumRangeChks(NumNumeric)%FieldName)//   &
+                                  '] was blank.')
+            ELSE
+              CALL ShowSevereError('Object='//TRIM(ObjectDef2(Found)%Name)//  &
+                                  ', Required Field=['//  &
+                                  TRIM(ObjectDef2(Found)%NumRangeChks(NumNumeric)%FieldName)//   &
+                                  '] was blank.')
+            ENDIF
+            ErrFlag=.true.
+          ELSE
+            LineItem2%Numbers(NumNumeric)=0.0
+            LineItem2%NumBlank(NumNumeric)=.true.
+            CALL ShowAuditErrorMessage(' **   Add   ** ','<blank field>   ! field=>'//  &
+                                TRIM(ObjectDef2(Found)%NumRangeChks(NumNumeric)%FieldName))
+          ENDIF
+        ENDIF
+      ENDDO
+    ENDIF
+  ENDIF
+
+  IF (.not. ErrFlag .and. .not. IDidntMeanIt) THEN
+    NumIDFRecords2=NumIDFRecords2+1
+    IDFRecords2(NumIDFRecords2)%Name=LineItem2%Name
+    IDFRecords2(NumIDFRecords2)%NumNumbers=LineItem2%NumNumbers
+    IDFRecords2(NumIDFRecords2)%NumAlphas=LineItem2%NumAlphas
+    ALLOCATE(IDFRecords2(NumIDFRecords2)%Alphas(LineItem2%NumAlphas))
+    ALLOCATE(IDFRecords2(NumIDFRecords2)%AlphBlank(LineItem2%NumAlphas))
+    ALLOCATE(IDFRecords2(NumIDFRecords2)%Numbers(LineItem2%NumNumbers))
+    ALLOCATE(IDFRecords2(NumIDFRecords2)%NumBlank(LineItem2%NumNumbers))
+    IDFRecords2(NumIDFRecords2)%Alphas(1:LineItem2%NumAlphas)=LineItem2%Alphas(1:LineItem2%NumAlphas)
+    IDFRecords2(NumIDFRecords2)%AlphBlank(1:LineItem2%NumAlphas)=LineItem2%AlphBlank(1:LineItem2%NumAlphas)
+    IDFRecords2(NumIDFRecords2)%Numbers(1:LineItem2%NumNumbers)=LineItem2%Numbers(1:LineItem2%NumNumbers)
+    IDFRecords2(NumIDFRecords2)%NumBlank(1:LineItem2%NumNumbers)=LineItem2%NumBlank(1:LineItem2%NumNumbers)
+    IF (LineItem2%NumNumbers > 0) THEN
+      DO Count=1,LineItem2%NumNumbers
+        IF (ObjectDef2(Found)%NumRangeChks(Count)%MinMaxChk .and. .not. LineItem2%NumBlank(Count)) THEN
+          CALL InternalRangeCheck(LineItem2%Numbers(Count),Count,Found,LineItem2%Alphas(1),  &
+                                  ObjectDef2(Found)%NumRangeChks(Count)%AutoSizable)
+        ENDIF
+      ENDDO
+    ENDIF
+  ELSEIF (.not. IDidntMeanIt) THEN
+    OverallErrorFlag=.true.
+  ENDIF
+
+  RETURN
+
+END SUBROUTINE ValidateObjectandParse2  !RS: Debugging: Testing to see if we can use more than one IDD and IDF here (9/22/14)
+
 
 SUBROUTINE ValidateSectionsInput
 
@@ -1943,7 +3278,7 @@ SUBROUTINE GetObjectItem(Object,Number,Alphas,NumAlphas,Numbers,NumNumbers,Statu
         CALL GetObjectItemfromFile(LoopIndex,ObjectWord,AlphaArgs,NumAlphas,NumberArgs,NumNumbers)
         IF (NumAlphas > MaxAlpha .or. NumNumbers > MaxNumbers) THEN
           CALL ShowWarningError('Too many actual arguments for those expected on Object: '//TRIM(ObjectWord)//     &
-                                 ' (GetObjectItem)',EchoInputFile)
+                                 ' (GetObjectItem)')
         ENDIF
         NumAlphas=MIN(MaxAlpha,NumAlphas)
         NumNumbers=MIN(MaxNumbers,NumNumbers)
@@ -1962,6 +3297,117 @@ SUBROUTINE GetObjectItem(Object,Number,Alphas,NumAlphas,Numbers,NumNumbers,Statu
   RETURN
 
 END SUBROUTINE GetObjectItem
+
+SUBROUTINE GetObjectItem2(Object,Number,Alphas,NumAlphas,Numbers,NumNumbers,Status) !RS: Debugging: Testing to see if we can use more than one IDD and IDF here (9/22/14)
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   September 1997
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine gets the 'number' 'object' from the IDFRecord data structure.
+
+          ! METHODOLOGY EMPLOYED:
+          ! na
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  CHARACTER(len=*), INTENT(IN) :: Object
+  INTEGER, INTENT(IN) :: Number
+  CHARACTER(len=*), INTENT(OUT), DIMENSION(:) :: Alphas
+  INTEGER, INTENT(OUT) :: NumAlphas
+  REAL, INTENT(OUT), DIMENSION(:) :: Numbers
+  INTEGER, INTENT(OUT) :: NumNumbers
+  INTEGER, INTENT(OUT) :: Status
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+  INTEGER Count
+  INTEGER LoopIndex
+  CHARACTER(len=MaxObjectNameLength) ObjectWord
+  CHARACTER(len=MaxObjectNameLength) UCObject
+  CHARACTER(len=MaxObjectNameLength), SAVE, ALLOCATABLE, DIMENSION(:) :: AlphaArgs
+  REAL, SAVE, ALLOCATABLE, DIMENSION(:) :: NumberArgs
+  INTEGER MaxAlpha,MaxNumbers
+  INTEGER Found
+  INTEGER StartRecord
+
+  MaxAlpha=SIZE(Alphas,1)
+  MaxNumbers=SIZE(Numbers,1)
+
+  IF (.not. ALLOCATED(AlphaArgs)) THEN
+    IF (NumObjectDefs2 == 0) THEN
+      CALL ProcessInput
+    ENDIF
+    ALLOCATE(AlphaArgs(MaxAlphaArgsFound))
+    ALLOCATE(NumberArgs(MaxNumericArgsFound))
+  ENDIF
+
+  Alphas(1:MaxAlpha)=' '
+  Numbers(1:MaxNumbers)=0.0
+  Count=0
+  Status=-1
+  UCOBject=MakeUPPERCase(Object)
+  Found=FindIteminList(UCOBject,ListofObjects2,NumObjectDefs2)
+  IF (Found == 0) THEN   !  This is more of a developer problem
+    CALL ShowFatalError('Requested object='//TRIM(UCObject)//', not found in Object Definitions -- incorrect IDD attached.')
+  ENDIF
+  StartRecord=FindIteminList(UCObject,IDFRecords2%Name,NumIDFRecords2)
+  IF (StartRecord == 0) THEN
+    CALL ShowWarningError('Requested object='//TRIM(UCObject)//', not found in IDF.')
+    Status=-1
+    StartRecord=NumIDFRecords+1
+  ENDIF
+
+  IF (Number == 1) THEN
+    WRITE(EchoInputFile,*) 'Getting object=',TRIM(UCObject)
+  ENDIF
+
+  DO LoopIndex=StartRecord,NumIDFRecords2
+    IF (IDFRecords2(LoopIndex)%Name == UCObject) THEN
+      Count=Count+1
+      IDFRecordsGotten(LoopIndex)=.true.  ! only object level "gets" recorded
+      IF (Count == Number) THEN
+        ! Read this one
+        CALL GetObjectItemfromFile2(LoopIndex,ObjectWord,AlphaArgs,NumAlphas,NumberArgs,NumNumbers)
+        IF (NumAlphas > MaxAlpha .or. NumNumbers > MaxNumbers) THEN
+          CALL ShowWarningError('Too many actual arguments for those expected on Object: '//TRIM(ObjectWord)//     &
+                                 ' (GetObjectItem)')
+        ENDIF
+        NumAlphas=MIN(MaxAlpha,NumAlphas)
+        NumNumbers=MIN(MaxNumbers,NumNumbers)
+        IF (NumAlphas > 0) THEN
+          Alphas(1:NumAlphas)=AlphaArgs(1:NumAlphas)
+        ENDIF
+        IF (NumNumbers > 0) THEN
+          Numbers(1:NumNumbers)=NumberArgs(1:NumNumbers)
+        ENDIF
+        Status=1
+        EXIT
+      ENDIF
+    ENDIF
+  END DO
+
+  RETURN
+
+END SUBROUTINE GetObjectItem2   !RS: Debugging: Testing to see if we can use more than one IDD and IDF here (9/22/14)
 
 INTEGER FUNCTION GetObjectItemNum(ObjType,ObjName)
 
@@ -2172,6 +3618,72 @@ SUBROUTINE GetObjectItemfromFile(Which,ObjectWord,AlphaArgs,NumAlpha,NumericArgs
 
 END SUBROUTINE GetObjectItemfromFile
 
+
+SUBROUTINE GetObjectItemfromFile2(Which,ObjectWord,AlphaArgs,NumAlpha,NumericArgs,NumNumeric)    !RS: Debugging: Testing to see if we can use more than one IDD and IDF here (9/22/14)
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   September 1997
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine "gets" the object instance from the data structure.
+
+          ! METHODOLOGY EMPLOYED:
+          ! na
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  INTEGER, INTENT(IN) :: Which
+  CHARACTER(len=*), INTENT(OUT) :: ObjectWord
+  CHARACTER(len=*), INTENT(OUT), DIMENSION(:), OPTIONAL :: AlphaArgs
+  INTEGER, INTENT(OUT) :: NumAlpha
+  REAL, INTENT(OUT), DIMENSION(:), OPTIONAL :: NumericArgs
+  INTEGER, INTENT(OUT) :: NumNumeric
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+
+  IF (Which >= 0 .and. Which <= NumIDFRecords) THEN
+    LineItem2=IDFRecords2(Which)
+    ObjectWord=LineItem2%Name
+    NumAlpha=LineItem2%NumAlphas
+    NumNumeric=LineItem2%NumNumbers
+    IF (PRESENT(AlphaArgs)) THEN
+      IF (NumAlpha >=1) THEN
+        AlphaArgs(1:NumAlpha)=LineItem2%Alphas(1:NumAlpha)
+      ENDIF
+    ENDIF
+    IF (PRESENT(NumericArgs)) THEN
+      IF (NumNumeric >= 1) THEN
+        NumericArgs(1:NumNumeric)=LineItem2%Numbers(1:NumNumeric)
+      ENDIF
+    ENDIF
+  ELSE
+    WRITE(EchoInputFile,*) ' Requested Record',Which,' not in range, 1 -- ',NumIDFRecords
+  ENDIF
+
+  RETURN
+
+END SUBROUTINE GetObjectItemfromFile2    !RS: Debugging: Testing to see if we can use more than one IDD and IDF here (9/22/14)
+
+
 ! Utility Functions/Routines for Module
 
 SUBROUTINE ReadInputLine(UnitNumber,CurPos,BlankLine,InputLineLength,EndofFile, &
@@ -2296,7 +3808,7 @@ SUBROUTINE ReadInputLine(UnitNumber,CurPos,BlankLine,InputLineLength,EndofFile, 
 !              RequiredField=.true.
               NSpace=FindNonSpace(UCInputLine(Slash+11:))
               IF (NSpace == 0) THEN
-                CALL ShowSevereError('Need number for \Min-Fields',EchoInputFile)
+                CALL ShowSevereError('Need number for \Min-Fields')
                 ErrFlag=.true.
                 MinimumNumberOfFields=0
               ELSE
@@ -2304,14 +3816,14 @@ SUBROUTINE ReadInputLine(UnitNumber,CurPos,BlankLine,InputLineLength,EndofFile, 
                 NSpace=SCAN(UCInputLine(Slash:),' !')
                 MinimumNumberOfFields=ProcessNumber(UCInputLine(Slash:Slash+NSpace-1),ErrFlag)
                 IF (ErrFlag) THEN
-                  CALL ShowSevereError('Illegal Number for \Min-Fields',EchoInputFile)
+                  CALL ShowSevereError('Illegal Number for \Min-Fields')
                 ENDIF
               ENDIF
             ENDIF  ! Min-Fields Arg
             IF (UCInputLine(Slash:Slash+9) == '\OBSOLETE') THEN
               NSpace=INDEX(UCInputLine(Slash+9:),'=>')
               IF (NSpace == 0) THEN
-                CALL ShowSevereError('Need replacement object for \Obsolete objects',EchoInputFile)
+                CALL ShowSevereError('Need replacement object for \Obsolete objects')
                 ErrFlag=.true.
               ELSE
                 Slash=Slash+9+NSpace+1
@@ -2344,7 +3856,7 @@ SUBROUTINE ReadInputLine(UnitNumber,CurPos,BlankLine,InputLineLength,EndofFile, 
                 Default=.true.
                 CALL ProcessMinMaxDefLine(UCInputLine(Pos:),WhichMinMax,MinMaxString,Value,DefString,ErrLevel)
                 IF (ErrLevel > 1) THEN
-                  CALL ShowContinueError('Blank Default Field Encountered',EchoInputFile)
+                  CALL ShowContinueError('Blank Default Field Encountered')
                   ErrFlag=.true.
                 ENDIF
               ELSE
@@ -2356,7 +3868,7 @@ SUBROUTINE ReadInputLine(UnitNumber,CurPos,BlankLine,InputLineLength,EndofFile, 
                 AutoSizable=.true.
                 CALL ProcessMinMaxDefLine(UCInputLine(Pos:),WhichMinMax,MinMaxString,Value,DefString,ErrLevel)
                 IF (ErrLevel > 0) THEN
-                  CALL ShowSevereError('Error in Autosize designation -- invalid number='//TRIM(UCInputLine(Pos:)),EchoInputFile)
+                  CALL ShowSevereError('Error in Autosize designation -- invalid number='//TRIM(UCInputLine(Pos:)))
                   ErrFlag=.true.
                 ENDIF
               ELSE
@@ -2557,7 +4069,7 @@ SUBROUTINE ProcessMinMaxDefLine(UCInputLine,WhichMinMax,MinMaxString,Value,Defau
     NSpace=FindNonSpace(UCInputLine(Pos:))
     IF (NSpace == 0) THEN
       IF (WhichMinMax /= 6) THEN  ! Only autosize can't have argument
-        CALL ShowSevereError('Min/Max/Default field cannot be blank -- must have value',EchoInputFile)
+        CALL ShowSevereError('Min/Max/Default field cannot be blank -- must have value')
         ErrLevel=2
       ELSE
         Value=DefAutosizeValue
@@ -2581,7 +4093,7 @@ SUBROUTINE ProcessMinMaxDefLine(UCInputLine,WhichMinMax,MinMaxString,Value,Defau
         IF (WhichMinMax == 6) THEN
           Value=DefAutosizeValue
         ELSE
-          CALL ShowSevereError('Min/Max/Default field cannot be blank -- must have value',EchoInputFile)
+          CALL ShowSevereError('Min/Max/Default field cannot be blank -- must have value')
           ErrLevel=2
         ENDIF
       ENDIF
@@ -2860,7 +4372,7 @@ SUBROUTINE InternalRangeCheck(Value,FieldNumber,WhichObject,PossibleAlpha,AutoSi
         IF (ObjectDef(WhichObject)%NameAlpha1) THEN
           Message=TRIM(Message)//'='//PossibleAlpha
         ENDIF
-        CALL ShowSevereError(TRIM(Message),EchoInputFile)
+        CALL ShowSevereError(TRIM(Message))
       ENDIF
     ENDIF
   ENDIF
@@ -2967,7 +4479,7 @@ SUBROUTINE DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
   INTEGER SLine
   INTEGER CurPos
   CHARACTER(len=300) TextLine
-
+ 
   CALL ShowMessage('IDF Context for following error/warning message:')
   WRITE(TextLine,'(1X,I5,1X,A)') StartLine,LineBuf(1:LineBufLen(1))
   CALL ShowMessage(TRIM(TextLine))
@@ -3040,7 +4552,7 @@ SUBROUTINE ShowAuditErrorMessage(Severity,ErrorMessage)
   ELSE
     WRITE(EchoInputFile,ErrorFormat) ' ************* '//TRIM(ErrorMessage)
   ENDIF
-
+    CLOSE(unit=EchoInputFile)
   RETURN
 
 END SUBROUTINE ShowAuditErrorMessage
@@ -3101,14 +4613,14 @@ SUBROUTINE ConvertCasetoUpper(InputString,OutputString)
           ! na
 
           ! USE STATEMENTS:
-  USE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+  USE DataGlobals_HPSimIntegrated !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN) :: InputString    ! Input string
   CHARACTER(len=*), INTENT(OUT) :: OutputString  ! Output string (in UpperCase)
-
+ 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 

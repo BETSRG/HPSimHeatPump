@@ -89,7 +89,7 @@ MODULE EvaporatorMod
 
 USE CoilCalcMod
 USE DataSimulation
-USE DataGlobals_HPSim, ONLY: RefName, RefrigIndex    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+USE DataGlobals_HPSimIntegrated, ONLY: RefName, RefrigIndex    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
 IMPLICIT NONE
 
@@ -346,6 +346,7 @@ REAL tSHiCmp      !Compressor inlet superheat, C
 REAL Wabsolute    !Asolute oil mass fraction  
 REAL DensityIn    !Inlet air density, kg/m3
 REAL DensityOut    !Outlet air density, kg/m3
+REAL tAiFan, hAifan !RS: Debugging: Updating Coil Outlet/Fan Inlet properties for Fan/Coil Debugging (4/12/19)
 
 !Geometry variables
 REAL Aface       !Coil face area
@@ -482,6 +483,10 @@ PRIVATE CalcWetSurfaceMcQuiston
 PRIVATE UpdateTubeDataFromCircuitData
 PUBLIC GetQout  !RS: TestingIntegration: Trying to bring in the new sub
 PRIVATE InitEvaporatorStructures    !RS: Debugging: Trying to allocate all at once
+PRIVATE PsyTdbFnHWLocal !RS: Debugging: Adding in condenser fan model (9/4/14)
+PRIVATE SimSimpleFan  !RS: Debugging: Adding in condenser fan model (9/4/14)
+PRIVATE PsyRhoAirFnPbTdbWLocal !RS: Debugging: Adding in condenser fan model (9/4/14)
+PRIVATE PsyWFnTdbHLocal !RS: Debugging: Adding in condenser fan model (9/4/14)
 
 CONTAINS
 
@@ -1071,7 +1076,7 @@ CONTAINS
         CoilSection(NumSection)%Qsection/CoilSection(NumSection)%mRef
     
         Qcoil=Qcoil+CoilSection(NumSection)%Qsection                !RS Comment: Determining the total coil heat transfer
-        Qcoilsens=QcoilSens+CoilSection(NumSection)%QsectionSens    !RS Comment: Determing the total sensible coil heat transfer
+        Qcoilsens=QcoilSens+CoilSection(NumSection)%QsectionSens    !RS Comment: Determining the total sensible coil heat transfer
     
     END DO !Number of sections, !ISI - 09/10/07
 
@@ -1095,8 +1100,10 @@ CONTAINS
         QcoilSens=Qcoil
     END IF
 
-    tAoCoil=tAiCoil+QcoilSens/Cair  !RS Comment: Finding the Coil Outlet Air Temperature
-    hAoCoil=hAiCoil+Qcoil/mAiCoil   !RS Comment: Finding the Coil Outlet Air Enthalpy
+    !tAoCoil=tAiCoil+QcoilSens/Cair  !RS Comment: Finding the Coil Outlet Air Temperature
+    tAiFan=tAiCoil+QcoilSens/Cair !RS: Debugging: Updating Coil Outlet/Fan Inlet properties for Fan/Coil Debugging (4/12/19)
+    !hAoCoil=hAiCoil+Qcoil/mAiCoil   !RS Comment: Finding the Coil Outlet Air Enthalpy
+    hAiFan=hAiCoil+Qcoil/mAiCoil !RS: Debugging: Updating Coil Outlet/Fan Inlet properties for Fan/Coil Debugging (4/12/19)
 
     !Fan air side inlet condition
     !CPair=CPA(REAL(tAoCoil))    !RS Comment: Finding the specific heat of air   !RS: Replace: CPA (2/19/14)
@@ -1106,9 +1113,19 @@ CONTAINS
 
     IF (SystemType .NE. REHEAT) THEN !For reheat system, skip this
         IF (DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
-            tAoCoil=tAoCoil+PwrFan/Cair
-            hAoCoil=hAoCoil+PwrFan/mAiCoil
+            !tAoCoil=tAoCoil+PwrFan/Cair
+            !hAoCoil=hAoCoil+PwrFan/mAiCoil
+            !RS: Debugging: Removing Evap Fan calls since handled on E+ side: Strictly for coupling/optimization! (11/11/14)
+        !CALL SimSimpleFan(tAoCoil,hAoCoil,mAiCoil,tAoCoil,hAoCoil)  !RS: Debugging: Adding in condenser fan model (9/4/14)
+        CALL SimSimpleFan(tAiFan,hAiFan,mAiCoil,tAoCoil,hAoCoil)  !RS: Debugging: Updating Coil Outlet/Fan Inlet properties for Fan/Coil Debugging (4/12/19)
+        EvapPAR%EvapFanPwr=FanOutE%Power
+        ELSE    !RS: Debugging: Updating Coil Outlet/Fan Inlet properties for Fan/Coil Debugging (4/12/19)
+           hAoCoil=hAiFan 
+           tAoCoil=tAiFan
         END IF
+    ELSE    !RS: Debugging: Updating Coil Outlet/Fan Inlet properties for Fan/Coil Debugging (4/12/19)
+        hAoCoil=hAiFan
+        tAoCoil=tAiFan
     END IF
 
     !Determining inlet and outlet air properties
@@ -1124,6 +1141,8 @@ CONTAINS
     CALL PsyChart(AirPropOpt,AirPropErr)  !(AirProp, ,BaroPressure,  
     rhAoCoil=AirProp%APRelHum !RS: Debugging: Formerly AirProp(3)
     DensityOut=AirProp%APDryDens   !RS: Debugging: Formerly AirProp(7)
+    EvapOUT%AirEnth=hAoCoil !RS: Debugging: Setting to pass out the exiting air enthalpy in the output file (10/29/19)
+    EvapOUT%AirHumRat=AirProp%APHumRat !RS: Debugging: Setting to pass out the exiting air humidity ratio in the output file (10/29/19)
 
     WetFlag=0
     RowNum=0
@@ -2598,8 +2617,26 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 ELSEIF (I .EQ. 5) THEN
                     CALL GetObjectItem('IDCcktCircuit5_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
-                ELSE
+                ELSEIF (I .EQ. 6) THEN
                     CALL GetObjectItem('IDCcktCircuit6_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                ELSEIF (I .EQ. 7) THEN
+                    CALL GetObjectItem('IDCcktCircuit7_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
+                ELSEIF (I .EQ. 8) THEN
+                    CALL GetObjectItem('IDCcktCircuit8_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                ELSEIF (I .EQ. 9) THEN
+                    CALL GetObjectItem('IDCcktCircuit9_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                ELSEIF (I .EQ. 10) THEN
+                    CALL GetObjectItem('IDCcktCircuit10_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                ELSEIF (I .EQ. 11) THEN
+                    CALL GetObjectItem('IDCcktCircuit11_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                ELSE
+                    CALL GetObjectItem('IDCcktCircuit12_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 END IF
                         Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
@@ -3110,9 +3147,30 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 ELSEIF (I .EQ. 4) THEN
                     CALL GetObjectItem('ODCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-                ELSE
+                ELSEIF (I .EQ. 5) THEN
                     CALL GetObjectItem('ODCcktCircuit5_TubeSequence',1,Alphas,NumAlphas, &
-                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                ELSEIF (I .EQ. 6) THEN
+                    CALL GetObjectItem('ODCcktCircuit6_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                ELSEIF (I .EQ. 7) THEN
+                    CALL GetObjectItem('ODCcktCircuit7_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
+                ELSEIF (I .EQ. 8) THEN
+                    CALL GetObjectItem('ODCcktCircuit8_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                ELSEIF (I .EQ. 9) THEN
+                    CALL GetObjectItem('ODCcktCircuit9_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                ELSEIF (I .EQ. 10) THEN
+                    CALL GetObjectItem('ODCcktCircuit10_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                ELSEIF (I .EQ. 11) THEN
+                    CALL GetObjectItem('ODCcktCircuit11_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                ELSE
+                    CALL GetObjectItem('ODCcktCircuit12_TubeSequence',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 END IF
                     Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)                
                     DO J=1, Ckt(I)%Ntube
@@ -3128,10 +3186,10 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             !************************* Velocity Profile ********************************
 
             CoilSection(NumOfSections)%NumOfCkts=NumOfCkts
-            IF (.NOT. ALLOCATED(CoilSection(NumofSections)%CktNum)) THEN    !RS: Debugging:
+            IF (.NOT. ALLOCATED(CoilSection(NumofSections)%CktNum)) THEN    !RS: Debugging: Checking allocations
 		      ALLOCATE(CoilSection(NumOfSections)%CktNum(CoilSection(NumOfSections)%NumOfCkts))
 		      ALLOCATE(CoilSection(NumOfSections)%mRefIter(CoilSection(NumOfSections)%NumOfCkts))
-              ALLOCATE(CoilSection(NumOfSections)%Ckt(CoilSection(NumOfSections)%NumOfCkts))    !RS: Debugging:
+              ALLOCATE(CoilSection(NumOfSections)%Ckt(CoilSection(NumOfSections)%NumOfCkts))    !RS: Debugging: Allocating
             END IF
 		      DO J=1, NumOfCkts
 		          CoilSection(NumOfSections)%CktNum(J)=J
@@ -3241,7 +3299,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 END DO !End NumOfCkts
 
                 CoilSection(NumSection)%Nnode=Nnode
-                IF (.NOT. ALLOCATED(CoilSection(NumSection)%Node)) THEN  !RS: Debugging:
+                IF (.NOT. ALLOCATED(CoilSection(NumSection)%Node)) THEN  !RS: Debugging: Allocating
                     ALLOCATE(CoilSection(NumSection)%Node(Nnode))
                 END IF
 
@@ -3993,8 +4051,11 @@ INTEGER :: NumSection !Loop counter, ISI - 09/10/07
   wAoCoil=wAiCoil
 
   IF (DrawBlow .EQ. BLOWTHROUGH) THEN !Blow through
-      tAiCoil=tAiCoil+PwrFan/Cair
-	  hAiCoil=hAiCoil+PwrFan/mAiCoil
+   !   tAiCoil=tAiCoil+PwrFan/Cair
+	  !hAiCoil=hAiCoil+PwrFan/mAiCoil
+            !RS: Debugging: Removing Evap Fan calls since handled on E+ side: Strictly for coupling/optimization! (11/11/14)
+        CALL SimSimpleFan(tAoCoil,hAiCoil,mAiCoil,tAoCoil,hAiCoil)  !RS: Debugging: Adding in condenser fan model (9/4/14)
+        EvapPAR%EvapFanPwr=FanOutE%Power
   END IF
   IF (IsCmpInAirStream .NE. 0) THEN !Compressor in air stream
 	  tAiCoil=tAiCoil+QlossCmp/Cair
@@ -4470,6 +4531,11 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%cAir=cAir
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%Rair=Rair
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%Rtube=Rtube
+        
+        !RS: Debugging: (Following 3 lines) Setting Rfrost to 0 if it hasn't been set or initialized by now (6/2/14)
+        IF (CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%Rfrost .LT. 0) THEN   
+            CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%Rfrost=0
+        END IF
 		
 		!Surface temperature
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tSi=tAiMod-ABS(Qmod)*(Rair+CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%Rfrost)
@@ -5546,7 +5612,9 @@ REAL humrat !RS: Replace: CPA (2/20/14) Finding outlet humidity ratio
 			!********************* Ding starts ******************************
 			!Calc. temperature where moisture remove occurs
 
-			IF (TdpAiMod .GT. tRiMod) THEN !Wet surface
+            !RS: Debugging: Trying the TAiMod condition since the tRiMod one doesn't make sense to JG & me (6/2/14)
+            !TAiMod .LT. TdpAiMod) THEN
+			IF (TdpAiMod .GT. tRiMod) THEN !Wet surface  
 				  !CALL CalcWetSurfaceDing(I,II,III,IV,CoilType)
 				  CALL CalcWetSurfaceBraun(NumSection,I,II,III,IV,CoilType)
 				  !CALL CalcWetSurfaceMcQuiston(I,II,III,IV,CoilType)
@@ -5650,7 +5718,7 @@ REAL humrat !RS: Replace: CPA (2/20/14) Finding outlet humidity ratio
 
 	!Calc. Outside air enthalpy
 	hAoMod=Qmod/mAiMod+hAiMod
-
+    
 	AirPropOpt=1
 	AirProp%APTDB=tAoMod   !RS: Debugging: Formerly AirProp(1)
 	AirProp%APEnth=hAoMod   !RS: Debugging: Formerly AirProp(4)
@@ -7444,5 +7512,306 @@ REAL, INTENT(OUT) :: Out2
     Out2=QModLat  !Latent Module heat transfer, kW
     
 END SUBROUTINE
+    
+SUBROUTINE SimSimpleFan(tAiFan,hAiFan,MassFlow,tAoCoil,hAoCoil) !RS: Debugging: Adding in condenser fan model (9/4/14)
+        !RS: Debugging: This fan model has been copied from EnergyPlus 7.1 (9/4/14)
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Unknown
+          !       DATE WRITTEN   Unknown
+          !       MODIFIED       Brent Griffith, May 2009, added EMS override
+          !                      Chandan Sharma, March 2011, FSEC: Added LocalTurnFansOn and LocalTurnFansOff
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine simulates the simple constant volume fan.
+
+          ! METHODOLOGY EMPLOYED:
+          ! Converts design pressure rise and efficiency into fan power and temperature rise
+          ! Constant fan pressure rise is assumed.
+
+          ! REFERENCES:
+          ! ASHRAE HVAC 2 Toolkit, page 2-3 (FANSIM)
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+   !Integer, Intent(IN) :: FanNum
+   REAL, INTENT(IN) :: tAiFan
+   REAL, INTENT(IN) :: hAiFan
+   REAL, INTENT(IN) :: MassFlow !mAiCoil
+   REAL, INTENT(OUT) :: tAoCoil
+   REAL, INTENT(OUT) :: hAoCoil
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+      !REAL(r64) RhoAir
+      !REAL(r64) DeltaPress  ! [N/m2]
+      !REAL(r64) FanEff
+      !REAL(r64) MotInAirFrac
+      !REAL(r64) MotEff
+      !REAL(r64) MassFlow    ! [kg/sec]
+!unused0909      REAL(r64) Tin         ! [C]
+!unused0909      REAL(r64) Win
+      REAL FanShaftPower ! power delivered to fan shaft
+      REAL PowerLossToAir ! fan and motor loss to air stream (watts)
+      !Integer NVPerfNum
+
+   !NVPerfNum  = Fan(FanNum)%NVPerfNum
+
+   !IF (NightVentOn .AND. NVPerfNum > 0) THEN
+   !  DeltaPress = NightVentPerf(NVPerfNum)%DeltaPress
+   !  FanEff = NightVentPerf(NVPerfNum)%FanEff
+   !  MotEff = NightVentPerf(NVPerfNum)%MotEff
+   !  MotInAirFrac = NightVentPerf(NVPerfNum)%MotInAirFrac
+   !ELSE
+   !  DeltaPress = Fan(FanNum)%DeltaPress
+   !  FanEff     = Fan(FanNum)%FanEff
+   !  MotEff     = Fan(FanNum)%MotEff
+   !  MotInAirFrac = Fan(FanNum)%MotInAirFrac
+   !END IF
+
+   !IF (Fan(FanNum)%EMSFanPressureOverrideOn) DeltaPress = Fan(FanNum)%EMSFanPressureValue
+   !IF (Fan(FanNum)%EMSFanEffOverrideOn) FanEff = Fan(FanNum)%EMSFanEffValue
+
+   ! For a Constant Volume Simple Fan the Max Flow Rate is the Flow Rate for the fan
+!unused0909   Tin        = Fan(FanNum)%InletAirTemp
+!unused0909   Win        = Fan(FanNum)%InletAirHumRat
+   !RhoAir     = Fan(FanNum)%RhoAirStdInit
+   !MassFlow   = Fan(FanNum)%InletAirMassFlowRate
+   !IF (Fan(FanNum)%EMSMaxMassFlowOverrideOn) MassFlow = Fan(FanNum)%EMSAirMassFlowValue
+  ! MassFlow   = MIN(MassFlow,Fan(FanNum)%MaxAirMassFlowRate)
+  ! MassFlow   = MAX(MassFlow,Fan(FanNum)%MinAirMassFlowRate)
+   !
+   !Determine the Fan Schedule for the Time step
+  !If( ( GetCurrentScheduleValue(Fan(FanNum)%SchedPtr)>0.0 .or. LocalTurnFansOn) &
+  !      .and. .NOT.LocalTurnFansOff  .and. Massflow>0.0) Then
+   !Fan is operating
+   !Fan(FanNum)%FanPower = MassFlow*DeltaPress/(FanEff*RhoAir) ! total fan power
+   FanOutE%HumRat=PsyWFnTdbHLocal(tAiFan,(hAiFan*1000))
+   FanOutE%RhoAir=PsyRhoAirFnPbTdbWLocal(EvapPAR%EvapBarPress,tAiFan,FanOutE%HumRat)
+   FanOutE%Power=MassFlow*FanOutE%DeltaPress/(FanOutE%FanEff*(FanOutE%RhoAir*1000)) !RhoAir) !RS: Debugging: I think it needs to be *1000
+   FanShaftPower = FanOutE%MotorEff * FanOutE%Power !Fan(FanNum)%FanPower  ! power delivered to shaft
+   PowerLossToAir = FanShaftPower + (FanOutE%Power - FanShaftPower) * FanOutE%MotInAirFrac
+   !Fan(FanNum)%OutletAirEnthalpy = Fan(FanNum)%InletAirEnthalpy + PowerLossToAir/MassFlow
+   hAoCoil = hAiFan +(PowerLossToAir/MassFlow)/1000
+   ! This fan does not change the moisture or Mass Flow across the component
+   !Fan(FanNum)%OutletAirHumRat       = Fan(FanNum)%InletAirHumRat
+   !Fan(FanNum)%OutletAirMassFlowRate = MassFlow
+   !Fan(FanNum)%OutletAirTemp = PsyTdbFnHW(Fan(FanNum)%OutletAirEnthalpy,Fan(FanNum)%OutletAirHumRat)
+   tAoCoil = PsyTdbFnHWLocal((hAoCoil*1000),FanOutE%HumRat) !Fan(FanNum)%OutletAirHumRat)
+    IF (FanOutE%HumRat < 0.00025) THEN !RS: Debugging: If the humidity ratio is that low, it should be reasonable to calculate it as dry air (4/12/19)
+        tAoCoil = tAiFan + (PowerLossToAir/(MassFlow*.2403))/1000    !RS: Debugging: Seeing if this works with no humidity (4/12/19)
+    END IF
+
+ !Else
+ !  !Fan is off and not operating no power consumed and mass flow rate.
+ !  Fan(FanNum)%FanPower = 0.0
+ !  FanShaftPower = 0.0
+ !  PowerLossToAir = 0.0
+ !  Fan(FanNum)%OutletAirMassFlowRate = 0.0
+ !  Fan(FanNum)%OutletAirHumRat       = Fan(FanNum)%InletAirHumRat
+ !  Fan(FanNum)%OutletAirEnthalpy     = Fan(FanNum)%InletAirEnthalpy
+ !  Fan(FanNum)%OutletAirTemp = Fan(FanNum)%InletAirTemp
+ !  ! Set the Control Flow variables to 0.0 flow when OFF.
+ !  Fan(FanNum)%MassFlowRateMaxAvail = 0.0
+ !  Fan(FanNum)%MassFlowRateMinAvail = 0.0
+ !
+ !End If
+
+ RETURN
+END SUBROUTINE SimSimpleFan
+    
+    FUNCTION PsyTdbFnHWLocal(H,dW) RESULT(TDB)  !RS: Debugging: Adding in condenser fan model (9/4/14)
+
+          ! FUNCTION INFORMATION:
+          !       AUTHOR         J. C. VanderZee
+          !       DATE WRITTEN   Feb. 1994
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS FUNCTION:
+          ! This function provides air temperature from enthalpy and humidity ratio.
+
+          ! METHODOLOGY EMPLOYED:
+          ! na
+
+          ! REFERENCES:
+          ! ASHRAE HANDBOOK OF FUNDAMENTALS, 1972, P100, EQN 32
+          !   by inverting function PsyHFnTdbW
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! FUNCTION ARGUMENT DEFINITIONS:
+      REAL, intent(in) :: H    ! enthalpy {J/kg}
+      REAL, intent(in) :: dW    ! humidity ratio
+      !character(len=*), intent(in), optional :: calledfrom  ! routine this function was called from (error messages) !unused1208
+      REAL        :: TDB  ! result=> dry-bulb temperature {C}
+
+          ! FUNCTION PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! FUNCTION LOCAL VARIABLE DECLARATIONS:
+      REAL W   ! humidity ratio
+
+      W=MAX(dW,1.0d-5)
+      TDB = (H - 2.50094d6 * W)/(1.00484d3 + 1.85895d3*W)
+
+  RETURN
+    END FUNCTION PsyTdbFnHWLocal
+    
+    FUNCTION PsyRhoAirFnPbTdbWLocal(pb,tdb,dw)  RESULT(rhoair)   !RS: Debugging: Adding in condenser fan model (9/4/14)
+
+          ! FUNCTION INFORMATION:
+          !       AUTHOR         G. S. Wright
+          !       DATE WRITTEN   June 2, 1994
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS FUNCTION:
+          ! This function provides density of air as a function of barometric
+          ! pressure, dry bulb temperature, and humidity ratio.
+
+          ! METHODOLOGY EMPLOYED:
+          ! ideal gas law
+          !    universal gas const for air 287 J/(kg K)
+          !    air/water molecular mass ratio 28.9645/18.01534
+
+          ! REFERENCES:
+          ! Wylan & Sontag, Fundamentals of Classical Thermodynamics.
+          ! ASHRAE handbook 1985 Fundamentals, Ch. 6, eqn. (6),(26)
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! FUNCTION ARGUMENT DEFINITIONS:
+      REAL, INTENT(IN)  :: pb     ! barometric pressure (Pascals)
+      REAL, INTENT(IN)  :: tdb    ! dry bulb temperature (Celsius)
+      REAL, INTENT(IN)  :: dw      ! humidity ratio (kgWater/kgDryAir)
+      !character(len=*), intent(in), optional :: calledfrom  ! routine this function was called from (error messages) !unused1208
+      REAL        :: rhoair ! result=> density of air
+
+          ! FUNCTION PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! FUNCTION LOCAL VARIABLE DECLARATIONS:
+      REAL w  ! humidity ratio
+
+      w=MAX(dw,1.0d-5)
+      rhoair = pb/(287.d0*(tdb+273.15)*(1.d0+1.6077687d0*w))
+
+  return
+    end function PsyRhoAirFnPbTdbWLocal
+    
+    FUNCTION PsyWFnTdbHLocal(TDB,H) RESULT(W)    !RS: Debugging: Adding in condenser fan model (9/4/14)
+
+          ! FUNCTION INFORMATION:
+          !       AUTHOR         George Shih
+          !       DATE WRITTEN   May 1976
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS FUNCTION:
+          ! This function provides the humidity ratio from dry-bulb temperature
+          ! and enthalpy.
+
+          ! METHODOLOGY EMPLOYED:
+          ! na
+
+          ! REFERENCES:
+          ! ASHRAE HANDBOOK OF FUNDAMENTALS, 1972, P100, EQN 32
+
+          ! USE STATEMENTS:
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! FUNCTION ARGUMENT DEFINITIONS:
+      REAL, INTENT(IN) :: TDB    ! dry-bulb temperature {C}
+      REAL, INTENT(IN) :: H      ! enthalpy {J/kg}
+      !character(len=*), intent(in), optional :: calledfrom  ! routine this function was called from (error messages)
+      REAL        :: W      ! result=> humidity ratio
+      INTEGER, PARAMETER :: iPSyWFnTdbH =6
+      !INTEGER, DIMENSION(NumPsychMonitors) ::  iPsyErrIndex = NumPsychMonitors*0 ! Number of times error occurred
+      !INTEGER(i64), DIMENSION(NumToReport) :: NumTimesCalled=NumToReport*0
+      !INTEGER, PARAMETER :: NumToReport=13
+      !INTEGER, PARAMETER :: NumPsychMonitors=17 ! Parameterization of Number of psychrometric routines that
+
+          ! FUNCTION PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! FUNCTION LOCAL VARIABLE DECLARATIONS:
+          ! na
+
+!CP-------- here is 1.2, 1200., 1.004, or 1004.  --------
+      W=(H-1.00484d3*TDB)/(2.50094d6+1.85895d3*TDB)
+!
+#ifdef EP_psych_stats
+      !NumTimesCalled(iPsyWFnTdbH)=NumTimesCalled(iPsyWFnTdbH)+1
+#endif
+
+!                                      VALIDITY TEST.
+      IF (W < 0.0d0) THEN
+#ifdef EP_psych_errors
+        IF (W < -.0001d0) THEN
+          !IF (.not. WarmupFlag) THEN
+            !IF (iPsyErrIndex(iPsyWFnTdbH) == 0) THEN
+              !String=' Dry-Bulb= '//TRIM(TrimSigDigits(TDB,2))//' Enthalpy= '//TRIM(TrimSigDigits(H,3))
+              !CALL ShowWarningMessage('Calculated Humidity Ratio invalid (PsyWFnTdbH)')
+              !if (present(calledfrom)) then
+                !CALL ShowContinueErrorTimeStamp(' Routine='//trim(calledfrom)//',')
+              !else
+                !CALL ShowContinueErrorTimeStamp(' Routine=Unknown,')
+              !endif
+              !CALL ShowContinueError(TRIM(String))
+              !String='Calculated Humidity Ratio= '//TRIM(TrimSigDigits(W,4))
+              !CALL ShowContinueError(TRIM(String)//' ... Humidity Ratio set to .00001')
+            !ENDIF
+            !CALL ShowRecurringWarningErrorAtEnd('Calculated Humidity Ratio invalid (PsyWFnTdbH)',   &
+            !  iPsyErrIndex(iPsyWFnTdbH),ReportMinOf=W,ReportMaxOf=W,ReportMinUnits='[]',ReportMaxUnits='[]')
+          !ENDIF
+        ENDIF
+#endif
+        W=1.d-5
+      ENDIF
+
+      ! W is the result
+
+  RETURN
+END FUNCTION PsyWFnTdbHLocal
+    
 
 END MODULE EvaporatorMod

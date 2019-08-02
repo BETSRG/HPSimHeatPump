@@ -62,7 +62,7 @@
     USE TXVMOD
     USE AccumulatorModule
     USE DataSimulation
-    USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE DataGlobals_HPSimIntegrated, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
     USE InputProcessor_HPSim    !RS: Debugging: Bringing over from GetHPSimInputs
 
     IMPLICIT NONE
@@ -182,7 +182,7 @@
 
     !for specified subcooling, set IREFC to zero
     !for specifed flow control, set IREFC to 3 
-    IF (MODE .EQ. 1 .OR. MODE .EQ. 3) THEN
+    IF (MODE .EQ. 2 .OR. MODE .EQ. 3 .OR. MODE .EQ. 4) THEN  !IF (MODE .EQ. 1 .OR. MODE .EQ. 3) THEN  !RS: Debugging: Due to Mode Mismatch; formerly Mode 1 & 3 (4/13/19)
         IREFC=3
     ELSE
         IREFC=0
@@ -218,6 +218,14 @@
             Quality=1
             PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Inlet Pressure
             IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
+                OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                WRITE(19,*) 'Initializing "Not Converged" file'
+                CLOSE(19)
+                WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                WRITE(6,*) 'Fatal error recognised in HPDM'
+                Close(6)
                 STOP
             END IF
             PiCmp=PiCmp/1000    !RS Comment: Unit Conversion
@@ -227,6 +235,14 @@
                 Pressure=PiCmp*1000 !RS Comment: Unit Conversion
                 HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
                 IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
+                    OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                    CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                    OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                    WRITE(19,*) 'Initializing "Not Converged" file'
+                    CLOSE(19)
+                    WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                    WRITE(6,*) 'Fatal error recognised in HPDM'
+                    Close(6)
                     STOP
                 END IF
                 HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
@@ -236,11 +252,27 @@
                 Quality=-SUPER
                 HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
                 IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
+                    OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                    CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                    OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                    WRITE(19,*) 'Initializing "Not Converged" file'
+                    CLOSE(19)
+                    WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                    WRITE(6,*) 'Fatal error recognised in HPDM'
+                    Close(6)
                     STOP
                 END IF
                 HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
                 TiCmp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)    !Compressor Inlet Temperature
                 IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
+                    OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                    CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                    OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                    WRITE(19,*) 'Initializing "Not Converged" file'
+                    CLOSE(19)
+                    WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                    WRITE(6,*) 'Fatal error recognised in HPDM'
+                    Close(6)
                     STOP
                 END IF
             END IF
@@ -261,17 +293,41 @@
                     Enthalpy=HoEvp*1000 !RS Comment: Unit Conversion
                     ToEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Evaporator Outlet Temperature
                     IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
+                        OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        WRITE(19,*) 'Initializing "Not Converged" file'
+                        CLOSE(19)
+                        WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                        WRITE(6,*) 'Fatal error recognised in HPDM'
+                        CLOSE(6)
                         STOP
                     END IF
 
                     XoEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Evaporator Outlet Quality
                     IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
+                        OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        WRITE(19,*) 'Initializing "Not Converged" file'
+                        CLOSE(19)
+                        WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                        WRITE(6,*) 'Fatal error recognised in HPDM'
+                        CLOSE(6)
                         STOP
                     END IF
 
                     Quality=1
                     TsoEvp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Evaporator Outlet Saturation Temperature
                     IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
+                        OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        WRITE(19,*) 'Initializing "Not Converged" file'
+                        CLOSE(19)
+                        WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                        WRITE(6,*) 'Fatal error recognised in HPDM'
+                        Close(6)
                         STOP
                     END IF
 
@@ -289,6 +345,14 @@
                     Pressure=PoEvp*1000 !RS Comment: Unit Conversion
                     HoEvp=TP(Ref$, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)   !Evaporator Outlet Enthalpy
                     IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
+                        OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        WRITE(19,*) 'Initializing "Not Converged" file'
+                        CLOSE(19)
+                        WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                        WRITE(6,*) 'Fatal error recognised in HPDM'
+                        Close(6)
                         STOP
                     END IF
                     HoEvp=HoEvp/1000    !RS Comment: Unit Conversion
@@ -297,12 +361,25 @@
                     Enthalpy=HoEvp*1000 !RS Comment: Unit Conversion
                     XoEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Evaporator Outlet Quality
                     IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
+                        OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        WRITE(19,*) 'Initializing "Not Converged" file'
+                        CLOSE(19)
+                        WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                        WRITE(6,*) 'Fatal error recognised in HPDM'
+                        Close(6)
                         STOP
                     END IF
 
                     Quality=1
                     TsoEvp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Evaporator Outlet Saturation Temperature
                     IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
+                        OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                        WRITE(19,*) 'Initializing "Not Converged" file'
+                        CLOSE(19)
                         STOP
                     END IF
 
@@ -355,7 +432,7 @@
         END IF
         STEP = 3
 
-        CALL IssueOutputMessage('|-------------------- Highside Iteration --------------------|')
+        !CALL IssueOutputMessage('|-------------------- Highside Iteration --------------------|')
 
         AirPropOpt=2
         AirProp%APTDB=(TaiC-32)*5/9    !RS Comment: Unit Conversion, from F to C   !RS: Debugging: Formerly AirProp(1)
@@ -371,7 +448,8 @@
 
         !Actual air mass flow rate
         XMaC=CFMcnd*RhoAiC
-        XMaE=CFMevp*RhoAiE
+        !RS: Debugging: Commenting again to build an exe that lets E+ set the mass flow rate (8/22/15)
+        XMaE=CFMevp*RhoAiE !RS: Commented out because XMaE is being set by E+ data in GetGenOptInputs (10/10/14)
 
         CoilMode=0  !RS: Debugging: This is for a test in ZeroConvergence (11/18/13)
         TSOCMP = ZeroConvergence(TSAT1,CNDNSR,1E-3,CNDCON,STEP,DIFFER,IERROR)
@@ -456,6 +534,7 @@
                     END IF
                     IsFirstTimeEvaporator=.FALSE. 
 
+                    EvapPAR%EvapSimpCoil=1  !RS: Debugging: Always simple (6/23/14)
                     !Always detailed    !RS: Debugging: There's no need for this to be set
                     !EvapPAR%EvapSimpCoil=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53) !RS: Debugging: Simple case 
 
@@ -468,6 +547,14 @@
             IF (EvapOUT%EOutErrFlag .NE. 0) THEN    !RS: Debugging: Formerly EvapOUT(17)
                 SELECT CASE (INT(EvapOUT%EOutErrFlag))  !RS: Debugging: Formerly EvapOUT(17)
                 CASE (3,4,5)
+                    OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                    CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                    OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                    WRITE(19,*) 'Initializing "Not Converged" file'
+                    CLOSE(19)
+                    WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                    WRITE(6,*) 'Fatal error recognised in HPDM'
+                    Close(6)
                     STOP
                 END SELECT
             END IF
@@ -484,16 +571,22 @@
 
         TAIE1 = TAIIEI
 
-        STEP = 2
+        STEP = 2    !RS: Debugging: Trying to keep the step tighter (8/5/14)
+        
+        !STEP=2.2-(0.2*TimeStep1)  !RS: Debugging: Trying to keep the step tighter (8/5/14)
+        !EVPCON=EVPCON-(0.1*(Timestep1-1))
+        !IF (EVPCON .LT. 0.1) THEN
+        !    EVPCON=0.1
+        !END IF
 
-        CALL IssueOutputMessage(' ')
-        CALL IssueOutputMessage('|-------------------- Lowside Iteration ---------------------|')
+        !CALL IssueOutputMessage(' ')
+        !CALL IssueOutputMessage('|-------------------- Lowside Iteration ---------------------|')
         IF (Unit .EQ. 1) THEN
             WRITE(tmpString, '(F10.4)') (TSICMP-32)*5/9
         ELSE
             WRITE(tmpString, '(F10.4)') TSICMP
         END IF
-        CALL IssueOutputMessage( '>> Compressor suction saturation temperature: '//TRIM(tmpString)//Tunit)
+        !CALL IssueOutputMessage( '>> Compressor suction saturation temperature: '//TRIM(tmpString)//Tunit)
 
         CoilMode=1  !RS: Debugging: This is for a test in ZeroConvergence (11/18/13)
         TAIIE = ZeroConvergence(TAIE1,EVPTR,AMBCON,EVPCON,STEP,DIFFER,IERROR)
@@ -585,7 +678,7 @@
 
             NCROSS = 1  !RS: Ensures that this section will run until the end of the loop (12/19/13)
             
-            IF(PROD.LE.0.0) THEN
+            IF(PROD.LE.0.0) THEN    !RS: This is triggered when DIFF switches from positive to negative (6/15/19)
                 TSATSV = TSATDM
                 TAISV = TAIDM
             END IF
@@ -607,7 +700,7 @@
 
         NTAMB = NTAMB + 1
         IF(NTAMB.GT.15) THEN
-            WRITE(tmpString,"('0DRIVER: ***** FAILED TO CONVERGE ON EVAPORATOR ',  'INLET AIR TEMPERATURE *****',/, '               DIFFERENCE  =',F8.3,' F')") DIFF
+            WRITE(tmpString, "('0DRIVER: ***** FAILED TO CONVERGE ON EVAPORATOR ',  'INLET AIR TEMPERATURE *****', '               DIFFERENCE  =',F8.3,' F')") DIFF !"('0DRIVER: ***** FAILED TO CONVERGE ON EVAPORATOR ',  'INLET AIR TEMPERATURE *****',/, '               DIFFERENCE  =',F8.3,' F')") DIFF
             CALL IssueOutputMessage(TRIM(tmpString))
             EXIT
         END IF
@@ -621,6 +714,14 @@
         IF (TSICMP .GE. TSOCMP) THEN
             CALL IssueOutputMessage('')
             CALL IssueOutputMessage('## ERROR ## HPdesign: Failed to find a solution.')
+            OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+            CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+            OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+            WRITE(19,*) 'Initializing "Not Converged" file'
+            CLOSE(19)
+            WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+            WRITE(6,*) 'Fatal error recognised in HPDM'
+            CLOSE(6)
             STOP
         END IF
 
@@ -665,7 +766,7 @@
                         END SELECT
                     END IF
 
-                    XMRFLD=ShTbOUT%ShTbOMdotE*3600/UnitM    !RS Comment: Unit Conversion, lbm/s??   !RS: Debugging: Formerly ShTbOUT(1)
+                    XMRFLD=ShTbOUT%ShTbOMdotE*3600/UnitM    !RS Comment: Unit Conversion, lbm/hr   !RS: Debugging: Formerly ShTbOUT(1)
                     ToExp=ShTbOUT%ShTbOToE    !RS: Debugging: Formerly ShTbOUT(3)
                     XoExp=ShTbOUT%ShTbOXoE    !RS: Debugging: Formerly ShTbOUT(4)
 
@@ -699,6 +800,14 @@
             IF (INT(ShTbOUT%ShTbOErrFlag) .EQ. 1) THEN    !RS: Debugging: Formerly ShTbOUT(7)
                 CALL IssueOutputMessage( '')
                 CALL IssueOutputMessage('## ERROR ## HPdesign: Short tube solution error.')
+                OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                WRITE(19,*) 'Initializing "Not Converged" file'
+                CLOSE(19)
+                WRITE(6,*) 'HPSim did not converge' !RS: Debugging: Using the log file to let wrapper program know if HPSim has crashed (12/19/14)
+                WRITE(6,*) 'Fatal error recognised in HPDM'
+                Close(6)
                 STOP
             END IF
 
@@ -752,7 +861,7 @@
                     END SELECT
                 END IF
 
-                XMRFLD=CapTubeOUT%CTOMdot*3600/UnitM !RS Comment: Unit Conversion, lbm/s??   !RS: Debugging: Formerly CapTubeOUT(1)
+                XMRFLD=CapTubeOUT%CTOMdot*3600/UnitM !RS Comment: Unit Conversion, lbm/hr   !RS: Debugging: Formerly CapTubeOUT(1)
                 ToExp=CapTubeOUT%CTOToE !RS: Debugging: Formerly CapTubeOUT(3)
                 XoExp=CapTubeOUT%CTOXoE !RS: Debugging: Formerly CapTubeOUT(4)
 
@@ -810,6 +919,11 @@
             IF (NumIter .GT. MaxIter) THEN
                 CALL IssueOutputMessage( '')
                 CALL IssueOutputMessage('## ERROR ## HPdesign: Capillary tube solution not converged.')
+                OPEN(20, FILE='Crash.txt', STATUS='old')   !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                CLOSE(20, STATUS='DELETE') !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                OPEN(UNIT=19, FILE='NC.txt')    !RS: Debugging: Trying to set up a buffer program (10/9/14)
+                WRITE(19,*) 'Initializing "Not Converged" file'
+                CLOSE(19)
                 STOP
             END IF
 

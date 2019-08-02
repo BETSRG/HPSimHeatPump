@@ -74,7 +74,9 @@ CONTAINS
         !call system('rename hpdata_longtubes.idf in.imf')  !RS: Test case input file
         !call system('rename HPdata_3TonAC_410.idf in.imf') !RS: Test case input file
         ! call epmacro on it
-        call system('EPMacro.exe')
+        !call system('EPMacro.exe') !C:/Users/lab303user/Desktop/GenOpt/HPSim/EPMacro.exe')
+        !call system('C:/Users/Rajesh/Desktop/Task/Java_Task/GenOpt/EPMacro.exe')
+        call system('C:/Users/lab303user/Documents/betsrg_dual/GenOpt/EPMacro.exe')
         ! now rename the file to be read by the E+ input processor
         call system('rename out.idf in.idf')
 !DEC$ ELSEIF DEFINED(__linux)
